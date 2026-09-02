@@ -112,5 +112,5 @@ cmake --build build --config Release
 - [x] **Phase 2: Battle Prototype** — 1v1 턴제, HP/영력, 4기술, 5종 상태이상, 속도 선공권, 포획 수식 (109KB / 7.57%)
 - [x] **Phase 3: Collection Prototype** — 108종 도감(Codex) UI, 3마리 파티, Lv.1~50 성장 & Ⅰ~Ⅴ 승급, 야생 인카운터 (131KB / 9.10%)
 - [x] **Phase 4: Artifact System** — 8종 양날의 검 유물, 버프/디버프 공존, 즉시 파괴 & 영기 환원 (142KB / 9.86%)
-- [ ] **Phase 5: Vertical Slice** — 1개 지역 완전 구현 (마을+필드+전투+NPC+퀘스트)
+- [x] **Phase 5: Vertical Slice** — 도선사 주막/북한산/대웅전 3개 맵 전환, NPC 대화/주막 완치, 퀘스트 추적, 챕터 1 음양당 보스전 (169KB / 11.74%)
 - [ ] **Phase 6: Full Content** — 108종 요괴, 음양당 캠페인, 민담 퀘스트

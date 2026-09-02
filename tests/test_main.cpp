@@ -4,6 +4,7 @@ bool runBattleSystemTests();
 bool runStatusEffectTests();
 bool runArtifactSystemTests();
 bool runEncyclopediaAndGrowthTests();
+bool runVerticalSliceTests();
 
 int main() {
     std::cout << "========================================" << std::endl;
@@ -15,6 +16,7 @@ int main() {
     if (!runStatusEffectTests()) passed = false;
     if (!runArtifactSystemTests()) passed = false;
     if (!runEncyclopediaAndGrowthTests()) passed = false;
+    if (!runVerticalSliceTests()) passed = false;
 
     std::cout << "----------------------------------------" << std::endl;
     if (passed) {

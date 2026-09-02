@@ -3,6 +3,9 @@
 #include "../src/gameplay/party.hpp"
 #include "../src/gameplay/artifact.hpp"
 #include "../src/gameplay/encyclopedia.hpp"
+#include "../src/gameplay/quest.hpp"
+#include "../src/world/tilemap.hpp"
+#include "../src/data/data_manager.hpp"
 #include "../src/battle/battle.hpp"
 #include "../src/battle/status_effects.hpp"
 
@@ -249,5 +252,81 @@ bool runEncyclopediaAndGrowthTests() {
     }
 
     std::cout << "  [PASS] 108 Encyclopedia & Growth/Promotion" << std::endl;
+    return true;
+}
+
+bool runVerticalSliceTests() {
+    std::cout << "[TEST 5] Running Phase 5 Vertical Slice (Maps, Quests, NPCs) Tests..." << std::endl;
+
+    // 1. Multi-map & Warp Transitions
+    Tilemap map;
+    map.loadMap(0); // Doseonsa Village
+    if (map.getMapName() != "도선사 주막마을") {
+        std::cerr << "  FAIL: Map 0 name mismatch!" << std::endl;
+        return false;
+    }
+
+    const WarpTrigger* warpToMountain = map.checkWarp(7, 11);
+    if (!warpToMountain || warpToMountain->targetMapId != 1) {
+        std::cerr << "  FAIL: Warp from Village to Mountain Path missing!" << std::endl;
+        return false;
+    }
+
+    map.loadMap(1); // Mountain Path
+    const WarpTrigger* warpToTemple = map.checkWarp(17, 11);
+    if (!warpToTemple || warpToTemple->targetMapId != 2) {
+        std::cerr << "  FAIL: Warp from Mountain to Temple Sanctuary missing!" << std::endl;
+        return false;
+    }
+
+    map.loadMap(2); // Temple Sanctuary
+    if (map.getMapName() != "도선사 대웅전 (음양당 제단)") {
+        std::cerr << "  FAIL: Map 2 name mismatch!" << std::endl;
+        return false;
+    }
+
+    // 2. Quest System Progress
+    QuestManager qm;
+    Quest q{"MQ_001", QuestType::Main, "벽사의 부름: 도선사의 요기", 1, "Test quest", {"단계 1", "단계 2", "단계 3"}, 0, {500, 300, "ART_DOKKAEBI_HAT"}, QuestState::NotStarted};
+    qm.registerQuest(q);
+
+    qm.startQuest("MQ_001");
+    if (qm.getQuest("MQ_001")->state != QuestState::InProgress || qm.getQuest("MQ_001")->getCurrentObjective() != "단계 1") {
+        std::cerr << "  FAIL: Quest did not start properly!" << std::endl;
+        return false;
+    }
+
+    qm.advanceQuest("MQ_001");
+    if (qm.getQuest("MQ_001")->getCurrentObjective() != "단계 2") {
+        std::cerr << "  FAIL: Quest objective did not advance!" << std::endl;
+        return false;
+    }
+
+    qm.completeQuest("MQ_001");
+    if (!qm.getQuest("MQ_001")->isComplete()) {
+        std::cerr << "  FAIL: Quest completion failed!" << std::endl;
+        return false;
+    }
+
+    // 3. NPC & Tavern Full Recovery
+    Party party;
+    Yokai damaged("YOKAI_001", "Dokkaebi", YokaiGrade::Grade2, Element::Fire, {100, 100, 50, 50, 20, 10, 15});
+    damaged.takeDamage(70);
+    damaged.consumeQi(40);
+    StatusEffectSystem::applyStatus(damaged, StatusEffect::Burn, 3);
+    party.addYokai(damaged);
+
+    // Tavern Rest Action: Full heal and clear statuses
+    Yokai* m = party.getYokai(0);
+    m->healHp(999);
+    m->restoreQi(999);
+    m->clearStatus();
+
+    if (m->getStats().hp != m->getStats().maxHp || m->getStats().qi != m->getStats().maxQi || m->getStatus().effect != StatusEffect::None) {
+        std::cerr << "  FAIL: Tavern rest did not fully restore HP/Qi or clear status!" << std::endl;
+        return false;
+    }
+
+    std::cout << "  [PASS] Vertical Slice (Maps, Quests, NPCs)" << std::endl;
     return true;
 }

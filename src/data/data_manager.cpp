@@ -5,7 +5,9 @@ namespace JoseonRPG {
 std::vector<Yokai> DataManager::s_yokaiDatabase;
 std::vector<Skill> DataManager::s_skillDatabase;
 std::vector<Artifact> DataManager::s_artifactDatabase;
+std::vector<NPC> DataManager::s_npcDatabase;
 Encyclopedia DataManager::s_encyclopedia;
+QuestManager DataManager::s_questManager;
 
 void DataManager::init() {
     // 1. Skills Database
@@ -76,7 +78,7 @@ void DataManager::init() {
     maidenGhost.addSkill(talismanSeal);
     maidenGhost.addSkill(spiritDrain);
 
-    // #006: Samdugumijo (Three-headed Nine-tailed Bird)
+    // #006: Samdugumijo
     Yokai samdu(6, "YOKAI_006", "Samdugumijo", YokaiGrade::Grade4, Element::Light, {105, 105, 90, 90, 26, 17, 25},
                "KOREAN_FOLKLORE", "삼재를 쫓는 세 머리와 아홉 꼬리를 가진 신령한 새.");
     samdu.addSkill(holyPurge);
@@ -100,7 +102,7 @@ void DataManager::init() {
     nue.addSkill(clubStrike);
     nue.addSkill(talismanSeal);
 
-    // #009: Jeoseungsaja (Grim Reaper)
+    // #009: Jeoseungsaja
     Yokai reaper(9, "YOKAI_009", "Jeoseungsaja", YokaiGrade::Grade4, Element::Dark, {115, 115, 95, 95, 29, 20, 23},
                  "KOREAN_FOLKLORE", "검은 갓과 도포를 입고 망자를 인도하는 저승의 차사.");
     reaper.addSkill(deathDecree);
@@ -116,18 +118,26 @@ void DataManager::init() {
     eoduk.addSkill(clubStrike);
     eoduk.addSkill(spiritDrain);
 
+    // Chapter 1 Boss: Red Berserk Dokkaebi
+    Yokai bossDokkaebi(1, "YOKAI_BOSS_01", "폭주한 붉은 도깨비", YokaiGrade::Grade3, Element::Fire, {160, 160, 90, 90, 32, 22, 18},
+                       "BOSS", "음양당 괴승 묘각의 주술로 흑화하여 거대화된 붉은 도깨비.");
+    bossDokkaebi.addSkill(goblinFire);
+    bossDokkaebi.addSkill(clubStrike);
+    bossDokkaebi.addSkill(earthSlam);
+    bossDokkaebi.addSkill(fearGaze);
+
     s_yokaiDatabase = {
         dokkaebi, gumiho, bulgasari, geuseundae, maidenGhost,
-        samdu, baize, nue, reaper, eoduk
+        samdu, baize, nue, reaper, eoduk, bossDokkaebi
     };
 
     // 3. Register All 108 Slots in Encyclopedia
     for (const auto& y : s_yokaiDatabase) {
+        if (y.getId() == "YOKAI_BOSS_01") continue;
         s_encyclopedia.registerTemplate(y.getNumber(), y.getId(), y.getName(), y.getName(),
                                         y.getGrade(), y.getElement(), y.getOrigin(), y.getLore());
     }
 
-    // Register placeholder templates for remaining slots #011 .. #108
     for (int i = 11; i <= 108; ++i) {
         std::string numStr = (i < 100) ? ((i < 10) ? "00" : "0") + std::to_string(i) : std::to_string(i);
         std::string slotId = "YOKAI_" + numStr;
@@ -135,13 +145,12 @@ void DataManager::init() {
         s_encyclopedia.registerTemplate(i, slotId, name, "Unknown Yokai", YokaiGrade::Grade1, Element::Physical, "UNKNOWN", "아직 기록되지 않은 조선의 미확인 요괴.");
     }
 
-    // Default registered sightings
     s_encyclopedia.markCaptured("YOKAI_001");
     s_encyclopedia.markCaptured("YOKAI_002");
     s_encyclopedia.markCaptured("YOKAI_003");
     s_encyclopedia.markSeen("YOKAI_005");
 
-    // 4. Artifacts Database (8 Dual-Trait Folklore Artifacts)
+    // 4. Artifacts Database
     Artifact dokkaebiHat{"ART_DOKKAEBI_HAT", "도깨비 감투", ArtifactBuffType::CritRateBoost, 30, ArtifactDebuffType::QiDrainPerTurn, 5, "쓰면 투명해지나 영혼의 기운을 갉아먹는 도깨비 털모자."};
     Artifact centipedeEgg{"ART_CENTIPEDE_EGG", "백년 묵은 지네의 알", ArtifactBuffType::ImmunityBurn, 1, ArtifactDebuffType::MaxHpReduction, 20, "독기를 막아주나 소지자의 기혈을 쇠약하게 만든다."};
     Artifact foxShard{"ART_FOX_MARBLE_SHARD", "깨진 여우구슬", ArtifactBuffType::MagicAtkBoost, 40, ArtifactDebuffType::DefReduction, 35, "엄청난 영술의 힘을 주지만 육신을 무방비로 만든다."};
@@ -155,6 +164,74 @@ void DataManager::init() {
         dokkaebiHat, centipedeEgg, foxShard, demonTile,
         jadeMirror, goldenBell, shadowIncense, reaperScroll
     };
+
+    // 5. NPCs Database
+    NPC jumoh{
+        "NPC_001", 0, 3, 3, 2, "주모 월선", "도선사 주막 주모",
+        {
+            "어서 오시게! 북한산 꼭대기 도선사에 수상한 음양당 놈들이",
+            "들어앉더니 온 산천에 흉흉한 요기가 돌고 있다오.",
+            "따뜻한 장터국밥 한 그릇 말아드릴 테니 기운 차리시게!"
+        },
+        NPCActionType::TavernRest, "MQ_001"
+    };
+
+    NPC merchant{
+        "NPC_002", 0, 14, 3, 3, "벽사 상인 박 서방", "관상감 공인 부적 상인",
+        {
+            "관상감에서 내려온 영술사님이시군요!",
+            "음양당 놈들이 부리는 요괴들은 벽사 부적으로 계약할 수 있습니다.",
+            "주막 아래쪽 길로 나가면 북한산 고갯길로 이어집니다."
+        },
+        NPCActionType::TalismanShop, ""
+    };
+
+    NPC bride{
+        "NPC_003", 0, 11, 7, 2, "방귀쟁이 며느리", "근심 가득한 며느리",
+        {
+            "흑흑... 제 몸에 깃든 바람 요괴 때문에",
+            "시아버지 앞에서 큰 방귀 소리를 내어 쫓겨날 판입니다.",
+            "고갯길의 바람 요괴를 진정시켜 주실 수 있을까요?"
+        },
+        NPCActionType::QuestTrigger, "SQ_001"
+    };
+
+    NPC bossMyogak{
+        "NPC_004", 2, 9, 3, 4, "괴승 묘각", "음양당 북악방주",
+        {
+            "크크크... 관상감의 애송이 영술사가 여기까지 기어들어왔구나!",
+            "천지음양부는 이미 깨어졌고, 조선의 108 요괴는 우리 음양당의 손에 들어갈 것이다!",
+            "폭주한 붉은 도깨비여, 저 놈을 찢어발겨라!"
+        },
+        NPCActionType::BossEncounter, "MQ_001"
+    };
+
+    s_npcDatabase = {jumoh, merchant, bride, bossMyogak};
+
+    // 6. Quests Database
+    Quest mainQuest1{
+        "MQ_001", QuestType::Main, "벽사의 부름: 도선사의 요기", 1,
+        "관상감 벽사청의 명을 받아 도선사 인근에 번지는 음양당의 사악한 기운을 조사하라.",
+        {
+            "도선사 주막 주모와 대화하여 정보 수집",
+            "북한산 고갯길을 지나 도선사 대웅전 진입",
+            "음양당 하수인 괴승 묘각 격파"
+        },
+        0, {500, 300, "ART_DOKKAEBI_HAT"}, QuestState::InProgress
+    };
+
+    Quest sideQuest1{
+        "SQ_001", QuestType::Side, "방귀쟁이 며느리의 하소연", 0,
+        "너무 강한 영적 바람(방귀)으로 인해 쫓겨날 위기에 처한 며느리를 위해 바람의 영수를 진정시켜라.",
+        {
+            "주막 뒤뜰 며느리와 대화 후 바람 요괴 수색",
+            "바람 요괴와 전투 후 계약 완료"
+        },
+        0, {250, 150, "ART_DEMON_TILE"}, QuestState::NotStarted
+    };
+
+    s_questManager.registerQuest(mainQuest1);
+    s_questManager.registerQuest(sideQuest1);
 }
 
 const std::vector<Yokai>& DataManager::getAllYokaiTemplates() {
@@ -167,6 +244,20 @@ const std::vector<Skill>& DataManager::getAllSkills() {
 
 const std::vector<Artifact>& DataManager::getAllArtifacts() {
     return s_artifactDatabase;
+}
+
+const std::vector<NPC>& DataManager::getAllNPCs() {
+    return s_npcDatabase;
+}
+
+std::vector<NPC> DataManager::getNPCsForMap(int mapId) {
+    std::vector<NPC> list;
+    for (const auto& n : s_npcDatabase) {
+        if (n.mapId == mapId) {
+            list.push_back(n);
+        }
+    }
+    return list;
 }
 
 Yokai DataManager::createYokaiById(std::string_view id) {

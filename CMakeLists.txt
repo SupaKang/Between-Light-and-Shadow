@@ -26,6 +26,7 @@ set(SOURCES
     src/gameplay/party.cpp
     src/gameplay/artifact.cpp
     src/gameplay/encyclopedia.cpp
+    src/gameplay/quest.cpp
     src/battle/status_effects.cpp
     src/battle/battle.cpp
     src/data/data_manager.cpp
@@ -42,13 +43,20 @@ endif()
 set(TEST_SOURCES
     tests/test_main.cpp
     tests/test_battle.cpp
+    src/core/renderer.cpp
+    src/world/tilemap.cpp
     src/gameplay/yokai.cpp
     src/gameplay/party.cpp
     src/gameplay/artifact.cpp
     src/gameplay/encyclopedia.cpp
+    src/gameplay/quest.cpp
     src/battle/status_effects.cpp
     src/battle/battle.cpp
     src/data/data_manager.cpp
 )
 
 add_executable(run_tests ${TEST_SOURCES})
+
+if(WIN32)
+    target_link_libraries(run_tests PRIVATE gdi32 user32)
+endif()

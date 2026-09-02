@@ -5,10 +5,12 @@
 #include "ui/font_renderer.hpp"
 #include "world/tilemap.hpp"
 #include "world/camera.hpp"
+#include "world/npc.hpp"
 #include "gameplay/yokai.hpp"
 #include "gameplay/party.hpp"
 #include "gameplay/artifact.hpp"
 #include "gameplay/encyclopedia.hpp"
+#include "gameplay/quest.hpp"
 #include "battle/battle.hpp"
 #include "data/data_manager.hpp"
 
@@ -23,10 +25,12 @@ using namespace JoseonRPG;
 
 enum class GameState {
     WorldExploration,
+    DialogueView,
     BattleView,
     ArtifactMenu,
     EncyclopediaView,
-    PartyManagementView
+    PartyManagementView,
+    QuestLogView
 };
 
 static std::mt19937 s_mainRng(2026);
@@ -50,11 +54,12 @@ int main() {
     int playerPixelX = playerGridX * TILE_SIZE;
     int playerPixelY = playerGridY * TILE_SIZE;
     int playerAnimFrame = 0;
+    int playerMoney = 500;
 
-    // 3. Gameplay State (3 Party Members & Artifacts)
+    // 3. Gameplay State (Party & Artifacts)
     Party playerParty;
     Yokai p1 = DataManager::createYokaiById("YOKAI_001"); // Dokkaebi
-    p1.gainExp(1200); // Level 5
+    p1.gainExp(1500); // Level 6
     playerParty.addYokai(p1);
 
     Yokai p2 = DataManager::createYokaiById("YOKAI_002"); // Gumiho
@@ -75,9 +80,15 @@ int main() {
     // UI View State
     int codexCursor = 1;      // 1..108
     int partyViewCursor = 0;  // 0..2
-    std::string partyFeedbackMsg = "";
     int artCursor = 0;        // 0..7
+    std::string partyFeedbackMsg = "";
     std::string artFeedbackMsg = "";
+    std::string systemNoticeMsg = "";
+
+    // Active Dialogue State
+    const NPC* activeNPC = nullptr;
+    size_t dialogueLineIndex = 0;
+    bool isBossBattleQueued = false;
 
     // 4. Main Game Loop (Fixed 60 FPS Target)
     auto prevTime = std::chrono::high_resolution_clock::now();
@@ -91,7 +102,6 @@ int main() {
             break;
         }
 
-        // Calculate FPS
         frameCount++;
         auto now = std::chrono::high_resolution_clock::now();
         if (std::chrono::duration_cast<std::chrono::milliseconds>(now - fpsTimer).count() >= 1000) {
@@ -102,7 +112,6 @@ int main() {
 
         // --- UPDATE LOGIC ---
         if (gameState == GameState::WorldExploration) {
-            // Player movement
             int dx = 0;
             int dy = 0;
             if (Input::isPressed(Key::Up)) dy -= 1;
@@ -113,36 +122,63 @@ int main() {
             if (dx != 0 || dy != 0) {
                 int targetX = playerGridX + dx;
                 int targetY = playerGridY + dy;
-                if (!tilemap.isSolid(targetX, targetY)) {
+                
+                // NPC collision check
+                bool npcBlocked = false;
+                auto currentNPCs = DataManager::getNPCsForMap(tilemap.getMapId());
+                for (const auto& n : currentNPCs) {
+                    if (n.gridX == targetX && n.gridY == targetY) {
+                        npcBlocked = true;
+                        break;
+                    }
+                }
+
+                if (!tilemap.isSolid(targetX, targetY) && !npcBlocked) {
                     playerGridX = targetX;
                     playerGridY = targetY;
                     playerPixelX = playerGridX * TILE_SIZE;
                     playerPixelY = playerGridY * TILE_SIZE;
                     playerAnimFrame++;
 
-                    // Wild Encounter check on grass (Tile 0)
-                    std::uniform_int_distribution<int> encRoll(1, 100);
-                    if (encRoll(s_mainRng) <= 12) { // 12% encounter chance per step
-                        const auto& pool = DataManager::getAllYokaiTemplates();
-                        std::uniform_int_distribution<size_t> poolDist(0, pool.size() - 1);
-                        Yokai wildEnemy = pool[poolDist(s_mainRng)];
+                    // Warp Check
+                    const WarpTrigger* warp = tilemap.checkWarp(playerGridX, playerGridY);
+                    if (warp) {
+                        tilemap.loadMap(warp->targetMapId);
+                        playerGridX = warp->targetX;
+                        playerGridY = warp->targetY;
+                        playerPixelX = playerGridX * TILE_SIZE;
+                        playerPixelY = playerGridY * TILE_SIZE;
+                        systemNoticeMsg = "[" + tilemap.getMapName() + "] 진입";
+                    }
+                    else if (tilemap.getMapId() == 1) {
+                        // Wild Encounter check on mountain field (15% per step)
+                        std::uniform_int_distribution<int> encRoll(1, 100);
+                        if (encRoll(s_mainRng) <= 15) {
+                            const auto& pool = DataManager::getAllYokaiTemplates();
+                            std::uniform_int_distribution<size_t> poolDist(0, pool.size() - 2); // Exclude boss
+                            Yokai wildEnemy = pool[poolDist(s_mainRng)];
 
-                        currentBattle = std::make_unique<Battle>(playerParty, wildEnemy, artifacts);
-                        gameState = GameState::BattleView;
+                            currentBattle = std::make_unique<Battle>(playerParty, wildEnemy, artifacts);
+                            gameState = GameState::BattleView;
+                        }
                     }
                 }
             }
 
             camera.update(playerPixelX, playerPixelY, tilemap.getWidth(), tilemap.getHeight());
 
-            // Manual Battle Trigger with ActionA (Z key)
+            // Talk to NPC with ActionA (Z key)
             if (Input::isPressed(Key::ActionA)) {
-                const auto& pool = DataManager::getAllYokaiTemplates();
-                std::uniform_int_distribution<size_t> poolDist(0, pool.size() - 1);
-                Yokai wildEnemy = pool[poolDist(s_mainRng)];
-
-                currentBattle = std::make_unique<Battle>(playerParty, wildEnemy, artifacts);
-                gameState = GameState::BattleView;
+                auto currentNPCs = DataManager::getNPCsForMap(tilemap.getMapId());
+                for (const auto& n : currentNPCs) {
+                    int dist = std::abs(n.gridX - playerGridX) + std::abs(n.gridY - playerGridY);
+                    if (dist <= 1) {
+                        activeNPC = &n;
+                        dialogueLineIndex = 0;
+                        gameState = GameState::DialogueView;
+                        break;
+                    }
+                }
             }
 
             // Open 108 Yokai Encyclopedia with ActionB (X key)
@@ -161,6 +197,45 @@ int main() {
                 gameState = GameState::PartyManagementView;
             }
         }
+        else if (gameState == GameState::DialogueView) {
+            if (Input::isPressed(Key::ActionA) || Input::isPressed(Key::ActionB)) {
+                if (activeNPC && dialogueLineIndex + 1 < activeNPC->dialogue.size()) {
+                    dialogueLineIndex++;
+                } else {
+                    // Dialogue Finished: Execute NPC Actions
+                    if (activeNPC) {
+                        if (activeNPC->actionType == NPCActionType::TavernRest) {
+                            // Full Party Heal
+                            for (size_t i = 0; i < playerParty.getSize(); ++i) {
+                                Yokai* m = playerParty.getYokai(i);
+                                if (m) {
+                                    m->healHp(999);
+                                    m->restoreQi(999);
+                                    m->clearStatus();
+                                }
+                            }
+                            systemNoticeMsg = "주막에서 하룻밤 묵었습니다. 파티 전원의 체력/영력 완치!";
+                            DataManager::getQuestManager().advanceQuest("MQ_001");
+                        }
+                        else if (activeNPC->actionType == NPCActionType::QuestTrigger) {
+                            DataManager::getQuestManager().startQuest(activeNPC->associatedQuestId);
+                            systemNoticeMsg = "퀘스트 [" + activeNPC->associatedQuestId + "] 수주 완료!";
+                        }
+                        else if (activeNPC->actionType == NPCActionType::BossEncounter) {
+                            // Trigger Chapter 1 Boss Battle with Eumyang-dang Myogak
+                            Yokai bossYokai = DataManager::createYokaiById("YOKAI_BOSS_01");
+                            currentBattle = std::make_unique<Battle>(playerParty, bossYokai, artifacts);
+                            isBossBattleQueued = true;
+                            gameState = GameState::BattleView;
+                            activeNPC = nullptr;
+                            continue;
+                        }
+                    }
+                    gameState = GameState::WorldExploration;
+                    activeNPC = nullptr;
+                }
+            }
+        }
         else if (gameState == GameState::BattleView) {
             if (currentBattle) {
                 if (currentBattle->getState() == BattleState::PlayerCommand) {
@@ -170,9 +245,35 @@ int main() {
                     if (Input::isPressed(Key::Right)) currentBattle->onNavigateRight();
                     if (Input::isPressed(Key::ActionA)) currentBattle->onConfirm();
                     if (Input::isPressed(Key::ActionB)) currentBattle->onCancel();
-                } else if (currentBattle->getState() == BattleState::Victory ||
-                           currentBattle->getState() == BattleState::Defeat) {
+                } else if (currentBattle->getState() == BattleState::Victory) {
                     if (Input::isPressed(Key::ActionA) || Input::isPressed(Key::ActionB)) {
+                        if (isBossBattleQueued) {
+                            // Complete Chapter 1 Main Quest
+                            DataManager::getQuestManager().completeQuest("MQ_001");
+                            playerMoney += 300;
+                            systemNoticeMsg = "★ 챕터 1 클리어! 음양당 괴승 묘각 격파 완료! ★";
+                            isBossBattleQueued = false;
+                        }
+                        gameState = GameState::WorldExploration;
+                    }
+                } else if (currentBattle->getState() == BattleState::Defeat) {
+                    if (Input::isPressed(Key::ActionA) || Input::isPressed(Key::ActionB)) {
+                        // Respawn back at Doseonsa Tavern
+                        tilemap.loadMap(0);
+                        playerGridX = 7;
+                        playerGridY = 6;
+                        playerPixelX = playerGridX * TILE_SIZE;
+                        playerPixelY = playerGridY * TILE_SIZE;
+                        for (size_t i = 0; i < playerParty.getSize(); ++i) {
+                            Yokai* m = playerParty.getYokai(i);
+                            if (m) {
+                                m->healHp(m->getStats().maxHp / 2);
+                                m->restoreQi(m->getStats().maxQi / 2);
+                                m->clearStatus();
+                            }
+                        }
+                        systemNoticeMsg = "도선사 주막으로 후송되어 응급 처치를 받았습니다.";
+                        isBossBattleQueued = false;
                         gameState = GameState::WorldExploration;
                     }
                 }
@@ -203,15 +304,14 @@ int main() {
                 if (partyViewCursor + 1 < static_cast<int>(playerParty.getSize())) partyViewCursor++;
             }
             if (Input::isPressed(Key::ActionA)) {
-                // Promote Grade attempt
                 Yokai* selected = playerParty.getYokai(partyViewCursor);
                 if (selected) {
                     if (selected->canPromote()) {
                         selected->promoteGrade();
-                        partyFeedbackMsg = selected->getName() + " 등급 승급 성공! (Grade " +
+                        partyFeedbackMsg = selected->getName() + " 승급 성공! (Grade " +
                                            std::to_string(static_cast<int>(selected->getGrade())) + ")";
                     } else {
-                        partyFeedbackMsg = "승급 레벨 조건 미충족 (필요: Lv.10/20/35/50)";
+                        partyFeedbackMsg = "승급 조건 미충족 (필요: Lv.10/20/35/50)";
                     }
                 }
             }
@@ -240,28 +340,61 @@ int main() {
         // --- RENDER LOGIC (320x180 Framebuffer) ---
         renderer.clear(Palette::Black);
 
-        if (gameState == GameState::WorldExploration) {
+        if (gameState == GameState::WorldExploration || gameState == GameState::DialogueView) {
             // Render 16x16 Tilemap
             tilemap.render(renderer, camera.getX(), camera.getY());
+
+            // Render NPCs
+            auto mapNPCs = DataManager::getNPCsForMap(tilemap.getMapId());
+            for (const auto& n : mapNPCs) {
+                int nx = n.gridX * TILE_SIZE - camera.getX();
+                int ny = n.gridY * TILE_SIZE - camera.getY();
+                renderer.drawSprite(nx, ny, n.spriteId, 0);
+            }
 
             // Render Player Sprite
             int screenPX = playerPixelX - camera.getX();
             int screenPY = playerPixelY - camera.getY();
             renderer.drawSprite(screenPX, screenPY, 0, playerAnimFrame);
 
-            // World HUD Overlay
-            renderer.fillRect(0, 0, SCREEN_WIDTH, 12, Color(18, 18, 20, 210));
-            FontRenderer::drawText(renderer, 4, 2, "108: EUMYANG GYEONMUNROK", Palette::Yellow);
+            // World Top HUD Overlay
+            renderer.fillRect(0, 0, SCREEN_WIDTH, 12, Color(18, 18, 22, 220));
+            FontRenderer::drawText(renderer, 4, 2, tilemap.getMapName(), Palette::Yellow);
             
-            std::string colRateStr = "도감: " + std::to_string(DataManager::getEncyclopedia().getCapturedCount()) + "/108";
-            FontRenderer::drawText(renderer, SCREEN_WIDTH - 120, 2, colRateStr, Palette::Jade);
+            // Quest tracker snippet
+            const Quest* mq = DataManager::getQuestManager().getQuest("MQ_001");
+            if (mq && mq->state == QuestState::InProgress) {
+                std::string qStr = "[임무] " + mq->getCurrentObjective();
+                FontRenderer::drawText(renderer, 100, 2, qStr, Palette::Jade);
+            }
 
-            std::string fpsStr = "FPS:" + std::to_string(fps);
-            FontRenderer::drawText(renderer, SCREEN_WIDTH - 42, 2, fpsStr, Palette::LightGray);
+            std::string moneyStr = std::to_string(playerMoney) + "냥";
+            FontRenderer::drawText(renderer, SCREEN_WIDTH - 46, 2, moneyStr, Palette::Yellow);
 
-            // Bottom controls hint
-            renderer.fillRect(0, SCREEN_HEIGHT - 12, SCREEN_WIDTH, 12, Color(18, 18, 20, 210));
-            FontRenderer::drawText(renderer, 4, SCREEN_HEIGHT - 10, "ARROWS:Move | Z:Encounter | X:Codex | C:Bag | F1:Party", Palette::White);
+            // Bottom controls hint / Notice
+            renderer.fillRect(0, SCREEN_HEIGHT - 12, SCREEN_WIDTH, 12, Color(18, 18, 22, 220));
+            if (!systemNoticeMsg.empty()) {
+                FontRenderer::drawText(renderer, 4, SCREEN_HEIGHT - 10, systemNoticeMsg, Palette::Yellow);
+            } else {
+                FontRenderer::drawText(renderer, 4, SCREEN_HEIGHT - 10, "ARROWS:이동 | Z:대화/조사 | X:도감 | C:유물 | F1:파티", Palette::White);
+            }
+
+            // Dialogue Box Overlay
+            if (gameState == GameState::DialogueView && activeNPC) {
+                renderer.drawPanel(8, 104, 304, 66, Color(20, 24, 34, 245), Palette::Yellow);
+                
+                // NPC Name & Title
+                std::string titleHeader = activeNPC->nameKo + " [" + activeNPC->titleKo + "]";
+                FontRenderer::drawText(renderer, 14, 108, titleHeader, Palette::Yellow);
+
+                // Speech Line
+                if (dialogueLineIndex < activeNPC->dialogue.size()) {
+                    FontRenderer::drawText(renderer, 14, 124, activeNPC->dialogue[dialogueLineIndex], Palette::White);
+                }
+
+                // Action / Continue hint
+                FontRenderer::drawText(renderer, 220, 156, "[Z: 다음 / 확인]", Palette::Jade);
+            }
         }
         else if (gameState == GameState::BattleView) {
             // Battle Background
@@ -274,7 +407,7 @@ int main() {
                 const Yokai& eYokai = currentBattle->getEnemyYokai();
 
                 // 1. Enemy HUD Box (Top-Left)
-                renderer.drawPanel(8, 6, 140, 42, Color(24, 26, 34, 230), Palette::MidGray);
+                renderer.drawPanel(8, 6, 140, 42, Color(24, 26, 34, 230), isBossBattleQueued ? Palette::Red : Palette::MidGray);
                 std::string eGradeStr = " [G." + std::to_string(static_cast<int>(eYokai.getGrade())) + "]";
                 FontRenderer::drawText(renderer, 14, 10, eYokai.getName() + " Lv." + std::to_string(eYokai.getLevel()), Palette::Red);
                 FontRenderer::drawText(renderer, 108, 10, eGradeStr, Palette::Yellow);
@@ -290,37 +423,35 @@ int main() {
                     FontRenderer::drawText(renderer, 16, 37, StatusEffectSystem::getStatusName(eYokai.getStatus().effect), Palette::Black);
                 }
 
-                // Enemy Sprite (Top-Right)
+                // Enemy Sprite
                 int eSpriteId = 1;
                 if (eYokai.getId() == "YOKAI_002") eSpriteId = 2; // Gumiho
                 else if (eYokai.getId() == "YOKAI_005") eSpriteId = 3; // Maiden Ghost
                 else if (eYokai.getId() == "YOKAI_003") eSpriteId = 4; // Bulgasari
+                else if (eYokai.getId() == "YOKAI_BOSS_01") eSpriteId = 1; // Berserk Dokkaebi
                 renderer.drawSprite(SCREEN_WIDTH - 65, 24, eSpriteId, 0);
 
-                // 2. Player Yokai HUD Box (Bottom-Right)
+                // 2. Player Yokai HUD Box
                 if (pYokai) {
-                    renderer.drawSprite(35, 68, 0, 0); // Player active yokai sprite
+                    renderer.drawSprite(35, 68, 0, 0);
 
                     renderer.drawPanel(165, 60, 147, 46, Color(24, 26, 34, 230), Palette::Blue);
                     FontRenderer::drawText(renderer, 171, 64, pYokai->getName() + " Lv." + std::to_string(pYokai->getLevel()), Palette::Jade);
                     
-                    // Player HP Bar
                     std::string pHpText = "HP " + std::to_string(pYokai->getStats().hp) + "/" + std::to_string(pYokai->getStats().maxHp);
                     FontRenderer::drawText(renderer, 171, 74, pHpText, Palette::White);
                     renderer.drawHealthBar(171, 83, 135, 5, pYokai->getStats().hp, pYokai->getStats().maxHp, Palette::Green);
 
-                    // Player Qi Bar
                     std::string pQiText = "Qi " + std::to_string(pYokai->getStats().qi) + "/" + std::to_string(pYokai->getStats().maxQi);
                     FontRenderer::drawText(renderer, 171, 90, pQiText, Palette::Jade);
                     renderer.drawHealthBar(220, 91, 86, 4, pYokai->getStats().qi, pYokai->getStats().maxQi, Palette::Blue);
                 }
 
-                // 3. Command & Log Region (Bottom Area: Y 110..180)
+                // 3. Command & Log Region
                 renderer.drawPanel(0, 110, SCREEN_WIDTH, 70, Palette::Black, Palette::MidGray);
 
                 if (currentBattle->getState() == BattleState::PlayerCommand) {
                     if (currentBattle->getMenuState() == BattleMenuState::MainAction) {
-                        // 4-Button Main Menu Panel (Left)
                         renderer.drawPanel(4, 114, 130, 62, Color(20, 22, 28), Palette::MidGray);
                         
                         const char* menuLabels[4] = {"1.기술 (Attack)", "2.계약 (Talisman)", "3.교체 (Party)", "4.도망 (Flee)"};
@@ -336,7 +467,7 @@ int main() {
                             FontRenderer::drawText(renderer, mx, my, menuLabels[i], c);
                         }
 
-                        // Combat Log & Status Panel (Right)
+                        // Combat Log & Status Panel
                         renderer.drawPanel(138, 114, 178, 62, Color(16, 18, 22), Palette::MidGray);
                         const auto& log = currentBattle->getCombatLog();
                         int logY = 118;
@@ -351,7 +482,6 @@ int main() {
                         FontRenderer::drawText(renderer, 240, 162, capStr, Palette::Yellow);
                     }
                     else if (currentBattle->getMenuState() == BattleMenuState::SkillSelect) {
-                        // 4-Skill Select Submenu (Left)
                         renderer.drawPanel(4, 114, 160, 62, Color(20, 22, 28), Palette::Yellow);
                         
                         if (pYokai) {
@@ -369,7 +499,7 @@ int main() {
                                 FontRenderer::drawText(renderer, sx, sy + 8, "Qi:" + std::to_string(skills[i].qiCost), Palette::Jade);
                             }
 
-                            // Skill Detail Panel (Right)
+                            // Skill Detail Panel
                             renderer.drawPanel(168, 114, 148, 62, Color(16, 18, 22), Palette::MidGray);
                             if (sCur < static_cast<int>(skills.size())) {
                                 const auto& curSkl = skills[sCur];
@@ -385,7 +515,6 @@ int main() {
                         }
                     }
                     else if (currentBattle->getMenuState() == BattleMenuState::PartySwapSelect) {
-                        // Party Swap Submenu
                         renderer.drawPanel(4, 114, 312, 62, Color(20, 22, 28), Palette::Blue);
                         FontRenderer::drawText(renderer, 10, 118, "=== 출전할 요괴를 선택하십시오 (X: 취소) ===", Palette::Yellow);
 
@@ -406,8 +535,13 @@ int main() {
                 }
                 else if (currentBattle->getState() == BattleState::Victory) {
                     renderer.drawPanel(30, 118, 260, 52, Color(16, 40, 24), Palette::Yellow);
-                    FontRenderer::drawText(renderer, 90, 126, "★ 전투 승리! ★", Palette::Yellow);
-                    FontRenderer::drawText(renderer, 50, 140, "경험치 " + std::to_string(currentBattle->getExpReward()) + " 획득 및 도감 등록!", Palette::White);
+                    if (isBossBattleQueued) {
+                        FontRenderer::drawText(renderer, 70, 126, "★ 음양당 보스 격파 성공! ★", Palette::Yellow);
+                        FontRenderer::drawText(renderer, 45, 140, "경험치 " + std::to_string(currentBattle->getExpReward()) + " & 300냥 획득 및 퀘스트 완료!", Palette::White);
+                    } else {
+                        FontRenderer::drawText(renderer, 90, 126, "★ 전투 승리! ★", Palette::Yellow);
+                        FontRenderer::drawText(renderer, 50, 140, "경험치 " + std::to_string(currentBattle->getExpReward()) + " 획득 및 도감 등록!", Palette::White);
+                    }
                     FontRenderer::drawText(renderer, 70, 154, "[Z / Space 키를 눌러 필드로 복귀]", Palette::Jade);
                 }
                 else if (currentBattle->getState() == BattleState::Defeat) {
@@ -422,7 +556,6 @@ int main() {
             // 108 Yokai Encyclopedia View
             renderer.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Color(20, 22, 28));
             
-            // Header
             renderer.drawPanel(4, 4, 312, 20, Color(30, 34, 44), Palette::Yellow);
             FontRenderer::drawText(renderer, 10, 8, "=== 108: 음양견문록 도감 (CODEX) ===", Palette::Yellow);
             
@@ -430,7 +563,6 @@ int main() {
             std::string rateStr = "수집: " + std::to_string(capCnt) + "/108 (" + std::to_string(static_cast<int>(capCnt * 100.0f / 108.0f)) + "%)";
             FontRenderer::drawText(renderer, 220, 8, rateStr, Palette::Jade);
 
-            // Left: 6-Slot Scroll List
             renderer.drawPanel(4, 26, 130, 136, Color(16, 18, 24), Palette::MidGray);
             int startSlot = std::max(1, std::min(103, codexCursor - 2));
 
@@ -460,7 +592,6 @@ int main() {
                 }
             }
 
-            // Right: Detail Panel
             renderer.drawPanel(138, 26, 178, 136, Color(16, 18, 24), Palette::MidGray);
             const auto* selected = DataManager::getEncyclopedia().getEntry(codexCursor);
             if (selected) {
@@ -476,7 +607,6 @@ int main() {
 
                     FontRenderer::drawText(renderer, 144, 58, "출처: " + selected->origin, Palette::LightGray);
                     
-                    // Multi-line lore
                     FontRenderer::drawText(renderer, 144, 72, "[전승 및 배경 설화]", Palette::Yellow);
                     FontRenderer::drawText(renderer, 144, 84, selected->lore.substr(0, 24), Palette::White);
                     if (selected->lore.length() > 24) {
@@ -495,17 +625,14 @@ int main() {
                 }
             }
 
-            // Footer
             renderer.fillRect(0, SCREEN_HEIGHT - 14, SCREEN_WIDTH, 14, Palette::Black);
-            FontRenderer::drawText(renderer, 4, SCREEN_HEIGHT - 11, "ARROWS:Scroll | LEFT/RIGHT:Skip 10 | X/Z:Back", Palette::White);
+            FontRenderer::drawText(renderer, 4, SCREEN_HEIGHT - 11, "ARROWS:스크롤 | LEFT/RIGHT:10개 점프 | X/Z:닫기", Palette::White);
         }
         else if (gameState == GameState::PartyManagementView) {
-            // Party Management & Promotion View
             renderer.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Color(20, 24, 32));
             renderer.drawPanel(4, 4, 312, 20, Color(30, 36, 48), Palette::Blue);
             FontRenderer::drawText(renderer, 10, 8, "=== 파티 관리 및 요괴 승급 (PARTY & GROWTH) ===", Palette::Yellow);
 
-            // Left: 3 Party Slots
             renderer.drawPanel(4, 26, 140, 136, Color(16, 20, 28), Palette::MidGray);
             for (size_t i = 0; i < playerParty.getSize(); ++i) {
                 const Yokai* member = playerParty.getYokai(i);
@@ -529,7 +656,6 @@ int main() {
                 FontRenderer::drawText(renderer, 16, py + 24, expStr, Palette::LightGray);
             }
 
-            // Right: Detailed Stats & Promotion Box
             renderer.drawPanel(148, 26, 168, 136, Color(16, 20, 28), Palette::MidGray);
             const Yokai* selectedMember = playerParty.getYokai(partyViewCursor);
             if (selectedMember) {
@@ -539,7 +665,6 @@ int main() {
                 FontRenderer::drawText(renderer, 154, 58, "신법(SPD): " + std::to_string(selectedMember->getStats().spd), Palette::White);
                 FontRenderer::drawText(renderer, 230, 58, "영력(Qi) : " + std::to_string(selectedMember->getStats().maxQi), Palette::Jade);
 
-                // Skills summary
                 FontRenderer::drawText(renderer, 154, 74, "[장착 기술 목록]", Palette::LightGray);
                 const auto& skills = selectedMember->getSkills();
                 for (size_t s = 0; s < skills.size() && s < 4; ++s) {
@@ -547,7 +672,6 @@ int main() {
                     FontRenderer::drawText(renderer, 154, sky, std::to_string(s + 1) + "." + skills[s].name, Palette::White);
                 }
 
-                // Promotion Button
                 renderer.drawPanel(154, 132, 156, 24, selectedMember->canPromote() ? Color(20, 60, 30) : Color(40, 40, 40), Palette::Yellow);
                 if (selectedMember->canPromote()) {
                     FontRenderer::drawText(renderer, 162, 139, "[Z키: 등급 승급(Promotion)!]", Palette::Yellow);
@@ -556,26 +680,22 @@ int main() {
                 }
             }
 
-            // Feedback / Footer
             if (!partyFeedbackMsg.empty()) {
                 renderer.fillRect(4, 148, 140, 12, Color(20, 50, 30));
                 FontRenderer::drawText(renderer, 8, 150, partyFeedbackMsg, Palette::Yellow);
             }
 
             renderer.fillRect(0, SCREEN_HEIGHT - 14, SCREEN_WIDTH, 14, Palette::Black);
-            FontRenderer::drawText(renderer, 4, SCREEN_HEIGHT - 11, "UP/DOWN:Select | Z:Promote Grade | F1/X:Close", Palette::White);
+            FontRenderer::drawText(renderer, 4, SCREEN_HEIGHT - 11, "UP/DOWN:선택 | Z:등급 승급 | F1/X:닫기", Palette::White);
         }
         else if (gameState == GameState::ArtifactMenu) {
-            // Artifact Inventory Dual-Panel View
             renderer.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Color(20, 24, 28));
             
-            // Header
             renderer.drawPanel(4, 4, 312, 20, Color(32, 38, 44), Palette::Yellow);
             FontRenderer::drawText(renderer, 10, 8, "=== 유물 보관함 (ARTIFACT INVENTORY) ===", Palette::Yellow);
             std::string slotCountStr = "보유: " + std::to_string(artifacts.getCount()) + "/8";
             FontRenderer::drawText(renderer, 248, 8, slotCountStr, Palette::Jade);
 
-            // Left: Artifact List (8 Slots)
             renderer.drawPanel(4, 26, 130, 136, Color(16, 18, 22), Palette::MidGray);
             const auto& artList = artifacts.getArtifacts();
 
@@ -593,42 +713,35 @@ int main() {
                 }
             }
 
-            // Right: Artifact Details (Buff & Debuff Coexistence Panel)
             renderer.drawPanel(138, 26, 178, 136, Color(16, 18, 22), Palette::MidGray);
             const auto* selectedArt = artifacts.getArtifact(artCursor);
             if (selectedArt) {
                 FontRenderer::drawText(renderer, 144, 30, selectedArt->name, Palette::Yellow);
                 
-                // Buff Box (Green)
                 renderer.fillRect(144, 42, 40, 9, Palette::Green);
                 FontRenderer::drawText(renderer, 146, 43, "[이점]", Palette::Black);
                 FontRenderer::drawText(renderer, 144, 54, ArtifactInventory::getBuffDescription(*selectedArt), Palette::Jade);
 
-                // Debuff Box (Red)
                 renderer.fillRect(144, 68, 40, 9, Palette::Red);
                 FontRenderer::drawText(renderer, 146, 69, "[대가]", Palette::Black);
                 FontRenderer::drawText(renderer, 144, 80, ArtifactInventory::getDebuffDescription(*selectedArt), Palette::Red);
 
-                // Lore
                 FontRenderer::drawText(renderer, 144, 98, "[배경 설화]", Palette::LightGray);
                 FontRenderer::drawText(renderer, 144, 108, selectedArt->lore.substr(0, 24), Palette::MidGray);
 
-                // Destruction Action Button
                 renderer.drawPanel(144, 134, 168, 22, Color(45, 20, 20), Palette::Red);
                 FontRenderer::drawText(renderer, 148, 140, "[Z키: 즉시 파괴 (영기 환원)]", Palette::Yellow);
             } else {
                 FontRenderer::drawText(renderer, 144, 40, "선택된 유물이 없습니다.", Palette::MidGray);
             }
 
-            // Feedback Message
             if (!artFeedbackMsg.empty()) {
                 renderer.fillRect(4, 148, 130, 12, Color(20, 50, 30));
                 FontRenderer::drawText(renderer, 8, 150, "파괴 완료! 영기 환원됨", Palette::Jade);
             }
 
-            // Footer
             renderer.fillRect(0, SCREEN_HEIGHT - 14, SCREEN_WIDTH, 14, Palette::Black);
-            FontRenderer::drawText(renderer, 4, SCREEN_HEIGHT - 11, "UP/DOWN:Select | Z:Instant Destroy | X/C:Close", Palette::White);
+            FontRenderer::drawText(renderer, 4, SCREEN_HEIGHT - 11, "UP/DOWN:선택 | Z:즉시 파괴 | X/C:닫기", Palette::White);
         }
 
         // Present Framebuffer to Win32 Window
