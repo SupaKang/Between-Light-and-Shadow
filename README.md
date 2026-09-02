@@ -1,4 +1,4 @@
-# 108:음양견문록 (108: Yin-Yang Chronicle)
+# 108:음양견문록 (Between Light and Shadow)
 
 > **1.44MB 플로피 디스크 용량 제한**을 고려하여 설계된 초소형 C++17 Windows 독립 실행 조선 민속 턴제 요괴 수집 RPG.
 
