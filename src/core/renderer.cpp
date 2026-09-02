@@ -226,6 +226,82 @@ void Renderer::drawSprite(int px, int py, int spriteId, int frame, bool flipX) {
         fillRect(px + 7, py + 7, 2, 6, Color(60, 65, 75)); // Trunk/Snout
         fillRect(px + 2, py + 11, 4, 4, Color(50, 55, 60)); // Leg L
         fillRect(px + 10, py + 11, 4, 4, Color(50, 55, 60)); // Leg R
+    } else if (spriteId == 5) {
+        // Jeoseungsaja (저승사자 - 검은 갓, 검은 도포, 붉은 명부)
+        fillRect(px + 2, py + 1, 12, 2, Palette::Black); // Wide Gat Brim
+        fillRect(px + 5, py, 6, 2, Palette::Black);
+        fillRect(px + 5, py + 3, 6, 4, Color(210, 220, 225)); // Pale ghost face
+        setPixel(px + 6, py + 4, Palette::Red); // Crimson eyes
+        setPixel(px + 9, py + 4, Palette::Red);
+        fillRect(px + 4, py + 7, 8, 8, Palette::InkBlack); // Black Robe
+        fillRect(px + 12, py + 8, 3, 4, Palette::Red); // Death Scroll
+    } else if (spriteId == 6) {
+        // Mountain Tiger (호랑이 산신 - 황금 털, 검은 줄무늬, 흰 수염)
+        fillRect(px + 3, py + 2, 10, 8, Color(220, 140, 30)); // Tiger face
+        fillRect(px + 4, py + 1, 2, 2, Color(160, 90, 10)); // Ear L
+        fillRect(px + 10, py + 1, 2, 2, Color(160, 90, 10)); // Ear R
+        setPixel(px + 5, py + 4, Palette::Yellow); // Glowing eyes
+        setPixel(px + 10, py + 4, Palette::Yellow);
+        fillRect(px + 6, py + 2, 4, 2, Palette::Black); // '王' Head mark
+        fillRect(px + 7, py + 3, 2, 3, Palette::Black);
+        fillRect(px + 5, py + 8, 6, 2, Palette::White); // Whiskers/Fangs
+        fillRect(px + 2, py + 10, 12, 5, Color(210, 130, 20)); // Body
+        setPixel(px + 4, py + 11, Palette::Black); // Stripes
+        setPixel(px + 8, py + 11, Palette::Black);
+        setPixel(px + 11, py + 11, Palette::Black);
+    } else if (spriteId == 7) {
+        // Imoogi / Dragon (이무기 - 푸른 비늘, 황금 눈, 여의주)
+        fillRect(px + 4, py + 2, 8, 6, Color(35, 110, 160)); // Dragon head
+        setPixel(px + 5, py + 1, Color(210, 180, 50)); // Horn L
+        setPixel(px + 10, py + 1, Color(210, 180, 50)); // Horn R
+        setPixel(px + 6, py + 4, Palette::Yellow); // Eyes
+        setPixel(px + 9, py + 4, Palette::Yellow);
+        fillRect(px + 3, py + 8, 10, 5, Color(25, 90, 140)); // Serpentine body
+        fillRect(px + 5, py + 13, 6, 3, Color(20, 70, 120));
+        fillRect(px + 12, py + 6, 3, 3, Palette::Yellow); // Yeouiju (Dragon Pearl)
+        setPixel(px + 13, py + 7, Palette::White);
+    } else if (spriteId == 8) {
+        // Centipede Demon (지네귀신 - 보랏빛 몸체, 다지류 다리, 독니)
+        fillRect(px + 5, py + 2, 6, 4, Color(110, 30, 130)); // Head
+        setPixel(px + 5, py + 1, Palette::Green); // Toxic fangs
+        setPixel(px + 10, py + 1, Palette::Green);
+        fillRect(px + 6, py + 6, 4, 8, Color(90, 20, 110)); // Segment body
+        // Segmented legs
+        for (int i = 0; i < 4; ++i) {
+            setPixel(px + 4, py + 6 + i * 2, Color(160, 40, 180));
+            setPixel(px + 11, py + 6 + i * 2, Color(160, 40, 180));
+        }
+    } else if (spriteId == 9) {
+        // Tree God / Dangsan Moksin (목신 - 거목 줄기, 잎사귀, 금줄)
+        fillRect(px + 3, py + 1, 10, 8, Color(30, 120, 50)); // Tree Crown
+        fillRect(px + 5, py + 9, 6, 6, Color(110, 70, 35)); // Trunk
+        fillRect(px + 4, py + 8, 8, 2, Palette::Yellow); // Sacred Geumjul Rope
+        setPixel(px + 6, py + 9, Palette::White); // Paper prayer streamer
+        setPixel(px + 9, py + 9, Palette::White);
+    } else if (spriteId == 10) {
+        // Eumyang-dang Cult Master Mukyeong (음양당 총수 묵영 - 흑자색 도포, 태극령)
+        fillRect(px + 4, py + 1, 8, 3, Palette::InkBlack); // Hood/Hat
+        fillRect(px + 5, py + 4, 6, 3, Color(230, 210, 190)); // Masked Face
+        setPixel(px + 6, py + 5, Palette::Red); // Glowing Evil Eyes
+        setPixel(px + 9, py + 5, Palette::Purple);
+        fillRect(px + 3, py + 7, 10, 8, Color(60, 20, 80)); // Shadow Robe
+        // Yin-Yang Staff
+        fillRect(px + 13, py + 2, 2, 12, Palette::LightGray);
+        setPixel(px + 13, py + 1, Palette::Red);
+        setPixel(px + 14, py + 1, Palette::Blue);
+    } else if (spriteId == 11) {
+        // Ancient Chaos Beast (태고의 혼돈 흉수 - 거대 암흑 아우라, 붉은 촉수)
+        fillRect(px + 2, py + 1, 12, 13, Palette::InkBlack); // Void Body
+        fillRect(px + 4, py + 3, 8, 8, Color(70, 10, 30)); // Corrupt Core
+        setPixel(px + 5, py + 5, Palette::Red); // Multi-Eyes
+        setPixel(px + 10, py + 5, Palette::Red);
+        setPixel(px + 7, py + 8, Palette::Yellow);
+        setPixel(px + 8, py + 8, Palette::Yellow);
+        // Chaos tendrils
+        setPixel(px + 1, py + 3, Palette::Purple);
+        setPixel(px + 14, py + 3, Palette::Purple);
+        setPixel(px + 1, py + 12, Palette::Purple);
+        setPixel(px + 14, py + 12, Palette::Purple);
     }
 }
 

@@ -128,6 +128,14 @@ LRESULT CALLBACK Window::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
                 case VK_TAB:
                     Input::setKeyState(Key::ActionC, down);
                     break;
+                case 'V':
+                case 'P':
+                    Input::setKeyState(Key::ActionD, down);
+                    break;
+                case 'Q':
+                case 'L':
+                    Input::setKeyState(Key::ActionE, down);
+                    break;
                 case VK_F1:
                     Input::setKeyState(Key::Debug, down);
                     break;

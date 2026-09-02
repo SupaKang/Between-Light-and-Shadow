@@ -150,13 +150,26 @@ int main() {
                         playerPixelY = playerGridY * TILE_SIZE;
                         systemNoticeMsg = "[" + tilemap.getMapName() + "] 진입";
                     }
-                    else if (tilemap.getMapId() == 1) {
-                        // Wild Encounter check on mountain field (15% per step)
+                    else if (tilemap.getMapId() == 1 || tilemap.getMapId() == 3 || tilemap.getMapId() == 4) {
+                        // Wild Encounter check across dangerous areas (15% per step)
                         std::uniform_int_distribution<int> encRoll(1, 100);
                         if (encRoll(s_mainRng) <= 15) {
                             const auto& pool = DataManager::getAllYokaiTemplates();
-                            std::uniform_int_distribution<size_t> poolDist(0, pool.size() - 2); // Exclude boss
+                            // Select regional yokai
+                            size_t maxIdx = 107; // Exclude boss templates (indices 108..112)
+                            size_t minIdx = 0;
+                            if (tilemap.getMapId() == 3) { minIdx = 20; maxIdx = 70; }
+                            else if (tilemap.getMapId() == 4) { minIdx = 50; maxIdx = 107; }
+                            else { minIdx = 0; maxIdx = 35; }
+
+                            std::uniform_int_distribution<size_t> poolDist(minIdx, std::min(maxIdx, pool.size() - 6));
                             Yokai wildEnemy = pool[poolDist(s_mainRng)];
+                            
+                            // Scale wild yokai level based on region
+                            int wildLevel = 3;
+                            if (tilemap.getMapId() == 3) wildLevel = 15;
+                            else if (tilemap.getMapId() == 4) wildLevel = 30;
+                            wildEnemy.gainExp(wildLevel * 250);
 
                             currentBattle = std::make_unique<Battle>(playerParty, wildEnemy, artifacts);
                             gameState = GameState::BattleView;
@@ -191,10 +204,15 @@ int main() {
                 gameState = GameState::ArtifactMenu;
             }
 
-            // Open Party Management with Debug/F1 key
-            if (Input::isPressed(Key::Debug)) {
+            // Open Party Management with ActionD (V / P / F1 key)
+            if (Input::isPressed(Key::ActionD) || Input::isPressed(Key::Debug)) {
                 partyFeedbackMsg = "";
                 gameState = GameState::PartyManagementView;
+            }
+
+            // Open Quest Log with ActionE (Q / L key)
+            if (Input::isPressed(Key::ActionE)) {
+                gameState = GameState::QuestLogView;
             }
         }
         else if (gameState == GameState::DialogueView) {
@@ -222,8 +240,13 @@ int main() {
                             systemNoticeMsg = "퀘스트 [" + activeNPC->associatedQuestId + "] 수주 완료!";
                         }
                         else if (activeNPC->actionType == NPCActionType::BossEncounter) {
-                            // Trigger Chapter 1 Boss Battle with Eumyang-dang Myogak
-                            Yokai bossYokai = DataManager::createYokaiById("YOKAI_BOSS_01");
+                            std::string bossId = "YOKAI_BOSS_01";
+                            if (activeNPC->associatedQuestId == "MQ_002") bossId = "YOKAI_BOSS_02";
+                            else if (activeNPC->associatedQuestId == "MQ_003") bossId = "YOKAI_BOSS_03";
+                            else if (activeNPC->associatedQuestId == "MQ_004") bossId = "YOKAI_BOSS_04";
+                            else if (activeNPC->associatedQuestId == "MQ_005") bossId = "YOKAI_BOSS_05";
+
+                            Yokai bossYokai = DataManager::createYokaiById(bossId);
                             currentBattle = std::make_unique<Battle>(playerParty, bossYokai, artifacts);
                             isBossBattleQueued = true;
                             gameState = GameState::BattleView;
@@ -248,10 +271,35 @@ int main() {
                 } else if (currentBattle->getState() == BattleState::Victory) {
                     if (Input::isPressed(Key::ActionA) || Input::isPressed(Key::ActionB)) {
                         if (isBossBattleQueued) {
-                            // Complete Chapter 1 Main Quest
-                            DataManager::getQuestManager().completeQuest("MQ_001");
-                            playerMoney += 300;
-                            systemNoticeMsg = "★ 챕터 1 클리어! 음양당 괴승 묘각 격파 완료! ★";
+                            if (tilemap.getMapId() == 2) {
+                                DataManager::getQuestManager().completeQuest("MQ_001");
+                                DataManager::getQuestManager().startQuest("MQ_002");
+                                playerMoney += 500;
+                                systemNoticeMsg = "★ [챕터 1 클리어] 음양당 괴승 묘각 격파! 제2구역 소백산맥 개방! ★";
+                            } else if (tilemap.getMapId() == 3) {
+                                if (DataManager::getQuestManager().getQuest("MQ_002")->state != QuestState::Completed) {
+                                    DataManager::getQuestManager().completeQuest("MQ_002");
+                                    DataManager::getQuestManager().startQuest("MQ_003");
+                                    playerMoney += 800;
+                                    systemNoticeMsg = "★ [챕터 2 클리어] 철포방주 격파! 남해 포구로 진입하십시오! ★";
+                                } else {
+                                    DataManager::getQuestManager().completeQuest("MQ_003");
+                                    DataManager::getQuestManager().startQuest("MQ_004");
+                                    playerMoney += 1200;
+                                    systemNoticeMsg = "★ [챕터 3 클리어] 수로방주 격파! 지리산 여우골 개방! ★";
+                                }
+                            } else if (tilemap.getMapId() == 4) {
+                                if (DataManager::getQuestManager().getQuest("MQ_004")->state != QuestState::Completed) {
+                                    DataManager::getQuestManager().completeQuest("MQ_004");
+                                    DataManager::getQuestManager().startQuest("MQ_005");
+                                    playerMoney += 1800;
+                                    systemNoticeMsg = "★ [챕터 4 클리어] 음양좌호법 격파! 최종 성채 당주실 개방! ★";
+                                } else {
+                                    DataManager::getQuestManager().completeQuest("MQ_005");
+                                    playerMoney += 5000;
+                                    systemNoticeMsg = "★ [축하합니다! 전 챕터 엔딩] 음양당 궤멸 및 조선의 평화 수호 완료! ★";
+                                }
+                            }
                             isBossBattleQueued = false;
                         }
                         gameState = GameState::WorldExploration;
@@ -315,7 +363,7 @@ int main() {
                     }
                 }
             }
-            if (Input::isPressed(Key::ActionB) || Input::isPressed(Key::Debug)) {
+            if (Input::isPressed(Key::ActionB) || Input::isPressed(Key::ActionD) || Input::isPressed(Key::Debug)) {
                 gameState = GameState::WorldExploration;
             }
         }
@@ -333,6 +381,11 @@ int main() {
                 }
             }
             if (Input::isPressed(Key::ActionB) || Input::isPressed(Key::ActionC)) {
+                gameState = GameState::WorldExploration;
+            }
+        }
+        else if (gameState == GameState::QuestLogView) {
+            if (Input::isPressed(Key::ActionB) || Input::isPressed(Key::ActionA) || Input::isPressed(Key::ActionE)) {
                 gameState = GameState::WorldExploration;
             }
         }
@@ -376,7 +429,7 @@ int main() {
             if (!systemNoticeMsg.empty()) {
                 FontRenderer::drawText(renderer, 4, SCREEN_HEIGHT - 10, systemNoticeMsg, Palette::Yellow);
             } else {
-                FontRenderer::drawText(renderer, 4, SCREEN_HEIGHT - 10, "ARROWS:이동 | Z:대화/조사 | X:도감 | C:유물 | F1:파티", Palette::White);
+                FontRenderer::drawText(renderer, 4, SCREEN_HEIGHT - 10, "방향키:이동 | Z:대화 | X:도감 | C:유물 | V:파티 | Q:임무", Palette::White);
             }
 
             // Dialogue Box Overlay
@@ -428,7 +481,25 @@ int main() {
                 if (eYokai.getId() == "YOKAI_002") eSpriteId = 2; // Gumiho
                 else if (eYokai.getId() == "YOKAI_005") eSpriteId = 3; // Maiden Ghost
                 else if (eYokai.getId() == "YOKAI_003") eSpriteId = 4; // Bulgasari
+                else if (eYokai.getId() == "YOKAI_007") eSpriteId = 5; // Jeoseungsaja
+                else if (eYokai.getId() == "YOKAI_031") eSpriteId = 6; // Mountain Tiger
+                else if (eYokai.getId() == "YOKAI_020") eSpriteId = 7; // Imoogi
+                else if (eYokai.getId() == "YOKAI_022") eSpriteId = 8; // Centipede Demon
+                else if (eYokai.getId() == "YOKAI_048") eSpriteId = 9; // Tree God
                 else if (eYokai.getId() == "YOKAI_BOSS_01") eSpriteId = 1; // Berserk Dokkaebi
+                else if (eYokai.getId() == "YOKAI_BOSS_02") eSpriteId = 4; // Metal Bulgasari
+                else if (eYokai.getId() == "YOKAI_BOSS_03") eSpriteId = 7; // Imoogi Sea Lord
+                else if (eYokai.getId() == "YOKAI_BOSS_04") eSpriteId = 2; // White Fox Guardian
+                else if (eYokai.getId() == "YOKAI_BOSS_05") eSpriteId = 11; // Chaos Beast
+                else {
+                    // Element/Grade based fallback sprite
+                    if (eYokai.getElement() == Element::Fire) eSpriteId = 1;
+                    else if (eYokai.getElement() == Element::Water) eSpriteId = 3;
+                    else if (eYokai.getElement() == Element::Earth) eSpriteId = 4;
+                    else if (eYokai.getElement() == Element::Dark) eSpriteId = 5;
+                    else if (eYokai.getElement() == Element::Light) eSpriteId = 2;
+                    else eSpriteId = 6;
+                }
                 renderer.drawSprite(SCREEN_WIDTH - 65, 24, eSpriteId, 0);
 
                 // 2. Player Yokai HUD Box
@@ -742,6 +813,44 @@ int main() {
 
             renderer.fillRect(0, SCREEN_HEIGHT - 14, SCREEN_WIDTH, 14, Palette::Black);
             FontRenderer::drawText(renderer, 4, SCREEN_HEIGHT - 11, "UP/DOWN:선택 | Z:즉시 파괴 | X/C:닫기", Palette::White);
+        }
+        else if (gameState == GameState::QuestLogView) {
+            renderer.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Color(18, 22, 28));
+            
+            renderer.drawPanel(4, 4, 312, 20, Color(30, 36, 46), Palette::Jade);
+            FontRenderer::drawText(renderer, 10, 8, "=== 임무 일지 (QUEST & MISSION LOG) ===", Palette::Yellow);
+            FontRenderer::drawText(renderer, 240, 8, "[Q/X: 닫기]", Palette::White);
+
+            renderer.drawPanel(4, 26, 312, 136, Color(14, 16, 22), Palette::MidGray);
+            
+            const auto& allQuests = DataManager::getQuestManager().getAllQuests();
+            int qy = 30;
+            int count = 0;
+            for (const auto& q : allQuests) {
+                if (q.state == QuestState::NotStarted) continue;
+                count++;
+                if (qy > 140) break;
+
+                Color tagColor = (q.type == QuestType::Main) ? Palette::Yellow : Palette::Jade;
+                std::string tag = (q.type == QuestType::Main) ? "[메인]" : "[서브]";
+                FontRenderer::drawText(renderer, 8, qy, tag + " " + q.titleKo, tagColor);
+
+                std::string stStr = (q.state == QuestState::Completed) ? " (완료)" : " (진행중)";
+                Color stColor = (q.state == QuestState::Completed) ? Palette::Jade : Palette::White;
+                FontRenderer::drawText(renderer, 250, qy, stStr, stColor);
+
+                qy += 11;
+                std::string objStr = " -> " + q.getCurrentObjective();
+                FontRenderer::drawText(renderer, 12, qy, objStr, Palette::LightGray);
+                qy += 15;
+            }
+
+            if (count == 0) {
+                FontRenderer::drawText(renderer, 12, 40, "현재 진행 중인 임무가 없습니다.", Palette::MidGray);
+            }
+
+            renderer.fillRect(0, SCREEN_HEIGHT - 14, SCREEN_WIDTH, 14, Palette::Black);
+            FontRenderer::drawText(renderer, 4, SCREEN_HEIGHT - 11, "마을의 NPC들과 대화하여 새로운 임무를 수주하십시오.", Palette::LightGray);
         }
 
         // Present Framebuffer to Win32 Window

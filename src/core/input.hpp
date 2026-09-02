@@ -9,10 +9,12 @@ enum class Key : uint32_t {
     Down    = 1 << 1,
     Left    = 1 << 2,
     Right   = 1 << 3,
-    ActionA = 1 << 4, // Z, Space, Enter (Confirm / Attack)
-    ActionB = 1 << 5, // X, Escape (Cancel / Menu)
-    ActionC = 1 << 6, // C, Tab (Party / Bag)
-    Debug   = 1 << 7  // F1, D (Tech Info toggle)
+    ActionA = 1 << 4, // Z, Space, Enter (Confirm / Talk)
+    ActionB = 1 << 5, // X, Escape (Cancel / Codex)
+    ActionC = 1 << 6, // C, Tab (Artifact Inventory)
+    ActionD = 1 << 7, // V, P (Party Management)
+    ActionE = 1 << 8, // Q, L (Quest Log)
+    Debug   = 1 << 9  // F1, D (Tech Info toggle)
 };
 
 inline Key operator|(Key a, Key b) {

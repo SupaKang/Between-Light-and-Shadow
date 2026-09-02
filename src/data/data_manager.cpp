@@ -265,19 +265,35 @@ void DataManager::init() {
              {"흑흑... 제 몸에 깃든 바람 요괴 때문에", "시아버지 앞에서 큰 방귀 소리를 내어 쫓겨날 판입니다.", "고갯길의 바람 요괴를 진정시켜 주실 수 있을까요?"},
              NPCActionType::QuestTrigger, "SQ_001"};
 
-    NPC bossMyogak{"NPC_004", 2, 9, 3, 4, "괴승 묘각", "음양당 북악방주",
+    NPC bossMyogak{"NPC_004", 2, 9, 3, 4, "괴승 묘각", "음양당 북악방주 (Chapter 1)",
                   {"크크크... 관상감의 애송이 영술사가 여기까지 기어들어왔구나!", "천지음양부는 이미 깨어졌고, 조선의 108 요괴는 우리 음양당의 손에 들어갈 것이다!", "폭주한 붉은 도깨비여, 저 놈을 찢어발겨라!"},
                   NPCActionType::BossEncounter, "MQ_001"};
 
     NPC sobaekElder{"NPC_005", 3, 4, 3, 2, "소백산 심마니", "산길 안내인",
-                   {"조심하게나! 소백산 무쇠광산에 거대 불가사리가 나타나", "온 산의 쇠를 먹어치우며 폭주하고 있다네!"},
+                   {"조심하게나! 소백산 무쇠광산에 거대 불가사리가 나타나", "온 산의 쇠를 먹어치우며 폭주하고 있다네!", "오른편 남해 포구 쪽으로 가면 철포방주와 불가사리가 있네!"},
                    NPCActionType::QuestTrigger, "MQ_002"};
 
-    NPC finalBoss{"NPC_006", 4, 9, 3, 4, "당주 묵영", "음양당 총수",
+    NPC bossIronLord{"NPC_007", 3, 16, 8, 4, "철포방주 배극", "음양당 철포방주 (Chapter 2)",
+                    {"소백산의 모든 무쇠는 우리 음양당의 거대 병기가 될 것이다!", "천년 무쇠 불가사리여, 침입자를 짓밟아라!"},
+                    NPCActionType::BossEncounter, "MQ_002"};
+
+    NPC bossWaterLord{"NPC_008", 3, 16, 2, 3, "수로방주 흑사", "음양당 수로방주 (Chapter 3)",
+                     {"남해 바다의 모든 수살귀와 이무기가 우리 명을 받든다.", "심해의 원혼들이여, 영술사의 숨을 끊어라!"},
+                     NPCActionType::BossEncounter, "MQ_003"};
+
+    NPC foxSage{"NPC_009", 4, 3, 5, 2, "지리산 백발 도사", "천년 선인",
+               {"음양당의 요술 결계가 지리산의 백발 구미호를 미치게 만들었네.", "어서 중심 제단으로 가 음양당 좌호법을 처치하고 구미호를 해방하게!"},
+               NPCActionType::QuestTrigger, "MQ_004"};
+
+    NPC bossLeftGuardian{"NPC_010", 4, 12, 3, 2, "음양좌호법 설화", "음양당 좌호법 (Chapter 4)",
+                         {"호호호... 천년 백발 구미호의 붉은 여우불 맛을 보겠느냐?", "음양당의 대업을 방해하는 자는 재가 되어 사라질 것이다!"},
+                         NPCActionType::BossEncounter, "MQ_004"};
+
+    NPC finalBoss{"NPC_006", 4, 9, 3, 10, "당주 묵영", "음양당 총수 (Final Boss)",
                  {"벽사청의 애송이가 마침내 일식의 성채까지 도달했군.", "허나 이미 늦었다. 108 요괴의 원혼으로 태고의 혼돈을 부활시켰다!", "조선의 하늘 아래 새로운 음양의 질서를 세우리라!"},
                  NPCActionType::BossEncounter, "MQ_005"};
 
-    s_npcDatabase = {jumoh, merchant, bride, bossMyogak, sobaekElder, finalBoss};
+    s_npcDatabase = {jumoh, merchant, bride, bossMyogak, sobaekElder, bossIronLord, bossWaterLord, foxSage, bossLeftGuardian, finalBoss};
 
     // 5. 5 Main Campaign Chapters & 5 Side Quests
     Quest mq1{"MQ_001", QuestType::Main, "제1장: 도선사의 붉은 안개", 1, "관상감 벽사청의 명을 받아 도선사 인근에 번지는 음양당의 요기를 조사하라.",
