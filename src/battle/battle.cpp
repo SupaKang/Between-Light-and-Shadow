@@ -1,4 +1,5 @@
 #include "battle.hpp"
+#include "../data/data_manager.hpp"
 #include <random>
 #include <algorithm>
 
@@ -9,6 +10,7 @@ static std::mt19937 s_battleRng(2026);
 Battle::Battle(Party& playerParty, Yokai wildYokai, ArtifactInventory& artifacts)
     : m_playerParty(playerParty), m_enemyYokai(std::move(wildYokai)), m_artifacts(artifacts) {
     m_expReward = static_cast<int>(m_enemyYokai.getLevel() * 35 * static_cast<int>(m_enemyYokai.getGrade()));
+    DataManager::getEncyclopedia().markSeen(m_enemyYokai.getId());
     m_combatLog.push_back("야생의 [" + m_enemyYokai.getName() + "] 조우!");
     m_combatLog.push_back("행동을 선택하십시오.");
 }
@@ -257,6 +259,7 @@ void Battle::resolveTurnActions(const TurnAction& playerAction, const TurnAction
         m_combatLog.push_back("벽사 봉인 부적을 던졌습니다! (성공률: " + std::to_string(static_cast<int>(rate * 100)) + "%)");
         if (dist(s_battleRng) <= rate) {
             m_combatLog.push_back("계약 성공! [" + m_enemyYokai.getName() + "]과 영혼의 계약을 맺었습니다!");
+            DataManager::getEncyclopedia().markCaptured(m_enemyYokai.getId());
             m_playerParty.addYokai(m_enemyYokai);
             m_state = BattleState::Victory;
             return;

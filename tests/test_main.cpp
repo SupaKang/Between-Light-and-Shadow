@@ -1,9 +1,9 @@
 #include <iostream>
 
-// Declarations of test suites
 bool runBattleSystemTests();
 bool runStatusEffectTests();
 bool runArtifactSystemTests();
+bool runEncyclopediaAndGrowthTests();
 
 int main() {
     std::cout << "========================================" << std::endl;
@@ -14,6 +14,7 @@ int main() {
     if (!runBattleSystemTests()) passed = false;
     if (!runStatusEffectTests()) passed = false;
     if (!runArtifactSystemTests()) passed = false;
+    if (!runEncyclopediaAndGrowthTests()) passed = false;
 
     std::cout << "----------------------------------------" << std::endl;
     if (passed) {

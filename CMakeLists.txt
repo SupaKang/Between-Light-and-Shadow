@@ -25,6 +25,7 @@ set(SOURCES
     src/gameplay/yokai.cpp
     src/gameplay/party.cpp
     src/gameplay/artifact.cpp
+    src/gameplay/encyclopedia.cpp
     src/battle/status_effects.cpp
     src/battle/battle.cpp
     src/data/data_manager.cpp
@@ -44,6 +45,7 @@ set(TEST_SOURCES
     src/gameplay/yokai.cpp
     src/gameplay/party.cpp
     src/gameplay/artifact.cpp
+    src/gameplay/encyclopedia.cpp
     src/battle/status_effects.cpp
     src/battle/battle.cpp
     src/data/data_manager.cpp

@@ -2,6 +2,7 @@
 #include "../src/gameplay/yokai.hpp"
 #include "../src/gameplay/party.hpp"
 #include "../src/gameplay/artifact.hpp"
+#include "../src/gameplay/encyclopedia.hpp"
 #include "../src/battle/battle.hpp"
 #include "../src/battle/status_effects.hpp"
 
@@ -161,5 +162,73 @@ bool runArtifactSystemTests() {
     }
 
     std::cout << "  [PASS] Artifacts Dual-Trait & Destruction" << std::endl;
+    return true;
+}
+
+bool runEncyclopediaAndGrowthTests() {
+    std::cout << "[TEST 4] Running 108 Encyclopedia & Yokai Growth/Promotion Tests..." << std::endl;
+
+    // 1. Encyclopedia Test
+    Encyclopedia codex;
+    for (int i = 1; i <= 108; ++i) {
+        codex.registerTemplate(i, "YOKAI_" + std::to_string(i), "요괴 #" + std::to_string(i), "Yokai #" + std::to_string(i),
+                               YokaiGrade::Grade1, Element::Physical, "KOREAN_FOLKLORE", "테스트 요괴 설화");
+    }
+
+    if (codex.getTotalEntries() != 108) {
+        std::cerr << "  FAIL: Total encyclopedia entries != 108 (Got " << codex.getTotalEntries() << ")" << std::endl;
+        return false;
+    }
+
+    codex.markSeen("YOKAI_1");
+    codex.markCaptured("YOKAI_1");
+    codex.markCaptured("YOKAI_2");
+
+    if (codex.getCapturedCount() != 2) {
+        std::cerr << "  FAIL: Captured count mismatch! Expected 2, got " << codex.getCapturedCount() << std::endl;
+        return false;
+    }
+    float rate = codex.getCompletionRate();
+    std::cout << "  - Codex completion rate (2/108): " << rate * 100.0f << "%" << std::endl;
+
+    // 2. Growth and Leveling Test (Lv 1 to Lv 10)
+    Yokai dokkaebi(1, "YOKAI_001", "Dokkaebi", YokaiGrade::Grade1, Element::Fire, {100, 100, 50, 50, 20, 10, 15});
+    int baseAtk = dokkaebi.getStats().atk;
+    int baseHp = dokkaebi.getStats().maxHp;
+
+    // Add EXP to reach Lv 10
+    // Required EXP: sum(15*n^2 + 50*n)
+    dokkaebi.gainExp(10000);
+    std::cout << "  - Dokkaebi gained 10000 EXP -> Reached Lv." << dokkaebi.getLevel() << " (HP: " << dokkaebi.getStats().maxHp << ", ATK: " << dokkaebi.getStats().atk << ")" << std::endl;
+
+    if (dokkaebi.getLevel() < 10) {
+        std::cerr << "  FAIL: Yokai level did not advance properly!" << std::endl;
+        return false;
+    }
+    if (dokkaebi.getStats().atk <= baseAtk || dokkaebi.getStats().maxHp <= baseHp) {
+        std::cerr << "  FAIL: Stats did not increase after leveling!" << std::endl;
+        return false;
+    }
+
+    // 3. Grade Promotion Test (Grade 1 -> Grade 2)
+    if (!dokkaebi.canPromote()) {
+        std::cerr << "  FAIL: Dokkaebi at Lv." << dokkaebi.getLevel() << " should be eligible for Grade 2 promotion!" << std::endl;
+        return false;
+    }
+
+    int atkBeforePromotion = dokkaebi.getStats().atk;
+    bool promoted = dokkaebi.promoteGrade();
+    if (!promoted || dokkaebi.getGrade() != YokaiGrade::Grade2) {
+        std::cerr << "  FAIL: Grade promotion failed!" << std::endl;
+        return false;
+    }
+
+    std::cout << "  - Dokkaebi promoted to Grade 2! (ATK: " << atkBeforePromotion << " -> " << dokkaebi.getStats().atk << ")" << std::endl;
+    if (dokkaebi.getStats().atk <= atkBeforePromotion) {
+        std::cerr << "  FAIL: Base stat multiplier did not boost ATK after promotion!" << std::endl;
+        return false;
+    }
+
+    std::cout << "  [PASS] 108 Encyclopedia & Growth/Promotion" << std::endl;
     return true;
 }

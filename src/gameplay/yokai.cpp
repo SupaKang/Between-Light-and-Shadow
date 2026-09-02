@@ -15,9 +15,10 @@ static float getGradeMultiplier(YokaiGrade grade) {
     }
 }
 
-Yokai::Yokai(std::string id, std::string name, YokaiGrade grade, Element element, Stats baseStats)
-    : m_id(std::move(id)), m_name(std::move(name)), m_grade(grade), m_element(element),
-      m_baseStats(baseStats), m_level(1), m_exp(0) {
+Yokai::Yokai(int number, std::string id, std::string name, YokaiGrade grade, Element element,
+             Stats baseStats, std::string origin, std::string lore)
+    : m_number(number), m_id(std::move(id)), m_name(std::move(name)), m_grade(grade), m_element(element),
+      m_origin(std::move(origin)), m_lore(std::move(lore)), m_baseStats(baseStats), m_level(1), m_exp(0) {
     calculateStats();
     m_stats.hp = m_stats.maxHp;
     m_stats.qi = m_stats.maxQi;
@@ -56,11 +57,28 @@ void Yokai::levelUp() {
     m_stats.qi += (m_stats.maxQi - prevMaxQi);
 }
 
-void Yokai::promoteGrade() {
-    if (static_cast<int>(m_grade) < 5) {
-        m_grade = static_cast<YokaiGrade>(static_cast<int>(m_grade) + 1);
-        calculateStats();
-    }
+bool Yokai::canPromote() const {
+    int currentGrade = static_cast<int>(m_grade);
+    if (currentGrade >= 5) return false;
+
+    // Promotion level thresholds: Ⅰ->Ⅱ (Lv 10), Ⅱ->Ⅲ (Lv 20), Ⅲ->Ⅳ (Lv 35), Ⅳ->Ⅴ (Lv 50)
+    if (currentGrade == 1 && m_level >= 10) return true;
+    if (currentGrade == 2 && m_level >= 20) return true;
+    if (currentGrade == 3 && m_level >= 35) return true;
+    if (currentGrade == 4 && m_level >= 50) return true;
+
+    return false;
+}
+
+bool Yokai::promoteGrade() {
+    if (!canPromote()) return false;
+    m_grade = static_cast<YokaiGrade>(static_cast<int>(m_grade) + 1);
+    int prevMaxHp = m_stats.maxHp;
+    int prevMaxQi = m_stats.maxQi;
+    calculateStats();
+    m_stats.hp += (m_stats.maxHp - prevMaxHp);
+    m_stats.qi += (m_stats.maxQi - prevMaxQi);
+    return true;
 }
 
 bool Yokai::takeDamage(int amount) {

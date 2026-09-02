@@ -31,12 +31,17 @@ struct Stats {
 class Yokai {
 public:
     Yokai() = default;
-    Yokai(std::string id, std::string name, YokaiGrade grade, Element element, Stats baseStats);
+    Yokai(std::string id, std::string name, YokaiGrade grade, Element element, Stats baseStats)
+        : Yokai(1, std::move(id), std::move(name), grade, element, baseStats) {}
+    Yokai(int number, std::string id, std::string name, YokaiGrade grade, Element element,
+          Stats baseStats, std::string origin = "KOREAN_FOLKLORE", std::string lore = "");
 
     void calculateStats();
     void gainExp(int amount);
     void levelUp();
-    void promoteGrade();
+
+    bool canPromote() const;
+    bool promoteGrade();
 
     bool takeDamage(int amount);
     void healHp(int amount);
@@ -44,6 +49,7 @@ public:
     void restoreQi(int amount);
 
     // Getters
+    int getNumber() const { return m_number; }
     const std::string& getId() const { return m_id; }
     const std::string& getName() const { return m_name; }
     YokaiGrade getGrade() const { return m_grade; }
@@ -51,6 +57,8 @@ public:
     int getLevel() const { return m_level; }
     int getExp() const { return m_exp; }
     int getExpToNextLevel() const;
+    const std::string& getOrigin() const { return m_origin; }
+    const std::string& getLore() const { return m_lore; }
     const Stats& getStats() const { return m_stats; }
     Stats& getStats() { return m_stats; }
     bool isFainted() const { return m_stats.hp <= 0; }
@@ -65,12 +73,15 @@ public:
     void clearStatus() { m_status = StatusInstance{}; }
 
 private:
+    int m_number = 1;
     std::string m_id;
     std::string m_name;
     YokaiGrade m_grade = YokaiGrade::Grade1;
     Element m_element = Element::Physical;
     int m_level = 1;
     int m_exp = 0;
+    std::string m_origin;
+    std::string m_lore;
 
     Stats m_baseStats;
     Stats m_stats;

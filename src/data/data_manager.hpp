@@ -1,6 +1,7 @@
 #pragma once
 #include "../gameplay/yokai.hpp"
 #include "../gameplay/artifact.hpp"
+#include "../gameplay/encyclopedia.hpp"
 #include <vector>
 #include <string_view>
 
@@ -14,13 +15,17 @@ public:
     static const std::vector<Skill>& getAllSkills();
     static const std::vector<Artifact>& getAllArtifacts();
 
+    static Encyclopedia& getEncyclopedia() { return s_encyclopedia; }
+
     static Yokai createYokaiById(std::string_view id);
+    static Yokai createYokaiByNumber(int number);
     static Artifact createArtifactById(std::string_view id);
 
 private:
     static std::vector<Yokai> s_yokaiDatabase;
     static std::vector<Skill> s_skillDatabase;
     static std::vector<Artifact> s_artifactDatabase;
+    static Encyclopedia s_encyclopedia;
 };
 
 } // namespace JoseonRPG
