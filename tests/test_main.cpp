@@ -7,7 +7,7 @@ bool runArtifactSystemTests();
 
 int main() {
     std::cout << "========================================" << std::endl;
-    std::cout << " JOSEON YOKAI RPG - LOGIC UNIT TESTS   " << std::endl;
+    std::cout << " 108: EUMYANG GYEONMUNROK - UNIT TESTS " << std::endl;
     std::cout << "========================================" << std::endl;
 
     bool passed = true;

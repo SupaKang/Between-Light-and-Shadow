@@ -1,6 +1,6 @@
-# 조선시대 민속 판타지 턴제 수집 RPG (Joseon Yokai RPG)
+# 108:음양견문록 (108: Yin-Yang Chronicle)
 
-> **1.44MB 플로피 디스크 용량 제한**을 고려하여 설계된 초소형 C++17 Windows 독립 실행 턴제 요괴 수집 RPG.
+> **1.44MB 플로피 디스크 용량 제한**을 고려하여 설계된 초소형 C++17 Windows 독립 실행 조선 민속 턴제 요괴 수집 RPG.
 
 ---
 
@@ -8,6 +8,7 @@
 
 | 항목 | 명세 |
 | :--- | :--- |
+| **프로젝트명** | **108:음양견문록** (108: Yin-Yang Chronicle) |
 | **장르** | 조선시대 민속 판타지 턴제 요괴 수집 RPG |
 | **대상 플랫폼** | Windows (x64 / x86 Standalone Executable) |
 | **기술 스택** | C++17, Native Win32 API, Software Framebuffer / Direct2D |

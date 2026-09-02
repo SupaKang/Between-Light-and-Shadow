@@ -1,6 +1,6 @@
 # PROJECT MASTER (SSOT: Single Source of Truth)
 
-> **프로젝트 공식 명칭**: 조선시대 민속 판타지 턴제 수집 RPG (Joseon Yokai RPG)  
+> **프로젝트 공식 명칭**: 108:음양견문록 (108: Yin-Yang Chronicle — 조선시대 민속 판타지 턴제 수집 RPG)  
 > **문서 버전**: v1.0.0 (Frozen Specification)  
 > **작성 기준일**: 2026-09-02  
 > **관리 원칙**: 본 문서는 프로젝트의 모든 기획, 데이터, 코드의 단일 진실 공급원(SSOT)이며, 상호 충돌 시 본 문서의 규정이 최우선한다.

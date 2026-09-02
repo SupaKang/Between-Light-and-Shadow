@@ -1,7 +1,7 @@
 # AGENTS.md
 
 ## Project
-조선시대 민속 판타지 턴제 수집 RPG (Joseon Folk Fantasy Turn-based Creature-Collecting RPG)
+108:음양견문록 (108: Yin-Yang Chronicle — 조선시대 민속 판타지 턴제 수집 RPG)
 
 ## Primary Goal
 1.44MB 제한(Floppy Disk 용량 한계: 1,474,560 bytes)을 고려한 초소형 Windows 독립 실행 게임 개발

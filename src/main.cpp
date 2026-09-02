@@ -29,7 +29,7 @@ int main() {
     // 1. Initialize Data & Subsystems
     DataManager::init();
 
-    Window window("Joseon Yokai RPG - Phase 1 Technical Spike (320x180)", 3);
+    Window window("108: Eumyang Gyeonmunrok (108: Yin-Yang Chronicle) - 320x180", 3);
     if (!window.init()) {
         return -1;
     }
@@ -162,7 +162,7 @@ int main() {
 
             // World HUD Overlay
             renderer.fillRect(0, 0, SCREEN_WIDTH, 12, Color(18, 18, 20, 210));
-            FontRenderer::drawText(renderer, 4, 2, "JOSEON YOKAI RPG - FIELD SPIKE", Palette::Yellow);
+            FontRenderer::drawText(renderer, 4, 2, "108: EUMYANG GYEONMUNROK", Palette::Yellow);
             
             std::string fpsStr = "FPS: " + std::to_string(fps);
             FontRenderer::drawText(renderer, SCREEN_WIDTH - 64, 2, fpsStr, Palette::Jade);
