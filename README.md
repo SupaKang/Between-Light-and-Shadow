@@ -108,8 +108,8 @@ cmake --build build --config Release
 ## 🚀 로드맵 (Development Roadmap)
 
 - [x] **Phase 0: Repository Bootstrap** — SSOT 문서 체계 및 디렉토리/스키마 구축
-- [ ] **Phase 1: Technical Spike** — 320x180 렌더러, 타일 이동, Release 크기 측정 (< 1.44MB)
-- [ ] **Phase 2: Battle Prototype** — 1v1 턴제, HP/영력, 4기술, 5종 상태이상
+- [x] **Phase 1: Technical Spike** — 320x180 렌더러, 타일 이동, Release 크기 측정 (87KB / 6.04%)
+- [x] **Phase 2: Battle Prototype** — 1v1 턴제, HP/영력, 4기술, 5종 상태이상, 속도 선공권, 포획 수식 (109KB / 7.57%)
 - [ ] **Phase 3: Collection Prototype** — 3마리 파티, 계약 포획, 도감, 1~50 성장
 - [ ] **Phase 4: Artifact System** — 유물 버프/디버프 및 즉시 파괴
 - [ ] **Phase 5: Vertical Slice** — 1개 지역 완전 구현 (마을+필드+전투+NPC+퀘스트)

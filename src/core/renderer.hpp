@@ -17,11 +17,13 @@ public:
     void drawLine(int x0, int y0, int x1, int y1, Color color);
     void drawRect(int x, int y, int w, int h, Color color);
     void fillRect(int x, int y, int w, int h, Color color);
+    void drawPanel(int x, int y, int w, int h, Color bg = Palette::DarkGray, Color border = Palette::MidGray);
+    void drawHealthBar(int x, int y, int w, int h, int curVal, int maxVal, Color fillColor, Color bgColor = Palette::DarkGray);
     
-    // Draw 16x16 tile from raw bitmap or procedural pattern
+    // Draw 16x16 tile from procedural pattern
     void drawTileProcedural(int x, int y, int tileId);
     
-    // Draw 16x16 character sprite
+    // Draw 16x16 / 32x32 character sprite
     void drawSprite(int x, int y, int spriteId, int frame, bool flipX = false);
 
     const uint32_t* getFramebuffer() const { return m_framebuffer.data(); }

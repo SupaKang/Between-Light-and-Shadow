@@ -87,6 +87,23 @@ void Renderer::fillRect(int x, int y, int w, int h, Color color) {
     }
 }
 
+void Renderer::drawPanel(int x, int y, int w, int h, Color bg, Color border) {
+    fillRect(x, y, w, h, bg);
+    drawRect(x, y, w, h, border);
+    drawRect(x + 1, y + 1, w - 2, h - 2, Palette::Black);
+}
+
+void Renderer::drawHealthBar(int x, int y, int w, int h, int curVal, int maxVal, Color fillColor, Color bgColor) {
+    fillRect(x, y, w, h, bgColor);
+    drawRect(x, y, w, h, Palette::Black);
+    if (maxVal <= 0) return;
+    float ratio = std::clamp(static_cast<float>(curVal) / maxVal, 0.0f, 1.0f);
+    int fillW = static_cast<int>((w - 2) * ratio);
+    if (fillW > 0) {
+        fillRect(x + 1, y + 1, fillW, h - 2, fillColor);
+    }
+}
+
 void Renderer::drawTileProcedural(int px, int py, int tileId) {
     // Procedural 16x16 tile pattern generator for size budget efficiency
     switch (tileId) {
@@ -175,6 +192,40 @@ void Renderer::drawSprite(int px, int py, int spriteId, int frame, bool flipX) {
         fillRect(px + 4, py + 9, 8, 5, Color(190, 90, 30));
         // Club (방망이)
         fillRect(px + 12, py + 4, 3, 9, Color(140, 95, 45));
+    } else if (spriteId == 2) {
+        // Gumiho (구미호 - 흰/붉은 여우귀, 붉은 눈, 아홉 꼬리 실루엣)
+        setPixel(px + 4, py + 1, Palette::White);
+        setPixel(px + 5, py + 2, Palette::Red); // Ear L
+        setPixel(px + 11, py + 1, Palette::White);
+        setPixel(px + 10, py + 2, Palette::Red); // Ear R
+
+        fillRect(px + 5, py + 3, 6, 5, Color(250, 240, 230)); // Face
+        setPixel(px + 6, py + 5, Palette::Red); // Eye L
+        setPixel(px + 9, py + 5, Palette::Red); // Eye R
+
+        fillRect(px + 4, py + 8, 8, 6, Palette::Red); // Hanbok robe
+        // Tails
+        setPixel(px + 1, py + 9, Palette::White);
+        setPixel(px + 2, py + 10, Palette::White);
+        setPixel(px + 13, py + 9, Palette::White);
+        setPixel(px + 14, py + 10, Palette::White);
+        // Fox fire
+        setPixel(px + 13, py + 4, Palette::Blue);
+    } else if (spriteId == 3) {
+        // Cheonyeogwishin (처녀귀신 - 긴 산발머리, 소복, 푸른 기운)
+        fillRect(px + 4, py + 1, 8, 12, Palette::InkBlack); // Hair
+        fillRect(px + 6, py + 4, 4, 4, Color(220, 235, 235)); // Pale face
+        setPixel(px + 7, py + 5, Palette::Red); // Ghost eye
+        fillRect(px + 4, py + 8, 8, 7, Palette::White); // White Sobok
+        setPixel(px + 3, py + 12, Palette::Blue); // Ghostly mist
+        setPixel(px + 12, py + 11, Palette::Blue);
+    } else if (spriteId == 4) {
+        // Bulgasari (불가사리 - 쇳빛 몸체, 코끼리 코)
+        fillRect(px + 3, py + 2, 10, 10, Color(80, 85, 95)); // Iron Body
+        fillRect(px + 5, py + 4, 6, 2, Palette::Red); // Glowing Eyes
+        fillRect(px + 7, py + 7, 2, 6, Color(60, 65, 75)); // Trunk/Snout
+        fillRect(px + 2, py + 11, 4, 4, Color(50, 55, 60)); // Leg L
+        fillRect(px + 10, py + 11, 4, 4, Color(50, 55, 60)); // Leg R
     }
 }
 

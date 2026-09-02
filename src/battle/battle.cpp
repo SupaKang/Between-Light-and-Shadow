@@ -4,27 +4,116 @@
 
 namespace JoseonRPG {
 
-static std::mt19937 s_battleRng(1337);
+static std::mt19937 s_battleRng(2026);
 
 Battle::Battle(Party& playerParty, Yokai wildYokai, ArtifactInventory& artifacts)
     : m_playerParty(playerParty), m_enemyYokai(std::move(wildYokai)), m_artifacts(artifacts) {
-    m_combatLog.push_back("A wild " + m_enemyYokai.getName() + " appeared!");
+    m_expReward = static_cast<int>(m_enemyYokai.getLevel() * 35 * static_cast<int>(m_enemyYokai.getGrade()));
+    m_combatLog.push_back("야생의 [" + m_enemyYokai.getName() + "] 조우!");
+    m_combatLog.push_back("행동을 선택하십시오.");
+}
+
+Yokai* Battle::getActivePlayerYokai() {
+    return m_playerParty.getActiveYokai();
 }
 
 const Yokai* Battle::getActivePlayerYokai() const {
     return m_playerParty.getActiveYokai();
 }
 
-float Battle::calculateCaptureProbability() const {
-    float hpRatio = static_cast<float>(m_enemyYokai.getStats().hp) / m_enemyYokai.getStats().maxHp;
-    float baseChance = (1.0f - hpRatio) * 0.60f; // Up to 60% from weakening
+void Battle::onNavigateUp() {
+    if (m_state != BattleState::PlayerCommand) return;
+    if (m_menuState == BattleMenuState::MainAction) {
+        if (m_mainCursor >= 2) m_mainCursor -= 2;
+    } else if (m_menuState == BattleMenuState::SkillSelect) {
+        if (m_skillCursor >= 2) m_skillCursor -= 2;
+    } else if (m_menuState == BattleMenuState::PartySwapSelect) {
+        if (m_swapCursor > 0) m_swapCursor--;
+    }
+}
 
-    // Status effect bonus (+25%)
+void Battle::onNavigateDown() {
+    if (m_state != BattleState::PlayerCommand) return;
+    if (m_menuState == BattleMenuState::MainAction) {
+        if (m_mainCursor <= 1) m_mainCursor += 2;
+    } else if (m_menuState == BattleMenuState::SkillSelect) {
+        Yokai* playerYokai = getActivePlayerYokai();
+        if (playerYokai && m_skillCursor + 2 < static_cast<int>(playerYokai->getSkills().size())) {
+            m_skillCursor += 2;
+        }
+    } else if (m_menuState == BattleMenuState::PartySwapSelect) {
+        if (m_swapCursor + 1 < static_cast<int>(m_playerParty.getSize())) {
+            m_swapCursor++;
+        }
+    }
+}
+
+void Battle::onNavigateLeft() {
+    if (m_state != BattleState::PlayerCommand) return;
+    if (m_menuState == BattleMenuState::MainAction) {
+        if (m_mainCursor % 2 == 1) m_mainCursor--;
+    } else if (m_menuState == BattleMenuState::SkillSelect) {
+        if (m_skillCursor % 2 == 1) m_skillCursor--;
+    }
+}
+
+void Battle::onNavigateRight() {
+    if (m_state != BattleState::PlayerCommand) return;
+    if (m_menuState == BattleMenuState::MainAction) {
+        if (m_mainCursor % 2 == 0) m_mainCursor++;
+    } else if (m_menuState == BattleMenuState::SkillSelect) {
+        Yokai* playerYokai = getActivePlayerYokai();
+        if (playerYokai && m_skillCursor + 1 < static_cast<int>(playerYokai->getSkills().size())) {
+            m_skillCursor++;
+        }
+    }
+}
+
+void Battle::onConfirm() {
+    if (m_state == BattleState::Victory || m_state == BattleState::Defeat) {
+        return;
+    }
+
+    if (m_menuState == BattleMenuState::MainAction) {
+        switch (m_mainCursor) {
+            case 0: // 기술 선택
+                m_menuState = BattleMenuState::SkillSelect;
+                m_skillCursor = 0;
+                break;
+            case 1: // 계약 시도
+                executePlayerCapture();
+                break;
+            case 2: // 요괴 교체
+                m_menuState = BattleMenuState::PartySwapSelect;
+                m_swapCursor = 0;
+                break;
+            case 3: // 도망
+                executePlayerFlee();
+                break;
+        }
+    } else if (m_menuState == BattleMenuState::SkillSelect) {
+        executePlayerSkill(m_skillCursor);
+    } else if (m_menuState == BattleMenuState::PartySwapSelect) {
+        executePlayerSwap(m_swapCursor);
+    }
+}
+
+void Battle::onCancel() {
+    if (m_menuState == BattleMenuState::SkillSelect || m_menuState == BattleMenuState::PartySwapSelect) {
+        m_menuState = BattleMenuState::MainAction;
+    }
+}
+
+float Battle::calculateCaptureProbability() const {
+    float hpRatio = static_cast<float>(m_enemyYokai.getStats().hp) / std::max(1, m_enemyYokai.getStats().maxHp);
+    float baseChance = (1.0f - hpRatio) * 0.60f; // Up to 60% based on remaining HP
+
+    // Status Effect Bonus (+25%)
     if (m_enemyYokai.getStatus().effect != StatusEffect::None) {
         baseChance += 0.25f;
     }
 
-    // Grade modifier
+    // Grade Modifier
     float gradeMod = 0.0f;
     switch (m_enemyYokai.getGrade()) {
         case YokaiGrade::Grade1: gradeMod = 0.15f; break;
@@ -37,21 +126,6 @@ float Battle::calculateCaptureProbability() const {
     return std::clamp(baseChance + gradeMod, 0.05f, 0.95f);
 }
 
-bool Battle::attemptCapture() {
-    float prob = calculateCaptureProbability();
-    std::uniform_real_distribution<float> dist(0.0f, 1.0f);
-    bool success = dist(s_battleRng) <= prob;
-
-    if (success) {
-        m_combatLog.push_back("Contract Successful! " + m_enemyYokai.getName() + " joined you!");
-        m_playerParty.addYokai(m_enemyYokai);
-        m_state = BattleState::Victory;
-    } else {
-        m_combatLog.push_back("The contract talisman failed! " + m_enemyYokai.getName() + " broke free!");
-    }
-    return success;
-}
-
 int Battle::calculateDamage(const Yokai& attacker, const Yokai& defender, const Skill& skill, bool isPlayerAttacker) {
     int effectiveAtk = attacker.getStats().atk;
     int effectiveDef = defender.getStats().def;
@@ -62,150 +136,267 @@ int Battle::calculateDamage(const Yokai& attacker, const Yokai& defender, const 
         effectiveDef = static_cast<int>(effectiveDef * m_artifacts.getDefMultiplier());
     }
 
-    // Standard formula: (ATK * Skill.Power) / (DEF * 2)
+    // Damage Formula: (ATK * Skill.Power) / (DEF * 2)
     float baseDmg = (static_cast<float>(effectiveAtk * skill.power) / std::max(1.0f, static_cast<float>(effectiveDef * 2)));
 
-    // Artifact damage reduction on player receiving damage
-    if (!isPlayerAttacker) {
+    // Artifact bonus / reduction
+    if (isPlayerAttacker) {
+        // Critical hit check
+        int critRate = 5 + m_artifacts.getCritRateBonus();
+        std::uniform_int_distribution<int> critRoll(1, 100);
+        if (critRoll(s_battleRng) <= critRate) {
+            baseDmg *= 1.5f;
+            m_combatLog.push_back(">> 치명타(Crit) 발생! <<");
+        }
+    } else {
         baseDmg *= m_artifacts.getDamageReductionMultiplier();
     }
 
-    int finalDmg = std::max(1, static_cast<int>(baseDmg));
-    return finalDmg;
+    return std::max(1, static_cast<int>(baseDmg));
 }
 
-void Battle::selectAction(PlayerAction action, int targetParam) {
-    if (m_state != BattleState::PlayerCommand) return;
-    executeTurn(action, targetParam);
-}
+void Battle::executePlayerSkill(int skillIndex) {
+    Yokai* playerYokai = getActivePlayerYokai();
+    if (!playerYokai || playerYokai->isFainted()) return;
 
-void Battle::executeTurn(PlayerAction playerAction, int targetParam) {
-    Yokai* playerYokai = m_playerParty.getActiveYokai();
-    if (!playerYokai || playerYokai->isFainted()) {
-        m_state = BattleState::Defeat;
-        return;
-    }
-
-    if (playerAction == PlayerAction::Contract) {
-        if (!attemptCapture()) {
-            executeEnemyTurn();
-        }
-        return;
-    }
-
-    if (playerAction == PlayerAction::SwapYokai) {
-        m_playerParty.swapYokai(0, targetParam);
-        m_combatLog.push_back("Swapped active Yokai!");
-        executeEnemyTurn();
-        return;
-    }
-
-    if (playerAction == PlayerAction::Flee) {
-        m_combatLog.push_back("Escaped safely!");
-        m_state = BattleState::Victory;
-        return;
-    }
-
-    // Skill execution
-    int skillIdx = static_cast<int>(playerAction);
     const auto& skills = playerYokai->getSkills();
-    if (skillIdx >= 0 && skillIdx < static_cast<int>(skills.size())) {
-        const Skill& skill = skills[skillIdx];
-        
-        // Sealed check
-        if (playerYokai->getStatus().effect == StatusEffect::Seal &&
-            playerYokai->getStatus().sealedSkillIndex == skillIdx) {
-            m_combatLog.push_back("This skill is [SEALED] and cannot be used!");
-            return;
+    if (skillIndex < 0 || skillIndex >= static_cast<int>(skills.size())) return;
+
+    const Skill& skill = skills[skillIndex];
+
+    // Qi check
+    if (playerYokai->getStats().qi < skill.qiCost) {
+        m_combatLog.push_back("영력(Qi)이 부족하여 시전할 수 없습니다!");
+        return;
+    }
+
+    // Sealed check
+    if (playerYokai->getStatus().effect == StatusEffect::Seal &&
+        playerYokai->getStatus().sealedSkillIndex == skillIndex) {
+        m_combatLog.push_back("해당 기술은 [봉인]되어 사용할 수 없습니다!");
+        return;
+    }
+
+    TurnAction playerAct;
+    playerAct.isPlayer = true;
+    playerAct.skillIndex = skillIndex;
+    playerAct.speed = playerYokai->getStats().spd + std::uniform_int_distribution<int>(-2, 2)(s_battleRng);
+
+    TurnAction enemyAct = decideEnemyAction();
+    resolveTurnActions(playerAct, enemyAct);
+}
+
+void Battle::executePlayerCapture() {
+    TurnAction playerAct;
+    playerAct.isPlayer = true;
+    playerAct.isCapture = true;
+    playerAct.speed = 999; // Top priority
+
+    TurnAction enemyAct = decideEnemyAction();
+    resolveTurnActions(playerAct, enemyAct);
+}
+
+void Battle::executePlayerSwap(int targetIndex) {
+    if (targetIndex < 0 || targetIndex >= static_cast<int>(m_playerParty.getSize())) return;
+    if (targetIndex == 0) {
+        m_combatLog.push_back("이미 출전 중인 요괴입니다.");
+        return;
+    }
+
+    Yokai* targetYokai = m_playerParty.getYokai(targetIndex);
+    if (!targetYokai || targetYokai->isFainted()) {
+        m_combatLog.push_back("기절한 요괴는 출전할 수 없습니다.");
+        return;
+    }
+
+    TurnAction playerAct;
+    playerAct.isPlayer = true;
+    playerAct.isSwap = true;
+    playerAct.swapIndex = targetIndex;
+    playerAct.speed = 999; // Top priority
+
+    TurnAction enemyAct = decideEnemyAction();
+    resolveTurnActions(playerAct, enemyAct);
+}
+
+void Battle::executePlayerFlee() {
+    m_combatLog.push_back("무사히 전장을 이탈했습니다.");
+    m_state = BattleState::Victory;
+}
+
+TurnAction Battle::decideEnemyAction() {
+    TurnAction act;
+    act.isPlayer = false;
+    act.speed = m_enemyYokai.getStats().spd + std::uniform_int_distribution<int>(-2, 2)(s_battleRng);
+
+    const auto& enemySkills = m_enemyYokai.getSkills();
+    if (!enemySkills.empty()) {
+        std::uniform_int_distribution<int> dist(0, static_cast<int>(enemySkills.size()) - 1);
+        act.skillIndex = dist(s_battleRng);
+    }
+    return act;
+}
+
+void Battle::resolveTurnActions(const TurnAction& playerAction, const TurnAction& enemyAction) {
+    m_menuState = BattleMenuState::MainAction;
+
+    // Handle Artifact Qi drain at turn start
+    Yokai* playerYokai = getActivePlayerYokai();
+    if (playerYokai && !playerYokai->isFainted()) {
+        int qiDrain = m_artifacts.getQiDrainPerTurn();
+        if (qiDrain > 0) {
+            playerYokai->consumeQi(qiDrain);
+            m_combatLog.push_back("유물 대가로 영력 " + std::to_string(qiDrain) + " 소모.");
         }
+    }
 
-        std::string turnLog;
-        if (!StatusEffectSystem::onTurnStart(*playerYokai, turnLog)) {
-            m_combatLog.push_back(turnLog);
-        } else {
-            // Player attacks enemy
-            m_combatLog.push_back(playerYokai->getName() + " uses " + skill.name + "!");
-            StatusEffectSystem::onActionUsed(*playerYokai, true, turnLog);
-            if (!turnLog.empty()) m_combatLog.push_back(turnLog);
-
-            int dmg = calculateDamage(*playerYokai, m_enemyYokai, skill, true);
-            dmg = StatusEffectSystem::onDamageReceived(m_enemyYokai, dmg, turnLog);
-            if (!turnLog.empty()) m_combatLog.push_back(turnLog);
-
-            m_enemyYokai.takeDamage(dmg);
-            m_combatLog.push_back("Dealt " + std::to_string(dmg) + " damage!");
-
-            // Apply status if triggered
-            if (skill.statusEffect != StatusEffect::None) {
-                std::uniform_int_distribution<int> dist(1, 100);
-                if (dist(s_battleRng) <= skill.statusChance) {
-                    StatusEffectSystem::applyStatus(m_enemyYokai, skill.statusEffect, 3, m_lastUsedEnemySkill);
-                    m_combatLog.push_back("Inflicted [" + std::string(StatusEffectSystem::getStatusName(skill.statusEffect)) + "]!");
-                }
-            }
-
-            m_lastUsedPlayerSkill = skillIdx;
-        }
-
-        if (m_enemyYokai.isFainted()) {
-            m_combatLog.push_back("Enemy " + m_enemyYokai.getName() + " was subdued!");
-            playerYokai->gainExp(100);
+    // 1. Capture Action Check
+    if (playerAction.isCapture) {
+        float rate = calculateCaptureProbability();
+        std::uniform_real_distribution<float> dist(0.0f, 1.0f);
+        m_combatLog.push_back("벽사 봉인 부적을 던졌습니다! (성공률: " + std::to_string(static_cast<int>(rate * 100)) + "%)");
+        if (dist(s_battleRng) <= rate) {
+            m_combatLog.push_back("계약 성공! [" + m_enemyYokai.getName() + "]과 영혼의 계약을 맺었습니다!");
+            m_playerParty.addYokai(m_enemyYokai);
             m_state = BattleState::Victory;
             return;
+        } else {
+            m_combatLog.push_back("부적이 튕겨져 나갔습니다! 계약 실패.");
+            // Enemy attacks after failed capture
+            if (playerYokai && !playerYokai->isFainted()) {
+                performSkillAction(m_enemyYokai, *playerYokai, enemyAction.skillIndex, false);
+            }
+            checkBattleOutcome();
+            return;
         }
     }
 
-    executeEnemyTurn();
+    // 2. Swap Action Check
+    if (playerAction.isSwap) {
+        m_playerParty.swapYokai(0, playerAction.swapIndex);
+        playerYokai = getActivePlayerYokai();
+        m_combatLog.push_back("가랏! [" + playerYokai->getName() + "] 교체 출전!");
+        // Enemy attacks incoming swapped yokai
+        if (playerYokai && !playerYokai->isFainted()) {
+            performSkillAction(m_enemyYokai, *playerYokai, enemyAction.skillIndex, false);
+        }
+        checkBattleOutcome();
+        return;
+    }
+
+    // 3. Initiative-based Turn Resolution
+    bool playerFirst = (playerAction.speed >= enemyAction.speed);
+
+    if (playerFirst) {
+        // Player attacks first
+        if (playerYokai && !playerYokai->isFainted()) {
+            performSkillAction(*playerYokai, m_enemyYokai, playerAction.skillIndex, true);
+        }
+        if (m_enemyYokai.isFainted()) {
+            checkBattleOutcome();
+            return;
+        }
+        // Enemy attacks second
+        if (playerYokai && !playerYokai->isFainted()) {
+            performSkillAction(m_enemyYokai, *playerYokai, enemyAction.skillIndex, false);
+        }
+    } else {
+        // Enemy attacks first
+        if (playerYokai && !playerYokai->isFainted()) {
+            performSkillAction(m_enemyYokai, *playerYokai, enemyAction.skillIndex, false);
+        }
+        if (playerYokai && playerYokai->isFainted()) {
+            checkBattleOutcome();
+            return;
+        }
+        // Player attacks second
+        if (playerYokai && !playerYokai->isFainted()) {
+            performSkillAction(*playerYokai, m_enemyYokai, playerAction.skillIndex, true);
+        }
+    }
+
+    // End of Turn Status Decrement
+    std::string dummyLog;
+    if (playerYokai) StatusEffectSystem::onTurnEnd(*playerYokai, dummyLog);
+    StatusEffectSystem::onTurnEnd(m_enemyYokai, dummyLog);
+
+    checkBattleOutcome();
 }
 
-void Battle::executeEnemyTurn() {
-    Yokai* playerYokai = m_playerParty.getActiveYokai();
-    if (!playerYokai) return;
+void Battle::performSkillAction(Yokai& attacker, Yokai& defender, int skillIndex, bool isPlayer) {
+    const auto& skills = attacker.getSkills();
+    if (skillIndex < 0 || skillIndex >= static_cast<int>(skills.size())) return;
+    const Skill& skill = skills[skillIndex];
 
+    // Status onTurnStart check (Freeze / Paralysis)
     std::string turnLog;
-    if (!StatusEffectSystem::onTurnStart(m_enemyYokai, turnLog)) {
+    if (!StatusEffectSystem::onTurnStart(attacker, turnLog)) {
         m_combatLog.push_back(turnLog);
         return;
     }
 
-    const auto& enemySkills = m_enemyYokai.getSkills();
-    if (!enemySkills.empty()) {
-        std::uniform_int_distribution<size_t> dist(0, enemySkills.size() - 1);
-        size_t chosenIdx = dist(s_battleRng);
-        const Skill& skill = enemySkills[chosenIdx];
+    // Consume Qi
+    attacker.consumeQi(skill.qiCost);
+    m_combatLog.push_back("[" + attacker.getName() + "]의 " + skill.name + "!");
 
-        m_combatLog.push_back("Enemy " + m_enemyYokai.getName() + " uses " + skill.name + "!");
-        StatusEffectSystem::onActionUsed(m_enemyYokai, true, turnLog);
-        if (!turnLog.empty()) m_combatLog.push_back(turnLog);
+    // Burn Backlash
+    StatusEffectSystem::onActionUsed(attacker, true, turnLog);
+    if (!turnLog.empty()) m_combatLog.push_back(turnLog);
 
-        int dmg = calculateDamage(m_enemyYokai, *playerYokai, skill, false);
-        dmg = StatusEffectSystem::onDamageReceived(*playerYokai, dmg, turnLog);
-        if (!turnLog.empty()) m_combatLog.push_back(turnLog);
+    // Calculate & Apply Damage
+    int dmg = calculateDamage(attacker, defender, skill, isPlayer);
+    dmg = StatusEffectSystem::onDamageReceived(defender, dmg, turnLog);
+    if (!turnLog.empty()) m_combatLog.push_back(turnLog);
 
-        playerYokai->takeDamage(dmg);
-        m_combatLog.push_back("Took " + std::to_string(dmg) + " damage!");
+    defender.takeDamage(dmg);
+    m_combatLog.push_back(defender.getName() + "에게 " + std::to_string(dmg) + " 피해!");
 
-        // Status effect chance
-        if (skill.statusEffect != StatusEffect::None) {
-            // Check burn immunity from artifact
-            if (skill.statusEffect == StatusEffect::Burn && m_artifacts.hasBurnImmunity()) {
-                m_combatLog.push_back("Burn prevented by Artifact effect!");
-            } else {
-                std::uniform_int_distribution<int> statusRoll(1, 100);
-                if (statusRoll(s_battleRng) <= skill.statusChance) {
-                    StatusEffectSystem::applyStatus(*playerYokai, skill.statusEffect, 3, m_lastUsedPlayerSkill);
-                    m_combatLog.push_back("Afflicted with [" + std::string(StatusEffectSystem::getStatusName(skill.statusEffect)) + "]!");
-                }
+    // Apply Status Effect
+    if (skill.statusEffect != StatusEffect::None) {
+        if (!isPlayer && skill.statusEffect == StatusEffect::Burn && m_artifacts.hasBurnImmunity()) {
+            m_combatLog.push_back("유물 효과로 화상 면역!");
+        } else {
+            std::uniform_int_distribution<int> roll(1, 100);
+            if (roll(s_battleRng) <= skill.statusChance) {
+                int lastSkill = isPlayer ? m_lastUsedEnemySkill : m_lastUsedPlayerSkill;
+                StatusEffectSystem::applyStatus(defender, skill.statusEffect, 3, lastSkill);
+                m_combatLog.push_back("[" + defender.getName() + "]에게 " + std::string(StatusEffectSystem::getStatusName(skill.statusEffect)) + " 부여!");
             }
         }
-        m_lastUsedEnemySkill = static_cast<int>(chosenIdx);
     }
 
-    if (playerYokai->isFainted()) {
-        m_combatLog.push_back(playerYokai->getName() + " fainted!");
+    if (isPlayer) {
+        m_lastUsedPlayerSkill = skillIndex;
+    } else {
+        m_lastUsedEnemySkill = skillIndex;
+    }
+}
+
+void Battle::checkBattleOutcome() {
+    if (m_enemyYokai.isFainted()) {
+        m_combatLog.push_back("적 [" + m_enemyYokai.getName() + "]을(를) 격파했습니다!");
+        m_combatLog.push_back("경험치 " + std::to_string(m_expReward) + " 획득!");
+        Yokai* pYokai = getActivePlayerYokai();
+        if (pYokai) {
+            int prevLv = pYokai->getLevel();
+            pYokai->gainExp(m_expReward);
+            if (pYokai->getLevel() > prevLv) {
+                m_combatLog.push_back("[" + pYokai->getName() + "] 레벨 상승! Lv." + std::to_string(pYokai->getLevel()));
+            }
+        }
+        m_state = BattleState::Victory;
+        return;
+    }
+
+    Yokai* playerYokai = getActivePlayerYokai();
+    if (playerYokai && playerYokai->isFainted()) {
+        m_combatLog.push_back("[" + playerYokai->getName() + "] 기절!");
         if (m_playerParty.isAllFainted()) {
-            m_combatLog.push_back("All party members fainted...");
+            m_combatLog.push_back("파티 전원 전투 불능... 눈앞이 캄캄해집니다.");
             m_state = BattleState::Defeat;
+        } else {
+            m_combatLog.push_back("다른 요괴를 출전시켜야 합니다 (교체 선택).");
+            m_menuState = BattleMenuState::PartySwapSelect;
         }
     }
 }
