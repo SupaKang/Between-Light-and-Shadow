@@ -1,0 +1,62 @@
+[
+  {
+    "id": "ART_DOKKAEBI_HAT",
+    "name_ko": "도깨비 감투",
+    "buff": {
+      "type": "CRIT_RATE_BOOST",
+      "value": 30,
+      "description": "파티 치명타 확률 +30%"
+    },
+    "debuff": {
+      "type": "QI_DRAIN_PER_TURN",
+      "value": 5,
+      "description": "매 턴 시작 시 영력(Qi) 5 강제 소모"
+    },
+    "lore": "쓰면 투명해지지만 사용자의 영혼을 갉아먹는 도깨비의 전설적인 털모자."
+  },
+  {
+    "id": "ART_CENTIPEDE_EGG",
+    "name_ko": "백년 묵은 지네의 알",
+    "buff": {
+      "type": "IMMUNITY_BURN",
+      "value": 1,
+      "description": "파티 화상 상태이상 완전 면역"
+    },
+    "debuff": {
+      "type": "MAX_HP_REDUCTION",
+      "value": 20,
+      "description": "파티 최대 체력(Max HP) 20% 감소"
+    },
+    "lore": "독기를 다스리는 비술이 담겨있으나 보유자의 기혈을 쇠약하게 만든다."
+  },
+  {
+    "id": "ART_FOX_MARBLE_SHARD",
+    "name_ko": "깨진 여우구슬",
+    "buff": {
+      "type": "MAGIC_ATK_BOOST",
+      "value": 40,
+      "description": "영술 공격 위력 +40%"
+    },
+    "debuff": {
+      "type": "DEF_REDUCTION",
+      "value": 35,
+      "description": "물리 방어력(DEF) 35% 감소"
+    },
+    "lore": "구미호의 정기가 담긴 파편. 엄청난 요술의 힘을 주지만 육신을 무방비로 만든다."
+  },
+  {
+    "id": "ART_DEMON_TILE",
+    "name_ko": "귀면와 (도깨비 기와)",
+    "buff": {
+      "type": "DAMAGE_REDUCTION",
+      "value": 20,
+      "description": "받는 모든 물리 피해 20% 경감"
+    },
+    "debuff": {
+      "type": "SPD_REDUCTION",
+      "value": 15,
+      "description": "신법(SPD) 15% 감소 및 도망 불가"
+    },
+    "lore": "지붕에 얹어 잡귀를 쫓던 무거운 도깨비 얼굴 기와."
+  }
+]

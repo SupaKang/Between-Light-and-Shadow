@@ -1,0 +1,79 @@
+[
+  {
+    "id": "SKL_CLUB_STRIKE",
+    "name_ko": "방망이 내려치기",
+    "power": 45,
+    "qi_cost": 10,
+    "element": "PHYSICAL",
+    "accuracy": 95,
+    "status_effect": null,
+    "status_chance": 0,
+    "description": "도깨비 방망이로 적을 강하게 후려친다."
+  },
+  {
+    "id": "SKL_GOBLIN_FIRE",
+    "name_ko": "도깨비불",
+    "power": 55,
+    "qi_cost": 18,
+    "element": "FIRE",
+    "accuracy": 90,
+    "status_effect": "BURN",
+    "status_chance": 35,
+    "description": "파란 도깨비불을 날려 적을 공격하고 일정 확률로 [화상]을 부여한다."
+  },
+  {
+    "id": "SKL_FOX_FIRE",
+    "name_ko": "여우불 세례",
+    "power": 65,
+    "qi_cost": 22,
+    "element": "FIRE",
+    "accuracy": 90,
+    "status_effect": "BURN",
+    "status_chance": 40,
+    "description": "타오르는 붉은 여우불을 소환하여 적을 불태운다."
+  },
+  {
+    "id": "SKL_FEAR_GAZE",
+    "name_ko": "귀기 서린 눈빛",
+    "power": 30,
+    "qi_cost": 15,
+    "element": "DARK",
+    "accuracy": 100,
+    "status_effect": "FEAR",
+    "status_chance": 80,
+    "description": "섬뜩한 눈빛으로 적의 기세를 꺾어 [공포]에 빠뜨린다."
+  },
+  {
+    "id": "SKL_CHILL_WAIL",
+    "name_ko": "서릿발 곡소리",
+    "power": 50,
+    "qi_cost": 20,
+    "element": "WATER",
+    "accuracy": 85,
+    "status_effect": "FREEZE",
+    "status_chance": 30,
+    "description": "원한 맺힌 한숨과 서리로 적을 얼어붙게 만든다."
+  },
+  {
+    "id": "SKL_TALISMAN_SEAL",
+    "name_ko": "벽사 부적술",
+    "power": 25,
+    "qi_cost": 25,
+    "element": "LIGHT",
+    "accuracy": 95,
+    "status_effect": "SEAL",
+    "status_chance": 100,
+    "description": "주술 부적으로 적의 최근 사용 기술 1개를 [봉인]한다."
+  },
+  {
+    "id": "SKL_LIGHTNING_BOLT",
+    "name_ko": "천둥 벼락",
+    "power": 70,
+    "qi_cost": 30,
+    "element": "LIGHTNING",
+    "accuracy": 85,
+    "status_effect": "PARALYSIS",
+    "status_chance": 45,
+    "description": "하늘에서 벼락을 내리쳐 큰 피해와 함께 [마비]를 일으킨다."
+  }
+]
