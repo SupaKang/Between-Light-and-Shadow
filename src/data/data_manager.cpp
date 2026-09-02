@@ -141,13 +141,20 @@ void DataManager::init() {
     s_encyclopedia.markCaptured("YOKAI_003");
     s_encyclopedia.markSeen("YOKAI_005");
 
-    // 4. Artifacts
-    Artifact dokkaebiHat{"ART_DOKKAEBI_HAT", "Dokkaebi Hat", ArtifactBuffType::CritRateBoost, 30, ArtifactDebuffType::QiDrainPerTurn, 5, "Invisibility hat with Qi drain."};
-    Artifact centipedeEgg{"ART_CENTIPEDE_EGG", "Centipede Egg", ArtifactBuffType::ImmunityBurn, 1, ArtifactDebuffType::MaxHpReduction, 20, "Burn immunity at the cost of Max HP."};
-    Artifact foxShard{"ART_FOX_MARBLE_SHARD", "Fox Bead Shard", ArtifactBuffType::MagicAtkBoost, 40, ArtifactDebuffType::DefReduction, 35, "Massive magic power, fragile body."};
-    Artifact demonTile{"ART_DEMON_TILE", "Demon Tile (Gwimyeonwa)", ArtifactBuffType::DamageReduction, 20, ArtifactDebuffType::SpdReduction, 15, "Reduces physical damage, SPD -15%."};
+    // 4. Artifacts Database (8 Dual-Trait Folklore Artifacts)
+    Artifact dokkaebiHat{"ART_DOKKAEBI_HAT", "도깨비 감투", ArtifactBuffType::CritRateBoost, 30, ArtifactDebuffType::QiDrainPerTurn, 5, "쓰면 투명해지나 영혼의 기운을 갉아먹는 도깨비 털모자."};
+    Artifact centipedeEgg{"ART_CENTIPEDE_EGG", "백년 묵은 지네의 알", ArtifactBuffType::ImmunityBurn, 1, ArtifactDebuffType::MaxHpReduction, 20, "독기를 막아주나 소지자의 기혈을 쇠약하게 만든다."};
+    Artifact foxShard{"ART_FOX_MARBLE_SHARD", "깨진 여우구슬", ArtifactBuffType::MagicAtkBoost, 40, ArtifactDebuffType::DefReduction, 35, "엄청난 영술의 힘을 주지만 육신을 무방비로 만든다."};
+    Artifact demonTile{"ART_DEMON_TILE", "귀면와 (도깨비 기와)", ArtifactBuffType::DamageReduction, 20, ArtifactDebuffType::SpdReduction, 15, "잡귀의 타격을 튕겨내지만 무거워서 신법이 둔해진다."};
+    Artifact jadeMirror{"ART_JADE_MIRROR", "벽사 옥경 (玉鏡)", ArtifactBuffType::ImmunityFreezeFear, 1, ArtifactDebuffType::HpDrainPerTurn, 3, "빙결과 공포를 막아주나 매 턴 생명력을 소모한다."};
+    Artifact goldenBell{"ART_GOLDEN_BELL", "신령 무당방울", ArtifactBuffType::CaptureRateBoost, 15, ArtifactDebuffType::ExpPenalty, 20, "요괴의 넋을 홀려 계약을 쉽게 하나 수련 경험치가 감소한다."};
+    Artifact shadowIncense{"ART_SHADOW_INCENSE", "음기도방의 향로", ArtifactBuffType::StatusChanceBoost, 50, ArtifactDebuffType::DefReduction, 15, "상태이상을 쉽게 걸리게 하지만 방어력을 떨어뜨린다."};
+    Artifact reaperScroll{"ART_REAPER_SCROLL", "저승사자의 명부 조각", ArtifactBuffType::MagicAtkBoost, 50, ArtifactDebuffType::QiDrainPerTurn, 10, "망자의 힘을 빌려 절대적인 위력을 내나 영력을 크게 소모한다."};
     
-    s_artifactDatabase = {dokkaebiHat, centipedeEgg, foxShard, demonTile};
+    s_artifactDatabase = {
+        dokkaebiHat, centipedeEgg, foxShard, demonTile,
+        jadeMirror, goldenBell, shadowIncense, reaperScroll
+    };
 }
 
 const std::vector<Yokai>& DataManager::getAllYokaiTemplates() {

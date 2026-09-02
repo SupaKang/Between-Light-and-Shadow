@@ -1,7 +1,7 @@
 # BATTLE SYSTEM (1v1 턴제 전투 시스템 명세)
 
 ## 1. 전투 플로우
-1. **진입 (Encounter)**: 필드에서 야생 요괴 조우 또는 흑월회 자객과 조우
+1. **진입 (Encounter)**: 필드에서 야생 요괴 조우 또는 음양당 술사와 조우
 2. **선공권 계산**:
    $$\text{Initiative} = \text{Yokai.SPD} + \text{RNG}(-2, +2)$$
 3. **명령 입력 단계 (Command Phase)**:

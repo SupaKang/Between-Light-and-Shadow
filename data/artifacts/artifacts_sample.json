@@ -58,5 +58,65 @@
       "description": "신법(SPD) 15% 감소 및 도망 불가"
     },
     "lore": "지붕에 얹어 잡귀를 쫓던 무거운 도깨비 얼굴 기와."
+  },
+  {
+    "id": "ART_JADE_MIRROR",
+    "name_ko": "벽사 옥경 (玉鏡)",
+    "buff": {
+      "type": "IMMUNITY_FREEZE_FEAR",
+      "value": 1,
+      "description": "빙결 및 공포 상태이상 완전 면역"
+    },
+    "debuff": {
+      "type": "HP_DRAIN_PER_TURN",
+      "value": 3,
+      "description": "매 턴 시작 시 최대 HP의 3% 자가 피해"
+    },
+    "lore": "사악한 기운을 비추어 쫓아내는 옥으로 깎은 신령한 거울."
+  },
+  {
+    "id": "ART_GOLDEN_BELL",
+    "name_ko": "신령 무당방울",
+    "buff": {
+      "type": "CAPTURE_RATE_BOOST",
+      "value": 15,
+      "description": "부적 계약(포획) 성공률 +15%p"
+    },
+    "debuff": {
+      "type": "EXP_PENALTY",
+      "value": 20,
+      "description": "전투 후 획득 경험치 20% 감소"
+    },
+    "lore": "흔들면 요괴의 넋을 빼앗는 무속의 놋쇠 방울."
+  },
+  {
+    "id": "ART_SHADOW_INCENSE",
+    "name_ko": "음기도방의 향로",
+    "buff": {
+      "type": "STATUS_CHANCE_BOOST",
+      "value": 50,
+      "description": "기술의 상태이상 부여 확률 +50%"
+    },
+    "debuff": {
+      "type": "DEF_REDUCTION",
+      "value": 15,
+      "description": "호신(방어력) 15% 감소"
+    },
+    "lore": "음양당 술사들이 주술을 걸 때 피우는 검은 연기의 청동 향로."
+  },
+  {
+    "id": "ART_REAPER_SCROLL",
+    "name_ko": "저승사자의 명부 조각",
+    "buff": {
+      "type": "MAGIC_ATK_BOOST",
+      "value": 50,
+      "description": "영술 공격 위력 +50%"
+    },
+    "debuff": {
+      "type": "QI_DRAIN_PER_TURN",
+      "value": 10,
+      "description": "매 턴 시작 시 영력(Qi) 10 강제 소모"
+    },
+    "lore": "망자의 수명이 적힌 찢어진 한지 조각. 파멸적인 힘을 부른다."
   }
 ]

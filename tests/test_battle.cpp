@@ -133,8 +133,10 @@ bool runArtifactSystemTests() {
     ArtifactInventory inv;
     Artifact hat{"ART_01", "Dokkaebi Hat", ArtifactBuffType::CritRateBoost, 30, ArtifactDebuffType::QiDrainPerTurn, 5, "Test hat"};
     Artifact egg{"ART_02", "Centipede Egg", ArtifactBuffType::ImmunityBurn, 1, ArtifactDebuffType::MaxHpReduction, 20, "Test egg"};
+    Artifact bell{"ART_03", "Golden Bell", ArtifactBuffType::CaptureRateBoost, 15, ArtifactDebuffType::ExpPenalty, 20, "Test bell"};
     inv.addArtifact(hat);
     inv.addArtifact(egg);
+    inv.addArtifact(bell);
 
     if (inv.getCritRateBonus() != 30) {
         std::cerr << "  FAIL: Crit buff mismatch!" << std::endl;
@@ -144,20 +146,37 @@ bool runArtifactSystemTests() {
         std::cerr << "  FAIL: Burn immunity buff not active!" << std::endl;
         return false;
     }
+    if (inv.getCaptureRateBonus() < 0.14f) {
+        std::cerr << "  FAIL: Capture rate bonus mismatch!" << std::endl;
+        return false;
+    }
     if (inv.getQiDrainPerTurn() != 5) {
         std::cerr << "  FAIL: Qi drain debuff mismatch!" << std::endl;
         return false;
     }
 
-    // Destroy first artifact (hat)
-    inv.destroyArtifact(0);
+    // Sacrifice Surge Test (Heal Yokai upon instant destruction)
+    Yokai damagedYokai(1, "YOKAI_01", "Dokkaebi", YokaiGrade::Grade2, Element::Fire, {100, 100, 50, 50, 20, 10, 15});
+    damagedYokai.takeDamage(40); // HP 60/100
+    damagedYokai.consumeQi(30);   // Qi 20/50
+    int hpBeforeDestroy = damagedYokai.getStats().hp;
+    int qiBeforeDestroy = damagedYokai.getStats().qi;
+
+    std::string destroyMsg;
+    inv.destroyArtifact(0, &damagedYokai, &destroyMsg); // Destroy hat
+
+    std::cout << "  - Sacrifice surge result: " << destroyMsg << std::endl;
+    if (damagedYokai.getStats().hp <= hpBeforeDestroy || damagedYokai.getStats().qi <= qiBeforeDestroy) {
+        std::cerr << "  FAIL: Sacrifice surge did not recover HP/Qi upon artifact destruction!" << std::endl;
+        return false;
+    }
     if (inv.getCritRateBonus() != 0 || inv.getQiDrainPerTurn() != 0) {
         std::cerr << "  FAIL: Destroyed artifact effect still lingered!" << std::endl;
         return false;
     }
-    // Centipede egg should still be present
-    if (!inv.hasBurnImmunity() || inv.getCount() != 1) {
-        std::cerr << "  FAIL: Remaining artifact corrupted after destroy!" << std::endl;
+    // Egg and Bell should still be present
+    if (!inv.hasBurnImmunity() || inv.getCount() != 2) {
+        std::cerr << "  FAIL: Remaining artifacts corrupted after destroy!" << std::endl;
         return false;
     }
 

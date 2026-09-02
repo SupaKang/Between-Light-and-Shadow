@@ -76,6 +76,8 @@ int main() {
     int codexCursor = 1;      // 1..108
     int partyViewCursor = 0;  // 0..2
     std::string partyFeedbackMsg = "";
+    int artCursor = 0;        // 0..7
+    std::string artFeedbackMsg = "";
 
     // 4. Main Game Loop (Fixed 60 FPS Target)
     auto prevTime = std::chrono::high_resolution_clock::now();
@@ -218,11 +220,20 @@ int main() {
             }
         }
         else if (gameState == GameState::ArtifactMenu) {
-            if (Input::isPressed(Key::ActionB) || Input::isPressed(Key::ActionC)) {
-                gameState = GameState::WorldExploration;
+            if (Input::isPressed(Key::Up)) {
+                if (artCursor > 0) artCursor--;
+            }
+            if (Input::isPressed(Key::Down)) {
+                if (artCursor + 1 < static_cast<int>(artifacts.getCount())) artCursor++;
             }
             if (Input::isPressed(Key::ActionA) && artifacts.getCount() > 0) {
-                artifacts.destroyArtifact(0);
+                artifacts.destroyArtifact(artCursor, playerParty.getActiveYokai(), &artFeedbackMsg);
+                if (artCursor >= static_cast<int>(artifacts.getCount()) && artCursor > 0) {
+                    artCursor--;
+                }
+            }
+            if (Input::isPressed(Key::ActionB) || Input::isPressed(Key::ActionC)) {
+                gameState = GameState::WorldExploration;
             }
         }
 
@@ -555,23 +566,69 @@ int main() {
             FontRenderer::drawText(renderer, 4, SCREEN_HEIGHT - 11, "UP/DOWN:Select | Z:Promote Grade | F1/X:Close", Palette::White);
         }
         else if (gameState == GameState::ArtifactMenu) {
-            renderer.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Palette::DarkGray);
-            FontRenderer::drawText(renderer, 10, 10, "=== ARTIFACT INVENTORY ===", Palette::Yellow);
+            // Artifact Inventory Dual-Panel View
+            renderer.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Color(20, 24, 28));
+            
+            // Header
+            renderer.drawPanel(4, 4, 312, 20, Color(32, 38, 44), Palette::Yellow);
+            FontRenderer::drawText(renderer, 10, 8, "=== 유물 보관함 (ARTIFACT INVENTORY) ===", Palette::Yellow);
+            std::string slotCountStr = "보유: " + std::to_string(artifacts.getCount()) + "/8";
+            FontRenderer::drawText(renderer, 248, 8, slotCountStr, Palette::Jade);
 
-            int artY = 30;
+            // Left: Artifact List (8 Slots)
+            renderer.drawPanel(4, 26, 130, 136, Color(16, 18, 22), Palette::MidGray);
             const auto& artList = artifacts.getArtifacts();
+
             if (artList.empty()) {
-                FontRenderer::drawText(renderer, 10, artY, "No artifacts in possession.", Palette::LightGray);
+                FontRenderer::drawText(renderer, 10, 36, "보유 유물 없음", Palette::LightGray);
             } else {
                 for (size_t i = 0; i < artList.size(); ++i) {
-                    FontRenderer::drawText(renderer, 10, artY, std::to_string(i + 1) + ". " + artList[i].name, Palette::White);
-                    FontRenderer::drawText(renderer, 20, artY + 10, artList[i].lore, Palette::MidGray);
-                    artY += 24;
+                    int ay = 30 + static_cast<int>(i) * 16;
+                    Color c = (artCursor == static_cast<int>(i)) ? Palette::Yellow : Palette::White;
+                    if (artCursor == static_cast<int>(i)) {
+                        renderer.drawPanel(6, ay - 2, 126, 15, Color(36, 42, 52), Palette::Yellow);
+                        FontRenderer::drawText(renderer, 8, ay + 1, ">", Palette::Yellow);
+                    }
+                    FontRenderer::drawText(renderer, 16, ay + 1, std::to_string(i + 1) + ". " + artList[i].name, c);
                 }
             }
 
-            renderer.fillRect(0, SCREEN_HEIGHT - 16, SCREEN_WIDTH, 16, Palette::Black);
-            FontRenderer::drawText(renderer, 4, SCREEN_HEIGHT - 12, "Z: Instantly Destroy #1 | X: Close", Palette::White);
+            // Right: Artifact Details (Buff & Debuff Coexistence Panel)
+            renderer.drawPanel(138, 26, 178, 136, Color(16, 18, 22), Palette::MidGray);
+            const auto* selectedArt = artifacts.getArtifact(artCursor);
+            if (selectedArt) {
+                FontRenderer::drawText(renderer, 144, 30, selectedArt->name, Palette::Yellow);
+                
+                // Buff Box (Green)
+                renderer.fillRect(144, 42, 40, 9, Palette::Green);
+                FontRenderer::drawText(renderer, 146, 43, "[이점]", Palette::Black);
+                FontRenderer::drawText(renderer, 144, 54, ArtifactInventory::getBuffDescription(*selectedArt), Palette::Jade);
+
+                // Debuff Box (Red)
+                renderer.fillRect(144, 68, 40, 9, Palette::Red);
+                FontRenderer::drawText(renderer, 146, 69, "[대가]", Palette::Black);
+                FontRenderer::drawText(renderer, 144, 80, ArtifactInventory::getDebuffDescription(*selectedArt), Palette::Red);
+
+                // Lore
+                FontRenderer::drawText(renderer, 144, 98, "[배경 설화]", Palette::LightGray);
+                FontRenderer::drawText(renderer, 144, 108, selectedArt->lore.substr(0, 24), Palette::MidGray);
+
+                // Destruction Action Button
+                renderer.drawPanel(144, 134, 168, 22, Color(45, 20, 20), Palette::Red);
+                FontRenderer::drawText(renderer, 148, 140, "[Z키: 즉시 파괴 (영기 환원)]", Palette::Yellow);
+            } else {
+                FontRenderer::drawText(renderer, 144, 40, "선택된 유물이 없습니다.", Palette::MidGray);
+            }
+
+            // Feedback Message
+            if (!artFeedbackMsg.empty()) {
+                renderer.fillRect(4, 148, 130, 12, Color(20, 50, 30));
+                FontRenderer::drawText(renderer, 8, 150, "파괴 완료! 영기 환원됨", Palette::Jade);
+            }
+
+            // Footer
+            renderer.fillRect(0, SCREEN_HEIGHT - 14, SCREEN_WIDTH, 14, Palette::Black);
+            FontRenderer::drawText(renderer, 4, SCREEN_HEIGHT - 11, "UP/DOWN:Select | Z:Instant Destroy | X/C:Close", Palette::White);
         }
 
         // Present Framebuffer to Win32 Window
