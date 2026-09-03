@@ -63,10 +63,10 @@ void ArtInspectorScene::handleInput() {
         AudioEngine::playSfx(SfxId::MenuCursor);
     }
 
-    // 4. 1-bit Monochrome Silhouette Mode Toggle (Shift / S)
-    if (Input::isPressed(Key::ShiftSprint)) {
+    // 4. 1-bit Monochrome Silhouette Mode Toggle (Shift / S / Dash)
+    if (Input::isPressed(Key::Dash)) {
         m_silhouetteMode = !m_silhouetteMode;
-        AudioEngine::playSfx(SfxId::TalismanThrow);
+        AudioEngine::playSfx(SfxId::CaptureThrow);
     }
 
     // 5. Exit Scene (Action B / X / Esc)
@@ -149,10 +149,10 @@ void ArtInspectorScene::renderYokaiTab(Renderer& renderer) {
     renderer.drawPanel(138, 28, 172, 120, Color(22, 26, 36), Palette::Yellow);
     
     std::string noStr = "#" + (m_yokaiIndex < 9 ? std::string("00") : (m_yokaiIndex < 99 ? std::string("0") : std::string(""))) + std::to_string(m_yokaiIndex + 1);
-    FontRenderer::drawText(renderer, 144, 34, noStr + " " + entry->name, Palette::Yellow);
-    FontRenderer::drawText(renderer, 144, 46, "속성: " + entry->habitat, Palette::White);
-    FontRenderer::drawText(renderer, 144, 58, "기초 체력: " + std::to_string(entry->baseStats.maxHp) + " | 공격력: " + std::to_string(entry->baseStats.atk), Palette::LightGray);
-    FontRenderer::drawText(renderer, 144, 70, "방어: " + std::to_string(entry->baseStats.def) + " | 민첩: " + std::to_string(entry->baseStats.spd), Palette::LightGray);
+    FontRenderer::drawText(renderer, 144, 34, noStr + " " + entry->nameKo, Palette::Yellow);
+    FontRenderer::drawText(renderer, 144, 46, "전승: " + entry->origin, Palette::White);
+    FontRenderer::drawText(renderer, 144, 58, "영문명: " + entry->nameEn, Palette::LightGray);
+    FontRenderer::drawText(renderer, 144, 70, "등급: " + std::to_string(static_cast<int>(entry->baseGrade) + 1) + "품 영수", Palette::LightGray);
 
     // Pokemon Benchmark Equivalence Box
     renderer.drawPanel(144, 84, 160, 58, Color(16, 20, 28), Palette::BichuiJade);
@@ -180,9 +180,9 @@ void ArtInspectorScene::renderYokaiTab(Renderer& renderer) {
     // Lower Codex lore
     renderer.drawPanel(12, 152, 298, 42, Color(18, 22, 30), Palette::MidGray);
     FontRenderer::drawText(renderer, 18, 156, "[조선 설화 고증 및 전승]", Palette::Yellow);
-    FontRenderer::drawText(renderer, 18, 168, entry->description.substr(0, 70), Palette::White);
-    if (entry->description.length() > 70) {
-        FontRenderer::drawText(renderer, 18, 180, entry->description.substr(70, 70), Palette::White);
+    FontRenderer::drawText(renderer, 18, 168, entry->lore.substr(0, std::min<size_t>(70, entry->lore.length())), Palette::White);
+    if (entry->lore.length() > 70) {
+        FontRenderer::drawText(renderer, 18, 180, entry->lore.substr(70, std::min<size_t>(70, entry->lore.length() - 70)), Palette::White);
     }
 }
 
@@ -201,9 +201,9 @@ void ArtInspectorScene::renderNpcTab(Renderer& renderer) {
 
     // Right Details Panel
     renderer.drawPanel(138, 28, 172, 120, Color(22, 26, 36), Palette::Yellow);
-    FontRenderer::drawText(renderer, 144, 34, "인물 #" + std::to_string(m_npcIndex + 1) + ": " + npc.name, Palette::Yellow);
-    FontRenderer::drawText(renderer, 144, 46, "서식 위치: Map " + std::to_string(npc.mapId) + " (" + std::to_string(npc.x) + ", " + std::to_string(npc.y) + ")", Palette::White);
-    FontRenderer::drawText(renderer, 144, 58, "대화 분기 선택지: " + std::to_string(npc.options.size()) + "개 선택 가능", Palette::LightGray);
+    FontRenderer::drawText(renderer, 144, 34, "인물 #" + std::to_string(m_npcIndex + 1) + ": " + npc.nameKo, Palette::Yellow);
+    FontRenderer::drawText(renderer, 144, 46, "직책: " + npc.titleKo + " | Map " + std::to_string(npc.mapId), Palette::White);
+    FontRenderer::drawText(renderer, 144, 58, "위치: (" + std::to_string(npc.gridX) + ", " + std::to_string(npc.gridY) + ") | 선택지: " + std::to_string(npc.options.size()) + "개", Palette::LightGray);
 
     // Pokemon Trainer Benchmark
     renderer.drawPanel(144, 74, 160, 68, Color(16, 20, 28), Palette::BichuiJade);
@@ -216,9 +216,10 @@ void ArtInspectorScene::renderNpcTab(Renderer& renderer) {
     // Bottom Dialogue Preview
     renderer.drawPanel(12, 152, 298, 42, Color(18, 22, 30), Palette::MidGray);
     FontRenderer::drawText(renderer, 18, 156, "[대표 대사 및 상호작용]", Palette::Yellow);
-    FontRenderer::drawText(renderer, 18, 168, npc.dialogue.substr(0, 75), Palette::White);
-    if (npc.dialogue.length() > 75) {
-        FontRenderer::drawText(renderer, 18, 180, npc.dialogue.substr(75, 75), Palette::White);
+    std::string diag = npc.dialogue.empty() ? "..." : npc.dialogue[0];
+    FontRenderer::drawText(renderer, 18, 168, diag.substr(0, std::min<size_t>(75, diag.length())), Palette::White);
+    if (diag.length() > 75) {
+        FontRenderer::drawText(renderer, 18, 180, diag.substr(75, std::min<size_t>(75, diag.length() - 75)), Palette::White);
     }
 }
 
@@ -240,7 +241,7 @@ void ArtInspectorScene::renderArtifactTab(Renderer& renderer) {
     renderer.drawPanel(138, 28, 172, 120, Color(22, 26, 36), Palette::Yellow);
     FontRenderer::drawText(renderer, 144, 34, "유물 #" + std::to_string(m_artifactIndex + 1) + ": " + art.name, Palette::Yellow);
     FontRenderer::drawText(renderer, 144, 46, "식별 코드: " + art.id, Palette::LightGray);
-    FontRenderer::drawText(renderer, 144, 58, "상점 가치: " + std::to_string(art.buyPrice) + "냥 (환원:" + std::to_string(art.sellPrice) + "냥)", Palette::White);
+    FontRenderer::drawText(renderer, 144, 58, "강화: +" + std::to_string(art.buffValue) + "% | 제약: -" + std::to_string(art.debuffValue) + "%", Palette::White);
 
     // Pokemon Key Item Benchmark
     renderer.drawPanel(144, 74, 160, 68, Color(16, 20, 28), Palette::BichuiJade);
@@ -253,9 +254,9 @@ void ArtInspectorScene::renderArtifactTab(Renderer& renderer) {
     // Bottom Description
     renderer.drawPanel(12, 152, 298, 42, Color(18, 22, 30), Palette::MidGray);
     FontRenderer::drawText(renderer, 18, 156, "[유물 전승 및 영기 효과]", Palette::Yellow);
-    FontRenderer::drawText(renderer, 18, 168, art.description.substr(0, 75), Palette::White);
-    if (art.description.length() > 75) {
-        FontRenderer::drawText(renderer, 18, 180, art.description.substr(75, 75), Palette::White);
+    FontRenderer::drawText(renderer, 18, 168, art.lore.substr(0, std::min<size_t>(75, art.lore.length())), Palette::White);
+    if (art.lore.length() > 75) {
+        FontRenderer::drawText(renderer, 18, 180, art.lore.substr(75, std::min<size_t>(75, art.lore.length() - 75)), Palette::White);
     }
 }
 

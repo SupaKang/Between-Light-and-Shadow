@@ -42,7 +42,7 @@ public:
     const std::string& getMapName() const { return m_mapName; }
     const std::vector<MapChest>& getChests() const { return m_chests; }
 
-    static int getTotalMapCount() { return 36; }
+    static int getTotalMapCount() { return 37; }
 
 private:
     // Chapter 1: 한양 북악산 & 도선사 (6 Maps)
@@ -60,26 +60,26 @@ private:
     void initMap9_IronMineUpper();       // 50x50 무쇠광산 상층 갱도
     void initMap10_IronMineDeep();       // 50x50 무쇠광산 최심부 (Ch.2 철포방주 배극)
 
-    // Chapter 3: 남해안 & 다도해 (5 Maps)
+    // Chapter 3: 남해안 포구 & 유령 난파선 (5 Maps)
     void initMap11_NamhaeReeds();        // 60x60 남해안 갈대밭 샛길
     void initMap12_NamhaePort();         // 80x50 남해안 갯벌 포구
     void initMap13_HaenyeoShelter();     // 24x18 해녀의 쉼터 실내
-    void initMap14_GhostShipUpper();     // 40x30 남해 유령 난파선 갑판
+    void initMap14_GhostShipUpper();     // 40x30 남해 유령 난파선 갑판 상층
     void initMap15_GhostShipDeep();      // 40x30 남해 유령 난파선 선장실 (Ch.3 수로방주 흑사)
 
-    // Chapter 4: 지리산 & 천왕봉 (5 Maps)
+    // Chapter 4: 지리산 원시림 & 천년 여우골 (5 Maps)
     void initMap16_JirisanEntry();       // 60x60 지리산 안개 숲길 초입
     void initMap17_JirisanForest();      // 80x80 지리산 대나무 밀림 미궁
-    void initMap18_DosaHermitage();      // 20x16 백발 도사의 산중 암자
-    void initMap19_FoxValleyForest();    // 60x60 여우골 상층 숲
+    void initMap18_DosaHermitage();      // 20x16 백발 도사의 산중 암자 실내
+    void initMap19_FoxValleyForest();    // 60x60 지리산 여우골 상층 숲
     void initMap20_FoxGrottoDungeon();   // 50x50 여우골 영맥동굴 (Ch.4 좌호법 설화)
 
-    // Chapter 5: 일식의 성채 & 음양당 본거지 (5 Maps)
+    // Chapter 5: 일식의 성채 & 천문음양전 (5 Maps)
     void initMap21_FortressMoat();       // 60x60 일식의 성채 외성 & 해자
     void initMap22_FortressCorridor();   // 60x60 성채 내성 흑요석 회랑
     void initMap23_GuardianTower();      // 40x40 음양당 사신수 결계탑
     void initMap24_FinalSanctum();       // 50x50 천문음양전 중심 제단 (최종보스 당주 묵영)
-    void initMap25_OriginAbyss();        // 50x50 태초의 영맥 심연 (진엔딩 신역)
+    void initMap25_OriginAbyss();        // 50x50 태초의 영맥 심연 (신역 관문)
 
     // Expanded Endgame & Secret Mythic Regions (5 Maps)
     void initMap26_HanyangBoulevard();   // 90x60 한양 육조거리 & 경복궁 근정전 외곽
@@ -94,6 +94,9 @@ private:
     void initMap33_SunkenGrotto();         // 50x50 난파선 침수 밀실 (난파선-용궁 연결)
     void initMap34_FoxLeylinePass();       // 60x60 여우골 영맥 환상 샛길 (지리산-성채 비밀 침투로)
     void initMap35_SecretCatacombs();      // 60x60 성채 지하 감옥 (성채-결계탑-미궁 비밀통로)
+
+    // Chapter 6: True 2nd Ending Holy Apex (1 Map)
+    void initMap36_SamshindanApex();       // 80x80 태초의 천상 신역 삼신단 (진 최종보스 삼신제석 & 2차 엔딩 제단)
 
     int m_mapId = 0;
     std::string m_mapName;

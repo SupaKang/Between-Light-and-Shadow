@@ -233,14 +233,18 @@ void DataManager::init() {
     Yokai boss4(2, "YOKAI_BOSS_04", "백발 백호 구미호", YokaiGrade::Grade5, Element::Fire, {240, 240, 140, 140, 38, 26, 30}, "BOSS", "음양당 좌호법이 조종하는 결계의 수호 백발 구미호.");
     boss4.addSkill(s_skillDatabase[4]); boss4.addSkill(s_skillDatabase[5]); boss4.addSkill(s_skillDatabase[15]); boss4.addSkill(s_skillDatabase[17]);
 
-    Yokai boss5(85, "YOKAI_BOSS_05", "태고의 혼돈 흉수", YokaiGrade::Grade5, Element::Dark, {300, 300, 160, 160, 42, 34, 28}, "BOSS", "음양당 당주 묵영이 일식의 성채에서 깨워낸 태고의 혼돈 흉수.");
+    Yokai boss5(85, "YOKAI_BOSS_05", "태초의 혼돈 흉수", YokaiGrade::Grade5, Element::Dark, {300, 300, 160, 160, 42, 34, 28}, "BOSS", "음양당 당주 묵영이 일식의 성채에서 깨워낸 태고의 혼돈 흉수.");
     boss5.addSkill(s_skillDatabase[18]); boss5.addSkill(s_skillDatabase[19]); boss5.addSkill(s_skillDatabase[13]); boss5.addSkill(s_skillDatabase[5]);
+
+    Yokai boss6(108, "YOKAI_BOSS_06", "태초의 삼신제석", YokaiGrade::Grade5, Element::Light, {450, 450, 200, 200, 48, 38, 35}, "CREATOR", "조선 천지를 빚어낸 태초의 창조신이자 108 번뇌의 궁극 주재자.");
+    boss6.addSkill(s_skillDatabase[12]); boss6.addSkill(s_skillDatabase[11]); boss6.addSkill(s_skillDatabase[8]); boss6.addSkill(s_skillDatabase[5]);
 
     s_yokaiDatabase.push_back(boss1);
     s_yokaiDatabase.push_back(boss2);
     s_yokaiDatabase.push_back(boss3);
     s_yokaiDatabase.push_back(boss4);
     s_yokaiDatabase.push_back(boss5);
+    s_yokaiDatabase.push_back(boss6);
 
     // Initial Encyclopedia Discoveries
     s_encyclopedia.markCaptured("YOKAI_001");
@@ -405,6 +409,10 @@ void DataManager::init() {
                       {"이곳은 시간과 공간이 교차하는 태고의 환상비무 미궁...", "조선 최강의 음양사만이 역대 5대 보스의 환영과 연속으로 겨룰 수 있다.", "궁극의 환상비무 연전(Boss Rush)에 도전하겠는가?"},
                       NPCActionType::BossEncounter, "SQ_010", {"[1] 5대 보스 연속 환상비무전에 도전한다!", "[2] 태고 미궁의 비보 위치를 묻는다", "[3] 아직 준비가 부족합니다"}};
 
+    NPC samshinArbiter{"NPC_030", 36, 40, 36, 1, "태초의 삼신제석", "천상 성역의 주재신",
+                       {"조선의 삼천리 강토를 두루 섭렵한 영술사여...", "그대가 108 번뇌의 모든 요괴를 품고 이곳 천상 삼신단에 도달하였구나.", "진정한 해탈을 위해 마지막 천명의 시험에 임하겠는가?"},
+                       NPCActionType::BossEncounter, "MQ_006", {"[1] 천명의 최종 시험(2차 진 최종보스전)에 임한다!", "[2] 108 요괴의 운명(성불 vs 이승 공존)에 대해 묻는다", "[3] 아직 마음의 준비가 필요합니다"}};
+
     s_npcDatabase = {
         jumoh, merchant, bride, scholar, blacksmith, judge,
         herbalist, bossMyogak, passTraveler, sobaekElder, miner,
@@ -412,10 +420,10 @@ void DataManager::init() {
         woodcutter, foxSage, hermitNovice, bossLeftGuardian,
         rebelExorcist, finalBoss, divineFox,
         inspectorPark, astronomerRyu, hermitSage, haenyeoCaptain,
-        whiteDeerSpirit, pantheonKeeper
+        whiteDeerSpirit, pantheonKeeper, samshinArbiter
     };
 
-    // 5. 5 Main Campaign Chapters & 10 Rich Side Quests
+    // 5. 6 Main Campaign Chapters (including True 2nd Ending Epilogue) & 10 Rich Side Quests
     Quest mq1{"MQ_001", QuestType::Main, "제1장: 도선사의 붉은 안개", 1, "관상감 벽사청의 명을 받아 도선사 인근에 번지는 음양당의 요기를 조사하라.",
              {"도선사 주막 주모와 대화하여 정보 수집", "북한산 고갯길을 지나 도선사 대웅전 진입", "음양당 하수인 괴승 묘각 격파"}, 0, {500, 300, "ART_DOKKAEBI_HAT"}, QuestState::InProgress};
 
@@ -428,8 +436,11 @@ void DataManager::init() {
     Quest mq4{"MQ_004", QuestType::Main, "제4장: 지리산 여우골의 미궁", 4, "지리산 대나무 밀림에 세워진 음양결계를 파괴하고 백발 구미호를 해방하라.",
              {"지리산 천년 사찰 조사", "여우골 동굴 미궁 돌파", "음양당 좌호법 및 백발 구미호 정화"}, 0, {1800, 1000, "ART_FOX_MARBLE_SHARD"}, QuestState::NotStarted};
 
-    Quest mq5{"MQ_005", QuestType::Main, "최종장: 일식의 성채 (천지음양의 밤)", 5, "음양당 본거지 일식의 성채에서 당주 묵영과 태고의 혼돈 흉수를 분쇄하고 천지음양부를 복원하라.",
+    Quest mq5{"MQ_005", QuestType::Main, "최종장: 일식의 성채 (1차 엔딩)", 5, "음양당 본거지 일식의 성채에서 당주 묵영과 태고의 혼돈 흉수를 분쇄하고 천지음양부를 복원하라.",
              {"일식의 성채 결계탑 해제", "천문음양전 중심 제단 진입", "음양당 당주 묵영 및 태고의 혼돈 격파"}, 0, {3000, 2000, "ART_SUN_ORB"}, QuestState::NotStarted};
+
+    Quest mq6{"MQ_006", QuestType::Main, "에필로그: 태초의 천명과 진정한 해탈 (2차 진엔딩)", 6, "108 요괴 전종 도감을 완성하고 천상 신역 삼신단에서 삼신제석을 알현하여 최후의 선택을 내려라.",
+             {"108종 요괴 전원 포획 계약 완료 (108/108)", "천상 신역 삼신단 제단 진입", "태초의 삼신제석 격파 후 진엔딩 선택"}, 0, {10000, 10000, "ART_TAIJI_BELL"}, QuestState::NotStarted};
 
     Quest sq1{"SQ_001", QuestType::Side, "방귀쟁이 며느리의 하소연", 0, "너무 강한 영적 바람으로 쫓겨날 위기에 처한 며느리를 위해 바람 요괴를 진정시켜라.",
              {"주막 뒤뜰 며느리와 대화", "바람 요괴와 전투 후 계약 완료"}, 0, {250, 150, "ART_DEMON_TILE"}, QuestState::NotStarted};
@@ -466,6 +477,7 @@ void DataManager::init() {
     s_questManager.registerQuest(mq3);
     s_questManager.registerQuest(mq4);
     s_questManager.registerQuest(mq5);
+    s_questManager.registerQuest(mq6);
     s_questManager.registerQuest(sq1);
     s_questManager.registerQuest(sq2);
     s_questManager.registerQuest(sq3);

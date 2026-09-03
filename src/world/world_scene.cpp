@@ -262,8 +262,18 @@ void WorldScene::interactWithNPC() {
                         bossId = "YOKAI_BOSS_04"; questId = "MQ_004"; nextQ = "MQ_005"; rMoney = 1800;
                         vNotice = "★ [챕터 4 클리어] 음양좌호법 격파! 최종 성채 개방! ★";
                     } else if (n.associatedQuestId == "MQ_005") {
-                        bossId = "YOKAI_BOSS_05"; questId = "MQ_005"; nextQ = ""; rMoney = 5000;
-                        vNotice = "★ [축하합니다! 전 챕터 제패] 음양당 궤멸 완료! 이제 자유롭게 108 도감을 완성하십시오! ★";
+                        bossId = "YOKAI_BOSS_05"; questId = "MQ_005"; nextQ = "MQ_006"; rMoney = 5000;
+                        vNotice = "★ [1차 엔딩 달성] 음양당 궤멸 완료! 108 요괴도감을 완성하여 2차 진엔딩을 해금하십시오! ★";
+                    } else if (n.associatedQuestId == "MQ_006") {
+                        // Check 108 Yokai Full Codex Requirement for 2nd Ending
+                        int cap = DataManager::getEncyclopedia().getCapturedCount();
+                        if (cap < 108) {
+                            m_noticeMsg = "★ [천명의 봉인] 108종 요괴도감을 전종 완성(108/108)해야만 시험에 응할 수 있습니다! (현재: " + std::to_string(cap) + "/108) ★";
+                            m_activeNPC = nullptr;
+                            return;
+                        }
+                        bossId = "YOKAI_BOSS_06"; questId = "MQ_006"; nextQ = ""; rMoney = 50000;
+                        vNotice = "★ [2차 진엔딩 달성!] 태초의 삼신제석 격파! 천명의 결단을 내리셨습니다! ★";
                     }
 
                     triggerBossBattle(bossId, questId, nextQ, rMoney, vNotice);
@@ -331,6 +341,7 @@ void WorldScene::triggerBossBattle(const std::string& bossId, const std::string&
     else if (bossId == "YOKAI_BOSS_03") bossYokai.setLevel(24);
     else if (bossId == "YOKAI_BOSS_04") bossYokai.setLevel(34);
     else if (bossId == "YOKAI_BOSS_05") bossYokai.setLevel(44);
+    else if (bossId == "YOKAI_BOSS_06") bossYokai.setLevel(55);
     else if (bossId == "YOKAI_108") bossYokai.setLevel(50);
 
     if (m_sceneStack) {
@@ -347,7 +358,21 @@ void WorldScene::triggerBossBattle(const std::string& bossId, const std::string&
                     m_noticeMsg = victoryNotice;
 
                     if (bossId == "YOKAI_BOSS_05" && m_sceneStack) {
-                        m_sceneStack->pushScene(std::make_unique<EndingScene>(m_party, m_artifacts, DataManager::getEncyclopedia()));
+                        // 1st Ending (Normal Campaign Clear)
+                        m_sceneStack->pushScene(std::make_unique<EndingScene>(m_party, m_artifacts, DataManager::getEncyclopedia(), EndingType::FirstEnding));
+                    } else if (bossId == "YOKAI_BOSS_06" && m_sceneStack) {
+                        // 2nd True Ending with Branching Philosophical Choice
+                        m_dialogueBox.startDialogueWithOptions(
+                            "태초의 삼신제석 [천명의 심판]",
+                            std::vector<std::string>{"그대는 108 번뇌의 모든 요괴를 품고 시험을 완수하였다. 이제 천명을 선택하라."},
+                            {"[1] 108 요괴 성불 및 신선 등선 (Nirvana Ascension)", "[2] 108 요괴와 이승 공존 및 조선 수호 (Earthly Coexistence)"},
+                            [this](int choiceIdx) {
+                                EndingType et = (choiceIdx == 0) ? EndingType::TrueEndingAscension : EndingType::TrueEndingCoexistence;
+                                if (m_sceneStack) {
+                                    m_sceneStack->pushScene(std::make_unique<EndingScene>(m_party, m_artifacts, DataManager::getEncyclopedia(), et));
+                                }
+                            }
+                        );
                     }
                 } else {
                     setPlayerPosition(7, 6, 0);

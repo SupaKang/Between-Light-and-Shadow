@@ -50,6 +50,7 @@ void Tilemap::loadMap(int mapId) {
         case 33: initMap33_SunkenGrotto(); break;
         case 34: initMap34_FoxLeylinePass(); break;
         case 35: initMap35_SecretCatacombs(); break;
+        case 36: initMap36_SamshindanApex(); break;
         default: initMap0_Village(); break;
     }
 }
@@ -884,6 +885,10 @@ void Tilemap::initMap25_OriginAbyss() {
 
     m_tiles[49 * m_width + 25] = 2; m_collision[49 * m_width + 25] = false;
     m_warps.push_back({25, 49, 24, 25, 7});
+
+    // Celestial Gate to Map 36 (태초의 천상 신역 삼신단) at (25, 4)
+    m_tiles[4 * m_width + 25] = 18; m_collision[4 * m_width + 25] = false; // Cloud Gate
+    m_warps.push_back({25, 4, 36, 40, 78});
 }
 
 // -------------------------------------------------------------
@@ -1271,6 +1276,42 @@ void Tilemap::initMap35_SecretCatacombs() {
     // South-East Warp to Map 30 (태고 환상비무 미궁)
     m_tiles[55 * m_width + 59] = 20; m_collision[55 * m_width + 59] = false;
     m_warps.push_back({59, 55, 30, 10, 90});
+}
+
+// -------------------------------------------------------------
+// [Map 36] 태초의 천상 신역 삼신단 (80 x 80)
+// -------------------------------------------------------------
+void Tilemap::initMap36_SamshindanApex() {
+    m_mapName = "태초의 천상 신역 삼신단 (2차 진엔딩 성역)";
+    m_width = 80;
+    m_height = 80;
+    m_tiles.assign(m_width * m_height, 18); // Floating Cloud Platforms
+    m_collision.assign(m_width * m_height, false);
+
+    makeBoundaryWalls(m_width, m_height, m_tiles, m_collision, 1);
+
+    // Golden Jade Hall floor (X=25~55, Y=25~55)
+    for (int y = 25; y <= 55; ++y) {
+        for (int x = 25; x <= 55; ++x) {
+            m_tiles[y * m_width + x] = 3; // Golden Maru
+        }
+    }
+
+    // Dancheong Banners around sacred apex
+    m_tiles[28 * m_width + 28] = 24; m_collision[28 * m_width + 28] = true;
+    m_tiles[28 * m_width + 52] = 24; m_collision[28 * m_width + 52] = true;
+    m_tiles[52 * m_width + 28] = 24; m_collision[52 * m_width + 28] = true;
+    m_tiles[52 * m_width + 52] = 24; m_collision[52 * m_width + 52] = true;
+
+    // Sacred Samshin Sovereign Altar in Center
+    m_tiles[40 * m_width + 40] = 9;
+
+    // Supreme Celestial Relic Chest
+    m_chests.push_back({39, 40, 28, "ART_TAIJI_BELL", 30000, 15000, false});
+
+    // South Warp to Map 25 (태초의 영맥 심연)
+    m_tiles[79 * m_width + 40] = 2; m_collision[79 * m_width + 40] = false;
+    m_warps.push_back({40, 79, 25, 25, 6});
 }
 
 void Tilemap::render(Renderer& renderer, int cameraX, int cameraY) const {
