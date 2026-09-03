@@ -54,6 +54,7 @@ public:
     void calculateStats();
     void gainExp(int amount);
     void levelUp();
+    void setLevel(int level);
 
     bool canPromote() const;
     bool promoteGrade();

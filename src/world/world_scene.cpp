@@ -117,7 +117,7 @@ void WorldScene::checkStepEvents(int newGridX, int newGridY) {
 
             std::uniform_int_distribution<size_t> poolDist(minIdx, maxIdx);
             Yokai wildEnemy = pool[poolDist(m_rng)];
-            wildEnemy.gainExp(wildLevel * 250);
+            wildEnemy.setLevel(wildLevel);
 
             if (m_sceneStack) {
                 m_sceneStack->pushScene(std::make_unique<BattleScene>(
@@ -262,6 +262,13 @@ void WorldScene::interactWithNPC() {
 
 void WorldScene::triggerBossBattle(const std::string& bossId, const std::string& questIdToComplete, const std::string& nextQuestId, int rewardMoney, const std::string& victoryNotice) {
     Yokai bossYokai = DataManager::createYokaiById(bossId);
+    if (bossId == "YOKAI_BOSS_01") bossYokai.setLevel(8);
+    else if (bossId == "YOKAI_BOSS_02") bossYokai.setLevel(16);
+    else if (bossId == "YOKAI_BOSS_03") bossYokai.setLevel(24);
+    else if (bossId == "YOKAI_BOSS_04") bossYokai.setLevel(34);
+    else if (bossId == "YOKAI_BOSS_05") bossYokai.setLevel(44);
+    else if (bossId == "YOKAI_108") bossYokai.setLevel(50);
+
     if (m_sceneStack) {
         m_sceneStack->pushScene(std::make_unique<BattleScene>(
             m_party, bossYokai, m_artifacts, true, [this, bossId, questIdToComplete, nextQuestId, rewardMoney, victoryNotice](bool won) {

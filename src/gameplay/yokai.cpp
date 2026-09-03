@@ -89,6 +89,14 @@ void Yokai::levelUp() {
     m_stats.qi += (m_stats.maxQi - prevMaxQi);
 }
 
+void Yokai::setLevel(int level) {
+    m_level = std::clamp(level, 1, MAX_LEVEL);
+    m_exp = 0;
+    calculateStats();
+    m_stats.hp = m_stats.maxHp;
+    m_stats.qi = m_stats.maxQi;
+}
+
 bool Yokai::canPromote() const {
     int currentGrade = static_cast<int>(m_grade);
     if (currentGrade >= 5) return false;
