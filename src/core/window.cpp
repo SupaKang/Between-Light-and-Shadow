@@ -239,6 +239,12 @@ LRESULT CALLBACK Window::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
                 case VK_F1:
                     Input::setKeyState(Key::Debug, down);
                     break;
+                case VK_SHIFT:
+                case VK_LSHIFT:
+                case VK_RSHIFT:
+                case 'B':
+                    Input::setKeyState(Key::Dash, down);
+                    break;
             }
             return 0;
         }

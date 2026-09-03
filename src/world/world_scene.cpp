@@ -301,6 +301,8 @@ void WorldScene::handleInput() {
         return;
     }
 
+    m_gridController.setRunning(Input::isDown(Key::Dash));
+
     if (!m_gridController.isMoving()) {
         auto walkableCheck = [this](int tx, int ty) -> bool {
             if (m_tilemap.isSolid(tx, ty)) return false;
@@ -407,21 +409,50 @@ void WorldScene::render(Renderer& renderer) {
     renderer.fillRect(0, 0, SCREEN_WIDTH, 12, Color(18, 18, 22, 220));
     FontRenderer::drawText(renderer, 4, 2, m_tilemap.getMapName(), Palette::Yellow);
 
-    auto activeQuests = DataManager::getQuestManager().getActiveQuests();
-    if (!activeQuests.empty() && activeQuests[0]) {
-        std::string qStr = "[임무] " + activeQuests[0]->getCurrentObjective();
-        FontRenderer::drawText(renderer, 96, 2, qStr, Palette::Jade);
+    int curMap = m_tilemap.getMapId();
+    bool isSafe = (curMap == 0 || curMap == 1 || curMap == 2 || curMap == 8 || curMap == 12 || curMap == 13 || curMap == 18);
+    if (!isSafe) {
+        size_t minIdx = 0, maxIdx = 25;
+        if (curMap >= 3 && curMap <= 5) { minIdx = 0; maxIdx = 25; }
+        else if (curMap >= 6 && curMap <= 10) { minIdx = 20; maxIdx = 55; }
+        else if (curMap >= 11 && curMap <= 15) { minIdx = 45; maxIdx = 80; }
+        else if (curMap >= 16 && curMap <= 20) { minIdx = 65; maxIdx = 100; }
+        else if (curMap >= 21 && curMap <= 25) { minIdx = 85; maxIdx = 107; }
+
+        int uncaptured = 0;
+        const auto& codex = DataManager::getEncyclopedia();
+        for (size_t i = minIdx; i <= maxIdx; ++i) {
+            const auto* entry = codex.getEntry(static_cast<int>(i + 1));
+            if (!entry || entry->status != DiscoveryStatus::Captured) {
+                uncaptured++;
+            }
+        }
+        if (uncaptured > 0) {
+            std::string radarStr = "★ 미계약 " + std::to_string(uncaptured) + "종 서식";
+            FontRenderer::drawText(renderer, 90, 2, radarStr, Palette::Yellow);
+        } else {
+            FontRenderer::drawText(renderer, 90, 2, "★ 지역도감 완전정복", Palette::Jade);
+        }
+    } else {
+        auto activeQuests = DataManager::getQuestManager().getActiveQuests();
+        if (!activeQuests.empty() && activeQuests[0]) {
+            std::string qStr = "[임무] " + activeQuests[0]->getCurrentObjective();
+            FontRenderer::drawText(renderer, 90, 2, qStr, Palette::Jade);
+        }
     }
 
     std::string moneyStr = std::to_string(m_money) + "냥";
-    FontRenderer::drawText(renderer, SCREEN_WIDTH - 46, 2, moneyStr, Palette::Yellow);
+    if (m_gridController.isRunning()) {
+        moneyStr = "[질주] " + moneyStr;
+    }
+    FontRenderer::drawText(renderer, SCREEN_WIDTH - 64, 2, moneyStr, m_gridController.isRunning() ? Palette::Jade : Palette::Yellow);
 
     // 7. Bottom Controls Hint / System Notice
     renderer.fillRect(0, SCREEN_HEIGHT - 12, SCREEN_WIDTH, 12, Color(18, 18, 22, 220));
     if (!m_noticeMsg.empty()) {
         FontRenderer::drawText(renderer, 4, SCREEN_HEIGHT - 10, m_noticeMsg, Palette::Yellow);
     } else {
-        FontRenderer::drawText(renderer, 4, SCREEN_HEIGHT - 10, "방향키:이동 | Z:대화 | X:도감 | C:유물 | V:파티 | Q:임무 | F5:저장", Palette::White);
+        FontRenderer::drawText(renderer, 4, SCREEN_HEIGHT - 10, "방향키:이동(Shift:질주) | Z:대화 | X:도감 | C:유물 | V:파티 | Q:임무 | F5:저장", Palette::White);
     }
 
     // 8. Dialogue Box Overlay

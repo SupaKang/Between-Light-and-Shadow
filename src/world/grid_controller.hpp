@@ -19,6 +19,8 @@ public:
 
     void setPosition(int gridX, int gridY);
     void setFacing(Direction dir) { m_facing = dir; }
+    void setRunning(bool running) { m_stepDuration = running ? 0.09f : 0.16f; }
+    bool isRunning() const { return m_stepDuration < 0.12f; }
 
     void update(float dt);
     

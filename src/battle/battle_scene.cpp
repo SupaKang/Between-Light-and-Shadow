@@ -120,18 +120,25 @@ void BattleScene::handleInput() {
 }
 
 void BattleScene::update(float dt) {
-    m_battleAnimTimer += dt;
-    m_sequencer.update(dt);
-    m_skillFx.update(dt);
+    bool isFast = Input::isDown(Key::Dash) || Input::isDown(Key::ActionA);
+    float simDt = isFast ? dt * 2.2f : dt;
 
-    if (m_playerLunge > 0.0f) m_playerLunge = std::max(0.0f, m_playerLunge - dt * 25.0f);
-    if (m_enemyLunge > 0.0f) m_enemyLunge = std::max(0.0f, m_enemyLunge - dt * 25.0f);
+    if (isFast && m_sequencer.isCurrentCommandTextMessage()) {
+        m_sequencer.advanceText();
+    }
+
+    m_battleAnimTimer += simDt;
+    m_sequencer.update(simDt);
+    m_skillFx.update(simDt);
+
+    if (m_playerLunge > 0.0f) m_playerLunge = std::max(0.0f, m_playerLunge - simDt * 25.0f);
+    if (m_enemyLunge > 0.0f) m_enemyLunge = std::max(0.0f, m_enemyLunge - simDt * 25.0f);
 
     if (m_sequencer.isPlayerFlashing()) m_playerShake = 3.5f;
     if (m_sequencer.isEnemyFlashing()) m_enemyShake = 3.5f;
 
-    if (m_playerShake > 0.0f) m_playerShake = std::max(0.0f, m_playerShake - dt * 15.0f);
-    if (m_enemyShake > 0.0f) m_enemyShake = std::max(0.0f, m_enemyShake - dt * 15.0f);
+    if (m_playerShake > 0.0f) m_playerShake = std::max(0.0f, m_playerShake - simDt * 15.0f);
+    if (m_enemyShake > 0.0f) m_enemyShake = std::max(0.0f, m_enemyShake - simDt * 15.0f);
 
     Yokai* pYokai = m_battle->getActivePlayerYokai();
     if (pYokai) {
@@ -140,9 +147,9 @@ void BattleScene::update(float dt) {
     }
     m_enemyHpBar.setTarget(m_battle->getEnemyYokai().getStats().hp, m_battle->getEnemyYokai().getStats().maxHp);
 
-    m_playerHpBar.update(dt);
-    m_playerQiBar.update(dt);
-    m_enemyHpBar.update(dt);
+    m_playerHpBar.update(simDt);
+    m_playerQiBar.update(simDt);
+    m_enemyHpBar.update(simDt);
 
     m_battle->update();
 }
@@ -154,6 +161,12 @@ void BattleScene::render(Renderer& renderer) {
     // Ground: Traditional Tatami / Earth platform
     renderer.fillRect(0, 80, SCREEN_WIDTH, 30, Color(24, 30, 42));
     renderer.drawLine(0, 110, SCREEN_WIDTH, 110, Palette::MidGray);
+
+    // Fast-Forward HUD Badge
+    if (Input::isDown(Key::Dash) || Input::isDown(Key::ActionA)) {
+        renderer.fillRect(2, 2, 80, 10, Color(18, 18, 24, 200));
+        FontRenderer::drawText(renderer, 4, 3, ">> 2.2x 배속", Palette::Yellow);
+    }
 
     // Elemental Skill Particle FX Overlay
     m_skillFx.render(renderer);

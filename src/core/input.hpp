@@ -17,7 +17,8 @@ enum class Key : uint32_t {
     ActionE = 1 << 8, // Q, L (Quest Log)
     Save    = 1 << 9, // S (Quick Save)
     Debug   = 1 << 10, // F1, D (Tech Info toggle)
-    Menu    = 1 << 11  // ESC, O, M (Settings Menu)
+    Menu    = 1 << 11, // ESC, O, M (Settings Menu)
+    Dash    = 1 << 12  // Shift, B (Fast Sprint/Dash)
 };
 
 inline Key operator|(Key a, Key b) {
