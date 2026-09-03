@@ -11,6 +11,9 @@
 #include "../scenes/party_scene.hpp"
 #include "../scenes/artifact_scene.hpp"
 #include "../scenes/quest_scene.hpp"
+#include "../scenes/yutnori_scene.hpp"
+#include "../gameplay/alchemy.hpp"
+#include "field_obstacle.hpp"
 #include <algorithm>
 
 namespace JoseonRPG {
@@ -25,6 +28,7 @@ WorldScene::WorldScene(Party& party, ArtifactInventory& artifacts, int& money)
 
 void WorldScene::onEnter() {
     AudioEngine::playBgm(BgmTrack::Village);
+    FieldObstacleManager::init();
     m_tilemap.loadMap(0);
     m_weather.setWeatherForMap(0);
     m_gridController.setPosition(7, 6);
@@ -124,7 +128,18 @@ void WorldScene::interactWithNPC() {
 
             m_dialogueBox.startDialogue(speakerTitle, n.dialogue, [this, n]() {
                 // Actions after dialogue finishes
-                if (n.actionType == NPCActionType::TavernRest) {
+                if (n.nameKo == "주모 월선" || n.nameKo == "이 생원") {
+                    if (m_sceneStack) {
+                        m_sceneStack->pushScene(std::make_unique<YutnoriScene>(m_money));
+                    }
+                }
+                else if (n.nameKo == "혜민서 의원") {
+                    AlchemySystem::brewPotion(AlchemyRecipeId::VitalityDecoction, m_party, m_money, m_noticeMsg);
+                }
+                else if (n.nameKo == "천명영호") {
+                    triggerBossBattle("YOKAI_108", "", "", 10000, "★ [환상비무대 제패!] 전설의 영수 천명영호를 꺾고 조선 제일의 음양사로 등극하셨습니다! ★");
+                }
+                else if (n.actionType == NPCActionType::TavernRest) {
                     m_party.healAll();
                     m_noticeMsg = "주막에서 하룻밤 묵었습니다. 파티 전원의 체력/영력 완치!";
                     DataManager::getQuestManager().advanceQuest("MQ_001");
@@ -192,6 +207,17 @@ void WorldScene::interactWithNPC() {
             return;
         }
     }
+
+    // 3. Check Field Obstacle Interaction (adjacent 4 tiles)
+    for (int i = 0; i < 4; ++i) {
+        int ox = px + dxs[i];
+        int oy = py + dys[i];
+        FieldObstacle* obs = FieldObstacleManager::getObstacleAt(m_tilemap.getMapId(), ox, oy);
+        if (obs) {
+            FieldObstacleManager::tryClearObstacle(*obs, m_party, m_noticeMsg);
+            return;
+        }
+    }
 }
 
 void WorldScene::triggerBossBattle(const std::string& bossId, const std::string& questIdToComplete, const std::string& nextQuestId, int rewardMoney, const std::string& victoryNotice) {
@@ -227,6 +253,7 @@ void WorldScene::handleInput() {
     if (!m_gridController.isMoving()) {
         auto walkableCheck = [this](int tx, int ty) -> bool {
             if (m_tilemap.isSolid(tx, ty)) return false;
+            if (FieldObstacleManager::getObstacleAt(m_tilemap.getMapId(), tx, ty)) return false;
             auto npcs = DataManager::getNPCsForMap(m_tilemap.getMapId());
             for (const auto& n : npcs) {
                 if (n.gridX == tx && n.gridY == ty) return false;

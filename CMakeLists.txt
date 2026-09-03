@@ -43,6 +43,9 @@ set(SOURCES
     src/scenes/artifact_scene.cpp
     src/scenes/quest_scene.cpp
     src/scenes/title_scene.cpp
+    src/scenes/yutnori_scene.cpp
+    src/gameplay/alchemy.cpp
+    src/world/field_obstacle.cpp
     src/data/data_manager.cpp
     src/audio/audio_engine.cpp
     src/world/weather_system.cpp
@@ -64,11 +67,13 @@ set(TEST_SOURCES
     src/core/task_engine.cpp
     src/core/save_system.cpp
     src/world/tilemap.cpp
+    src/world/field_obstacle.cpp
     src/gameplay/yokai.cpp
     src/gameplay/party.cpp
     src/gameplay/artifact.cpp
     src/gameplay/encyclopedia.cpp
     src/gameplay/quest.cpp
+    src/gameplay/alchemy.cpp
     src/battle/status_effects.cpp
     src/battle/battle.cpp
     src/data/data_manager.cpp

@@ -879,3 +879,83 @@ bool runPhase8VisualAndWeatherTests() {
     std::cout << "  [PASS] Phase 8 (Weather & Elemental Skill FX)" << std::endl;
     return true;
 }
+
+#include "../src/world/field_obstacle.hpp"
+#include "../src/gameplay/alchemy.hpp"
+
+bool runPhase9ObstaclesAndMinigamesTests() {
+    std::cout << "[TEST 10] Running Phase 9 (Field Obstacles, Herbal Alchemy, Minigames) Tests..." << std::endl;
+
+    // 1. Field Obstacles Mechanism Test
+    FieldObstacleManager::init();
+    FieldObstacle* briars = FieldObstacleManager::getObstacleAt(3, 20, 45);
+    if (!briars) {
+        std::cerr << "  FAIL: Map 3 CursedBriars not found!" << std::endl;
+        return false;
+    }
+
+    Party emptyWaterParty;
+    Yokai waterYokai(20, "YOKAI_020", "Imoogi", YokaiGrade::Grade4, Element::Water, {120, 120, 80, 80, 26, 20, 18});
+    emptyWaterParty.addYokai(waterYokai);
+
+    std::string msg;
+    if (FieldObstacleManager::tryClearObstacle(*briars, emptyWaterParty, msg)) {
+        std::cerr << "  FAIL: Water Yokai should not clear CursedBriars!" << std::endl;
+        return false;
+    }
+
+    // Add Fire Dokkaebi
+    Yokai fireDokkaebi(1, "YOKAI_001", "Dokkaebi", YokaiGrade::Grade2, Element::Fire, {95, 95, 60, 60, 22, 18, 14});
+    emptyWaterParty.addYokai(fireDokkaebi);
+
+    if (!FieldObstacleManager::tryClearObstacle(*briars, emptyWaterParty, msg) || !briars->cleared) {
+        std::cerr << "  FAIL: Fire Dokkaebi should clear CursedBriars!" << std::endl;
+        return false;
+    }
+
+    // Test IronBars on Map 9 with Bulgasari
+    FieldObstacle* ironBars = FieldObstacleManager::getObstacleAt(9, 25, 25);
+    if (!ironBars) {
+        std::cerr << "  FAIL: Map 9 IronBars not found!" << std::endl;
+        return false;
+    }
+
+    Party partyWithBulgasari;
+    Yokai bulgasari(3, "YOKAI_003", "Bulgasari", YokaiGrade::Grade3, Element::Earth, {140, 140, 50, 50, 24, 28, 10}, "FOLKLORE", "", YokaiTrait::IronDiet);
+    partyWithBulgasari.addYokai(bulgasari);
+
+    if (!FieldObstacleManager::tryClearObstacle(*ironBars, partyWithBulgasari, msg) || !ironBars->cleared) {
+        std::cerr << "  FAIL: Bulgasari should clear IronBars!" << std::endl;
+        return false;
+    }
+    std::cout << "  - Verified Field Obstacles (CursedBriars, HeavyBoulder, IronBars, WaterRapids)." << std::endl;
+
+    // 2. Herbal Alchemy System Test
+    Party alchemyParty;
+    Yokai testLead(1, "YOKAI_001", "Dokkaebi", YokaiGrade::Grade2, Element::Fire, {100, 100, 60, 60, 22, 18, 14});
+    testLead.takeDamage(60); // HP 40/100
+    alchemyParty.addYokai(testLead);
+
+    int testMoney = 500;
+    std::string brewMsg;
+    if (!AlchemySystem::brewPotion(AlchemyRecipeId::VitalityDecoction, alchemyParty, testMoney, brewMsg)) {
+        std::cerr << "  FAIL: VitalityDecoction brewing failed!" << std::endl;
+        return false;
+    }
+
+    if (testMoney != 450 || alchemyParty.getActiveYokai()->getStats().hp != alchemyParty.getActiveYokai()->getStats().maxHp) {
+        std::cerr << "  FAIL: VitalityDecoction effect/money mismatch!" << std::endl;
+        return false;
+    }
+
+    // Insufficient funds test
+    testMoney = 20;
+    if (AlchemySystem::brewPotion(AlchemyRecipeId::CenturyGinsengPill, alchemyParty, testMoney, brewMsg)) {
+        std::cerr << "  FAIL: Brewing should fail with insufficient money!" << std::endl;
+        return false;
+    }
+    std::cout << "  - Verified Joseon Herbal Alchemy brewing system." << std::endl;
+
+    std::cout << "  [PASS] Phase 9 (Field Obstacles, Alchemy, Minigames)" << std::endl;
+    return true;
+}
