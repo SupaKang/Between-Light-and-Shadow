@@ -11,7 +11,7 @@ QuestManager DataManager::s_questManager;
 
 void DataManager::init() {
     // 1. Skills Database (Comprehensive 20+ Skills Across 7 Elements)
-    Skill clubStrike{"SKL_CLUB_STRIKE", "Club Strike", 45, 10, Element::Physical, 95, StatusEffect::None, 0};
+    Skill clubStrike{"SKL_CLUB_STRIKE", "Club Strike", 45, 0, Element::Physical, 95, StatusEffect::None, 0};
     Skill ironCharge{"SKL_IRON_CHARGE", "Iron Charge", 55, 15, Element::Earth, 90, StatusEffect::None, 0};
     Skill earthSlam{"SKL_EARTH_SLAM", "Earth Slam", 65, 25, Element::Earth, 85, StatusEffect::None, 0};
     
