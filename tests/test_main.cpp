@@ -15,6 +15,7 @@ bool runStep1To3PolishAndBugFixTests();
 bool runEndToEndPlaythroughSimulationTests();
 bool runMonteCarloBalancingAndAnomalyDetectionTests();
 bool runPokemonSeriesBenchmarkAndVolumeTrackingTests();
+bool runPixelArtQualityAndSilhouetteReadabilityAuditTests();
 
 int main() {
     std::cout << "========================================" << std::endl;
@@ -37,6 +38,7 @@ int main() {
     if (!runEndToEndPlaythroughSimulationTests()) passed = false;
     if (!runMonteCarloBalancingAndAnomalyDetectionTests()) passed = false;
     if (!runPokemonSeriesBenchmarkAndVolumeTrackingTests()) passed = false;
+    if (!runPixelArtQualityAndSilhouetteReadabilityAuditTests()) passed = false;
 
     std::cout << "----------------------------------------" << std::endl;
     if (passed) {

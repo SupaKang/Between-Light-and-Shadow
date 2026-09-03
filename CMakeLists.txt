@@ -46,6 +46,7 @@ set(SOURCES
     src/scenes/yutnori_scene.cpp
     src/scenes/settings_scene.cpp
     src/scenes/ending_scene.cpp
+    src/scenes/art_inspector_scene.cpp
     src/gameplay/alchemy.cpp
     src/world/field_obstacle.cpp
     src/data/data_manager.cpp
@@ -76,6 +77,7 @@ set(TEST_SOURCES
     src/world/field_obstacle.cpp
     src/scenes/settings_scene.cpp
     src/scenes/ending_scene.cpp
+    src/scenes/art_inspector_scene.cpp
     src/gameplay/yokai.cpp
     src/gameplay/party.cpp
     src/gameplay/artifact.cpp

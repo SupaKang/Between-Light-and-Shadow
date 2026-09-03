@@ -1,4 +1,5 @@
 #include "title_scene.hpp"
+#include "art_inspector_scene.hpp"
 #include "../core/renderer.hpp"
 #include "../core/input.hpp"
 #include "../core/scene_stack.hpp"
@@ -82,7 +83,7 @@ void TitleScene::handleInput() {
         }
     }
     if (Input::isRepeated(Key::Down)) {
-        if (m_cursor < 2) {
+        if (m_cursor < 3) {
             m_cursor++;
             AudioEngine::playSfx(SfxId::MenuCursor);
         }
@@ -99,6 +100,10 @@ void TitleScene::handleInput() {
                 startNewGame();
             }
         } else if (m_cursor == 2) {
+            if (m_sceneStack) {
+                m_sceneStack->pushScene(std::make_unique<ArtInspectorScene>());
+            }
+        } else if (m_cursor == 3) {
             PostQuitMessage(0);
         }
     }
@@ -119,15 +124,20 @@ void TitleScene::render(Renderer& renderer) {
     FontRenderer::drawText(renderer, 76, 50, "C++17 Standalone JRPG", Palette::LightGray);
 
     // Menu Options Box
-    renderer.drawPanel(60, 78, 200, 68, Color(20, 24, 32), Palette::MidGray);
+    renderer.drawPanel(60, 74, 200, 78, Color(20, 24, 32), Palette::MidGray);
 
-    const char* options[3] = {"1. 새로 시작 (New Game)", "2. 이어 하기 (Continue)", "3. 게임 종료 (Exit)"};
-    for (int i = 0; i < 3; ++i) {
-        int oy = 86 + i * 18;
+    const char* options[4] = {
+        "1. 새로 시작 (New Game)",
+        "2. 이어 하기 (Continue)",
+        "3. 화첩 인스펙터 (Art Codex)",
+        "4. 게임 종료 (Exit)"
+    };
+    for (int i = 0; i < 4; ++i) {
+        int oy = 80 + i * 17;
         bool isSel = (m_cursor == i);
 
         if (isSel) {
-            renderer.fillRect(66, oy - 2, 188, 16, Color(40, 48, 64));
+            renderer.fillRect(66, oy - 2, 188, 15, Color(40, 48, 64));
             FontRenderer::drawText(renderer, 72, oy + 1, ">", Palette::Yellow);
         }
 
@@ -141,8 +151,8 @@ void TitleScene::render(Renderer& renderer) {
 
     // Save Data Summary Preview
     if (m_hasSave) {
-        renderer.drawPanel(40, 150, 240, 18, Color(16, 24, 20), Palette::Jade);
-        FontRenderer::drawText(renderer, 46, 155, "[저장 기록] " + m_saveSummary, Palette::Jade);
+        renderer.drawPanel(40, 156, 240, 18, Color(16, 24, 20), Palette::Jade);
+        FontRenderer::drawText(renderer, 46, 161, "[저장 기록] " + m_saveSummary, Palette::Jade);
     }
 
     // Bottom Footer
