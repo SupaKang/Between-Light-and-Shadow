@@ -48,6 +48,7 @@ private:
     UISmoothBar m_enemyHpBar;
 
     int m_enemySpriteId = 1;
+    float m_battleAnimTimer = 0.0f;
 };
 
 } // namespace JoseonRPG

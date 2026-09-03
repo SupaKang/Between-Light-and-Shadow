@@ -118,6 +118,7 @@ void BattleScene::handleInput() {
 }
 
 void BattleScene::update(float dt) {
+    m_battleAnimTimer += dt;
     m_sequencer.update(dt);
     m_skillFx.update(dt);
 
@@ -169,15 +170,49 @@ void BattleScene::render(Renderer& renderer) {
         FontRenderer::drawText(renderer, 82, 35, StatusEffectSystem::getStatusName(eYokai.getStatus().effect), Palette::Black);
     }
 
+    // Dynamic Idle Breathing & Float
+    int eBounceY = static_cast<int>(std::sin(m_battleAnimTimer * 3.5f) * 1.5f);
+    int pBounceY = static_cast<int>(std::cos(m_battleAnimTimer * 3.5f) * 1.5f);
+
+    // Enemy Elemental Aura Base
+    int eBaseX = SCREEN_WIDTH - 65;
+    int eBaseY = 24 + eBounceY;
+    Color eAuraCol = Palette::MidGray;
+    if (eYokai.getElement() == Element::Fire) eAuraCol = Palette::CinnabarRed;
+    else if (eYokai.getElement() == Element::Water) eAuraCol = Palette::IndigoBlue;
+    else if (eYokai.getElement() == Element::Earth) eAuraCol = Palette::GardeniaYellow;
+    else if (eYokai.getElement() == Element::Light) eAuraCol = Palette::GoldHalo;
+    else if (eYokai.getElement() == Element::Dark) eAuraCol = Palette::RoyalPurple;
+
+    renderer.fillRect(eBaseX + 2, eBaseY + 15, 12, 2, Color(eAuraCol.r, eAuraCol.g, eAuraCol.b, 120));
+
     // Enemy Sprite with flashing support
     if (!m_sequencer.isEnemyFlashing()) {
-        renderer.drawSprite(SCREEN_WIDTH - 65, 24, m_enemySpriteId, 0);
+        renderer.drawSprite(eBaseX, eBaseY, m_enemySpriteId, static_cast<int>(m_battleAnimTimer * 4.0f) % 2);
     }
 
-    // 2. Player Yokai HUD Box
+    // 2. Player Yokai HUD Box & Combatant
     if (pYokai) {
+        int pBaseX = 35;
+        int pBaseY = 68 + pBounceY;
+
+        Color pAuraCol = Palette::MidGray;
+        if (pYokai->getElement() == Element::Fire) pAuraCol = Palette::CinnabarRed;
+        else if (pYokai->getElement() == Element::Water) pAuraCol = Palette::IndigoBlue;
+        else if (pYokai->getElement() == Element::Earth) pAuraCol = Palette::GardeniaYellow;
+        else if (pYokai->getElement() == Element::Light) pAuraCol = Palette::GoldHalo;
+        else if (pYokai->getElement() == Element::Dark) pAuraCol = Palette::RoyalPurple;
+
+        renderer.fillRect(pBaseX + 2, pBaseY + 15, 12, 2, Color(pAuraCol.r, pAuraCol.g, pAuraCol.b, 120));
+
+        int playerSprite = 0;
+        if (pYokai->getId() == "YOKAI_001") playerSprite = 12;
+        else if (pYokai->getId() == "YOKAI_002") playerSprite = 13;
+        else if (pYokai->getId() == "YOKAI_003") playerSprite = 14;
+        else if (pYokai->getId() == "YOKAI_108") playerSprite = 15;
+
         if (!m_sequencer.isPlayerFlashing()) {
-            renderer.drawSprite(35, 68, 0, 0);
+            renderer.drawSprite(pBaseX, pBaseY, playerSprite, static_cast<int>(m_battleAnimTimer * 4.0f) % 2);
         }
 
         renderer.drawPanel(165, 58, 147, 50, Color(24, 26, 34, 230), Palette::Blue);

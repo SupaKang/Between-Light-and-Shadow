@@ -38,7 +38,7 @@ namespace Palette {
     constexpr Color LightGray{180, 184, 195};
     constexpr Color White{250, 248, 245};
     
-    // Obangsaek (Korean Traditional 5 Colors)
+    // Obangsaek (Korean Traditional 5 Colors) & Dancheong Mineral Pigments
     constexpr Color Blue{43, 108, 196};
     constexpr Color Red{179, 42, 42};
     constexpr Color Yellow{212, 162, 55};
@@ -47,6 +47,19 @@ namespace Palette {
     constexpr Color HanjiBackground{237, 234, 225};
     constexpr Color InkBlack{20, 20, 24};
     constexpr Color Purple{128, 64, 160};
+
+    // Authentic Dancheong Pigments
+    constexpr Color IndigoBlue{30, 75, 130};
+    constexpr Color CinnabarRed{184, 38, 38};
+    constexpr Color GardeniaYellow{230, 180, 34};
+    constexpr Color BaegokWhite{237, 232, 208};
+    constexpr Color SongyeonInk{24, 24, 32};
+    constexpr Color BichuiJade{42, 157, 143};
+    constexpr Color PeonyPink{231, 111, 81};
+    constexpr Color RoyalPurple{74, 21, 75};
+    constexpr Color TigerOrange{211, 84, 0};
+    constexpr Color GoldHalo{244, 208, 63};
+    constexpr Color BambooGreen{39, 174, 96};
 }
 
 struct Vec2i {
