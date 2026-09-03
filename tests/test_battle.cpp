@@ -388,7 +388,7 @@ bool runFullContentTests() {
 
     // 5. 31 Multi-Floor and Massive Map Regions & Warps & Chests
     Tilemap tm;
-    const int expectedDims[31][2] = {
+    const int expectedDims[36][2] = {
         {80, 60},   // Map 0: Village Overworld
         {24, 18},   // Map 1: Tavern Interior
         {24, 18},   // Map 2: Exorcist Bureau
@@ -419,10 +419,15 @@ bool runFullContentTests() {
         {80, 70},   // Map 27: Mount Geumgang Celestial Realm
         {70, 70},   // Map 28: Heuksan Deep Sea Dragon Palace
         {80, 80},   // Map 29: Mount Baekdu Heavenly Lake
-        {100, 100}  // Map 30: Ancient Pantheon Labyrinth
+        {100, 100}, // Map 30: Ancient Pantheon Labyrinth
+        {60, 60},   // Map 31: Subterranean Aqueduct Shortcut
+        {70, 70},   // Map 32: Sobaek-Jirisan Beacon Ridge
+        {50, 50},   // Map 33: Sunken Grotto & Flooded Hold
+        {60, 60},   // Map 34: Fox Leyline Spirit Pass
+        {60, 60}    // Map 35: Fortress Secret Catacombs
     };
 
-    for (int m = 0; m < 31; ++m) {
+    for (int m = 0; m < 36; ++m) {
         tm.loadMap(m);
         int expW = expectedDims[m][0];
         int expH = expectedDims[m][1];
@@ -462,15 +467,20 @@ bool runFullContentTests() {
         else if (m == 28) { sx = 35; sy = 30; }
         else if (m == 29) { sx = 40; sy = 40; }
         else if (m == 30) { sx = 50; sy = 50; }
+        else if (m == 31) { sx = 30; sy = 30; }
+        else if (m == 32) { sx = 35; sy = 35; }
+        else if (m == 33) { sx = 25; sy = 25; }
+        else if (m == 34) { sx = 30; sy = 30; }
+        else if (m == 35) { sx = 30; sy = 30; }
 
         if (tm.isSolid(sx, sy)) {
             std::cerr << "  FAIL: Map " << m << " spawn point (" << sx << ", " << sy << ") is solid!" << std::endl;
             return false;
         }
     }
-    std::cout << "  - Verified 31 multi-floor & massive region maps (20x16 ~ 100x100, 40x120)." << std::endl;
+    std::cout << "  - Verified 36 multi-floor & non-linear shortcut region maps (20x16 ~ 100x100)." << std::endl;
 
-    // 6. Verify Warp Connectivity Across Multi-Floor Hierarchy
+    // 6. Verify Warp Connectivity Across Multi-Floor & Dynamic Non-Linear Shortcuts
     // Map 0 -> Map 1 (Village -> Tavern)
     tm.loadMap(0);
     const auto* w01 = tm.checkWarp(14, 18);
@@ -488,6 +498,54 @@ bool runFullContentTests() {
     const auto* w03 = tm.checkWarp(79, 30);
     if (!w03 || w03->targetMapId != 3) {
         std::cerr << "  FAIL: Map 0 -> Map 3 warp missing!" << std::endl;
+        return false;
+    }
+    // Map 0 -> Map 31 (Village Well -> Subterranean Aqueduct Shortcut)
+    const auto* w0_31 = tm.checkWarp(20, 50);
+    if (!w0_31 || w0_31->targetMapId != 31) {
+        std::cerr << "  FAIL: Map 0 -> Map 31 subterranean shortcut warp missing!" << std::endl;
+        return false;
+    }
+    // Map 31 -> Map 11 (Subterranean Aqueduct -> Namhae Reeds)
+    tm.loadMap(31);
+    const auto* w31_11 = tm.checkWarp(59, 30);
+    if (!w31_11 || w31_11->targetMapId != 11) {
+        std::cerr << "  FAIL: Map 31 -> Map 11 shortcut warp missing!" << std::endl;
+        return false;
+    }
+    // Map 7 -> Map 32 (Sobaek Canyon -> Beacon Ridge Shortcut)
+    tm.loadMap(7);
+    const auto* w7_32 = tm.checkWarp(90, 10);
+    if (!w7_32 || w7_32->targetMapId != 32) {
+        std::cerr << "  FAIL: Map 7 -> Map 32 beacon ridge warp missing!" << std::endl;
+        return false;
+    }
+    // Map 32 -> Map 16 (Beacon Ridge -> Jirisan Entry)
+    tm.loadMap(32);
+    const auto* w32_16 = tm.checkWarp(69, 10);
+    if (!w32_16 || w32_16->targetMapId != 16) {
+        std::cerr << "  FAIL: Map 32 -> Map 16 shortcut warp missing!" << std::endl;
+        return false;
+    }
+    // Map 14 -> Map 33 (Ghost Ship Upper -> Sunken Grotto)
+    tm.loadMap(14);
+    const auto* w14_33 = tm.checkWarp(10, 10);
+    if (!w14_33 || w14_33->targetMapId != 33) {
+        std::cerr << "  FAIL: Map 14 -> Map 33 sunken grotto warp missing!" << std::endl;
+        return false;
+    }
+    // Map 17 -> Map 34 (Jirisan Bamboo -> Fox Leyline Pass)
+    tm.loadMap(17);
+    const auto* w17_34 = tm.checkWarp(75, 75);
+    if (!w17_34 || w17_34->targetMapId != 34) {
+        std::cerr << "  FAIL: Map 17 -> Map 34 fox leyline warp missing!" << std::endl;
+        return false;
+    }
+    // Map 21 -> Map 35 (Fortress Moat -> Secret Catacombs)
+    tm.loadMap(21);
+    const auto* w21_35 = tm.checkWarp(5, 55);
+    if (!w21_35 || w21_35->targetMapId != 35) {
+        std::cerr << "  FAIL: Map 21 -> Map 35 secret catacombs warp missing!" << std::endl;
         return false;
     }
     // Map 3 -> Map 4 (Mountain -> Cave B1F)
@@ -639,9 +697,9 @@ bool runFullContentTests() {
         std::cerr << "  FAIL: Map 24 -> Map 25 warp missing!" << std::endl;
         return false;
     }
-    std::cout << "  - Verified seamless 26-stage multi-floor bi-directional warp hierarchy." << std::endl;
+    std::cout << "  - Verified seamless 36-stage multi-floor and non-linear shortcut warp hierarchy." << std::endl;
 
-    std::cout << "  [PASS] Full Content (108 Yokai, 5 Campaigns, 24 Artifacts, 26 Multi-Floor Maps)" << std::endl;
+    std::cout << "  [PASS] Full Content (108 Yokai, 5 Campaigns, 27 Artifacts, 36 Non-Linear Multi-Floor Maps)" << std::endl;
     return true;
 }
 

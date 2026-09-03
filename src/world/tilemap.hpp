@@ -42,7 +42,7 @@ public:
     const std::string& getMapName() const { return m_mapName; }
     const std::vector<MapChest>& getChests() const { return m_chests; }
 
-    static int getTotalMapCount() { return 31; }
+    static int getTotalMapCount() { return 36; }
 
 private:
     // Chapter 1: 한양 북악산 & 도선사 (6 Maps)
@@ -87,6 +87,13 @@ private:
     void initMap28_HeuksanDragonPalace();// 70x70 흑산도 심해 용궁
     void initMap29_BaekdusanSanctuary(); // 80x80 백두산 천지 백록담 신역
     void initMap30_PantheonLabyrinth();  // 100x100 태고의 환상비무 미궁 (보스러시)
+
+    // Dynamic Connecting Shortcuts & Secret Loop Passages (5 Maps)
+    void initMap31_SubterraneanAqueduct(); // 60x60 지하 암반 수로 (도선사-북한산-남해안 연결)
+    void initMap32_BeaconRidge();          // 70x70 소백-지리 봉화대 능선 (소백산-지리산-금강산 연결)
+    void initMap33_SunkenGrotto();         // 50x50 난파선 침수 밀실 (난파선-용궁 연결)
+    void initMap34_FoxLeylinePass();       // 60x60 여우골 영맥 환상 샛길 (지리산-성채 비밀 침투로)
+    void initMap35_SecretCatacombs();      // 60x60 성채 지하 감옥 (성채-결계탑-미궁 비밀통로)
 
     int m_mapId = 0;
     std::string m_mapName;

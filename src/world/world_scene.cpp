@@ -126,6 +126,26 @@ void WorldScene::checkStepEvents(int newGridX, int newGridY) {
                 // Zone 6D: 태고의 환상비무 미궁 (Lv 48 ~ 50)
                 minIdx = 85; maxIdx = 107;
                 wildLevel = 50;
+            } else if (mapId == 31) {
+                // Connecting Passage A: 지하 암반 수로 (Lv 15 ~ 22)
+                minIdx = 10; maxIdx = 45;
+                wildLevel = 18;
+            } else if (mapId == 32) {
+                // Connecting Passage B: 소백-지리 봉화대 능선 (Lv 25 ~ 32)
+                minIdx = 30; maxIdx = 70;
+                wildLevel = 28;
+            } else if (mapId == 33) {
+                // Connecting Passage C: 난파선 침수 밀실 (Lv 30 ~ 38)
+                minIdx = 40; maxIdx = 85;
+                wildLevel = 34;
+            } else if (mapId == 34) {
+                // Connecting Passage D: 여우골 영맥 환상 샛길 (Lv 35 ~ 44)
+                minIdx = 60; maxIdx = 95;
+                wildLevel = 40;
+            } else if (mapId == 35) {
+                // Connecting Passage E: 성채 지하 감옥 & 흑마술 비밀통로 (Lv 42 ~ 48)
+                minIdx = 80; maxIdx = 106;
+                wildLevel = 46;
             }
 
             maxIdx = std::min(maxIdx, pool.size() - 6);
@@ -519,6 +539,11 @@ void WorldScene::render(Renderer& renderer) {
         else if (curMap == 28) { minIdx = 60; maxIdx = 95; }
         else if (curMap == 29) { minIdx = 75; maxIdx = 105; }
         else if (curMap == 30) { minIdx = 85; maxIdx = 107; }
+        else if (curMap == 31) { minIdx = 10; maxIdx = 45; }
+        else if (curMap == 32) { minIdx = 30; maxIdx = 70; }
+        else if (curMap == 33) { minIdx = 40; maxIdx = 85; }
+        else if (curMap == 34) { minIdx = 60; maxIdx = 95; }
+        else if (curMap == 35) { minIdx = 80; maxIdx = 106; }
 
         int uncaptured = 0;
         const auto& codex = DataManager::getEncyclopedia();
