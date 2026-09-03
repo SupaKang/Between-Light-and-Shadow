@@ -5,6 +5,7 @@
 #include "../gameplay/artifact.hpp"
 #include "../battle/battle.hpp"
 #include "../battle/battle_sequencer.hpp"
+#include "../battle/skill_fx_system.hpp"
 #include "../ui/ui_widgets.hpp"
 #include <memory>
 #include <functional>
@@ -22,6 +23,8 @@ public:
 
     bool isModal() const override { return false; }
 
+    const SkillFxSystem& getSkillFxSystem() const { return m_skillFx; }
+
 private:
     void setupTurnSequence(const TurnAction& playerAction, const TurnAction& enemyAction);
     void appendSkillActionToSequence(Yokai& attacker, Yokai& defender, int skillIndex, bool isPlayer);
@@ -37,6 +40,7 @@ private:
 
     std::unique_ptr<Battle> m_battle;
     BattleSequencer m_sequencer;
+    SkillFxSystem m_skillFx;
 
     // Smooth HUD Bars
     UISmoothBar m_playerHpBar;

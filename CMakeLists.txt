@@ -45,6 +45,8 @@ set(SOURCES
     src/scenes/title_scene.cpp
     src/data/data_manager.cpp
     src/audio/audio_engine.cpp
+    src/world/weather_system.cpp
+    src/battle/skill_fx_system.cpp
 )
 
 # Main Executable
@@ -71,6 +73,8 @@ set(TEST_SOURCES
     src/battle/battle.cpp
     src/data/data_manager.cpp
     src/audio/audio_engine.cpp
+    src/world/weather_system.cpp
+    src/battle/skill_fx_system.cpp
 )
 
 add_executable(run_tests ${TEST_SOURCES})

@@ -8,6 +8,7 @@
 #include "../gameplay/party.hpp"
 #include "../gameplay/artifact.hpp"
 #include "../ui/dialogue_box.hpp"
+#include "../world/weather_system.hpp"
 #include <random>
 #include <string>
 
@@ -26,6 +27,8 @@ public:
     void setPlayerPosition(int gridX, int gridY, int mapId = -1);
     void triggerBossBattle(const std::string& bossId, const std::string& questIdToComplete, const std::string& nextQuestId, int rewardMoney, const std::string& victoryNotice);
 
+    const WeatherSystem& getWeatherSystem() const { return m_weather; }
+
 private:
     void interactWithNPC();
     void checkStepEvents(int newGridX, int newGridY);
@@ -39,6 +42,7 @@ private:
     Camera m_camera;
     GridController m_gridController;
     DialogueBox m_dialogueBox;
+    WeatherSystem m_weather;
 
     std::mt19937 m_rng;
     std::string m_noticeMsg;

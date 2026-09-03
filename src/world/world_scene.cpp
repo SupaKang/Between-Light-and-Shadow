@@ -26,18 +26,21 @@ WorldScene::WorldScene(Party& party, ArtifactInventory& artifacts, int& money)
 void WorldScene::onEnter() {
     AudioEngine::playBgm(BgmTrack::Village);
     m_tilemap.loadMap(0);
+    m_weather.setWeatherForMap(0);
     m_gridController.setPosition(7, 6);
     m_noticeMsg = "[" + m_tilemap.getMapName() + "] 진입";
 }
 
 void WorldScene::onResume() {
     AudioEngine::playBgm(BgmTrack::Village);
+    m_weather.setWeatherForMap(m_tilemap.getMapId());
     m_activeNPC = nullptr;
 }
 
 void WorldScene::setPlayerPosition(int gridX, int gridY, int mapId) {
     if (mapId >= 0 && mapId != m_tilemap.getMapId()) {
         m_tilemap.loadMap(mapId);
+        m_weather.setWeatherForMap(mapId);
     }
     m_gridController.setPosition(gridX, gridY);
 }
@@ -47,6 +50,7 @@ void WorldScene::checkStepEvents(int newGridX, int newGridY) {
     const WarpTrigger* warp = m_tilemap.checkWarp(newGridX, newGridY);
     if (warp) {
         m_tilemap.loadMap(warp->targetMapId);
+        m_weather.setWeatherForMap(warp->targetMapId);
         m_gridController.setPosition(warp->targetX, warp->targetY);
         m_noticeMsg = "[" + m_tilemap.getMapName() + "] 진입";
         return;
@@ -282,6 +286,7 @@ void WorldScene::update(float dt) {
 
     m_gridController.update(dt);
     m_camera.update(m_gridController.getPixelX(), m_gridController.getPixelY(), m_tilemap.getWidth(), m_tilemap.getHeight());
+    m_weather.update(dt);
 }
 
 void WorldScene::render(Renderer& renderer) {
@@ -301,7 +306,10 @@ void WorldScene::render(Renderer& renderer) {
     int screenPY = m_gridController.getPixelY() - m_camera.getY();
     renderer.drawSprite(screenPX, screenPY, 0, m_gridController.getAnimFrame());
 
-    // 4. World Top HUD Overlay
+    // 4. Regional Ambient Weather and Atmosphere Overlay
+    m_weather.render(renderer);
+
+    // 5. World Top HUD Overlay
     renderer.fillRect(0, 0, SCREEN_WIDTH, 12, Color(18, 18, 22, 220));
     FontRenderer::drawText(renderer, 4, 2, m_tilemap.getMapName(), Palette::Yellow);
 

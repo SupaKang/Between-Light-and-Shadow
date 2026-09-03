@@ -85,6 +85,12 @@ void BattleScene::handleInput() {
             
             // Check if turn action was submitted
             if (m_battle->getState() == BattleState::ExecutingTurn) {
+                Yokai* py = m_battle->getActivePlayerYokai();
+                if (py) {
+                    m_skillFx.triggerSkillFx(py->getElement(), SCREEN_WIDTH - 65, 45);
+                }
+                m_skillFx.triggerSkillFx(m_battle->getEnemyYokai().getElement(), 50, 85);
+
                 // Read latest combat log from battle and push to sequencer
                 const auto& log = m_battle->getCombatLog();
                 for (const auto& line : log) {
@@ -113,6 +119,7 @@ void BattleScene::handleInput() {
 
 void BattleScene::update(float dt) {
     m_sequencer.update(dt);
+    m_skillFx.update(dt);
 
     Yokai* pYokai = m_battle->getActivePlayerYokai();
     if (pYokai) {
@@ -135,6 +142,9 @@ void BattleScene::render(Renderer& renderer) {
     // Ground: Traditional Tatami / Earth platform
     renderer.fillRect(0, 80, SCREEN_WIDTH, 30, Color(24, 30, 42));
     renderer.drawLine(0, 110, SCREEN_WIDTH, 110, Palette::MidGray);
+
+    // Elemental Skill Particle FX Overlay
+    m_skillFx.render(renderer);
 
     const Yokai* pYokai = m_battle->getActivePlayerYokai();
     const Yokai& eYokai = m_battle->getEnemyYokai();

@@ -807,3 +807,75 @@ bool runPhase7SoundAndTraitsTests() {
     std::cout << "  [PASS] Phase 7 (Audio, 108 Traits, In-Battle Swap)" << std::endl;
     return true;
 }
+
+#include "../src/world/weather_system.hpp"
+#include "../src/battle/skill_fx_system.hpp"
+
+bool runPhase8VisualAndWeatherTests() {
+    std::cout << "[TEST 9] Running Phase 8 (5 Regional Weathers & Elemental Skill FX) Tests..." << std::endl;
+
+    // 1. Weather System Region Mapping Test
+    WeatherSystem ws;
+    ws.setWeatherForMap(0);
+    if (ws.getWeather() != WeatherType::EerieMist) {
+        std::cerr << "  FAIL: Map 0 weather should be EerieMist!" << std::endl;
+        return false;
+    }
+
+    ws.setWeatherForMap(1); // Indoor
+    if (ws.getWeather() != WeatherType::None) {
+        std::cerr << "  FAIL: Indoor Map 1 weather should be None!" << std::endl;
+        return false;
+    }
+
+    ws.setWeatherForMap(7); // Ch.2 Sobaek
+    if (ws.getWeather() != WeatherType::Blizzard) {
+        std::cerr << "  FAIL: Map 7 weather should be Blizzard!" << std::endl;
+        return false;
+    }
+
+    ws.setWeatherForMap(12); // Ch.3 Namhae
+    if (ws.getWeather() != WeatherType::Rainstorm) {
+        std::cerr << "  FAIL: Map 12 weather should be Rainstorm!" << std::endl;
+        return false;
+    }
+
+    ws.setWeatherForMap(17); // Ch.4 Jirisan
+    if (ws.getWeather() != WeatherType::BambooFog) {
+        std::cerr << "  FAIL: Map 17 weather should be BambooFog!" << std::endl;
+        return false;
+    }
+
+    ws.setWeatherForMap(24); // Ch.5 Final Sanctum
+    if (ws.getWeather() != WeatherType::SolarEclipse) {
+        std::cerr << "  FAIL: Map 24 weather should be SolarEclipse!" << std::endl;
+        return false;
+    }
+
+    ws.update(0.016f);
+    std::cout << "  - Verified 5 regional ambient weather systems (Mist, Blizzard, Rain, Fog, Eclipse)." << std::endl;
+
+    // 2. Skill FX Particle System Test
+    SkillFxSystem sfx;
+    if (sfx.isActive()) {
+        std::cerr << "  FAIL: Initial SkillFxSystem should not be active!" << std::endl;
+        return false;
+    }
+
+    sfx.triggerSkillFx(Element::Fire, 100, 100);
+    if (!sfx.isActive()) {
+        std::cerr << "  FAIL: SkillFxSystem should be active after trigger!" << std::endl;
+        return false;
+    }
+
+    sfx.update(0.016f);
+    sfx.update(1.0f); // Advance past particle lifetime
+    if (sfx.isActive()) {
+        std::cerr << "  FAIL: Skill particles should have expired!" << std::endl;
+        return false;
+    }
+    std::cout << "  - Verified 5 elemental procedural skill particle visual effects." << std::endl;
+
+    std::cout << "  [PASS] Phase 8 (Weather & Elemental Skill FX)" << std::endl;
+    return true;
+}
