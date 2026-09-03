@@ -5,6 +5,7 @@
 #include "../core/save_system.hpp"
 #include "../ui/font_renderer.hpp"
 #include "../data/data_manager.hpp"
+#include "../audio/audio_engine.hpp"
 #include "../battle/battle_scene.hpp"
 #include "../scenes/encyclopedia_scene.hpp"
 #include "../scenes/party_scene.hpp"
@@ -23,12 +24,14 @@ WorldScene::WorldScene(Party& party, ArtifactInventory& artifacts, int& money)
 }
 
 void WorldScene::onEnter() {
+    AudioEngine::playBgm(BgmTrack::Village);
     m_tilemap.loadMap(0);
     m_gridController.setPosition(7, 6);
     m_noticeMsg = "[" + m_tilemap.getMapName() + "] 진입";
 }
 
 void WorldScene::onResume() {
+    AudioEngine::playBgm(BgmTrack::Village);
     m_activeNPC = nullptr;
 }
 
@@ -164,6 +167,7 @@ void WorldScene::interactWithNPC() {
         MapChest* chest = m_tilemap.checkChest(cx, cy);
         if (chest && !chest->opened) {
             chest->opened = true;
+            AudioEngine::playSfx(SfxId::ChestOpen);
             m_money += chest->money;
             std::string rewardSummary = "엽전 " + std::to_string(chest->money) + "냥";
 

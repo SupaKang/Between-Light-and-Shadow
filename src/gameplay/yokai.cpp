@@ -16,12 +16,44 @@ static float getGradeMultiplier(YokaiGrade grade) {
 }
 
 Yokai::Yokai(int number, std::string id, std::string name, YokaiGrade grade, Element element,
-             Stats baseStats, std::string origin, std::string lore)
+             Stats baseStats, std::string origin, std::string lore, YokaiTrait trait)
     : m_number(number), m_id(std::move(id)), m_name(std::move(name)), m_grade(grade), m_element(element),
-      m_origin(std::move(origin)), m_lore(std::move(lore)), m_baseStats(baseStats), m_level(1), m_exp(0) {
+      m_origin(std::move(origin)), m_lore(std::move(lore)), m_trait(trait), m_baseStats(baseStats), m_level(1), m_exp(0) {
     calculateStats();
     m_stats.hp = m_stats.maxHp;
     m_stats.qi = m_stats.maxQi;
+}
+
+std::string Yokai::getTraitName() const {
+    switch (m_trait) {
+        case YokaiTrait::DokkaebiPower:   return "도깨비의 완력";
+        case YokaiTrait::FoxCharm:        return "구미호의 매혹";
+        case YokaiTrait::IronDiet:        return "불가사리의 섭철";
+        case YokaiTrait::GrimGaze:        return "저승사자의 명부";
+        case YokaiTrait::AquaSurge:       return "이무기의 용오름";
+        case YokaiTrait::DuduriProtection:return "두두리의 가호";
+        case YokaiTrait::FlameBody:       return "타오르는 화기운";
+        case YokaiTrait::HolyAura:        return "벽사의 영기";
+        case YokaiTrait::WindGrace:       return "풍백의 신법";
+        case YokaiTrait::TaijiHarmony:    return "음양의 조화";
+        default:                          return "특성 없음";
+    }
+}
+
+std::string Yokai::getTraitDescription() const {
+    switch (m_trait) {
+        case YokaiTrait::DokkaebiPower:   return "치명타 확률이 15% 상승합니다.";
+        case YokaiTrait::FoxCharm:        return "전투 진입 시 25% 확률로 적에게 공포를 부여합니다.";
+        case YokaiTrait::IronDiet:        return "물리 피격 시 호신(방어력)이 15% 상승합니다.";
+        case YokaiTrait::GrimGaze:        return "적 체력이 30% 이하일 때 공격력이 40% 폭증합니다.";
+        case YokaiTrait::AquaSurge:       return "수속성 기술 사용 시 영력 소모가 25% 감소합니다.";
+        case YokaiTrait::DuduriProtection:return "받는 모든 피해가 10% 상시 경감됩니다.";
+        case YokaiTrait::FlameBody:       return "접촉 공격 피격 시 30% 확률로 공격자에게 화상을 입힙니다.";
+        case YokaiTrait::HolyAura:        return "매 턴 시작 시 최대 체력의 5%를 자연 치유합니다.";
+        case YokaiTrait::WindGrace:       return "신법(SPD)이 20% 상승하고 회피율이 15% 증가합니다.";
+        case YokaiTrait::TaijiHarmony:    return "상태이상 지속이 1턴 감소하고 상성 우위 시 피해가 25% 증가합니다.";
+        default:                          return "고유 특성이 없습니다.";
+    }
 }
 
 void Yokai::calculateStats() {

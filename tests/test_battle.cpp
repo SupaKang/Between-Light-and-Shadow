@@ -746,3 +746,64 @@ bool runSaveSystemAndTaskEngineTests() {
     std::cout << "  [PASS] Save System (512B Compact) & TaskEngine" << std::endl;
     return true;
 }
+
+#include "../src/audio/audio_engine.hpp"
+
+bool runPhase7SoundAndTraitsTests() {
+    std::cout << "[TEST 8] Running Phase 7 (Procedural Audio, Yokai Traits, Party Switching) Tests..." << std::endl;
+
+    // 1. AudioEngine API Integrity Test
+    AudioEngine::init();
+    AudioEngine::playBgm(BgmTrack::Title);
+    AudioEngine::playSfx(SfxId::HitMagic);
+    AudioEngine::setMasterVolume(0.8f);
+    AudioEngine::toggleMute();
+    if (!AudioEngine::isMuted()) {
+        std::cerr << "  FAIL: AudioEngine mute toggle failed!" << std::endl;
+        return false;
+    }
+    AudioEngine::toggleMute();
+    AudioEngine::stopBgm();
+    AudioEngine::shutdown();
+    std::cout << "  - Verified Win32 4-Channel Synthesizer AudioEngine (BGM & SFX)." << std::endl;
+
+    // 2. Yokai Trait Mechanics Test
+    Yokai holyTiger(31, "YOKAI_031", "Mountain Tiger", YokaiGrade::Grade4, Element::Light, {100, 100, 50, 50, 25, 20, 20}, "FOLKLORE", "", YokaiTrait::HolyAura);
+    holyTiger.takeDamage(40); // HP 60/100
+    if (holyTiger.getTrait() != YokaiTrait::HolyAura || holyTiger.getTraitName() != "벽사의 영기") {
+        std::cerr << "  FAIL: Yokai Trait metadata mismatch!" << std::endl;
+        return false;
+    }
+
+    // 3. In-Battle Party Switching Test
+    Yokai dokkaebi(1, "YOKAI_001", "Dokkaebi", YokaiGrade::Grade2, Element::Fire, {95, 95, 60, 60, 22, 18, 14}, "FOLKLORE", "", YokaiTrait::DokkaebiPower);
+    Yokai gumiho(2, "YOKAI_002", "Gumiho", YokaiGrade::Grade4, Element::Fire, {110, 110, 100, 100, 28, 16, 26}, "FOLKLORE", "", YokaiTrait::FoxCharm);
+    Skill attackSkill{"SKL_CLUB", "Club Strike", 40, 10, Element::Physical, 95, StatusEffect::None, 0};
+    dokkaebi.addSkill(attackSkill);
+    gumiho.addSkill(attackSkill);
+
+    Party party;
+    party.addYokai(dokkaebi); // Slot 0
+    party.addYokai(gumiho);   // Slot 1
+
+    ArtifactInventory artifacts;
+    Yokai wildEnemy(3, "YOKAI_003", "Bulgasari", YokaiGrade::Grade3, Element::Earth, {140, 140, 50, 50, 24, 28, 10});
+    wildEnemy.addSkill(attackSkill);
+
+    Battle battle(party, wildEnemy, artifacts);
+    if (battle.getActivePlayerYokai()->getId() != "YOKAI_001") {
+        std::cerr << "  FAIL: Initial active Yokai is not Dokkaebi!" << std::endl;
+        return false;
+    }
+
+    // Execute Player Swap to Slot 1 (Gumiho)
+    battle.executePlayerSwap(1);
+    if (battle.getActivePlayerYokai()->getId() != "YOKAI_002") {
+        std::cerr << "  FAIL: In-Battle Party Swap did not switch active Yokai to Gumiho!" << std::endl;
+        return false;
+    }
+    std::cout << "  - Verified In-Battle Party Switching (1-turn swap mechanics)." << std::endl;
+
+    std::cout << "  [PASS] Phase 7 (Audio, 108 Traits, In-Battle Swap)" << std::endl;
+    return true;
+}

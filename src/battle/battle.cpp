@@ -1,5 +1,6 @@
 #include "battle.hpp"
 #include "../data/data_manager.hpp"
+#include "../audio/audio_engine.hpp"
 #include <random>
 #include <algorithm>
 
@@ -12,6 +13,16 @@ Battle::Battle(Party& playerParty, Yokai wildYokai, ArtifactInventory& artifacts
     m_expReward = static_cast<int>(m_enemyYokai.getLevel() * 35 * static_cast<int>(m_enemyYokai.getGrade()));
     DataManager::getEncyclopedia().markSeen(m_enemyYokai.getId());
     m_combatLog.push_back("야생의 [" + m_enemyYokai.getName() + "] 조우!");
+
+    // FoxCharm Trait Check on battle start
+    Yokai* playerYokai = getActivePlayerYokai();
+    if (playerYokai && playerYokai->getTrait() == YokaiTrait::FoxCharm) {
+        std::uniform_int_distribution<int> roll(1, 100);
+        if (roll(s_battleRng) <= 30) {
+            StatusEffectSystem::applyStatus(m_enemyYokai, StatusEffect::Fear, 2);
+            m_combatLog.push_back("[" + playerYokai->getName() + "]의 [구미호의 매혹] 발동! 적이 공포에 빠집니다.");
+        }
+    }
     m_combatLog.push_back("행동을 선택하십시오.");
 }
 
@@ -142,13 +153,31 @@ int Battle::calculateDamage(const Yokai& attacker, const Yokai& defender, const 
         effectiveDef = static_cast<int>(effectiveDef * m_artifacts.getDefMultiplier());
     }
 
+    // Trait Buff: GrimGaze (ATK +40% when target HP <= 30%)
+    if (attacker.getTrait() == YokaiTrait::GrimGaze) {
+        if (defender.getStats().hp * 100 / std::max(1, defender.getStats().maxHp) <= 30) {
+            effectiveAtk = static_cast<int>(effectiveAtk * 1.40f);
+        }
+    }
+
     // Damage Formula: (ATK * Skill.Power) / (DEF * 2)
     float baseDmg = (static_cast<float>(effectiveAtk * skill.power) / std::max(1.0f, static_cast<float>(effectiveDef * 2)));
 
-    // Artifact bonus / reduction
+    // Trait Defense: DuduriProtection (-10% incoming damage)
+    if (defender.getTrait() == YokaiTrait::DuduriProtection) {
+        baseDmg *= 0.90f;
+    }
+    // Trait Defense: IronDiet (-15% physical damage)
+    if (defender.getTrait() == YokaiTrait::IronDiet && skill.element == Element::Physical) {
+        baseDmg *= 0.85f;
+    }
+
+    // Artifact bonus / reduction & Critical calculation
     if (isPlayerAttacker) {
-        // Critical hit check
         int critRate = 5 + m_artifacts.getCritRateBonus();
+        if (attacker.getTrait() == YokaiTrait::DokkaebiPower) {
+            critRate += 15; // Trait: Dokkaebi power +15%
+        }
         std::uniform_int_distribution<int> critRoll(1, 100);
         if (critRoll(s_battleRng) <= critRate) {
             baseDmg *= 1.5f;
@@ -246,7 +275,7 @@ TurnAction Battle::decideEnemyAction() {
 void Battle::resolveTurnActions(const TurnAction& playerAction, const TurnAction& enemyAction) {
     m_menuState = BattleMenuState::MainAction;
 
-    // Handle Artifact Qi drain at turn start
+    // Handle Artifact Qi drain and HolyAura at turn start
     Yokai* playerYokai = getActivePlayerYokai();
     if (playerYokai && !playerYokai->isFainted()) {
         int qiDrain = m_artifacts.getQiDrainPerTurn();
@@ -254,20 +283,30 @@ void Battle::resolveTurnActions(const TurnAction& playerAction, const TurnAction
             playerYokai->consumeQi(qiDrain);
             m_combatLog.push_back("유물 대가로 영력 " + std::to_string(qiDrain) + " 소모.");
         }
+
+        // Trait: HolyAura (5% HP heal)
+        if (playerYokai->getTrait() == YokaiTrait::HolyAura) {
+            int healAmt = std::max(1, playerYokai->getStats().maxHp * 5 / 100);
+            playerYokai->healHp(healAmt);
+            m_combatLog.push_back("[" + playerYokai->getName() + "]의 [벽사의 영기]로 HP +" + std::to_string(healAmt) + " 회복!");
+        }
     }
 
     // 1. Capture Action Check
     if (playerAction.isCapture) {
+        AudioEngine::playSfx(SfxId::CaptureThrow);
         float rate = calculateCaptureProbability();
         std::uniform_real_distribution<float> dist(0.0f, 1.0f);
         m_combatLog.push_back("벽사 봉인 부적을 던졌습니다! (성공률: " + std::to_string(static_cast<int>(rate * 100)) + "%)");
         if (dist(s_battleRng) <= rate) {
+            AudioEngine::playSfx(SfxId::CaptureSuccess);
             m_combatLog.push_back("계약 성공! [" + m_enemyYokai.getName() + "]과 영혼의 계약을 맺었습니다!");
             DataManager::getEncyclopedia().markCaptured(m_enemyYokai.getId());
             m_playerParty.addYokai(m_enemyYokai);
             m_state = BattleState::Victory;
             return;
         } else {
+            AudioEngine::playSfx(SfxId::MenuCancel);
             m_combatLog.push_back("부적이 튕겨져 나갔습니다! 계약 실패.");
             // Enemy attacks after failed capture
             if (playerYokai && !playerYokai->isFainted()) {
@@ -280,6 +319,7 @@ void Battle::resolveTurnActions(const TurnAction& playerAction, const TurnAction
 
     // 2. Swap Action Check
     if (playerAction.isSwap) {
+        AudioEngine::playSfx(SfxId::MenuSelect);
         m_playerParty.swapYokai(0, playerAction.swapIndex);
         playerYokai = getActivePlayerYokai();
         m_combatLog.push_back("가랏! [" + playerYokai->getName() + "] 교체 출전!");
@@ -335,40 +375,48 @@ void Battle::performSkillAction(Yokai& attacker, Yokai& defender, int skillIndex
     if (skillIndex < 0 || skillIndex >= static_cast<int>(skills.size())) return;
     const Skill& skill = skills[skillIndex];
 
-    // Status onTurnStart check (Freeze / Paralysis)
-    std::string turnLog;
-    if (!StatusEffectSystem::onTurnStart(attacker, turnLog)) {
-        m_combatLog.push_back(turnLog);
+    int actualCost = skill.qiCost;
+    if (attacker.getTrait() == YokaiTrait::AquaSurge && skill.element == Element::Water) {
+        actualCost = std::max(1, actualCost * 75 / 100);
+    }
+    attacker.consumeQi(actualCost);
+
+    m_combatLog.push_back("[" + attacker.getName() + "]의 " + skill.name + "!");
+
+    // Accuracy Check
+    std::uniform_int_distribution<int> accRoll(1, 100);
+    if (accRoll(s_battleRng) > skill.accuracy) {
+        m_combatLog.push_back("공격이 빗나갔습니다!");
         return;
     }
 
-    // Consume Qi
-    attacker.consumeQi(skill.qiCost);
-    m_combatLog.push_back("[" + attacker.getName() + "]의 " + skill.name + "!");
-
-    // Burn Backlash
-    StatusEffectSystem::onActionUsed(attacker, true, turnLog);
-    if (!turnLog.empty()) m_combatLog.push_back(turnLog);
-
-    // Calculate & Apply Damage
     int dmg = calculateDamage(attacker, defender, skill, isPlayer);
-    dmg = StatusEffectSystem::onDamageReceived(defender, dmg, turnLog);
-    if (!turnLog.empty()) m_combatLog.push_back(turnLog);
-
     defender.takeDamage(dmg);
-    m_combatLog.push_back(defender.getName() + "에게 " + std::to_string(dmg) + " 피해!");
 
-    // Apply Status Effect
-    if (skill.statusEffect != StatusEffect::None) {
-        if (!isPlayer && skill.statusEffect == StatusEffect::Burn && m_artifacts.hasBurnImmunity()) {
-            m_combatLog.push_back("유물 효과로 화상 면역!");
-        } else {
-            std::uniform_int_distribution<int> roll(1, 100);
-            if (roll(s_battleRng) <= skill.statusChance) {
-                int lastSkill = isPlayer ? m_lastUsedEnemySkill : m_lastUsedPlayerSkill;
-                StatusEffectSystem::applyStatus(defender, skill.statusEffect, 3, lastSkill);
-                m_combatLog.push_back("[" + defender.getName() + "]에게 " + std::string(StatusEffectSystem::getStatusName(skill.statusEffect)) + " 부여!");
-            }
+    if (skill.element == Element::Physical) {
+        AudioEngine::playSfx(SfxId::HitPhysical);
+    } else {
+        AudioEngine::playSfx(SfxId::HitMagic);
+    }
+
+    m_combatLog.push_back("[" + defender.getName() + "]에게 " + std::to_string(dmg) + " 피해!");
+
+    // Trait: FlameBody check on physical contact
+    if (defender.getTrait() == YokaiTrait::FlameBody && skill.element == Element::Physical) {
+        std::uniform_int_distribution<int> roll(1, 100);
+        if (roll(s_battleRng) <= 30 && attacker.getStatus().effect == StatusEffect::None) {
+            StatusEffectSystem::applyStatus(attacker, StatusEffect::Burn, 3);
+            m_combatLog.push_back("[" + defender.getName() + "]의 [타오르는 화기운]으로 화상을 입었습니다!");
+        }
+    }
+
+    // Status effect apply check
+    if (skill.statusEffect != StatusEffect::None && defender.getStatus().effect == StatusEffect::None) {
+        std::uniform_int_distribution<int> statusRoll(1, 100);
+        if (statusRoll(s_battleRng) <= skill.statusChance) {
+            StatusEffectSystem::applyStatus(defender, skill.statusEffect, 3);
+            AudioEngine::playSfx(SfxId::StatusAfflict);
+            m_combatLog.push_back("[" + defender.getName() + "] 상태이상 부여 성공!");
         }
     }
 

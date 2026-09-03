@@ -4,6 +4,7 @@
 #include "../core/scene_stack.hpp"
 #include "../ui/font_renderer.hpp"
 #include "../data/data_manager.hpp"
+#include "../audio/audio_engine.hpp"
 #include <algorithm>
 
 namespace JoseonRPG {
@@ -14,6 +15,8 @@ BattleScene::BattleScene(Party& party, Yokai enemy, ArtifactInventory& artifacts
 }
 
 void BattleScene::onEnter() {
+    AudioEngine::playBgm(m_isBoss ? BgmTrack::BossBattle : BgmTrack::WildBattle);
+
     Yokai* pYokai = m_battle->getActivePlayerYokai();
     if (pYokai) {
         m_playerHpBar.setTarget(pYokai->getStats().hp, pYokai->getStats().maxHp, true);
@@ -59,12 +62,25 @@ void BattleScene::handleInput() {
     }
 
     if (m_battle->getState() == BattleState::PlayerCommand) {
-        if (Input::isPressed(Key::Up)) m_battle->onNavigateUp();
-        if (Input::isPressed(Key::Down)) m_battle->onNavigateDown();
-        if (Input::isPressed(Key::Left)) m_battle->onNavigateLeft();
-        if (Input::isPressed(Key::Right)) m_battle->onNavigateRight();
+        if (Input::isPressed(Key::Up)) {
+            m_battle->onNavigateUp();
+            AudioEngine::playSfx(SfxId::MenuCursor);
+        }
+        if (Input::isPressed(Key::Down)) {
+            m_battle->onNavigateDown();
+            AudioEngine::playSfx(SfxId::MenuCursor);
+        }
+        if (Input::isPressed(Key::Left)) {
+            m_battle->onNavigateLeft();
+            AudioEngine::playSfx(SfxId::MenuCursor);
+        }
+        if (Input::isPressed(Key::Right)) {
+            m_battle->onNavigateRight();
+            AudioEngine::playSfx(SfxId::MenuCursor);
+        }
 
         if (Input::isPressed(Key::ActionA)) {
+            AudioEngine::playSfx(SfxId::MenuSelect);
             m_battle->onConfirm();
             
             // Check if turn action was submitted
@@ -79,6 +95,7 @@ void BattleScene::handleInput() {
             }
         }
         if (Input::isPressed(Key::ActionB)) {
+            AudioEngine::playSfx(SfxId::MenuCancel);
             m_battle->onCancel();
         }
     } else if (m_battle->getState() == BattleState::Victory) {
@@ -112,8 +129,10 @@ void BattleScene::update(float dt) {
 }
 
 void BattleScene::render(Renderer& renderer) {
-    // Battle Background
-    renderer.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Color(16, 20, 28));
+    // Top Half: Oriental Sky & Mountains
+    renderer.fillRect(0, 0, SCREEN_WIDTH, 80, Color(14, 16, 24));
+
+    // Ground: Traditional Tatami / Earth platform
     renderer.fillRect(0, 80, SCREEN_WIDTH, 30, Color(24, 30, 42));
     renderer.drawLine(0, 110, SCREEN_WIDTH, 110, Palette::MidGray);
 
@@ -121,18 +140,23 @@ void BattleScene::render(Renderer& renderer) {
     const Yokai& eYokai = m_battle->getEnemyYokai();
 
     // 1. Enemy HUD Box (Top-Left)
-    renderer.drawPanel(8, 6, 140, 42, Color(24, 26, 34, 230), m_isBoss ? Palette::Red : Palette::MidGray);
+    renderer.drawPanel(8, 4, 144, 46, Color(24, 26, 34, 230), m_isBoss ? Palette::Red : Palette::MidGray);
     std::string eGradeStr = " [G." + std::to_string(static_cast<int>(eYokai.getGrade())) + "]";
-    FontRenderer::drawText(renderer, 14, 10, eYokai.getName() + " Lv." + std::to_string(eYokai.getLevel()), Palette::Red);
-    FontRenderer::drawText(renderer, 108, 10, eGradeStr, Palette::Yellow);
+    FontRenderer::drawText(renderer, 14, 8, eYokai.getName() + " Lv." + std::to_string(eYokai.getLevel()), Palette::Red);
+    FontRenderer::drawText(renderer, 112, 8, eGradeStr, Palette::Yellow);
 
     std::string eHpText = "HP " + std::to_string(m_enemyHpBar.getCurrentValue()) + "/" + std::to_string(eYokai.getStats().maxHp);
-    FontRenderer::drawText(renderer, 14, 20, eHpText, Palette::White);
-    m_enemyHpBar.render(renderer, 14, 29, 128, 5, Palette::Red);
+    FontRenderer::drawText(renderer, 14, 18, eHpText, Palette::White);
+    m_enemyHpBar.render(renderer, 14, 27, 132, 5, Palette::Red);
+
+    // Enemy Trait indicator
+    if (eYokai.getTrait() != YokaiTrait::None) {
+        FontRenderer::drawText(renderer, 14, 34, "[" + eYokai.getTraitName() + "]", Palette::Yellow);
+    }
 
     if (eYokai.getStatus().effect != StatusEffect::None) {
-        renderer.fillRect(14, 36, 60, 9, StatusEffectSystem::getStatusColor(eYokai.getStatus().effect));
-        FontRenderer::drawText(renderer, 16, 37, StatusEffectSystem::getStatusName(eYokai.getStatus().effect), Palette::Black);
+        renderer.fillRect(80, 34, 60, 9, StatusEffectSystem::getStatusColor(eYokai.getStatus().effect));
+        FontRenderer::drawText(renderer, 82, 35, StatusEffectSystem::getStatusName(eYokai.getStatus().effect), Palette::Black);
     }
 
     // Enemy Sprite with flashing support
@@ -146,16 +170,21 @@ void BattleScene::render(Renderer& renderer) {
             renderer.drawSprite(35, 68, 0, 0);
         }
 
-        renderer.drawPanel(165, 60, 147, 46, Color(24, 26, 34, 230), Palette::Blue);
-        FontRenderer::drawText(renderer, 171, 64, pYokai->getName() + " Lv." + std::to_string(pYokai->getLevel()), Palette::Jade);
+        renderer.drawPanel(165, 58, 147, 50, Color(24, 26, 34, 230), Palette::Blue);
+        FontRenderer::drawText(renderer, 171, 62, pYokai->getName() + " Lv." + std::to_string(pYokai->getLevel()), Palette::Jade);
 
         std::string pHpText = "HP " + std::to_string(m_playerHpBar.getCurrentValue()) + "/" + std::to_string(pYokai->getStats().maxHp);
-        FontRenderer::drawText(renderer, 171, 74, pHpText, Palette::White);
-        m_playerHpBar.render(renderer, 171, 83, 135, 5, Palette::Green);
+        FontRenderer::drawText(renderer, 171, 72, pHpText, Palette::White);
+        m_playerHpBar.render(renderer, 171, 81, 135, 5, Palette::Green);
 
         std::string pQiText = "Qi " + std::to_string(m_playerQiBar.getCurrentValue()) + "/" + std::to_string(pYokai->getStats().maxQi);
-        FontRenderer::drawText(renderer, 171, 90, pQiText, Palette::Jade);
-        m_playerQiBar.render(renderer, 220, 91, 86, 4, Palette::Blue);
+        FontRenderer::drawText(renderer, 171, 88, pQiText, Palette::Jade);
+        m_playerQiBar.render(renderer, 220, 89, 86, 4, Palette::Blue);
+
+        // Player Trait indicator
+        if (pYokai->getTrait() != YokaiTrait::None) {
+            FontRenderer::drawText(renderer, 171, 96, "특성:" + pYokai->getTraitName(), Palette::Yellow);
+        }
     }
 
     // 3. Command & Log Region

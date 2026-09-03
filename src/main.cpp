@@ -4,6 +4,7 @@
 #include "core/input.hpp"
 #include "core/task_engine.hpp"
 #include "core/scene_stack.hpp"
+#include "audio/audio_engine.hpp"
 #include "data/data_manager.hpp"
 #include "gameplay/party.hpp"
 #include "gameplay/artifact.hpp"
@@ -18,9 +19,11 @@ using namespace JoseonRPG;
 int main() {
     // 1. Initialize Subsystems & Static Databases
     DataManager::init();
+    AudioEngine::init();
 
     Window window("108: Eumyang Gyeonmunrok (Between Light and Shadow) - 320x180", 3);
     if (!window.init()) {
+        AudioEngine::shutdown();
         return -1;
     }
 
@@ -74,5 +77,6 @@ int main() {
         }
     }
 
+    AudioEngine::shutdown();
     return 0;
 }

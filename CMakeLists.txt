@@ -44,13 +44,14 @@ set(SOURCES
     src/scenes/quest_scene.cpp
     src/scenes/title_scene.cpp
     src/data/data_manager.cpp
+    src/audio/audio_engine.cpp
 )
 
 # Main Executable
 add_executable(joseon_yokai_rpg ${SOURCES})
 
 if(WIN32)
-    target_link_libraries(joseon_yokai_rpg PRIVATE gdi32 user32)
+    target_link_libraries(joseon_yokai_rpg PRIVATE gdi32 user32 winmm)
 endif()
 
 # Logic Unit Tests Executable
@@ -69,10 +70,11 @@ set(TEST_SOURCES
     src/battle/status_effects.cpp
     src/battle/battle.cpp
     src/data/data_manager.cpp
+    src/audio/audio_engine.cpp
 )
 
 add_executable(run_tests ${TEST_SOURCES})
 
 if(WIN32)
-    target_link_libraries(run_tests PRIVATE gdi32 user32)
+    target_link_libraries(run_tests PRIVATE gdi32 user32 winmm)
 endif()

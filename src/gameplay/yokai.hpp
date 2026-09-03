@@ -7,6 +7,20 @@
 
 namespace JoseonRPG {
 
+enum class YokaiTrait {
+    None,
+    DokkaebiPower,    // 치명타율 +15%
+    FoxCharm,         // 전투 진입 시 적에게 공포/혼란 확률 부여
+    IronDiet,         // 물리 피격 시 방어력 15% 상승
+    GrimGaze,         // 상대 HP 30% 이하 시 공격력 +40%
+    AquaSurge,        // 수속성 기술 사용 시 영력 소모 25% 감소
+    DuduriProtection, // 받는 피해 10% 감소
+    FlameBody,        // 접촉 피격 시 30% 확률로 공격자에게 화상 부여
+    HolyAura,         // 매 턴 체력 5% 자연 치유
+    WindGrace,        // 신법(SPD) +20% & 회피율 +15%
+    TaijiHarmony      // 음양 조화: 상태이상 지속시간 1턴 감소 & 상성 유리 시 피해 +25%
+};
+
 struct Skill {
     std::string id;
     std::string name;
@@ -34,7 +48,8 @@ public:
     Yokai(std::string id, std::string name, YokaiGrade grade, Element element, Stats baseStats)
         : Yokai(1, std::move(id), std::move(name), grade, element, baseStats) {}
     Yokai(int number, std::string id, std::string name, YokaiGrade grade, Element element,
-          Stats baseStats, std::string origin = "KOREAN_FOLKLORE", std::string lore = "");
+          Stats baseStats, std::string origin = "KOREAN_FOLKLORE", std::string lore = "",
+          YokaiTrait trait = YokaiTrait::None);
 
     void calculateStats();
     void gainExp(int amount);
@@ -65,6 +80,12 @@ public:
     Stats& getStats() { return m_stats; }
     bool isFainted() const { return m_stats.hp <= 0; }
 
+    // Trait (고유 특성)
+    YokaiTrait getTrait() const { return m_trait; }
+    void setTrait(YokaiTrait trait) { m_trait = trait; }
+    std::string getTraitName() const;
+    std::string getTraitDescription() const;
+
     // Skills
     const std::vector<Skill>& getSkills() const { return m_skills; }
     bool addSkill(const Skill& skill);
@@ -84,6 +105,7 @@ private:
     int m_exp = 0;
     std::string m_origin;
     std::string m_lore;
+    YokaiTrait m_trait = YokaiTrait::None;
 
     Stats m_baseStats;
     Stats m_stats;

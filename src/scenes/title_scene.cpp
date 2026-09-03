@@ -6,6 +6,7 @@
 #include "../ui/font_renderer.hpp"
 #include "../data/data_manager.hpp"
 #include "../world/world_scene.hpp"
+#include "../audio/audio_engine.hpp"
 #include <windows.h>
 
 namespace JoseonRPG {
@@ -14,6 +15,7 @@ TitleScene::TitleScene(Party& party, ArtifactInventory& artifacts, int& money)
     : m_party(party), m_artifacts(artifacts), m_money(money) {}
 
 void TitleScene::onEnter() {
+    AudioEngine::playBgm(BgmTrack::Title);
     m_hasSave = SaveSystem::hasSaveFile(1);
     if (m_hasSave) {
         SaveSystem::getSaveSummary(1, m_saveSummary);
@@ -74,13 +76,20 @@ void TitleScene::loadSavedGame() {
 
 void TitleScene::handleInput() {
     if (Input::isRepeated(Key::Up)) {
-        if (m_cursor > 0) m_cursor--;
+        if (m_cursor > 0) {
+            m_cursor--;
+            AudioEngine::playSfx(SfxId::MenuCursor);
+        }
     }
     if (Input::isRepeated(Key::Down)) {
-        if (m_cursor < 2) m_cursor++;
+        if (m_cursor < 2) {
+            m_cursor++;
+            AudioEngine::playSfx(SfxId::MenuCursor);
+        }
     }
 
     if (Input::isPressed(Key::ActionA)) {
+        AudioEngine::playSfx(SfxId::MenuSelect);
         if (m_cursor == 0) {
             startNewGame();
         } else if (m_cursor == 1) {

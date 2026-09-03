@@ -7,6 +7,7 @@ bool runEncyclopediaAndGrowthTests();
 bool runVerticalSliceTests();
 bool runFullContentTests();
 bool runSaveSystemAndTaskEngineTests();
+bool runPhase7SoundAndTraitsTests();
 
 int main() {
     std::cout << "========================================" << std::endl;
@@ -21,6 +22,7 @@ int main() {
     if (!runVerticalSliceTests()) passed = false;
     if (!runFullContentTests()) passed = false;
     if (!runSaveSystemAndTaskEngineTests()) passed = false;
+    if (!runPhase7SoundAndTraitsTests()) passed = false;
 
     std::cout << "----------------------------------------" << std::endl;
     if (passed) {

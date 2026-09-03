@@ -174,7 +174,22 @@ void DataManager::init() {
 
     for (int i = 0; i < 108; ++i) {
         const auto& m = k108Roster[i];
-        Yokai y(m.num, m.id, m.nameKo, m.grade, m.elem, m.stats, m.origin, m.lore);
+
+        // Determine characteristic trait
+        YokaiTrait trait = YokaiTrait::None;
+        if (m.num == 1 || m.num == 32 || m.num == 10) trait = YokaiTrait::DokkaebiPower;
+        else if (m.num == 2 || m.num == 34 || m.num == 38 || m.num == 39) trait = YokaiTrait::FoxCharm;
+        else if (m.num == 3 || m.num == 12 || m.num == 33) trait = YokaiTrait::IronDiet;
+        else if (m.num == 7 || m.num == 13 || m.num == 14 || m.num == 30) trait = YokaiTrait::GrimGaze;
+        else if (m.elem == Element::Water || m.num == 20) trait = YokaiTrait::AquaSurge;
+        else if (m.num == 9 || m.elem == Element::Earth) trait = YokaiTrait::DuduriProtection;
+        else if (m.elem == Element::Fire || m.num == 6 || m.num == 19) trait = YokaiTrait::FlameBody;
+        else if (m.elem == Element::Light || m.num == 18 || m.num == 31) trait = YokaiTrait::HolyAura;
+        else if (m.num == 4 || m.num == 8 || m.num == 24 || m.num == 28) trait = YokaiTrait::WindGrace;
+        else if (m.num >= 100) trait = YokaiTrait::TaijiHarmony;
+        else trait = YokaiTrait::DuduriProtection;
+
+        Yokai y(m.num, m.id, m.nameKo, m.grade, m.elem, m.stats, m.origin, m.lore, trait);
         
         // Assign diverse starter skills based on element
         y.addSkill(s_skillDatabase[0]); // Club strike
