@@ -67,6 +67,7 @@ set(TEST_SOURCES
     tests/test_battle.cpp
     src/core/renderer.cpp
     src/core/input.cpp
+    src/core/window.cpp
     src/core/scene_stack.cpp
     src/core/task_engine.cpp
     src/core/save_system.cpp

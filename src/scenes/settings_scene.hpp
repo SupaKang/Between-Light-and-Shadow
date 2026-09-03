@@ -15,6 +15,7 @@ struct GameSettings {
     bool crtFilter = true;
     bool vignette = true;
     int textSpeed = 1; // 0: Normal, 1: Fast, 2: Instant
+    int displayScale = 3; // 3: 3X, 4: 4X, 5: 5X, 6: Fullscreen
 };
 
 class SettingsScene : public IScene {

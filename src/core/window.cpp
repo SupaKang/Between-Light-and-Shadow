@@ -1,13 +1,21 @@
 #include "window.hpp"
 #include "renderer.hpp"
 #include "input.hpp"
+#include <algorithm>
 
 namespace JoseonRPG {
 
+Window* Window::s_instance = nullptr;
+
 Window::Window(std::string_view title, int scale)
-    : m_title(title), m_scale(scale) {}
+    : m_title(title), m_scale(scale) {
+    s_instance = this;
+}
 
 Window::~Window() {
+    if (s_instance == this) {
+        s_instance = nullptr;
+    }
     if (m_hdc && m_hwnd) {
         ReleaseDC(m_hwnd, m_hdc);
     }
@@ -61,6 +69,53 @@ bool Window::init() {
     return true;
 }
 
+void Window::setScale(int scale) {
+    if (scale < 1 || scale > 6) return;
+    m_scale = scale;
+    if (m_isFullscreen) {
+        setFullscreen(false);
+    }
+    if (m_hwnd) {
+        int clientW = SCREEN_WIDTH * m_scale;
+        int clientH = SCREEN_HEIGHT * m_scale;
+        RECT wr = {0, 0, clientW, clientH};
+        AdjustWindowRect(&wr, WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX, FALSE);
+        SetWindowPos(m_hwnd, nullptr, 0, 0, wr.right - wr.left, wr.bottom - wr.top,
+                     SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED);
+    }
+}
+
+void Window::toggleFullscreen() {
+    setFullscreen(!m_isFullscreen);
+}
+
+void Window::setFullscreen(bool enable) {
+    if (m_isFullscreen == enable || !m_hwnd) return;
+    m_isFullscreen = enable;
+
+    DWORD style = GetWindowLong(m_hwnd, GWL_STYLE);
+
+    if (m_isFullscreen) {
+        GetWindowPlacement(m_hwnd, &m_prevPlacement);
+        SetWindowLong(m_hwnd, GWL_STYLE, style & ~(WS_OVERLAPPEDWINDOW | WS_CAPTION | WS_THICKFRAME));
+
+        HMONITOR hMon = MonitorFromWindow(m_hwnd, MONITOR_DEFAULTTOPRIMARY);
+        MONITORINFO mi = {sizeof(mi)};
+        GetMonitorInfo(hMon, &mi);
+
+        SetWindowPos(m_hwnd, HWND_TOP,
+                     mi.rcMonitor.left, mi.rcMonitor.top,
+                     mi.rcMonitor.right - mi.rcMonitor.left,
+                     mi.rcMonitor.bottom - mi.rcMonitor.top,
+                     SWP_NOOWNERZORDER | SWP_FRAMECHANGED | SWP_SHOWWINDOW);
+    } else {
+        SetWindowLong(m_hwnd, GWL_STYLE, style | WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX);
+        SetWindowPlacement(m_hwnd, &m_prevPlacement);
+        SetWindowPos(m_hwnd, nullptr, 0, 0, 0, 0,
+                     SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
+    }
+}
+
 bool Window::processMessages() {
     MSG msg;
     while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
@@ -82,9 +137,35 @@ void Window::present(const Renderer& renderer) {
     int clientW = clientRect.right - clientRect.left;
     int clientH = clientRect.bottom - clientRect.top;
 
+    if (clientW <= 0 || clientH <= 0) return;
+
+    // Pixel-Perfect Integer Scaling
+    int scaleX = clientW / SCREEN_WIDTH;
+    int scaleY = clientH / SCREEN_HEIGHT;
+    int scale = std::max(1, std::min(scaleX, scaleY));
+
+    int dstW = SCREEN_WIDTH * scale;
+    int dstH = SCREEN_HEIGHT * scale;
+    int dstX = (clientW - dstW) / 2;
+    int dstY = (clientH - dstH) / 2;
+
+    // Clear pillarbox / letterbox borders if present
+    if (dstX > 0) {
+        RECT leftBar = {0, 0, dstX, clientH};
+        RECT rightBar = {dstX + dstW, 0, clientW, clientH};
+        FillRect(m_hdc, &leftBar, (HBRUSH)GetStockObject(BLACK_BRUSH));
+        FillRect(m_hdc, &rightBar, (HBRUSH)GetStockObject(BLACK_BRUSH));
+    }
+    if (dstY > 0) {
+        RECT topBar = {0, 0, clientW, dstY};
+        RECT bottomBar = {0, dstY + dstH, clientW, clientH};
+        FillRect(m_hdc, &topBar, (HBRUSH)GetStockObject(BLACK_BRUSH));
+        FillRect(m_hdc, &bottomBar, (HBRUSH)GetStockObject(BLACK_BRUSH));
+    }
+
     StretchDIBits(
         m_hdc,
-        0, 0, clientW, clientH,
+        dstX, dstY, dstW, dstH,
         0, 0, SCREEN_WIDTH, SCREEN_HEIGHT,
         renderer.getFramebuffer(),
         &m_bmi,
@@ -117,8 +198,14 @@ LRESULT CALLBACK Window::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
                     break;
                 case 'Z':
                 case VK_SPACE:
-                case VK_RETURN:
                     Input::setKeyState(Key::ActionA, down);
+                    break;
+                case VK_RETURN:
+                    if (down && (GetKeyState(VK_MENU) & 0x8000)) {
+                        if (Window::s_instance) Window::s_instance->toggleFullscreen();
+                    } else {
+                        Input::setKeyState(Key::ActionA, down);
+                    }
                     break;
                 case 'X':
                 case VK_ESCAPE:
@@ -143,6 +230,11 @@ LRESULT CALLBACK Window::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
                     break;
                 case VK_F5:
                     Input::setKeyState(Key::Save, down);
+                    break;
+                case VK_F11:
+                    if (down && Window::s_instance) {
+                        Window::s_instance->toggleFullscreen();
+                    }
                     break;
                 case VK_F1:
                     Input::setKeyState(Key::Debug, down);
