@@ -38,6 +38,12 @@ public:
     static void playSfx(SfxId sfx);
 
     static void setMasterVolume(float vol); // 0.0f to 1.0f
+    static float getMasterVolume();
+    static void setBgmVolume(float vol);
+    static float getBgmVolume();
+    static void setSfxVolume(float vol);
+    static float getSfxVolume();
+
     static void toggleMute();
     static bool isMuted();
 

@@ -136,6 +136,14 @@ LRESULT CALLBACK Window::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
                 case 'L':
                     Input::setKeyState(Key::ActionE, down);
                     break;
+                case 'O':
+                case 'M':
+                case VK_F2:
+                    Input::setKeyState(Key::Menu, down);
+                    break;
+                case VK_F5:
+                    Input::setKeyState(Key::Save, down);
+                    break;
                 case VK_F1:
                     Input::setKeyState(Key::Debug, down);
                     break;

@@ -12,6 +12,8 @@
 #include "../scenes/artifact_scene.hpp"
 #include "../scenes/quest_scene.hpp"
 #include "../scenes/yutnori_scene.hpp"
+#include "../scenes/settings_scene.hpp"
+#include "../scenes/ending_scene.hpp"
 #include "../gameplay/alchemy.hpp"
 #include "field_obstacle.hpp"
 #include <algorithm>
@@ -224,7 +226,7 @@ void WorldScene::triggerBossBattle(const std::string& bossId, const std::string&
     Yokai bossYokai = DataManager::createYokaiById(bossId);
     if (m_sceneStack) {
         m_sceneStack->pushScene(std::make_unique<BattleScene>(
-            m_party, bossYokai, m_artifacts, true, [this, questIdToComplete, nextQuestId, rewardMoney, victoryNotice](bool won) {
+            m_party, bossYokai, m_artifacts, true, [this, bossId, questIdToComplete, nextQuestId, rewardMoney, victoryNotice](bool won) {
                 if (won) {
                     if (!questIdToComplete.empty()) {
                         DataManager::getQuestManager().completeQuest(questIdToComplete);
@@ -234,6 +236,10 @@ void WorldScene::triggerBossBattle(const std::string& bossId, const std::string&
                     }
                     m_money += rewardMoney;
                     m_noticeMsg = victoryNotice;
+
+                    if (bossId == "YOKAI_BOSS_05" && m_sceneStack) {
+                        m_sceneStack->pushScene(std::make_unique<EndingScene>(m_party, m_artifacts, DataManager::getEncyclopedia()));
+                    }
                 } else {
                     setPlayerPosition(7, 6, 0);
                     m_party.healAll();
@@ -297,6 +303,13 @@ void WorldScene::handleInput() {
     if (Input::isPressed(Key::ActionE)) {
         if (m_sceneStack) {
             m_sceneStack->pushScene(std::make_unique<QuestScene>(DataManager::getQuestManager()));
+        }
+    }
+
+    // Open Settings (ESC / Menu key)
+    if (Input::isPressed(Key::Menu)) {
+        if (m_sceneStack) {
+            m_sceneStack->pushScene(std::make_unique<SettingsScene>());
         }
     }
 

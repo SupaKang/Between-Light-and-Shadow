@@ -26,6 +26,9 @@ public:
     // Draw 16x16 / 32x32 character sprite
     void drawSprite(int x, int y, int spriteId, int frame, bool flipX = false);
 
+    // Post-processing CRT Scanline & Vignette
+    void applyPostProcess(bool crtScanlines = true, bool vignette = true);
+
     const uint32_t* getFramebuffer() const { return m_framebuffer.data(); }
     int getWidth() const { return SCREEN_WIDTH; }
     int getHeight() const { return SCREEN_HEIGHT; }

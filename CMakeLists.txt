@@ -44,6 +44,8 @@ set(SOURCES
     src/scenes/quest_scene.cpp
     src/scenes/title_scene.cpp
     src/scenes/yutnori_scene.cpp
+    src/scenes/settings_scene.cpp
+    src/scenes/ending_scene.cpp
     src/gameplay/alchemy.cpp
     src/world/field_obstacle.cpp
     src/data/data_manager.cpp
@@ -64,10 +66,15 @@ set(TEST_SOURCES
     tests/test_main.cpp
     tests/test_battle.cpp
     src/core/renderer.cpp
+    src/core/input.cpp
+    src/core/scene_stack.cpp
     src/core/task_engine.cpp
     src/core/save_system.cpp
+    src/ui/font_renderer.cpp
     src/world/tilemap.cpp
     src/world/field_obstacle.cpp
+    src/scenes/settings_scene.cpp
+    src/scenes/ending_scene.cpp
     src/gameplay/yokai.cpp
     src/gameplay/party.cpp
     src/gameplay/artifact.cpp

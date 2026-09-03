@@ -23,6 +23,8 @@ constexpr int NUM_BUFFERS = 3;
 std::atomic<bool> s_running{false};
 std::atomic<bool> s_muted{false};
 std::atomic<float> s_masterVolume{0.6f};
+std::atomic<float> s_bgmVolume{1.0f};
+std::atomic<float> s_sfxVolume{1.0f};
 std::thread s_audioThread;
 
 #ifdef _WIN32
@@ -373,6 +375,26 @@ void AudioEngine::fillAudioBuffer(int16_t* buffer, int numSamples) {
         sample = std::clamp(sample * masterVol, -1.0f, 1.0f);
         buffer[i] = static_cast<int16_t>(sample * 32767.0f);
     }
+}
+
+float AudioEngine::getMasterVolume() {
+    return s_masterVolume.load();
+}
+
+void AudioEngine::setBgmVolume(float vol) {
+    s_bgmVolume = std::clamp(vol, 0.0f, 1.0f);
+}
+
+float AudioEngine::getBgmVolume() {
+    return s_bgmVolume.load();
+}
+
+void AudioEngine::setSfxVolume(float vol) {
+    s_sfxVolume = std::clamp(vol, 0.0f, 1.0f);
+}
+
+float AudioEngine::getSfxVolume() {
+    return s_sfxVolume.load();
 }
 
 void AudioEngine::update(float dt) {

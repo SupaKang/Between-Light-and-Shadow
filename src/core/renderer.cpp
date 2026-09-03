@@ -341,4 +341,37 @@ void Renderer::drawSprite(int px, int py, int spriteId, int frame, bool flipX) {
     }
 }
 
+void Renderer::applyPostProcess(bool crtScanlines, bool vignette) {
+    if (!crtScanlines && !vignette) return;
+
+    for (int y = 0; y < SCREEN_HEIGHT; ++y) {
+        bool isScanline = crtScanlines && ((y % 2) == 1);
+        float dy = (y - (SCREEN_HEIGHT / 2.0f)) / (SCREEN_HEIGHT / 2.0f);
+
+        for (int x = 0; x < SCREEN_WIDTH; ++x) {
+            float mult = 1.0f;
+
+            if (isScanline) {
+                mult *= 0.82f; // Subtle scanline darkening
+            }
+
+            if (vignette) {
+                float dx = (x - (SCREEN_WIDTH / 2.0f)) / (SCREEN_WIDTH / 2.0f);
+                float distSq = dx * dx + dy * dy;
+                if (distSq > 0.6f) {
+                    mult *= (1.0f - (distSq - 0.6f) * 0.35f);
+                }
+            }
+
+            if (mult < 0.999f) {
+                uint32_t c = m_framebuffer[y * SCREEN_WIDTH + x];
+                uint8_t b = static_cast<uint8_t>((c & 0xFF) * mult);
+                uint8_t g = static_cast<uint8_t>(((c >> 8) & 0xFF) * mult);
+                uint8_t r = static_cast<uint8_t>(((c >> 16) & 0xFF) * mult);
+                m_framebuffer[y * SCREEN_WIDTH + x] = (0xFF << 24) | (r << 16) | (g << 8) | b;
+            }
+        }
+    }
+}
+
 } // namespace JoseonRPG

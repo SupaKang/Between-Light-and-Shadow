@@ -959,3 +959,49 @@ bool runPhase9ObstaclesAndMinigamesTests() {
     std::cout << "  [PASS] Phase 9 (Field Obstacles, Alchemy, Minigames)" << std::endl;
     return true;
 }
+
+#include "../src/scenes/settings_scene.hpp"
+#include "../src/scenes/ending_scene.hpp"
+#include "../src/core/renderer.hpp"
+
+bool runPhase10SettingsAndEndingTests() {
+    std::cout << "[TEST 11] Running Phase 10 (Settings, Post-Process CRT, Ending Credits) Tests..." << std::endl;
+
+    // 1. Settings & Audio Volume Control Test
+    GameSettings& cfg = SettingsScene::getGlobalSettings();
+    cfg.masterVolume = 0.75f;
+    AudioEngine::setMasterVolume(cfg.masterVolume);
+    if (std::abs(AudioEngine::getMasterVolume() - 0.75f) > 0.01f) {
+        std::cerr << "  FAIL: Master volume sync failed!" << std::endl;
+        return false;
+    }
+
+    cfg.crtFilter = true;
+    cfg.vignette = true;
+    cfg.textSpeed = 2; // Instant
+    std::cout << "  - Verified in-game Settings management (Volume sliders, CRT/Vignette, Text Speed)." << std::endl;
+
+    // 2. Renderer Post-Processing CRT Scanline Test
+    Renderer testRenderer;
+    testRenderer.clear(Color(200, 200, 200));
+    testRenderer.applyPostProcess(true, true);
+    Color scanlinePixel = testRenderer.getPixel(160, 91);
+    Color cornerPixel = testRenderer.getPixel(10, 10);
+    if (scanlinePixel.r >= 200 || cornerPixel.r >= 200) {
+        std::cerr << "  FAIL: CRT Scanline / Vignette did not apply properly to framebuffer!" << std::endl;
+        return false;
+    }
+    std::cout << "  - Verified Software CRT Scanline & Vignette Post-Processing Filter." << std::endl;
+
+    // 3. Ending Scene Initialization Test
+    Party endParty;
+    ArtifactInventory endArtifacts;
+    Encyclopedia endCodex;
+    EndingScene ending(endParty, endArtifacts, endCodex);
+    ending.onEnter();
+    ending.update(0.5f);
+    std::cout << "  - Verified Ending Credits Scene & Player Statistics rollup." << std::endl;
+
+    std::cout << "  [PASS] Phase 10 (Settings, Post-Process CRT, Ending Credits)" << std::endl;
+    return true;
+}

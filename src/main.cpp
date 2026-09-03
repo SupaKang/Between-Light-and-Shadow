@@ -9,6 +9,7 @@
 #include "gameplay/party.hpp"
 #include "gameplay/artifact.hpp"
 #include "scenes/title_scene.hpp"
+#include "scenes/settings_scene.hpp"
 
 #include <chrono>
 #include <thread>
@@ -66,6 +67,7 @@ int main() {
         // Render Framebuffer
         renderer.clear(Palette::Black);
         sceneStack.render(renderer);
+        renderer.applyPostProcess(SettingsScene::getGlobalSettings().crtFilter, SettingsScene::getGlobalSettings().vignette);
         window.present(renderer);
 
         // Frame rate limiter

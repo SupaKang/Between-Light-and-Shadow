@@ -10,6 +10,7 @@ bool runSaveSystemAndTaskEngineTests();
 bool runPhase7SoundAndTraitsTests();
 bool runPhase8VisualAndWeatherTests();
 bool runPhase9ObstaclesAndMinigamesTests();
+bool runPhase10SettingsAndEndingTests();
 
 int main() {
     std::cout << "========================================" << std::endl;
@@ -27,6 +28,7 @@ int main() {
     if (!runPhase7SoundAndTraitsTests()) passed = false;
     if (!runPhase8VisualAndWeatherTests()) passed = false;
     if (!runPhase9ObstaclesAndMinigamesTests()) passed = false;
+    if (!runPhase10SettingsAndEndingTests()) passed = false;
 
     std::cout << "----------------------------------------" << std::endl;
     if (passed) {
