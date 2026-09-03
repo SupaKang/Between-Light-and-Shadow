@@ -10,6 +10,7 @@ Encyclopedia DataManager::s_encyclopedia;
 QuestManager DataManager::s_questManager;
 
 void DataManager::init() {
+    if (!s_yokaiDatabase.empty()) return;
     // 1. Skills Database (Comprehensive 20+ Skills Across 7 Elements)
     Skill clubStrike{"SKL_CLUB_STRIKE", "Club Strike", 45, 0, Element::Physical, 95, StatusEffect::None, 0};
     Skill ironCharge{"SKL_IRON_CHARGE", "Iron Charge", 55, 15, Element::Earth, 90, StatusEffect::None, 0};
