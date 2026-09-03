@@ -476,4 +476,16 @@ void Renderer::applyPostProcess(bool crtScanlines, bool vignette) {
     }
 }
 
+void Renderer::applyFade(float brightness) {
+    if (brightness >= 0.999f) return;
+    brightness = std::clamp(brightness, 0.0f, 1.0f);
+    for (size_t i = 0; i < m_framebuffer.size(); ++i) {
+        uint32_t c = m_framebuffer[i];
+        uint8_t b = static_cast<uint8_t>((c & 0xFF) * brightness);
+        uint8_t g = static_cast<uint8_t>(((c >> 8) & 0xFF) * brightness);
+        uint8_t r = static_cast<uint8_t>(((c >> 16) & 0xFF) * brightness);
+        m_framebuffer[i] = (0xFF << 24) | (r << 16) | (g << 8) | b;
+    }
+}
+
 } // namespace JoseonRPG

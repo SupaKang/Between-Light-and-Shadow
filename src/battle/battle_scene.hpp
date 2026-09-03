@@ -49,6 +49,10 @@ private:
 
     int m_enemySpriteId = 1;
     float m_battleAnimTimer = 0.0f;
+    float m_playerLunge = 0.0f;
+    float m_enemyLunge = 0.0f;
+    float m_playerShake = 0.0f;
+    float m_enemyShake = 0.0f;
 };
 
 } // namespace JoseonRPG

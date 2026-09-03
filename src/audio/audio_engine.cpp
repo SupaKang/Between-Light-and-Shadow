@@ -260,6 +260,30 @@ void AudioEngine::playSfx(SfxId sfx) {
                     s_activeSfx[i].freqEnd = 600.0f;
                     s_activeSfx[i].volume = 0.25f;
                     break;
+                case SfxId::ArtifactDestroy:
+                    s_activeSfx[i].duration = 0.30f;
+                    s_activeSfx[i].freqStart = 900.0f;
+                    s_activeSfx[i].freqEnd = 150.0f;
+                    s_activeSfx[i].volume = 0.85f;
+                    break;
+                case SfxId::TavernHeal:
+                    s_activeSfx[i].duration = 0.45f;
+                    s_activeSfx[i].freqStart = 523.25f; // C5 -> G5
+                    s_activeSfx[i].freqEnd = 783.99f;
+                    s_activeSfx[i].volume = 0.70f;
+                    break;
+                case SfxId::MapWarp:
+                    s_activeSfx[i].duration = 0.20f;
+                    s_activeSfx[i].freqStart = 330.0f;
+                    s_activeSfx[i].freqEnd = 660.0f;
+                    s_activeSfx[i].volume = 0.50f;
+                    break;
+                case SfxId::FreezeShatter:
+                    s_activeSfx[i].duration = 0.25f;
+                    s_activeSfx[i].freqStart = 1600.0f;
+                    s_activeSfx[i].freqEnd = 300.0f;
+                    s_activeSfx[i].volume = 0.75f;
+                    break;
             }
             break;
         }

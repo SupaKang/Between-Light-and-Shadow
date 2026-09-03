@@ -3,6 +3,7 @@
 #include "../core/input.hpp"
 #include "../core/scene_stack.hpp"
 #include "../ui/font_renderer.hpp"
+#include "../audio/audio_engine.hpp"
 #include <algorithm>
 
 namespace JoseonRPG {
@@ -24,6 +25,7 @@ void ArtifactScene::handleInput() {
     }
 
     if (Input::isPressed(Key::ActionA) && m_artifacts.getCount() > 0) {
+        AudioEngine::playSfx(SfxId::ArtifactDestroy);
         m_artifacts.destroyArtifact(m_cursor, m_party.getActiveYokai(), &m_feedbackMsg);
         if (m_cursor >= static_cast<int>(m_artifacts.getCount()) && m_cursor > 0) {
             m_cursor--;

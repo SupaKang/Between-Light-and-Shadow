@@ -24,7 +24,11 @@ enum class SfxId {
     CaptureSuccess,
     LevelUp,
     ChestOpen,
-    DialogueBeep
+    DialogueBeep,
+    ArtifactDestroy,
+    TavernHeal,
+    MapWarp,
+    FreezeShatter
 };
 
 class AudioEngine {

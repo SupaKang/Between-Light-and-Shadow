@@ -47,38 +47,76 @@ void WorldScene::setPlayerPosition(int gridX, int gridY, int mapId) {
     if (mapId >= 0 && mapId != m_tilemap.getMapId()) {
         m_tilemap.loadMap(mapId);
         m_weather.setWeatherForMap(mapId);
+        m_fadeAlpha = 1.0f;
     }
-    m_gridController.setPosition(gridX, gridY);
+    // Clamping to valid map boundary and safety from collision
+    int clampedX = std::clamp(gridX, 1, m_tilemap.getWidth() - 2);
+    int clampedY = std::clamp(gridY, 1, m_tilemap.getHeight() - 2);
+    if (m_tilemap.isSolid(clampedX, clampedY)) {
+        const int dx[] = {0, 1, -1, 0, 1, -1, 1, -1};
+        const int dy[] = {1, 0, 0, -1, 1, 1, -1, -1};
+        for (int i = 0; i < 8; ++i) {
+            int nx = clampedX + dx[i];
+            int ny = clampedY + dy[i];
+            if (!m_tilemap.isSolid(nx, ny)) {
+                clampedX = nx;
+                clampedY = ny;
+                break;
+            }
+        }
+    }
+    m_gridController.setPosition(clampedX, clampedY);
 }
 
 void WorldScene::checkStepEvents(int newGridX, int newGridY) {
     // 1. Warp Trigger Check
     const WarpTrigger* warp = m_tilemap.checkWarp(newGridX, newGridY);
     if (warp) {
-        m_tilemap.loadMap(warp->targetMapId);
-        m_weather.setWeatherForMap(warp->targetMapId);
-        m_gridController.setPosition(warp->targetX, warp->targetY);
+        AudioEngine::playSfx(SfxId::MapWarp);
+        setPlayerPosition(warp->targetX, warp->targetY, warp->targetMapId);
         m_noticeMsg = "[" + m_tilemap.getMapName() + "] 진입";
         return;
     }
 
     // 2. Wild Encounter Check across dangerous maps (15% roll)
-    if (m_tilemap.getMapId() == 1 || m_tilemap.getMapId() == 3 || m_tilemap.getMapId() == 4) {
+    int mapId = m_tilemap.getMapId();
+    // Exclude safe havens: 0 (Village), 1 (Tavern), 2 (Bureau), 8 (Hut), 12 (Port), 13 (Shelter), 18 (Hermitage)
+    bool isSafeZone = (mapId == 0 || mapId == 1 || mapId == 2 || mapId == 8 || mapId == 12 || mapId == 13 || mapId == 18);
+    if (!isSafeZone) {
         std::uniform_int_distribution<int> encRoll(1, 100);
         if (encRoll(m_rng) <= 15) {
             const auto& pool = DataManager::getAllYokaiTemplates();
-            size_t maxIdx = 107;
             size_t minIdx = 0;
-            if (m_tilemap.getMapId() == 3) { minIdx = 20; maxIdx = 70; }
-            else if (m_tilemap.getMapId() == 4) { minIdx = 50; maxIdx = 107; }
-            else { minIdx = 0; maxIdx = 35; }
-
-            std::uniform_int_distribution<size_t> poolDist(minIdx, std::min(maxIdx, pool.size() - 6));
-            Yokai wildEnemy = pool[poolDist(m_rng)];
-
+            size_t maxIdx = 25;
             int wildLevel = 3;
-            if (m_tilemap.getMapId() == 3) wildLevel = 15;
-            else if (m_tilemap.getMapId() == 4) wildLevel = 30;
+
+            if (mapId >= 3 && mapId <= 5) {
+                // Zone 1: 북한산 & 고대 석굴 & 대웅전 (Lv 3 ~ 9)
+                minIdx = 0; maxIdx = 25;
+                wildLevel = 3 + (mapId - 3) * 2;
+            } else if (mapId >= 6 && mapId <= 10) {
+                // Zone 2: 죽령 옛고개 & 소백산맥 & 무쇠광산 (Lv 10 ~ 19)
+                minIdx = 20; maxIdx = 55;
+                wildLevel = 10 + (mapId == 6 ? 0 : (mapId == 7 ? 2 : (mapId == 9 ? 5 : 8)));
+            } else if (mapId >= 11 && mapId <= 15) {
+                // Zone 3: 남해안 갈대밭 & 유령 난파선 (Lv 20 ~ 28)
+                minIdx = 45; maxIdx = 80;
+                wildLevel = 20 + (mapId == 11 ? 0 : (mapId == 14 ? 3 : 7));
+            } else if (mapId >= 16 && mapId <= 20) {
+                // Zone 4: 지리산 원시림 & 여우골 (Lv 28 ~ 37)
+                minIdx = 65; maxIdx = 100;
+                wildLevel = 28 + (mapId == 16 ? 0 : (mapId == 17 ? 3 : (mapId == 19 ? 5 : 8)));
+            } else if (mapId >= 21 && mapId <= 25) {
+                // Zone 5: 음양당 성채 & 수호탑 & 본당 & 태초 심연 (Lv 38 ~ 48)
+                minIdx = 85; maxIdx = std::min<size_t>(107, pool.size() - 6);
+                wildLevel = 38 + (mapId - 21) * 2;
+            }
+
+            maxIdx = std::min(maxIdx, pool.size() - 6);
+            if (minIdx > maxIdx) minIdx = 0;
+
+            std::uniform_int_distribution<size_t> poolDist(minIdx, maxIdx);
+            Yokai wildEnemy = pool[poolDist(m_rng)];
             wildEnemy.gainExp(wildLevel * 250);
 
             if (m_sceneStack) {
@@ -142,6 +180,7 @@ void WorldScene::interactWithNPC() {
                     triggerBossBattle("YOKAI_108", "", "", 10000, "★ [환상비무대 제패!] 전설의 영수 천명영호를 꺾고 조선 제일의 음양사로 등극하셨습니다! ★");
                 }
                 else if (n.actionType == NPCActionType::TavernRest) {
+                    AudioEngine::playSfx(SfxId::TavernHeal);
                     m_party.healAll();
                     m_noticeMsg = "주막에서 하룻밤 묵었습니다. 파티 전원의 체력/영력 완치!";
                     DataManager::getQuestManager().advanceQuest("MQ_001");
@@ -168,7 +207,7 @@ void WorldScene::interactWithNPC() {
                         vNotice = "★ [챕터 4 클리어] 음양좌호법 격파! 최종 성채 개방! ★";
                     } else if (n.associatedQuestId == "MQ_005") {
                         bossId = "YOKAI_BOSS_05"; questId = "MQ_005"; nextQ = ""; rMoney = 5000;
-                        vNotice = "★ [축하합니다! 전 챕터 엔딩] 음양당 궤멸 및 조선의 평화 수호 완료! ★";
+                        vNotice = "★ [축하합니다! 전 챕터 제패] 음양당 궤멸 완료! 이제 자유롭게 108 도감을 완성하십시오! ★";
                     }
 
                     triggerBossBattle(bossId, questId, nextQ, rMoney, vNotice);
@@ -194,8 +233,7 @@ void WorldScene::interactWithNPC() {
 
             if (!chest->artifactId.empty()) {
                 Artifact art = DataManager::createArtifactById(chest->artifactId);
-                if (!art.id.empty()) {
-                    m_artifacts.addArtifact(art);
+                if (m_artifacts.addArtifact(art)) {
                     rewardSummary += " & 유물 [" + art.name + "]";
                 }
             }
@@ -324,6 +362,10 @@ void WorldScene::update(float dt) {
         m_dialogueBox.update(dt);
     }
 
+    if (m_fadeAlpha > 0.0f) {
+        m_fadeAlpha = std::max(0.0f, m_fadeAlpha - dt * 3.5f);
+    }
+
     m_gridController.update(dt);
     m_camera.update(m_gridController.getPixelX(), m_gridController.getPixelY(), m_tilemap.getWidth(), m_tilemap.getHeight());
     m_weather.update(dt);
@@ -349,7 +391,12 @@ void WorldScene::render(Renderer& renderer) {
     // 4. Regional Ambient Weather and Atmosphere Overlay
     m_weather.render(renderer);
 
-    // 5. World Top HUD Overlay
+    // 5. Screen Fade Transition
+    if (m_fadeAlpha > 0.001f) {
+        renderer.applyFade(1.0f - m_fadeAlpha);
+    }
+
+    // 6. World Top HUD Overlay
     renderer.fillRect(0, 0, SCREEN_WIDTH, 12, Color(18, 18, 22, 220));
     FontRenderer::drawText(renderer, 4, 2, m_tilemap.getMapName(), Palette::Yellow);
 
@@ -362,7 +409,7 @@ void WorldScene::render(Renderer& renderer) {
     std::string moneyStr = std::to_string(m_money) + "냥";
     FontRenderer::drawText(renderer, SCREEN_WIDTH - 46, 2, moneyStr, Palette::Yellow);
 
-    // 5. Bottom Controls Hint / System Notice
+    // 7. Bottom Controls Hint / System Notice
     renderer.fillRect(0, SCREEN_HEIGHT - 12, SCREEN_WIDTH, 12, Color(18, 18, 22, 220));
     if (!m_noticeMsg.empty()) {
         FontRenderer::drawText(renderer, 4, SCREEN_HEIGHT - 10, m_noticeMsg, Palette::Yellow);
@@ -370,7 +417,7 @@ void WorldScene::render(Renderer& renderer) {
         FontRenderer::drawText(renderer, 4, SCREEN_HEIGHT - 10, "방향키:이동 | Z:대화 | X:도감 | C:유물 | V:파티 | Q:임무 | F5:저장", Palette::White);
     }
 
-    // 6. Dialogue Box Overlay
+    // 8. Dialogue Box Overlay
     if (m_dialogueBox.isActive()) {
         m_dialogueBox.render(renderer);
     }

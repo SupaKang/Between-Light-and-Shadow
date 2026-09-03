@@ -46,6 +46,7 @@ private:
 
     std::mt19937 m_rng;
     std::string m_noticeMsg;
+    float m_fadeAlpha = 0.0f;
 
     // Active Dialogue NPC state
     const NPC* m_activeNPC = nullptr;

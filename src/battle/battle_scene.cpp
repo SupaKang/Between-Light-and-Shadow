@@ -85,6 +85,8 @@ void BattleScene::handleInput() {
             
             // Check if turn action was submitted
             if (m_battle->getState() == BattleState::ExecutingTurn) {
+                m_playerLunge = 8.0f;
+                m_enemyLunge = 8.0f;
                 Yokai* py = m_battle->getActivePlayerYokai();
                 if (py) {
                     m_skillFx.triggerSkillFx(py->getElement(), SCREEN_WIDTH - 65, 45);
@@ -121,6 +123,15 @@ void BattleScene::update(float dt) {
     m_battleAnimTimer += dt;
     m_sequencer.update(dt);
     m_skillFx.update(dt);
+
+    if (m_playerLunge > 0.0f) m_playerLunge = std::max(0.0f, m_playerLunge - dt * 25.0f);
+    if (m_enemyLunge > 0.0f) m_enemyLunge = std::max(0.0f, m_enemyLunge - dt * 25.0f);
+
+    if (m_sequencer.isPlayerFlashing()) m_playerShake = 3.5f;
+    if (m_sequencer.isEnemyFlashing()) m_enemyShake = 3.5f;
+
+    if (m_playerShake > 0.0f) m_playerShake = std::max(0.0f, m_playerShake - dt * 15.0f);
+    if (m_enemyShake > 0.0f) m_enemyShake = std::max(0.0f, m_enemyShake - dt * 15.0f);
 
     Yokai* pYokai = m_battle->getActivePlayerYokai();
     if (pYokai) {
@@ -166,16 +177,24 @@ void BattleScene::render(Renderer& renderer) {
     }
 
     if (eYokai.getStatus().effect != StatusEffect::None) {
-        renderer.fillRect(80, 34, 60, 9, StatusEffectSystem::getStatusColor(eYokai.getStatus().effect));
-        FontRenderer::drawText(renderer, 82, 35, StatusEffectSystem::getStatusName(eYokai.getStatus().effect), Palette::Black);
+        renderer.fillRect(76, 34, 72, 10, StatusEffectSystem::getStatusColor(eYokai.getStatus().effect));
+        renderer.drawRect(76, 34, 72, 10, Palette::Black);
+        std::string statStr = std::string(StatusEffectSystem::getStatusName(eYokai.getStatus().effect)) + " " + std::to_string(eYokai.getStatus().durationTurns) + "T";
+        FontRenderer::drawText(renderer, 80, 35, statStr, Palette::Black);
     }
 
-    // Dynamic Idle Breathing & Float
+    // Dynamic Idle Breathing & Float + Lunge / Shake
     int eBounceY = static_cast<int>(std::sin(m_battleAnimTimer * 3.5f) * 1.5f);
     int pBounceY = static_cast<int>(std::cos(m_battleAnimTimer * 3.5f) * 1.5f);
 
+    int pShakeX = (m_playerShake > 0.05f) ? static_cast<int>(std::sin(m_battleAnimTimer * 50.0f) * m_playerShake) : 0;
+    int eShakeX = (m_enemyShake > 0.05f) ? static_cast<int>(std::sin(m_battleAnimTimer * 50.0f) * m_enemyShake) : 0;
+
+    int pLungeX = static_cast<int>(m_playerLunge);
+    int eLungeX = -static_cast<int>(m_enemyLunge);
+
     // Enemy Elemental Aura Base
-    int eBaseX = SCREEN_WIDTH - 65;
+    int eBaseX = SCREEN_WIDTH - 65 + eShakeX + eLungeX;
     int eBaseY = 24 + eBounceY;
     Color eAuraCol = Palette::MidGray;
     if (eYokai.getElement() == Element::Fire) eAuraCol = Palette::CinnabarRed;
@@ -193,7 +212,7 @@ void BattleScene::render(Renderer& renderer) {
 
     // 2. Player Yokai HUD Box & Combatant
     if (pYokai) {
-        int pBaseX = 35;
+        int pBaseX = 35 + pShakeX + pLungeX;
         int pBaseY = 68 + pBounceY;
 
         Color pAuraCol = Palette::MidGray;
@@ -226,9 +245,16 @@ void BattleScene::render(Renderer& renderer) {
         FontRenderer::drawText(renderer, 171, 88, pQiText, Palette::Jade);
         m_playerQiBar.render(renderer, 220, 89, 86, 4, Palette::Blue);
 
-        // Player Trait indicator
+        // Player Trait indicator & Status Badge
         if (pYokai->getTrait() != YokaiTrait::None) {
             FontRenderer::drawText(renderer, 171, 96, "특성:" + pYokai->getTraitName(), Palette::Yellow);
+        }
+
+        if (pYokai->getStatus().effect != StatusEffect::None) {
+            renderer.fillRect(238, 95, 70, 10, StatusEffectSystem::getStatusColor(pYokai->getStatus().effect));
+            renderer.drawRect(238, 95, 70, 10, Palette::Black);
+            std::string pStatStr = std::string(StatusEffectSystem::getStatusName(pYokai->getStatus().effect)) + " " + std::to_string(pYokai->getStatus().durationTurns) + "T";
+            FontRenderer::drawText(renderer, 242, 96, pStatStr, Palette::Black);
         }
     }
 

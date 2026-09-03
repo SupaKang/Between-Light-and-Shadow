@@ -29,6 +29,9 @@ public:
     // Post-processing CRT Scanline & Vignette
     void applyPostProcess(bool crtScanlines = true, bool vignette = true);
 
+    // Screen Fade Transition (0.0 = black, 1.0 = fully visible)
+    void applyFade(float brightness);
+
     const uint32_t* getFramebuffer() const { return m_framebuffer.data(); }
     int getWidth() const { return SCREEN_WIDTH; }
     int getHeight() const { return SCREEN_HEIGHT; }
