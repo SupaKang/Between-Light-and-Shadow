@@ -16,6 +16,9 @@ void SceneStack::pushScene(std::unique_ptr<IScene> scene) {
     if (!scene) return;
     m_pendingAction = PendingAction::Push;
     m_pendingScene = std::move(scene);
+    if (m_scenes.empty()) {
+        applyPendingChanges();
+    }
 }
 
 void SceneStack::popScene() {

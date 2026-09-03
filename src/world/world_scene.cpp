@@ -202,7 +202,7 @@ void WorldScene::interactWithNPC() {
             m_activeNPC = &n;
             std::string speakerTitle = n.nameKo + " [" + n.titleKo + "]";
 
-            auto handleNPCAction = [this, n](int optIdx) {
+            auto handleNPCAction = [this, n, px](int optIdx) {
                 if (n.nameKo == "주모 월선") {
                     if (optIdx == 0) {
                         AudioEngine::playSfx(SfxId::TavernHeal);
@@ -272,11 +272,27 @@ void WorldScene::interactWithNPC() {
                             m_activeNPC = nullptr;
                             return;
                         }
-                        bossId = "YOKAI_BOSS_06"; questId = "MQ_006"; nextQ = ""; rMoney = 50000;
-                        vNotice = "★ [2차 진엔딩 달성!] 태초의 삼신제석 격파! 천명의 결단을 내리셨습니다! ★";
                     }
-
                     triggerBossBattle(bossId, questId, nextQ, rMoney, vNotice);
+                }
+                else if (n.actionType == NPCActionType::FerryCrossing) {
+                    if (optIdx == 0) {
+                        if (m_money >= 30) {
+                            m_money -= 30;
+                            AudioEngine::playSfx(SfxId::MapWarp);
+                            if (px >= 50) {
+                                // Cross from East to West
+                                setPlayerPosition(38, 35, 38);
+                                m_noticeMsg = "★ [나룻배 도강] 임진강을 건너 서안 절벽 선착장에 도착했습니다! (30냥 지불) ★";
+                            } else {
+                                // Cross from West to East
+                                setPlayerPosition(55, 35, 38);
+                                m_noticeMsg = "★ [나룻배 도강] 임진강을 건너 동안 포구 선착장에 도착했습니다! (30냥 지불) ★";
+                            }
+                        } else {
+                            m_noticeMsg = "뱃삯 30냥이 부족하여 나룻배를 탈 수 없습니다!";
+                        }
+                    }
                 }
                 m_activeNPC = nullptr;
             };
@@ -384,9 +400,79 @@ void WorldScene::triggerBossBattle(const std::string& bossId, const std::string&
     }
 }
 
+void WorldScene::openStartMenu() {
+    m_menuOpen = true;
+    m_menuCursor = 0;
+    AudioEngine::playSfx(SfxId::MenuSelect);
+}
+
+void WorldScene::closeStartMenu() {
+    m_menuOpen = false;
+    AudioEngine::playSfx(SfxId::MenuCancel);
+}
+
+void WorldScene::handleStartMenuInput() {
+    if (Input::isPressed(Key::Up)) {
+        if (m_menuCursor > 0) {
+            m_menuCursor--;
+            AudioEngine::playSfx(SfxId::MenuCursor);
+        }
+    }
+    if (Input::isPressed(Key::Down)) {
+        if (m_menuCursor < 6) {
+            m_menuCursor++;
+            AudioEngine::playSfx(SfxId::MenuCursor);
+        }
+    }
+
+    if (Input::isPressed(Key::ActionA)) {
+        AudioEngine::playSfx(SfxId::MenuSelect);
+        int choice = m_menuCursor;
+        m_menuOpen = false; // Close menu on selection
+        switch (choice) {
+            case 0: // 요괴도감 (POKEDEX)
+                if (m_sceneStack) m_sceneStack->pushScene(std::make_unique<EncyclopediaScene>(DataManager::getEncyclopedia()));
+                break;
+            case 1: // 사역요괴 (POKEMON)
+                if (m_sceneStack) m_sceneStack->pushScene(std::make_unique<PartyScene>(m_party));
+                break;
+            case 2: // 유물/가방 (PACK/BAG)
+                if (m_sceneStack) m_sceneStack->pushScene(std::make_unique<ArtifactScene>(m_artifacts, m_party));
+                break;
+            case 3: // 임무록 (QUEST/GEAR)
+                if (m_sceneStack) m_sceneStack->pushScene(std::make_unique<QuestScene>(DataManager::getQuestManager()));
+                break;
+            case 4: // 기록하기 (SAVE)
+                saveGame();
+                break;
+            case 5: // 환경설정 (OPTION)
+                if (m_sceneStack) m_sceneStack->pushScene(std::make_unique<SettingsScene>());
+                break;
+            case 6: // 닫기 (EXIT)
+                break;
+        }
+        return;
+    }
+
+    if (Input::isPressed(Key::ActionB) || Input::isPressed(Key::Menu)) {
+        closeStartMenu();
+    }
+}
+
 void WorldScene::handleInput() {
     if (m_dialogueBox.isActive()) {
         m_dialogueBox.handleInput();
+        return;
+    }
+
+    if (m_menuOpen) {
+        handleStartMenuInput();
+        return;
+    }
+
+    // Open Pokemon Gold Style Start Menu (ESC or Enter/Start/Menu key)
+    if (Input::isPressed(Key::Menu)) {
+        openStartMenu();
         return;
     }
 
@@ -409,47 +495,24 @@ void WorldScene::handleInput() {
         else if (Input::isDown(Key::Right)) m_gridController.tryMove(Direction::East, walkableCheck);
     }
 
-    // NPC Interaction
+    // Interaction (Z / Space)
     if (Input::isPressed(Key::ActionA)) {
         interactWithNPC();
     }
 
-    // Open Codex (X key)
+    // Quick shortcuts for convenience
     if (Input::isPressed(Key::ActionB)) {
-        if (m_sceneStack) {
-            m_sceneStack->pushScene(std::make_unique<EncyclopediaScene>(DataManager::getEncyclopedia()));
-        }
+        if (m_sceneStack) m_sceneStack->pushScene(std::make_unique<EncyclopediaScene>(DataManager::getEncyclopedia()));
     }
-
-    // Open Artifacts (C key)
     if (Input::isPressed(Key::ActionC)) {
-        if (m_sceneStack) {
-            m_sceneStack->pushScene(std::make_unique<ArtifactScene>(m_artifacts, m_party));
-        }
+        if (m_sceneStack) m_sceneStack->pushScene(std::make_unique<ArtifactScene>(m_artifacts, m_party));
     }
-
-    // Open Party (V / P / F1 key)
     if (Input::isPressed(Key::ActionD) || Input::isPressed(Key::Debug)) {
-        if (m_sceneStack) {
-            m_sceneStack->pushScene(std::make_unique<PartyScene>(m_party));
-        }
+        if (m_sceneStack) m_sceneStack->pushScene(std::make_unique<PartyScene>(m_party));
     }
-
-    // Open Quest Log (Q / L key)
     if (Input::isPressed(Key::ActionE)) {
-        if (m_sceneStack) {
-            m_sceneStack->pushScene(std::make_unique<QuestScene>(DataManager::getQuestManager()));
-        }
+        if (m_sceneStack) m_sceneStack->pushScene(std::make_unique<QuestScene>(DataManager::getQuestManager()));
     }
-
-    // Open Settings (ESC / Menu key)
-    if (Input::isPressed(Key::Menu)) {
-        if (m_sceneStack) {
-            m_sceneStack->pushScene(std::make_unique<SettingsScene>());
-        }
-    }
-
-    // Quick Save (F5 / S key)
     if (Input::isPressed(Key::Save)) {
         saveGame();
     }
@@ -464,12 +527,18 @@ void WorldScene::update(float dt) {
         m_fadeAlpha = std::max(0.0f, m_fadeAlpha - dt * 3.5f);
     }
 
-    m_gridController.update(dt);
-    m_camera.update(m_gridController.getPixelX(), m_gridController.getPixelY(), m_tilemap.getWidth(), m_tilemap.getHeight());
+    if (!m_dialogueBox.isActive() && !m_menuOpen) {
+        m_gridController.update(dt);
+    }
+
+    // Smooth Camera Follow
+    m_camera.update(m_gridController.getPixelX(), m_gridController.getPixelY(),
+                    m_tilemap.getWidth(), m_tilemap.getHeight());
+
     m_weather.update(dt);
 
-    // Procedural Footstep Dust Particles during fast sprint
-    if (m_gridController.isMoving() && m_gridController.isRunning()) {
+    // Dust particles
+    if (m_gridController.isRunning() && m_gridController.isMoving()) {
         m_dustTimer += dt;
         if (m_dustTimer >= 0.035f) {
             m_dustTimer = 0.0f;
@@ -490,7 +559,6 @@ void WorldScene::update(float dt) {
         }
     }
 
-    // Update Dust Particles
     for (auto& p : m_dustParticles) {
         p.x += p.vx * dt;
         p.y += p.vy * dt;
@@ -502,6 +570,40 @@ void WorldScene::update(float dt) {
         }),
         m_dustParticles.end()
     );
+}
+
+void WorldScene::renderStartMenu(Renderer& renderer) {
+    // Pokemon Gold Style Right-Side Popup Menu Frame (Pale DMG background with dark border)
+    int menuW = 88;
+    int menuH = 126;
+    int menuX = SCREEN_WIDTH - menuW - 6;
+    int menuY = 6;
+
+    renderer.fillRect(menuX, menuY, menuW, menuH, Color(224, 248, 208)); // Pale off-white
+    renderer.drawRect(menuX, menuY, menuW, menuH, Color(8, 24, 32));      // Darkest ink border
+    renderer.drawRect(menuX + 2, menuY + 2, menuW - 4, menuH - 4, Color(52, 104, 86)); // Dark olive inner
+
+    const std::string menuItems[7] = {
+        "도 감",
+        "요 괴",
+        "가 방",
+        "임 무",
+        "기 록",
+        "설 정",
+        "닫 기"
+    };
+
+    for (int i = 0; i < 7; ++i) {
+        int iy = menuY + 8 + i * 16;
+        bool isSel = (m_menuCursor == i);
+
+        if (isSel) {
+            FontRenderer::drawText(renderer, menuX + 8, iy, "▶", Color(8, 24, 32));
+            FontRenderer::drawText(renderer, menuX + 22, iy, menuItems[i], Color(8, 24, 32));
+        } else {
+            FontRenderer::drawText(renderer, menuX + 22, iy, menuItems[i], Color(52, 104, 86));
+        }
+    }
 }
 
 void WorldScene::render(Renderer& renderer) {
@@ -516,7 +618,7 @@ void WorldScene::render(Renderer& renderer) {
         renderer.drawSprite(nx, ny, n.spriteId, 0);
     }
 
-    // 3. Render Sprint Dust Particles behind player's feet
+    // 3. Render Sprint Dust Particles
     for (const auto& p : m_dustParticles) {
         int sx = static_cast<int>(p.x) - m_camera.getX();
         int sy = static_cast<int>(p.y) - m_camera.getY();
@@ -526,20 +628,12 @@ void WorldScene::render(Renderer& renderer) {
         renderer.fillRect(sx - size / 2, sy - size / 2, size, size, dustColor);
     }
 
-    // 4. Render Player Sprite with walk animation
+    // 4. Render Player Sprite (16x24 crisp bitmapped)
     int screenPX = m_gridController.getPixelX() - m_camera.getX();
     int screenPY = m_gridController.getPixelY() - m_camera.getY();
     renderer.drawSprite(screenPX, screenPY, 0, m_gridController.getAnimFrame());
 
-    // 4.1. Subtle Wind Streak / After-image lines when running
-    if (m_gridController.isRunning() && m_gridController.isMoving()) {
-        int wx = screenPX + (m_gridController.getFacing() == Direction::East ? -3 : (m_gridController.getFacing() == Direction::West ? 15 : 6));
-        int wy = screenPY + 11;
-        renderer.setPixel(wx, wy, Palette::White);
-        renderer.setPixel(wx + 1, wy + 1, Palette::LightGray);
-    }
-
-    // 5. Regional Ambient Weather and Atmosphere Overlay
+    // 5. Regional Ambient Weather
     m_weather.render(renderer);
 
     // 6. Screen Fade Transition
@@ -547,65 +641,22 @@ void WorldScene::render(Renderer& renderer) {
         renderer.applyFade(1.0f - m_fadeAlpha);
     }
 
-    // 7. World Top HUD Overlay (Clean, Minimalist Design)
-    renderer.fillRect(0, 0, SCREEN_WIDTH, 12, Color(18, 18, 22, 220));
-    FontRenderer::drawText(renderer, 4, 2, m_tilemap.getMapName(), Palette::Yellow);
-
-    int curMap = m_tilemap.getMapId();
-    bool isSafe = (curMap == 0 || curMap == 1 || curMap == 2 || curMap == 8 || curMap == 12 || curMap == 13 || curMap == 18 || curMap == 26);
-    if (!isSafe) {
-        size_t minIdx = 0, maxIdx = 25;
-        if (curMap >= 3 && curMap <= 5) { minIdx = 0; maxIdx = 25; }
-        else if (curMap >= 6 && curMap <= 10) { minIdx = 20; maxIdx = 55; }
-        else if (curMap >= 11 && curMap <= 15) { minIdx = 45; maxIdx = 80; }
-        else if (curMap >= 16 && curMap <= 20) { minIdx = 65; maxIdx = 100; }
-        else if (curMap >= 21 && curMap <= 25) { minIdx = 85; maxIdx = 107; }
-        else if (curMap == 27) { minIdx = 50; maxIdx = 90; }
-        else if (curMap == 28) { minIdx = 60; maxIdx = 95; }
-        else if (curMap == 29) { minIdx = 75; maxIdx = 105; }
-        else if (curMap == 30) { minIdx = 85; maxIdx = 107; }
-        else if (curMap == 31) { minIdx = 10; maxIdx = 45; }
-        else if (curMap == 32) { minIdx = 30; maxIdx = 70; }
-        else if (curMap == 33) { minIdx = 40; maxIdx = 85; }
-        else if (curMap == 34) { minIdx = 60; maxIdx = 95; }
-        else if (curMap == 35) { minIdx = 80; maxIdx = 106; }
-
-        int uncaptured = 0;
-        const auto& codex = DataManager::getEncyclopedia();
-        for (size_t i = minIdx; i <= maxIdx; ++i) {
-            const auto* entry = codex.getEntry(static_cast<int>(i + 1));
-            if (!entry || entry->status != DiscoveryStatus::Captured) {
-                uncaptured++;
-            }
-        }
-        if (uncaptured > 0) {
-            std::string radarStr = "★ 미계약 " + std::to_string(uncaptured) + "종 서식";
-            FontRenderer::drawText(renderer, 90, 2, radarStr, Palette::Yellow);
-        } else {
-            FontRenderer::drawText(renderer, 90, 2, "★ 지역도감 완전정복", Palette::Jade);
-        }
-    } else {
-        auto activeQuests = DataManager::getQuestManager().getActiveQuests();
-        if (!activeQuests.empty() && activeQuests[0]) {
-            std::string qStr = "[임무] " + activeQuests[0]->getCurrentObjective();
-            FontRenderer::drawText(renderer, 90, 2, qStr, Palette::Jade);
-        }
+    // 7. Pokemon Gold Style Minimalist Location Banner (Only when noticeMsg exists)
+    if (!m_noticeMsg.empty() && !m_dialogueBox.isActive() && !m_menuOpen) {
+        int notW = static_cast<int>(m_noticeMsg.size() * 8 + 16);
+        renderer.fillRect(4, 4, notW, 16, Color(224, 248, 208));
+        renderer.drawRect(4, 4, notW, 16, Color(8, 24, 32));
+        FontRenderer::drawText(renderer, 8, 8, m_noticeMsg, Color(8, 24, 32));
     }
 
-    std::string moneyStr = std::to_string(m_money) + "냥";
-    FontRenderer::drawText(renderer, SCREEN_WIDTH - 46, 2, moneyStr, Palette::Yellow);
-
-    // 8. Bottom Controls Hint / System Notice
-    renderer.fillRect(0, SCREEN_HEIGHT - 12, SCREEN_WIDTH, 12, Color(18, 18, 22, 220));
-    if (!m_noticeMsg.empty()) {
-        FontRenderer::drawText(renderer, 4, SCREEN_HEIGHT - 10, m_noticeMsg, Palette::Yellow);
-    } else {
-        FontRenderer::drawText(renderer, 4, SCREEN_HEIGHT - 10, "방향키:이동(Shift:질주) | Z:대화 | X:도감 | C:유물 | V:파티 | Q:임무 | F5:저장", Palette::White);
-    }
-
-    // 8. Dialogue Box Overlay
+    // 8. Dialogue Box
     if (m_dialogueBox.isActive()) {
         m_dialogueBox.render(renderer);
+    }
+
+    // 9. Pokemon Gold Style Start Menu Popup
+    if (m_menuOpen) {
+        renderStartMenu(renderer);
     }
 }
 

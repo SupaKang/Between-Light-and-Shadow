@@ -9,7 +9,8 @@ enum class NPCActionType {
     TavernRest,     // 주막 휴식 (파티 전원 HP/Qi 완치)
     QuestTrigger,   // 퀘스트 대화 및 수주/진행
     TalismanShop,   // 벽사 부적 및 유물 거래
-    BossEncounter   // 음양당 보스전 트리거
+    BossEncounter,  // 음양당 보스전 트리거
+    FerryCrossing   // 나룻배 도강 및 강 건너기 특수 이벤트
 };
 
 struct NPC {

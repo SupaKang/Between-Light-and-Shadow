@@ -1,6 +1,7 @@
 #include "tilemap.hpp"
 #include "../core/renderer.hpp"
 #include <algorithm>
+#include <cmath>
 
 namespace JoseonRPG {
 
@@ -51,6 +52,8 @@ void Tilemap::loadMap(int mapId) {
         case 34: initMap34_FoxLeylinePass(); break;
         case 35: initMap35_SecretCatacombs(); break;
         case 36: initMap36_SamshindanApex(); break;
+        case 37: initMap37_ElderHanokInterior(); break;
+        case 38: initMap38_ImjinFerryCrossing(); break;
         default: initMap0_Village(); break;
     }
 }
@@ -67,128 +70,290 @@ static void makeBoundaryWalls(int w, int h, std::vector<int>& tiles, std::vector
 }
 
 // -------------------------------------------------------------
-// [Map 0] 도선사 주막마을 (80 x 60)
+// [Map 0] 도선사 주막마을 (80 x 60) - 포켓몬 골드 규격 정밀 메타타일셋 배치
 // -------------------------------------------------------------
 void Tilemap::initMap0_Village() {
     m_mapName = "제1구역: 도선사 주막마을";
     m_width = 80;
     m_height = 60;
-    m_tiles.assign(m_width * m_height, 0);
+    m_tiles.assign(m_width * m_height, 0); // Grass base (Tile 0)
     m_collision.assign(m_width * m_height, false);
 
-    makeBoundaryWalls(m_width, m_height, m_tiles, m_collision);
+    makeBoundaryWalls(m_width, m_height, m_tiles, m_collision, 16); // Forest Boundary (Tile 16)
 
-    // Stream on X=55 with bridge at Y=30
+    // Helper Lambdas for Metatile Prefabs
+    auto placeGiwaHouse = [this](int startX, int startY, int w, int h, int doorX, int warpTargetMap, int warpTargetX, int warpTargetY) {
+        // Roof layer (Top 2 rows)
+        for (int x = startX; x < startX + w; ++x) {
+            m_tiles[startY * m_width + x] = (x == startX) ? 5 : ((x == startX + w - 1) ? 7 : 6);
+            m_collision[startY * m_width + x] = true;
+            m_tiles[(startY + 1) * m_width + x] = 6;
+            m_collision[(startY + 1) * m_width + x] = true;
+        }
+        // Wall & Door Layer (Rows 2..h-1)
+        for (int y = startY + 2; y < startY + h; ++y) {
+            for (int x = startX; x < startX + w; ++x) {
+                if (y == startY + h - 1 && x == doorX) {
+                    m_tiles[y * m_width + x] = 9; // Changhoji Door (Tile 9)
+                    m_collision[y * m_width + x] = false;
+                    if (warpTargetMap >= 0) {
+                        m_warps.push_back({x, y, warpTargetMap, warpTargetX, warpTargetY});
+                    }
+                } else {
+                    m_tiles[y * m_width + x] = 8; // Pillar Wall (Tile 8)
+                    m_collision[y * m_width + x] = true;
+                }
+            }
+        }
+    };
+
+    auto placeChogaHouse = [this](int startX, int startY, int w, int h, int doorX, int warpTargetMap, int warpTargetX, int warpTargetY) {
+        // Thatched Roof layer
+        for (int x = startX; x < startX + w; ++x) {
+            m_tiles[startY * m_width + x] = (x == startX) ? 10 : ((x == startX + w - 1) ? 12 : 11);
+            m_collision[startY * m_width + x] = true;
+            m_tiles[(startY + 1) * m_width + x] = 11;
+            m_collision[(startY + 1) * m_width + x] = true;
+        }
+        // Mud Wall & Door
+        for (int y = startY + 2; y < startY + h; ++y) {
+            for (int x = startX; x < startX + w; ++x) {
+                if (y == startY + h - 1 && x == doorX) {
+                    m_tiles[y * m_width + x] = 9; // Door
+                    m_collision[y * m_width + x] = false;
+                    if (warpTargetMap >= 0) {
+                        m_warps.push_back({x, y, warpTargetMap, warpTargetX, warpTargetY});
+                    }
+                } else {
+                    m_tiles[y * m_width + x] = 13; // Mud Wall (Tile 13)
+                    m_collision[y * m_width + x] = true;
+                }
+            }
+        }
+    };
+
+    auto placeDangsanTree = [this](int rootX, int rootY) {
+        // 2x2 Canopy Top + 2x1 Trunk Base
+        m_tiles[(rootY - 2) * m_width + rootX] = 14; m_collision[(rootY - 2) * m_width + rootX] = true;
+        m_tiles[(rootY - 2) * m_width + rootX + 1] = 14; m_collision[(rootY - 2) * m_width + rootX + 1] = true;
+        m_tiles[(rootY - 1) * m_width + rootX] = 14; m_collision[(rootY - 1) * m_width + rootX] = true;
+        m_tiles[(rootY - 1) * m_width + rootX + 1] = 14; m_collision[(rootY - 1) * m_width + rootX + 1] = true;
+        m_tiles[rootY * m_width + rootX] = 15; m_collision[rootY * m_width + rootX] = true;
+        m_tiles[rootY * m_width + rootX + 1] = 15; m_collision[rootY * m_width + rootX + 1] = true;
+    };
+
+    // 1. Natural Organic Winding River / Stream (X=52..56)
     for (int y = 1; y < m_height - 1; ++y) {
-        m_tiles[y * m_width + 55] = 6; m_collision[y * m_width + 55] = true;
-    }
-    m_tiles[30 * m_width + 55] = 7; m_collision[30 * m_width + 55] = false;
-
-    // Roads
-    for (int x = 2; x < m_width - 1; ++x) {
-        if (x != 55) m_tiles[30 * m_width + x] = 2;
-    }
-    for (int y = 2; y < m_height - 1; ++y) {
-        m_tiles[y * m_width + 20] = 2;
-        m_tiles[y * m_width + 40] = 2;
-        m_tiles[y * m_width + 68] = 2;
-    }
-
-    // Tavern Building (X=10~18, Y=12~18)
-    for (int y = 12; y <= 18; ++y) {
-        for (int x = 10; x <= 18; ++x) {
-            m_tiles[y * m_width + x] = (y == 12) ? 4 : 3;
-            m_collision[y * m_width + x] = (y == 12 || (x == 10 && y < 18) || (x == 18 && y < 18));
+        int streamX = 52 + static_cast<int>(3.5 * std::sin(y * 0.18));
+        for (int w = 0; w < 3; ++w) {
+            int cx = streamX + w;
+            if (cx >= 1 && cx < m_width - 1) {
+                m_tiles[y * m_width + cx] = 17; // Water (Tile 17)
+                m_collision[y * m_width + cx] = true;
+            }
         }
     }
-    m_tiles[18 * m_width + 14] = 3;
-
-    // Exorcist Bureau Building (X=24~32, Y=12~18)
-    for (int y = 12; y <= 18; ++y) {
-        for (int x = 24; x <= 32; ++x) {
-            m_tiles[y * m_width + x] = (y == 12) ? 4 : 3;
-            m_collision[y * m_width + x] = (y == 12 || (x == 24 && y < 18) || (x == 32 && y < 18));
+    // Wooden Arched Bridge across stream
+    for (int y = 28; y <= 31; ++y) {
+        int streamX = 52 + static_cast<int>(3.5 * std::sin(y * 0.18));
+        for (int w = 0; w < 3; ++w) {
+            int cx = streamX + w;
+            m_tiles[y * m_width + cx] = 18; // Bridge (Tile 18)
+            m_collision[y * m_width + cx] = false;
         }
     }
-    m_tiles[18 * m_width + 28] = 3;
 
-    // Environmental Props: Jangseung & Sotdae Totems at entrances
-    m_tiles[30 * m_width + 5] = 12; m_collision[30 * m_width + 5] = true;
-    m_tiles[30 * m_width + 74] = 11; // Hongsalmun Gate before Mountain Pass
+    // 2. Structured Dirt Paths & Plaza
+    // Central Crossroads Plaza (Tile 2 Paved Cobblestone)
+    for (int y = 24; y <= 34; ++y) {
+        for (int x = 30; x <= 42; ++x) {
+            m_tiles[y * m_width + x] = 2;
+        }
+    }
+    // West Main Road to entrance (Tile 1 Dirt Road)
+    for (int x = 1; x < 30; ++x) {
+        int ry = 28 + static_cast<int>(2.5 * std::sin(x * 0.22));
+        for (int dy = -1; dy <= 1; ++dy) {
+            if (ry + dy >= 1 && ry + dy < m_height - 1) m_tiles[(ry + dy) * m_width + x] = 1;
+        }
+    }
+    // East Road across Bridge
+    for (int x = 42; x < m_width - 1; ++x) {
+        int ry = 29 + static_cast<int>(1.8 * std::cos(x * 0.2));
+        for (int dy = -1; dy <= 1; ++dy) {
+            if (ry + dy >= 1 && ry + dy < m_height - 1) {
+                if (m_tiles[(ry + dy) * m_width + x] != 18 && m_tiles[(ry + dy) * m_width + x] != 17) {
+                    m_tiles[(ry + dy) * m_width + x] = 1;
+                }
+            }
+        }
+    }
+    // North & South Branching Paths
+    for (int y = 1; y < 24; ++y) {
+        int rx = 36 + static_cast<int>(3.0 * std::sin(y * 0.15));
+        for (int dx = -1; dx <= 1; ++dx) m_tiles[y * m_width + (rx + dx)] = 1;
+    }
+    for (int y = 34; y < m_height - 1; ++y) {
+        int rx = 38 + static_cast<int>(3.0 * std::cos(y * 0.15));
+        for (int dx = -1; dx <= 1; ++dx) m_tiles[y * m_width + (rx + dx)] = 1;
+    }
 
-    // Onggi Kimchi / Soy Pots behind Tavern
-    m_tiles[10 * m_width + 11] = 14; m_collision[10 * m_width + 11] = true;
-    m_tiles[10 * m_width + 12] = 14; m_collision[10 * m_width + 12] = true;
+    // 3. Compact Pokemon-Scale Buildings (4x3 / 5x3) & Dol-dam Courtyard Enclosures
+    // [Building A] Village Tavern Inn (X=12~16, Y=12~14: 5x3)
+    placeGiwaHouse(12, 12, 5, 3, 14, 1, 5, 6);
+    // Tavern Courtyard Dol-dam Fences (ㄷ자형 돌담 감싸기)
+    for (int x = 10; x <= 18; ++x) { m_tiles[10 * m_width + x] = 3; m_collision[10 * m_width + x] = true; }
+    for (int y = 11; y <= 16; ++y) {
+        m_tiles[y * m_width + 10] = 4; m_collision[y * m_width + 10] = true;
+        m_tiles[y * m_width + 18] = 4; m_collision[y * m_width + 18] = true;
+    }
+    // Front Fence with Gate opening at X=14
+    for (int x = 10; x <= 18; ++x) {
+        if (x != 14) { m_tiles[16 * m_width + x] = 3; m_collision[16 * m_width + x] = true; }
+        else { m_tiles[16 * m_width + x] = 1; m_collision[16 * m_width + x] = false; }
+    }
+    // Tavern Courtyard Tables & Onggi Soy Pots
+    m_tiles[15 * m_width + 12] = 24; m_collision[15 * m_width + 12] = true;
+    m_tiles[15 * m_width + 16] = 24; m_collision[15 * m_width + 16] = true;
+    m_tiles[11 * m_width + 11] = 19; m_collision[11 * m_width + 11] = true;
+    m_tiles[12 * m_width + 11] = 19; m_collision[12 * m_width + 11] = true;
 
-    // Doltap (Spirit Cairns) & Dangsan Tree
-    m_tiles[15 * m_width + 68] = 5; m_collision[15 * m_width + 68] = true;
-    m_tiles[16 * m_width + 69] = 13; m_collision[16 * m_width + 69] = true;
+    // [Building B] Exorcist Bureau Branch (X=14~18, Y=36~38: 5x3)
+    placeGiwaHouse(14, 36, 5, 3, 16, 2, 5, 6);
+    for (int x = 12; x <= 20; ++x) { m_tiles[34 * m_width + x] = 3; m_collision[34 * m_width + x] = true; }
+    for (int y = 35; y <= 40; ++y) {
+        m_tiles[y * m_width + 12] = 4; m_collision[y * m_width + 12] = true;
+        m_tiles[y * m_width + 20] = 4; m_collision[y * m_width + 20] = true;
+    }
+    for (int x = 12; x <= 20; ++x) {
+        if (x != 16) { m_tiles[40 * m_width + x] = 3; m_collision[40 * m_width + x] = true; }
+        else { m_tiles[40 * m_width + x] = 1; m_collision[40 * m_width + x] = false; }
+    }
 
-    // Lotus Pond in village garden
-    m_tiles[8 * m_width + 45] = 22; m_collision[8 * m_width + 45] = true;
-    m_tiles[8 * m_width + 46] = 22; m_collision[8 * m_width + 46] = true;
+    // [Building C] Village Elder Hanok House (X=28~32, Y=10~12: 5x3)
+    placeGiwaHouse(28, 10, 5, 3, 30, 37, 12, 16);
+    for (int x = 26; x <= 34; ++x) { m_tiles[8 * m_width + x] = 3; m_collision[8 * m_width + x] = true; }
+    for (int y = 9; y <= 14; ++y) {
+        m_tiles[y * m_width + 26] = 4; m_collision[y * m_width + 26] = true;
+        m_tiles[y * m_width + 34] = 4; m_collision[y * m_width + 34] = true;
+    }
+    for (int x = 26; x <= 34; ++x) {
+        if (x != 30) { m_tiles[14 * m_width + x] = 3; m_collision[14 * m_width + x] = true; }
+        else { m_tiles[14 * m_width + x] = 1; m_collision[14 * m_width + x] = false; }
+    }
 
-    // Chests
-    m_tiles[8 * m_width + 10] = 10;
-    m_chests.push_back({1, 10, 8, "", 200, 100, false});
+    // [Building D] Riverside Thatched Cottage (X=64~68, Y=14~16: 5x3)
+    placeChogaHouse(64, 14, 5, 3, 66, -1, 0, 0);
+    for (int x = 62; x <= 70; ++x) { m_tiles[12 * m_width + x] = 3; m_collision[12 * m_width + x] = true; }
+    for (int y = 13; y <= 18; ++y) {
+        m_tiles[y * m_width + 62] = 4; m_collision[y * m_width + 62] = true;
+        m_tiles[y * m_width + 70] = 4; m_collision[y * m_width + 70] = true;
+    }
+    for (int x = 62; x <= 70; ++x) {
+        if (x != 66) { m_tiles[18 * m_width + x] = 3; m_collision[18 * m_width + x] = true; }
+        else { m_tiles[18 * m_width + x] = 1; m_collision[18 * m_width + x] = false; }
+    }
 
-    m_tiles[12 * m_width + 65] = 10;
-    m_chests.push_back({2, 65, 12, "", 300, 150, false});
+    // 4. Korean Folklore Environmental Props & Natural Landmark Prefabs
+    // Central Sacred Dangsan Tree in Plaza
+    placeDangsanTree(36, 26);
+    m_tiles[26 * m_width + 39] = 20; m_collision[26 * m_width + 39] = true; // Dol-tap Altar (Tile 20)
 
-    // Warps
-    m_warps.push_back({14, 18, 1, 12, 16}); // To Tavern Interior (Map 1)
-    m_warps.push_back({28, 18, 2, 12, 16}); // To Exorcist Bureau (Map 2)
+    // Village West Entrance: Great General Jangseung Totem Pair (Tile 21)
+    m_tiles[26 * m_width + 4] = 21; m_collision[26 * m_width + 4] = true;
+    m_tiles[31 * m_width + 4] = 21; m_collision[31 * m_width + 4] = true;
 
-    m_tiles[30 * m_width + 78] = 2; m_collision[30 * m_width + 78] = false;
-    m_tiles[30 * m_width + 79] = 2; m_collision[30 * m_width + 79] = false;
-    m_warps.push_back({79, 30, 3, 20, 2});  // To Mountain Pass (Map 3)
-    m_warps.push_back({78, 30, 3, 20, 2});
+    // Hongsalmun Gate before Mountain Pass (Tile 27)
+    m_tiles[27 * m_width + 74] = 27; m_collision[27 * m_width + 74] = true;
+    m_tiles[31 * m_width + 74] = 27; m_collision[31 * m_width + 74] = true;
 
-    m_tiles[59 * m_width + 75] = 2; m_collision[59 * m_width + 75] = false;
-    m_warps.push_back({75, 59, 26, 45, 58}); // To Hanyang Boulevard (Map 26)
+    // Onggi Kimchi / Soy Pots Clusters in Courtyards (Tile 19)
+    m_tiles[10 * m_width + 27] = 19; m_collision[10 * m_width + 27] = true;
+    m_tiles[15 * m_width + 72] = 19; m_collision[15 * m_width + 72] = true;
 
-    m_tiles[50 * m_width + 20] = 23; m_collision[50 * m_width + 20] = false; // Secret Stone Well Rim (Shortcut)
-    m_warps.push_back({20, 50, 31, 30, 2}); // To Subterranean Aqueduct (Map 31)
+    // Lotus Pond in Southern Meadow (Tile 22)
+    for (int dy = 0; dy < 3; ++dy) {
+        for (int dx = 0; dx < 4; ++dx) {
+            m_tiles[(48 + dy) * m_width + (60 + dx)] = 22;
+            m_collision[(48 + dy) * m_width + (60 + dx)] = true;
+        }
+    }
+
+    // Secret Stone Well Rim (Tile 23, Shortcut to Map 31)
+    m_tiles[50 * m_width + 22] = 23; m_collision[50 * m_width + 22] = false;
+    m_warps.push_back({22, 50, 31, 30, 2});
+
+    // Treasure Chests (Tile 28)
+    m_tiles[8 * m_width + 11] = 28; m_collision[8 * m_width + 11] = true;
+    m_chests.push_back({1, 11, 8, "", 200, 100, false});
+    m_tiles[13 * m_width + 73] = 28; m_collision[13 * m_width + 73] = true;
+    m_chests.push_back({2, 73, 13, "", 300, 150, false});
+
+    // Exits & Warps
+    m_tiles[29 * m_width + 78] = 1; m_collision[29 * m_width + 78] = false;
+    m_tiles[29 * m_width + 79] = 1; m_collision[29 * m_width + 79] = false;
+    m_warps.push_back({79, 29, 3, 20, 2});
+    m_warps.push_back({78, 29, 3, 20, 2});
+    m_warps.push_back({79, 30, 3, 20, 2}); // Compatibility
+    m_warps.push_back({78, 30, 3, 20, 2}); // Compatibility
+    m_warps.push_back({14, 18, 1, 12, 16}); // Backward compatibility
+    m_warps.push_back({28, 18, 2, 12, 16}); // Backward compatibility
+    m_warps.push_back({20, 50, 31, 30, 2}); // Backward compatibility
+
+    // South Warp to Map 26 (한양 육조거리)
+    m_tiles[59 * m_width + 38] = 1; m_collision[59 * m_width + 38] = false;
+    m_warps.push_back({38, 59, 26, 45, 58});
+
+    // West Warp to Map 38 (임진나루 도강지대)
+    m_tiles[28 * m_width + 0] = 1; m_collision[28 * m_width + 0] = false;
+    m_warps.push_back({0, 28, 38, 88, 30});
 }
 
 // -------------------------------------------------------------
-// [Map 1] 주막 본채 실내 (24 x 18)
+// [Map 1] 주막 본채 실내 (10 x 8) - 포켓몬 금/은 정통 실내 규격
 // -------------------------------------------------------------
 void Tilemap::initMap1_TavernInterior() {
     m_mapName = "도선사 주막 본채 (실내)";
-    m_width = 24;
-    m_height = 18;
-    m_tiles.assign(m_width * m_height, 3);
+    m_width = 10;
+    m_height = 8;
+    m_tiles.assign(m_width * m_height, 29); // Maru wood floor (Tile 29)
     m_collision.assign(m_width * m_height, false);
 
-    makeBoundaryWalls(m_width, m_height, m_tiles, m_collision, 1);
+    makeBoundaryWalls(m_width, m_height, m_tiles, m_collision, 8); // Pillar walls (Tile 8)
 
-    for (int y = 2; y <= 8; ++y) { m_tiles[y * m_width + 8] = 1; m_collision[y * m_width + 8] = true; }
-    for (int x = 2; x <= 8; ++x) { m_tiles[8 * m_width + x] = 1; m_collision[8 * m_width + x] = true; }
-    m_tiles[8 * m_width + 5] = 3; m_collision[8 * m_width + 5] = false;
+    // Inner Kitchen Partition (Folding Screen Tile 30)
+    m_tiles[1 * m_width + 3] = 30; m_collision[1 * m_width + 3] = true;
+    m_tiles[2 * m_width + 3] = 30; m_collision[2 * m_width + 3] = true;
+    m_tiles[3 * m_width + 3] = 30; m_collision[3 * m_width + 3] = true;
 
-    m_tiles[17 * m_width + 12] = 2; m_collision[17 * m_width + 12] = false;
-    m_warps.push_back({12, 17, 0, 14, 19});
+    // Tavern Dining Table & Bench (Tile 24)
+    m_tiles[3 * m_width + 6] = 24; m_collision[3 * m_width + 6] = true;
+    m_tiles[4 * m_width + 6] = 24; m_collision[4 * m_width + 6] = true;
+
+    // Exit Door to Village Courtyard (Tile 9 Changhoji Door)
+    m_tiles[7 * m_width + 5] = 9; m_collision[7 * m_width + 5] = false;
+    m_warps.push_back({5, 7, 0, 15, 16});
 }
 
 // -------------------------------------------------------------
-// [Map 2] 관상감 벽사청 북악출장소 (24 x 18)
+// [Map 2] 관상감 벽사청 북악출장소 (10 x 8) - 포켓몬 정통 실내 규격
 // -------------------------------------------------------------
 void Tilemap::initMap2_ExorcistBureau() {
     m_mapName = "관상감 벽사청 북악출장소 (실내)";
-    m_width = 24;
-    m_height = 18;
-    m_tiles.assign(m_width * m_height, 3);
+    m_width = 10;
+    m_height = 8;
+    m_tiles.assign(m_width * m_height, 29);
     m_collision.assign(m_width * m_height, false);
 
-    makeBoundaryWalls(m_width, m_height, m_tiles, m_collision, 1);
+    makeBoundaryWalls(m_width, m_height, m_tiles, m_collision, 8);
 
-    m_tiles[6 * m_width + 12] = 9;  // Altar
-    m_tiles[6 * m_width + 18] = 10; // Chest
-    m_chests.push_back({3, 18, 6, "ART_HEONGSAL_WOOD", 250, 200, false});
+    m_tiles[2 * m_width + 5] = 31; m_collision[2 * m_width + 5] = true; // Ceremonial Desk (Tile 31)
+    m_tiles[2 * m_width + 8] = 28; m_collision[2 * m_width + 8] = true; // Key Relic Chest (Tile 28)
+    m_chests.push_back({3, 8, 2, "ART_HEONGSAL_WOOD", 250, 200, false});
 
-    m_tiles[17 * m_width + 12] = 2; m_collision[17 * m_width + 12] = false;
-    m_warps.push_back({12, 17, 0, 28, 19});
+    // Exit Door to Village (Tile 9 Changhoji Door)
+    m_tiles[7 * m_width + 5] = 9; m_collision[7 * m_width + 5] = false;
+    m_warps.push_back({5, 7, 0, 28, 19});
 }
 
 // -------------------------------------------------------------
@@ -1312,6 +1477,171 @@ void Tilemap::initMap36_SamshindanApex() {
     // South Warp to Map 25 (태초의 영맥 심연)
     m_tiles[79 * m_width + 40] = 2; m_collision[79 * m_width + 40] = false;
     m_warps.push_back({40, 79, 25, 25, 6});
+}
+
+// -------------------------------------------------------------
+// [Map 37] 마을 원로 훈장의 고택 실내 (24 x 18)
+// -------------------------------------------------------------
+void Tilemap::initMap37_ElderHanokInterior() {
+    m_mapName = "도선사 마을 훈장 고택 (실내)";
+    m_width = 24;
+    m_height = 18;
+    m_tiles.assign(m_width * m_height, 3); // Daecheong-maru wooden floor
+    m_collision.assign(m_width * m_height, false);
+
+    makeBoundaryWalls(m_width, m_height, m_tiles, m_collision, 1);
+
+    // Ink landscape folding screen (30) on North wall
+    for (int x = 6; x <= 17; ++x) {
+        m_tiles[2 * m_width + x] = 30;
+        m_collision[2 * m_width + x] = true;
+    }
+
+    // Tea Table & Porcelain Set (32) in front of screen
+    m_tiles[5 * m_width + 11] = 32;
+    m_tiles[5 * m_width + 12] = 32;
+    m_collision[5 * m_width + 11] = true;
+    m_collision[5 * m_width + 12] = true;
+
+    // Ceramic Brazier & Firewood (31) on East side
+    m_tiles[6 * m_width + 18] = 31;
+    m_collision[6 * m_width + 18] = true;
+
+    // Secret Antique Chest
+    m_tiles[3 * m_width + 20] = 10;
+    m_chests.push_back({40, 20, 3, "ART_SCHOLAR_BRUSH", 800, 400, false});
+
+    // Southern Exit Door (29: Changhoji Door)
+    m_tiles[17 * m_width + 12] = 29;
+    m_collision[17 * m_width + 12] = false;
+    m_warps.push_back({12, 17, 0, 32, 17}); // Return to Map 0 Village
+}
+
+// -------------------------------------------------------------
+// [Map 38] 임진나루 도강지대 & 절벽 고저차 (90 x 60)
+// -------------------------------------------------------------
+void Tilemap::initMap38_ImjinFerryCrossing() {
+    m_mapName = "제1구역: 임진나루 도강지대 & 절벽 험로";
+    m_width = 90;
+    m_height = 60;
+    m_tiles.assign(m_width * m_height, 0); // Grass base
+    m_collision.assign(m_width * m_height, false);
+
+    makeBoundaryWalls(m_width, m_height, m_tiles, m_collision);
+
+    // 1. Wide Flowing River (X=38~52) dividing East and West
+    for (int y = 1; y < m_height - 1; ++y) {
+        int riverCenter = 45 + static_cast<int>(3.0 * std::sin(y * 0.12));
+        for (int rx = riverCenter - 7; rx <= riverCenter + 7; ++rx) {
+            if (rx >= 1 && rx < m_width - 1) {
+                m_tiles[y * m_width + rx] = 6;
+                m_collision[y * m_width + rx] = true;
+            }
+        }
+    }
+
+    // 2. Partially Collapsed Stone Arch Bridge at Y=10~15 (Broken Bridge Gimmick)
+    for (int y = 10; y <= 15; ++y) {
+        // East intact side
+        for (int x = 50; x <= 56; ++x) {
+            m_tiles[y * m_width + x] = 1;
+            m_collision[y * m_width + x] = false;
+        }
+        // West intact side
+        for (int x = 34; x <= 39; ++x) {
+            m_tiles[y * m_width + x] = 1;
+            m_collision[y * m_width + x] = false;
+        }
+        // Broken gap in middle (X=40~49 remains deep water!)
+    }
+
+    // 3. Wooden Ferry Piers & Ferry Boats (나루터 선착장 & 나룻배)
+    // East Pier (X=52~55, Y=34~37)
+    for (int y = 34; y <= 37; ++y) {
+        for (int x = 52; x <= 55; ++x) {
+            m_tiles[y * m_width + x] = 27; // Pier Dock
+            m_collision[y * m_width + x] = false;
+        }
+    }
+    m_tiles[35 * m_width + 51] = 28; // Ferry Boat moored
+
+    // West Pier (X=36~39, Y=34~37)
+    for (int y = 34; y <= 37; ++y) {
+        for (int x = 36; x <= 39; ++x) {
+            m_tiles[y * m_width + x] = 27;
+            m_collision[y * m_width + x] = false;
+        }
+    }
+    m_tiles[35 * m_width + 40] = 28; // Ferry Boat moored
+
+    // 4. Multi-Tier High Cliff Elevation (X=1~30, Y=1~58) on West Bank
+    // Tier 1 Cliff Ridge
+    for (int y = 5; y <= 55; ++y) {
+        m_tiles[y * m_width + 25] = 25; // Rock Cliff Wall
+        m_collision[y * m_width + 25] = true;
+    }
+    // Stone Staircases (26) cutting through cliff at Y=20 and Y=45
+    for (int y = 19; y <= 21; ++y) {
+        m_tiles[y * m_width + 25] = 26;
+        m_collision[y * m_width + 25] = false;
+    }
+    for (int y = 44; y <= 46; ++y) {
+        m_tiles[y * m_width + 25] = 26;
+        m_collision[y * m_width + 25] = false;
+    }
+
+    // Tier 2 High Summit Mountain Cliff (X=1~15)
+    for (int y = 10; y <= 50; ++y) {
+        m_tiles[y * m_width + 15] = 25;
+        m_collision[y * m_width + 15] = true;
+    }
+    m_tiles[30 * m_width + 15] = 26; // High Summit Stairs
+    m_collision[30 * m_width + 15] = false;
+
+    // Mountain Top Ancient Shrine on High Cliff (X=4~10, Y=26~32)
+    for (int y = 26; y <= 32; ++y) {
+        for (int x = 4; x <= 10; ++x) {
+            m_tiles[y * m_width + x] = (y == 26) ? 4 : 3;
+            m_collision[y * m_width + x] = (y == 26 || x == 4 || x == 10 || (y == 32 && x != 7));
+        }
+    }
+    m_tiles[29 * m_width + 7] = 9; // Ancient Spirit Altar inside summit shrine
+
+    // 5. Ferry Tavern & Roadways
+    // East Ferry Tavern (X=65~75, Y=30~36)
+    for (int y = 30; y <= 36; ++y) {
+        for (int x = 65; x <= 75; ++x) {
+            m_tiles[y * m_width + x] = (y == 30) ? 15 : 3;
+            m_collision[y * m_width + x] = (y == 30 || x == 65 || x == 75 || (y == 36 && x != 70));
+        }
+    }
+    // Road connecting East Pier to East Boundary
+    for (int x = 55; x < m_width - 1; ++x) {
+        m_tiles[35 * m_width + x] = 2;
+    }
+    // Road connecting West Pier through cliff stairs
+    for (int x = 25; x <= 36; ++x) {
+        m_tiles[20 * m_width + x] = 2;
+        m_tiles[45 * m_width + x] = 2;
+    }
+    for (int y = 20; y <= 45; ++y) {
+        m_tiles[y * m_width + 36] = 2;
+    }
+
+    // Props: Willow groves, Doltap & Totems
+    m_tiles[32 * m_width + 58] = 5; m_collision[32 * m_width + 58] = true; // Willow Tree
+    m_tiles[38 * m_width + 58] = 5; m_collision[38 * m_width + 58] = true;
+    m_tiles[35 * m_width + 60] = 12; m_collision[35 * m_width + 60] = true; // Ferry Jangseung
+    m_tiles[35 * m_width + 33] = 13; m_collision[35 * m_width + 33] = true; // Wish Doltap
+
+    // Hidden High Cliff Chest
+    m_tiles[28 * m_width + 5] = 10;
+    m_chests.push_back({41, 5, 28, "ART_BLACK_TIGER_TALON", 1200, 600, false});
+
+    // Warps
+    // East Warp back to Map 0 (도선사 주막마을)
+    m_tiles[35 * m_width + 89] = 2; m_collision[35 * m_width + 89] = false;
+    m_warps.push_back({89, 35, 0, 2, 28});
 }
 
 void Tilemap::render(Renderer& renderer, int cameraX, int cameraY) const {

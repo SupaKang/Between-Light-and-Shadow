@@ -10,6 +10,8 @@
 #include "../audio/audio_engine.hpp"
 #include <windows.h>
 
+#include "intro_scene.hpp"
+
 namespace JoseonRPG {
 
 TitleScene::TitleScene(Party& party, ArtifactInventory& artifacts, int& money)
@@ -27,31 +29,10 @@ void TitleScene::onEnter() {
 }
 
 void TitleScene::startNewGame() {
-    // Initialize default starter party
-    m_party.clear();
-    Yokai p1 = DataManager::createYokaiById("YOKAI_001"); // Dokkaebi
-    p1.gainExp(1500); // Level 6
-    m_party.addYokai(p1);
-
-    Yokai p2 = DataManager::createYokaiById("YOKAI_002"); // Gumiho
-    p2.gainExp(2500); // Level 8
-    m_party.addYokai(p2);
-
-    Yokai p3 = DataManager::createYokaiById("YOKAI_003"); // Bulgasari
-    p3.gainExp(800);  // Level 4
-    m_party.addYokai(p3);
-
-    m_artifacts.clear();
-    m_artifacts.addArtifact(DataManager::createArtifactById("ART_DOKKAEBI_HAT"));
-    m_artifacts.addArtifact(DataManager::createArtifactById("ART_DEMON_TILE"));
-
-    m_money = 500;
-
-    auto world = std::make_unique<WorldScene>(m_party, m_artifacts, m_money);
-    world->setPlayerPosition(7, 6, 0);
-
+    // Launch Prologue Cinematic Narrative Scene
+    auto intro = std::make_unique<IntroScene>(m_party, m_artifacts, m_money);
     if (m_sceneStack) {
-        m_sceneStack->clearAndSet(std::move(world));
+        m_sceneStack->clearAndSet(std::move(intro));
     }
 }
 

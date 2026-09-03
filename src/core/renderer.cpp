@@ -1,7 +1,30 @@
 #include "renderer.hpp"
+#include "gen1_assets.hpp"
 #include <cmath>
 
 namespace JoseonRPG {
+
+void Renderer::drawGen1Bitmap(int px, int py, int w, int h, const uint8_t* packedData, bool transparentKey0, bool flipX) {
+    if (!packedData) return;
+    int pixelIdx = 0;
+    for (int y = 0; y < h; ++y) {
+        for (int x = 0; x < w; ++x) {
+            int byteIdx = pixelIdx / 4;
+            int shift = 6 - (pixelIdx % 4) * 2;
+            uint8_t colorIdx = (packedData[byteIdx] >> shift) & 0x03;
+            pixelIdx++;
+
+            if (transparentKey0 && colorIdx == 0) continue;
+
+            int targetX = flipX ? (px + (w - 1 - x)) : (px + x);
+            int targetY = py + y;
+
+            if (targetX >= 0 && targetX < SCREEN_WIDTH && targetY >= 0 && targetY < SCREEN_HEIGHT) {
+                m_framebuffer[targetY * SCREEN_WIDTH + targetX] = Gen1Assets::DMG_PALETTE[colorIdx];
+            }
+        }
+    }
+}
 
 Renderer::Renderer() {
     clear(Palette::Black);
@@ -105,7 +128,11 @@ void Renderer::drawHealthBar(int x, int y, int w, int h, int curVal, int maxVal,
 }
 
 void Renderer::drawTileProcedural(int px, int py, int tileId) {
-    // Procedural 16x16 tile pattern generator for size budget efficiency
+    if (tileId >= 0 && tileId < Gen1Assets::TOTAL_TILES) {
+        drawGen1Bitmap(px, py, 16, 16, Gen1Assets::TILES_16x16[tileId], false);
+        return;
+    }
+    // Fallback if tileId is out of range
     switch (tileId) {
         case 0: // Grass / Earth (바닥 풀밭 & 들꽃)
             fillRect(px, py, 16, 16, Color(42, 100, 52));
@@ -305,6 +332,78 @@ void Renderer::drawTileProcedural(int px, int py, int tileId) {
             fillRect(px + 5, py + 5, 8, 3, Palette::IndigoBlue);
             setPixel(px + 7, py + 3, Palette::GardeniaYellow);
             break;
+        case 25: // Cliff / Rock Wall Elevation (바위 절벽 암벽 & 음영)
+            fillRect(px, py, 16, 16, Color(95, 88, 80)); // Cliff rock
+            fillRect(px, py, 16, 4, Color(125, 118, 110)); // Top highlight
+            drawLine(px + 2, py + 5, px + 5, py + 14, Color(65, 58, 50)); // Deep fissure
+            drawLine(px + 9, py + 3, px + 14, py + 15, Color(65, 58, 50));
+            setPixel(px + 3, py + 2, Color(55, 120, 65)); // Moss on ledge
+            setPixel(px + 12, py + 2, Color(55, 120, 65));
+            break;
+        case 26: // Stone Staircase / Cliff Steps (돌계단 & 고저차 통로)
+            fillRect(px, py, 16, 16, Color(140, 135, 130));
+            for (int step = 0; step < 4; ++step) {
+                fillRect(px + 1, py + step * 4, 14, 2, Color(175, 170, 165)); // Step surface
+                fillRect(px + 1, py + step * 4 + 2, 14, 2, Color(90, 85, 80));   // Step riser shadow
+            }
+            break;
+        case 27: // Wooden Ferry Pier / Dock (나루터 목조 선착장 데크)
+            fillRect(px, py, 16, 16, Color(30, 80, 150)); // Water backdrop
+            fillRect(px + 1, py + 2, 14, 12, Color(145, 95, 50)); // Planks
+            drawRect(px + 1, py + 2, 14, 12, Color(85, 50, 25));
+            drawLine(px + 5, py + 2, px + 5, py + 13, Color(85, 50, 25));
+            drawLine(px + 10, py + 2, px + 10, py + 13, Color(85, 50, 25));
+            // Mooring Post
+            fillRect(px + 2, py, 2, 4, Color(70, 40, 20));
+            fillRect(px + 12, py, 2, 4, Color(70, 40, 20));
+            break;
+        case 28: // Wooden Ferry Boat (나루터 나룻배 선체 & 노)
+            fillRect(px, py, 16, 16, Color(30, 80, 150)); // Water
+            fillRect(px + 2, py + 4, 12, 8, Color(160, 105, 55)); // Hull
+            fillRect(px + 3, py + 5, 10, 6, Color(110, 70, 35));  // Deck interior
+            setPixel(px + 1, py + 7, Color(160, 105, 55));        // Prow
+            setPixel(px + 14, py + 7, Color(160, 105, 55));       // Stern
+            drawLine(px + 5, py + 1, px + 10, py + 14, Color(210, 170, 100)); // Oar (노)
+            break;
+        case 29: // Hanok Sliding Paper Door (창호지 미닫이 문 & 문살)
+            fillRect(px, py, 16, 16, Color(245, 240, 230)); // Changhoji Paper
+            drawRect(px + 1, py + 1, 14, 14, Color(130, 85, 45)); // Wood frame
+            // Delicate Grid Lattice (세살 문살)
+            drawLine(px + 5, py + 1, px + 5, py + 14, Color(150, 100, 55));
+            drawLine(px + 10, py + 1, px + 10, py + 14, Color(150, 100, 55));
+            drawLine(px + 1, py + 5, px + 14, py + 5, Color(150, 100, 55));
+            drawLine(px + 1, py + 10, px + 14, py + 10, Color(150, 100, 55));
+            break;
+        case 30: // Traditional Folding Screen (산수화 8폭 병풍)
+            fillRect(px, py, 16, 16, Color(235, 225, 205)); // Silk canvas
+            drawRect(px + 1, py + 1, 14, 14, Color(90, 55, 30)); // Frame
+            // Ink Landscape Mountain & Pine (수묵 산수화)
+            drawLine(px + 3, py + 12, px + 8, py + 6, Palette::SongyeonInk);
+            drawLine(px + 8, py + 6, px + 13, py + 12, Palette::SongyeonInk);
+            fillRect(px + 5, py + 8, 2, 2, Palette::BambooGreen); // Pine tree needle
+            setPixel(px + 11, py + 4, Palette::CinnabarRed);     // Red seal stamp (낙관)
+            break;
+        case 31: // Ceramic Brazier & Firewood (따스한 숯불 화로 & 장작)
+            fillRect(px, py, 16, 16, Color(180, 120, 60)); // Floor base
+            fillRect(px + 4, py + 6, 8, 7, Color(120, 115, 110)); // Ceramic bowl
+            fillRect(px + 5, py + 7, 6, 3, Color(60, 25, 20));    // Charcoal pit
+            // Glowing Embers
+            setPixel(px + 6, py + 8, Palette::CinnabarRed);
+            setPixel(px + 7, py + 7, Palette::TigerOrange);
+            setPixel(px + 8, py + 8, Palette::GardeniaYellow);
+            // Firewood log beside
+            fillRect(px + 1, py + 12, 4, 3, Color(90, 55, 25));
+            break;
+        case 32: // Tea Table & Porcelain Set (오동나무 찻상 & 백자 다기 세트)
+            fillRect(px, py, 16, 16, Color(180, 120, 60)); // Floor
+            fillRect(px + 3, py + 5, 10, 7, Color(100, 60, 30)); // Small table
+            fillRect(px + 4, py + 6, 8, 5, Color(130, 80, 40));
+            // White Porcelain Teapot & Cups
+            fillRect(px + 5, py + 7, 3, 3, Palette::BaegokWhite); // Teapot
+            setPixel(px + 9, py + 7, Palette::BaegokWhite);       // Teacup
+            setPixel(px + 10, py + 8, Palette::BaegokWhite);
+            setPixel(px + 6, py + 6, Palette::BichuiJade);        // Green tea lid
+            break;
         default:
             fillRect(px, py, 16, 16, Palette::DarkGray);
             break;
@@ -312,7 +411,21 @@ void Renderer::drawTileProcedural(int px, int py, int tileId) {
 }
 
 void Renderer::drawSprite(int px, int py, int spriteId, int frame, bool flipX) {
-    (void)flipX;
+    if (spriteId == 0) {
+        // [0] Player: Joseon Exorcist Soseul (16x24 Gen 1 2-bit DMG Bitmap)
+        int animFrame = frame % 8;
+        drawGen1Bitmap(px, py - 4, 16, 24, Gen1Assets::PLAYER_16x24[animFrame], true, flipX);
+        return;
+    } else if (spriteId == 12) {
+        // [12] Dokkaebi #001 (32x32 Gen 1 2-bit DMG Battler)
+        drawGen1Bitmap(px, py, 32, 32, Gen1Assets::DOKKAEBI_32x32, true, flipX);
+        return;
+    } else if (spriteId == 13) {
+        // [13] Gumiho #002 (48x48 Gen 1 2-bit DMG Battler)
+        drawGen1Bitmap(px, py, 48, 48, Gen1Assets::GUMIHO_48x48, true, flipX);
+        return;
+    }
+
     // Remastered 16x16 / 32x32 Joseon Folklore Character & Yokai Sprites
     if (spriteId == 0) {
         // [0] Player: Joseon Exorcist Soseul (벽사청 영술사 소슬 - 흑립 갓, 백색 도포, 갓끈, 옥패)
@@ -563,6 +676,31 @@ void Renderer::drawSprite(int px, int py, int spriteId, int frame, bool flipX) {
         setPixel(px + 14, py + 8, Palette::BichuiJade);
         setPixel(px + 2, py + 12, Palette::GoldHalo);
         setPixel(px + 13, py + 12, Palette::GoldHalo);
+    } else if (spriteId == 16) {
+        // [16] Ferryman NPC (나룻배 뱃사공 - 갈색 삿갓, 무명 두루마기, 긴 노)
+        fillRect(px + 3, py + 1, 10, 2, Color(160, 110, 50)); // Wide Satgat bamboo hat
+        fillRect(px + 5, py, 6, 2, Color(130, 85, 35));
+        // Sun-tanned Face
+        fillRect(px + 5, py + 3, 6, 4, Color(225, 175, 130));
+        setPixel(px + 6, py + 4, Palette::SongyeonInk);
+        setPixel(px + 9, py + 4, Palette::SongyeonInk);
+        // Commoner Hanbok & Indigo Sash
+        fillRect(px + 4, py + 7, 8, 7, Palette::BaegokWhite);
+        fillRect(px + 4, py + 9, 8, 2, Palette::IndigoBlue); // Waist sash
+        // Long Wooden Oar (긴 삿대 노)
+        fillRect(px + 13, py + 2, 2, 13, Color(140, 95, 45));
+        setPixel(px + 12, py + 14, Color(170, 120, 60));
+    } else if (spriteId == 17) {
+        // [17] Village Elder / Scholar (마을 원로 백발 노인 - 탕건, 순백 도포, 흰 수염)
+        fillRect(px + 5, py + 1, 6, 2, Palette::SongyeonInk); // Tanggeon horsehair hat
+        // Face & Gentle Sage Eyes
+        fillRect(px + 5, py + 3, 6, 4, Color(245, 220, 185));
+        setPixel(px + 6, py + 4, Palette::SongyeonInk);
+        setPixel(px + 9, py + 4, Palette::SongyeonInk);
+        fillRect(px + 6, py + 6, 4, 3, Palette::BaegokWhite); // Long White Beard
+        // Pure White Silk Robe
+        fillRect(px + 4, py + 7, 8, 7, Palette::BaegokWhite);
+        setPixel(px + 7, py + 8, Palette::BichuiJade); // Jade Norigae pendant
     }
 }
 

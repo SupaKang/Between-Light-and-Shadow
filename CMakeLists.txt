@@ -43,6 +43,7 @@ set(SOURCES
     src/scenes/artifact_scene.cpp
     src/scenes/quest_scene.cpp
     src/scenes/title_scene.cpp
+    src/scenes/intro_scene.cpp
     src/scenes/yutnori_scene.cpp
     src/scenes/settings_scene.cpp
     src/scenes/ending_scene.cpp
@@ -96,4 +97,52 @@ add_executable(run_tests ${TEST_SOURCES})
 
 if(WIN32)
     target_link_libraries(run_tests PRIVATE gdi32 user32 winmm)
+endif()
+
+# Automated Screen Capture Target
+set(CAPTURE_SOURCES
+    tools/capture_screens.cpp
+    src/core/renderer.cpp
+    src/core/input.cpp
+    src/core/window.cpp
+    src/core/task_engine.cpp
+    src/core/scene_stack.cpp
+    src/core/save_system.cpp
+    src/ui/font_renderer.cpp
+    src/ui/dialogue_box.cpp
+    src/ui/ui_widgets.cpp
+    src/world/tilemap.cpp
+    src/world/grid_controller.cpp
+    src/world/world_scene.cpp
+    src/gameplay/yokai.cpp
+    src/gameplay/party.cpp
+    src/gameplay/artifact.cpp
+    src/gameplay/encyclopedia.cpp
+    src/gameplay/quest.cpp
+    src/battle/status_effects.cpp
+    src/battle/battle.cpp
+    src/battle/battle_sequencer.cpp
+    src/battle/battle_scene.cpp
+    src/scenes/encyclopedia_scene.cpp
+    src/scenes/party_scene.cpp
+    src/scenes/artifact_scene.cpp
+    src/scenes/quest_scene.cpp
+    src/scenes/title_scene.cpp
+    src/scenes/intro_scene.cpp
+    src/scenes/yutnori_scene.cpp
+    src/scenes/settings_scene.cpp
+    src/scenes/ending_scene.cpp
+    src/scenes/art_inspector_scene.cpp
+    src/gameplay/alchemy.cpp
+    src/world/field_obstacle.cpp
+    src/data/data_manager.cpp
+    src/audio/audio_engine.cpp
+    src/world/weather_system.cpp
+    src/battle/skill_fx_system.cpp
+)
+
+add_executable(capture_screens ${CAPTURE_SOURCES})
+
+if(WIN32)
+    target_link_libraries(capture_screens PRIVATE gdi32 user32 winmm)
 endif()

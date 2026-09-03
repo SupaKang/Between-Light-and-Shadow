@@ -1,4 +1,5 @@
 #include "font_renderer.hpp"
+#include "korean_font.hpp"
 #include "../core/renderer.hpp"
 
 namespace JoseonRPG {
@@ -115,17 +116,58 @@ void FontRenderer::drawChar(Renderer& renderer, int x, int y, char c, Color colo
     }
 }
 
+void FontRenderer::drawHangul(Renderer& renderer, int x, int y, uint16_t unicode, Color color) {
+    const uint8_t* bitmap = findHangulBitmap(unicode);
+    if (!bitmap) return;
+    
+    // 12x12 glyph: 18 bytes (144 bits)
+    int bitIdx = 0;
+    for (int r = 0; r < 12; ++r) {
+        for (int c = 0; c < 12; ++c) {
+            int byteIdx = bitIdx / 8;
+            int bitShift = 7 - (bitIdx % 8);
+            if ((bitmap[byteIdx] >> bitShift) & 1) {
+                renderer.setPixel(x + c, y + r, color);
+            }
+            bitIdx++;
+        }
+    }
+}
+
 void FontRenderer::drawText(Renderer& renderer, int x, int y, std::string_view text, Color color) {
     int curX = x;
     int curY = y;
-    for (char c : text) {
+    size_t i = 0;
+    while (i < text.size()) {
+        unsigned char c = static_cast<unsigned char>(text[i]);
         if (c == '\n') {
             curX = x;
-            curY += 9;
+            curY += 13;
+            i++;
             continue;
         }
-        drawChar(renderer, curX, curY, c, color);
-        curX += 8;
+
+        if (c < 0x80) {
+            // ASCII 1-byte
+            drawChar(renderer, curX, curY + 2, static_cast<char>(c), color);
+            curX += 8;
+            i++;
+        } else if ((c & 0xE0) == 0xE0 && i + 2 < text.size()) {
+            // UTF-8 3-byte Korean character (0xAC00 ~ 0xD7A3)
+            unsigned char c2 = static_cast<unsigned char>(text[i + 1]);
+            unsigned char c3 = static_cast<unsigned char>(text[i + 2]);
+            uint16_t unicode = ((c & 0x0F) << 12) | ((c2 & 0x3F) << 6) | (c3 & 0x3F);
+            drawHangul(renderer, curX, curY, unicode, color);
+            curX += 13;
+            i += 3;
+        } else if ((c & 0xC0) == 0xC0 && i + 1 < text.size()) {
+            // UTF-8 2-byte
+            i += 2;
+            curX += 8;
+        } else {
+            i++;
+            curX += 8;
+        }
     }
 }
 

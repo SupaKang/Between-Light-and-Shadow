@@ -44,11 +44,11 @@ void EncyclopediaScene::render(Renderer& renderer) {
 
     // Header Banner
     renderer.drawPanel(4, 4, 312, 20, Color(28, 32, 42), Palette::Yellow);
-    FontRenderer::drawText(renderer, 10, 8, "=== 108: 음양견문록 도감 (CODEX) ===", Palette::Yellow);
+    FontRenderer::drawText(renderer, 10, 8, "=== 108: 음양견문록 도감 ===", Palette::Yellow);
 
     int capCnt = m_encyclopedia.getCapturedCount();
-    std::string rateStr = "수집: " + std::to_string(capCnt) + "/108 (" + std::to_string(static_cast<int>(capCnt * 100.0f / 108.0f)) + "%)";
-    FontRenderer::drawText(renderer, 220, 8, rateStr, Palette::Jade);
+    std::string rateStr = "수집: " + std::to_string(capCnt) + "/108";
+    FontRenderer::drawText(renderer, 228, 8, rateStr, Palette::Jade);
 
     // Left List Panel
     renderer.drawPanel(4, 26, 130, 136, Color(16, 18, 24), Palette::MidGray);

@@ -20,11 +20,14 @@ public:
     void drawPanel(int x, int y, int w, int h, Color bg = Palette::DarkGray, Color border = Palette::MidGray);
     void drawHealthBar(int x, int y, int w, int h, int curVal, int maxVal, Color fillColor, Color bgColor = Palette::DarkGray);
     
-    // Draw 16x16 tile from procedural pattern
+    // Draw 16x16 tile from procedural pattern / real Gen 1 2-bit DMG bitmap
     void drawTileProcedural(int x, int y, int tileId);
     
-    // Draw 16x16 / 32x32 character sprite
+    // Draw 16x16 / 16x24 / 32x32 character or environmental sprite
     void drawSprite(int x, int y, int spriteId, int frame, bool flipX = false);
+
+    // Draw Gen 1 2-bit DMG packed bitmap (4 pixels per byte) with optional transparency (key = 0)
+    void drawGen1Bitmap(int x, int y, int w, int h, const uint8_t* packedData, bool transparentKey0 = false, bool flipX = false);
 
     // Post-processing CRT Scanline & Vignette
     void applyPostProcess(bool crtScanlines = true, bool vignette = true);

@@ -46,9 +46,9 @@ void ArtifactScene::render(Renderer& renderer) {
 
     // Header Banner
     renderer.drawPanel(4, 4, 312, 20, Color(32, 38, 44), Palette::Yellow);
-    FontRenderer::drawText(renderer, 10, 8, "=== 유물 보관함 (ARTIFACT INVENTORY) ===", Palette::Yellow);
+    FontRenderer::drawText(renderer, 10, 8, "=== 유물 보관함 ===", Palette::Yellow);
     std::string slotCountStr = "보유: " + std::to_string(m_artifacts.getCount()) + "/8";
-    FontRenderer::drawText(renderer, 248, 8, slotCountStr, Palette::Jade);
+    FontRenderer::drawText(renderer, 240, 8, slotCountStr, Palette::Jade);
 
     // Left List
     renderer.drawPanel(4, 26, 130, 136, Color(16, 18, 22), Palette::MidGray);

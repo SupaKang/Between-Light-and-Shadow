@@ -42,19 +42,19 @@ public:
     const std::string& getMapName() const { return m_mapName; }
     const std::vector<MapChest>& getChests() const { return m_chests; }
 
-    static int getTotalMapCount() { return 37; }
+    static int getTotalMapCount() { return 39; }
 
 private:
     // Chapter 1: 한양 북악산 & 도선사 (6 Maps)
-    void initMap0_Village();             // 80x60 마을 외경
+    void initMap0_Village();             // 80x60 마을 외경 (비정형 유기적 지형 & 장식)
     void initMap1_TavernInterior();      // 24x18 주막 실내
     void initMap2_ExorcistBureau();      // 24x18 관상감 벽사청 임시 지부
-    void initMap3_MountainPass();        // 40x120 북한산 대협곡 종단 도로
+    void initMap3_MountainPass();        // 40x120 북한산 대협곡 종단 도로 (고저차 & 돌계단)
     void initMap4_MountainCave();        // 36x36 북한산 고대 석굴
     void initMap5_BossTemple();          // 48x36 도선사 대웅전 (Ch.1 괴승 묘각)
 
     // Chapter 2: 소백산맥 & 죽령 험로 (5 Maps)
-    void initMap6_JungryeongPass();      // 80x60 죽령 옛길 초입
+    void initMap6_JungryeongPass();      // 80x60 죽령 옛길 초입 (절벽 고저차 & 출렁다리)
     void initMap7_SobaekCanyon();        // 100x50 소백산맥 대협곡길
     void initMap8_SimmaniHut();          // 20x16 심마니 오두막 실내
     void initMap9_IronMineUpper();       // 50x50 무쇠광산 상층 갱도
@@ -62,7 +62,7 @@ private:
 
     // Chapter 3: 남해안 포구 & 유령 난파선 (5 Maps)
     void initMap11_NamhaeReeds();        // 60x60 남해안 갈대밭 샛길
-    void initMap12_NamhaePort();         // 80x50 남해안 갯벌 포구
+    void initMap12_NamhaePort();         // 80x50 남해안 갯벌 포구 (나루터 선착장 & 뱃사공)
     void initMap13_HaenyeoShelter();     // 24x18 해녀의 쉼터 실내
     void initMap14_GhostShipUpper();     // 40x30 남해 유령 난파선 갑판 상층
     void initMap15_GhostShipDeep();      // 40x30 남해 유령 난파선 선장실 (Ch.3 수로방주 흑사)
@@ -97,6 +97,10 @@ private:
 
     // Chapter 6: True 2nd Ending Holy Apex (1 Map)
     void initMap36_SamshindanApex();       // 80x80 태초의 천상 신역 삼신단 (진 최종보스 삼신제석 & 2차 엔딩 제단)
+
+    // Expanded Atmospheric Interiors & Special River Ferry (2 Maps)
+    void initMap37_ElderHanokInterior();   // 24x18 마을 원로 훈장의 고택 실내 (병풍, 화로, 찻상)
+    void initMap38_ImjinFerryCrossing();   // 90x60 임진나루 도강지대 (절벽 고저차, 끊어진 석교, 나루터 주막 & 사공)
 
     int m_mapId = 0;
     std::string m_mapName;

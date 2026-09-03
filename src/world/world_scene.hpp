@@ -29,6 +29,9 @@ public:
 
     const WeatherSystem& getWeatherSystem() const { return m_weather; }
 
+    void openStartMenu();
+    void closeStartMenu();
+
 private:
     void interactWithNPC();
     void checkStepEvents(int newGridX, int newGridY);
@@ -61,6 +64,12 @@ private:
 
     // Active Dialogue NPC state
     const NPC* m_activeNPC = nullptr;
+
+    // Pokemon Gold Style Start Menu
+    bool m_menuOpen = false;
+    int m_menuCursor = 0;
+    void handleStartMenuInput();
+    void renderStartMenu(Renderer& renderer);
 };
 
 } // namespace JoseonRPG

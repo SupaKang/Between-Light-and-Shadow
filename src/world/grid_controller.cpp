@@ -81,13 +81,24 @@ int GridController::getPixelY() const {
 }
 
 int GridController::getAnimFrame() const {
-    if (!m_isMoving) return 0;
+    int baseFrame = 0;
+    switch (m_facing) {
+        case Direction::South: baseFrame = 0; break;
+        case Direction::North: baseFrame = 2; break;
+        case Direction::West:  baseFrame = 4; break;
+        case Direction::East:  baseFrame = 6; break;
+    }
 
-    // Walk animation cycle: 0 -> 1 -> 0 -> 2
-    if (m_stepProgress < 0.25f) return (m_walkCycle == 0) ? 1 : 2;
-    if (m_stepProgress < 0.50f) return 0;
-    if (m_stepProgress < 0.75f) return (m_walkCycle == 0) ? 2 : 1;
-    return 0;
+    if (!m_isMoving) {
+        return baseFrame; // Idle frame (0, 2, 4, 6)
+    }
+
+    // Walking alternation
+    int walkOffset = (m_walkCycle % 2 == 0) ? 0 : 1;
+    if (m_stepProgress >= 0.5f) {
+        walkOffset = 1 - walkOffset;
+    }
+    return baseFrame + walkOffset;
 }
 
 } // namespace JoseonRPG

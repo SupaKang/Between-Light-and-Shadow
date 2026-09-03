@@ -25,17 +25,17 @@ Window::~Window() {
 }
 
 bool Window::init() {
-    HINSTANCE hInstance = GetModuleHandle(nullptr);
+    HINSTANCE hInstance = GetModuleHandleW(nullptr);
 
-    WNDCLASSEX wc = {};
-    wc.cbSize = sizeof(WNDCLASSEX);
+    WNDCLASSEXW wc = {};
+    wc.cbSize = sizeof(WNDCLASSEXW);
     wc.style = CS_HREDRAW | CS_VREDRAW;
     wc.lpfnWndProc = Window::WndProc;
     wc.hInstance = hInstance;
-    wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
-    wc.lpszClassName = "JoseonYokaiRPGWindow";
+    wc.hCursor = LoadCursorW(nullptr, (LPCWSTR)IDC_ARROW);
+    wc.lpszClassName = L"JoseonYokaiRPGWindow";
 
-    RegisterClassEx(&wc);
+    RegisterClassExW(&wc);
 
     int clientW = SCREEN_WIDTH * m_scale;
     int clientH = SCREEN_HEIGHT * m_scale;
@@ -43,10 +43,16 @@ bool Window::init() {
     RECT wr = {0, 0, clientW, clientH};
     AdjustWindowRect(&wr, WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX, FALSE);
 
-    m_hwnd = CreateWindowEx(
+    int titleLen = MultiByteToWideChar(CP_UTF8, 0, m_title.c_str(), -1, nullptr, 0);
+    std::wstring wTitle(titleLen, L'\0');
+    if (titleLen > 0) {
+        MultiByteToWideChar(CP_UTF8, 0, m_title.c_str(), -1, &wTitle[0], titleLen);
+    }
+
+    m_hwnd = CreateWindowExW(
         0,
         wc.lpszClassName,
-        m_title.c_str(),
+        wTitle.c_str(),
         WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_VISIBLE,
         CW_USEDEFAULT, CW_USEDEFAULT,
         wr.right - wr.left, wr.bottom - wr.top,
@@ -54,6 +60,9 @@ bool Window::init() {
     );
 
     if (!m_hwnd) return false;
+
+    ShowWindow(m_hwnd, SW_SHOW);
+    UpdateWindow(m_hwnd);
 
     m_hdc = GetDC(m_hwnd);
 
@@ -252,7 +261,7 @@ LRESULT CALLBACK Window::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
             PostQuitMessage(0);
             return 0;
     }
-    return DefWindowProc(hwnd, msg, wParam, lParam);
+    return DefWindowProcW(hwnd, msg, wParam, lParam);
 }
 
 } // namespace JoseonRPG

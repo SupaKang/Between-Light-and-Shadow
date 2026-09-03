@@ -27,7 +27,7 @@ public:
     void update(float dt);
     void render(Renderer& renderer);
 
-    bool isEmpty() const { return m_scenes.empty(); }
+    bool isEmpty() const { return m_scenes.empty() && m_pendingAction == PendingAction::None; }
     IScene* getTopScene() const;
     size_t getSceneCount() const { return m_scenes.size(); }
 

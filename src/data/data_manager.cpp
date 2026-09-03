@@ -292,7 +292,7 @@ void DataManager::init() {
     };
 
     // 4. NPCs Database (Across All 31 Sub-Maps)
-    NPC jumoh{"NPC_001", 1, 8, 6, 2, "주모 월선", "도선사 주막 주모",
+    NPC jumoh{"NPC_001", 1, 3, 2, 2, "주모 월선", "도선사 주막 주모",
              {"어서 오시게! 북한산 꼭대기 도선사에 수상한 음양당 놈들이", "들어앉더니 온 산천에 흉흉한 요기가 돌고 있다오.", "따뜻한 장터국밥 한 그릇 말아드릴 테니 기운 차리시게!", "주막 뒤편 마루는 언제든 편히 쉬어가도 좋소."},
              NPCActionType::TavernRest, "MQ_001", {"[1] 주막에서 하룻밤 쉰다 (완치)", "[2] 윷놀이 내기를 한다", "[3] 떠난다"}};
 
@@ -304,15 +304,23 @@ void DataManager::init() {
              {"흑흑... 영술사님, 제 사정 좀 들어보세요.", "제 몸에 깃든 바람 요괴 때문에", "시아버지 앞에서 큰 방귀 소리를 내어 쫓겨날 판입니다.", "고갯길의 바람 요괴를 진정시켜 주실 수 있을까요?"},
              NPCActionType::QuestTrigger, "SQ_001", {"[1] 며느리를 돕는다 (퀘스트 수주)", "[2] 위로하고 떠난다"}};
 
-    NPC scholar{"NPC_011", 0, 20, 45, 1, "훈장 이 생원", "향교 훈장",
+    NPC scholar{"NPC_011", 37, 12, 7, 17, "훈장 이 생원", "마을 최고 원로 훈장",
                {"주역과 음양오행에 따르면 만물은 상생과 상극이 있는 법!", "화(火)는 수(水)에 약하고, 암(暗)은 광(光)에 정화되느니라.", "108 요괴 도감을 완성하면 나라의 국운이 흥할 것이다."},
                NPCActionType::QuestTrigger, "SQ_005", {"[1] 윷놀이 한판 겨룬다", "[2] 음양오행 상성을 묻는다", "[3] 작별한다"}};
+
+    NPC ferrymanImjin{"NPC_031", 38, 54, 35, 16, "임진 뱃사공 마 서방", "임진나루 뱃사공",
+                     {"어이, 영술사 나리! 강 건너 서편 절벽은 요기가 짙어 위험하오.", "홍예교가 무너져 나룻배가 아니면 건널 수 없소이다.", "뱃삯 30냥만 내시면 저편 절벽 선착장으로 안전하게 모시겠소."},
+                     NPCActionType::FerryCrossing, "", {"[1] 뱃삯 30냥을 내고 서안 절벽으로 건넌다", "[2] 강 건너편의 소문을 묻는다", "[3] 물러선다"}};
+
+    NPC ferrymanWest{"NPC_032", 38, 38, 35, 16, "임진 뱃사공 마 서방", "임진나루 서안 뱃사공",
+                    {"절벽 위 고대 사당 조사는 잘 마치셨소?", "동쪽 주막마을로 돌아가시려면 배를 타셔야 하오. 뱃삯은 30냥이오."},
+                    NPCActionType::FerryCrossing, "", {"[1] 뱃삯 30냥을 내고 동쪽 포구로 건넌다", "[2] 잠시 더 둘러본다"}};
 
     NPC blacksmith{"NPC_012", 0, 48, 45, 4, "대장장이 쇠돌이", "주막마을 대장장이",
                   {"유물은 소지하고만 있어도 강한 힘을 주지만 대가가 따르오.", "만약 위험하다 싶으면 '유물 파괴'를 눌러 영기를 환원하시오!", "체력과 영력이 즉시 차오르고 수련 경험치도 얻게 될 테니 말이오."},
                   NPCActionType::QuestTrigger, "", {"[1] 유물 환원법에 대해 묻는다", "[2] 쇠를 삼킨 불가사리 이야기를 듣는다", "[3] 떠난다"}};
 
-    NPC judge{"NPC_013", 2, 12, 6, 2, "판관 신 서방", "관상감 벽사청 판관",
+    NPC judge{"NPC_013", 2, 5, 2, 2, "판관 신 서방", "관상감 벽사청 판관",
              {"어명이오! 음양당의 수괴 묵영이 팔도의 영맥을 끊으려 하고 있소.", "괴승 묘각부터 시작하여 음양당 4대 방주를 모조리 토벌하시오.", "북한산 고갯길 중간에 고대 석굴이 있으니 영험한 유물을 꼭 챙기시오."},
              NPCActionType::QuestTrigger, "MQ_001", {"[1] 관상감 어명을 받든다", "[2] 4대 방주에 대해 묻는다"}};
 
@@ -420,7 +428,8 @@ void DataManager::init() {
         woodcutter, foxSage, hermitNovice, bossLeftGuardian,
         rebelExorcist, finalBoss, divineFox,
         inspectorPark, astronomerRyu, hermitSage, haenyeoCaptain,
-        whiteDeerSpirit, pantheonKeeper, samshinArbiter
+        whiteDeerSpirit, pantheonKeeper, samshinArbiter,
+        ferrymanImjin, ferrymanWest
     };
 
     // 5. 6 Main Campaign Chapters (including True 2nd Ending Epilogue) & 10 Rich Side Quests

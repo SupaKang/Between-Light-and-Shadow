@@ -1,6 +1,7 @@
 #include "dialogue_box.hpp"
 #include "font_renderer.hpp"
 #include "../core/input.hpp"
+#include "../core/gen1_assets.hpp"
 #include "../scenes/settings_scene.hpp"
 #include <algorithm>
 
@@ -141,18 +142,31 @@ bool DialogueBox::handleInput() {
 void DialogueBox::render(Renderer& renderer) {
     if (!m_active || m_currentLineIndex >= m_lines.size()) return;
 
-    // Main Dialogue Frame at bottom (320x180 resolution)
+    // Main Dialogue Frame at bottom (320x180 resolution) - 1세대 GB 스타일
     int boxX = 6;
-    int boxY = 110;
+    int boxY = 112;
     int boxW = 308;
-    int boxH = 64;
+    int boxH = 62;
 
-    renderer.drawPanel(boxX, boxY, boxW, boxH, Color(18, 22, 30, 245), Palette::Yellow);
+    renderer.fillRect(boxX, boxY, boxW, boxH, Color(224, 248, 208)); // Pale off-white DMG background
+    renderer.drawRect(boxX, boxY, boxW, boxH, Color(8, 24, 32));      // Darkest DMG border
+    renderer.drawRect(boxX + 2, boxY + 2, boxW - 4, boxH - 4, Color(52, 104, 86));
+
+    // Portrait (48x48 Gen 1 Bust)
+    int textStartX = boxX + 10;
+    bool hasPortrait = (m_speaker.find("구미호") != std::string::npos || m_speaker.find("설화") != std::string::npos || m_speaker.find("여우") != std::string::npos);
+    if (hasPortrait) {
+        renderer.drawGen1Bitmap(boxX + 6, boxY + 7, 48, 48, Gen1Assets::PORTRAIT_GUMIHO_48x48, false);
+        renderer.drawRect(boxX + 5, boxY + 6, 50, 50, Color(8, 24, 32));
+        textStartX = boxX + 62;
+    }
 
     // Speaker Nameplate Header
     if (!m_speaker.empty()) {
-        renderer.drawPanel(boxX + 6, boxY - 10, static_cast<int>(m_speaker.size() * 8 + 12), 14, Color(28, 34, 48), Palette::Yellow);
-        FontRenderer::drawText(renderer, boxX + 12, boxY - 7, m_speaker, Palette::Yellow);
+        int spkW = static_cast<int>(m_speaker.size() * 8 + 12);
+        renderer.fillRect(boxX + 6, boxY - 10, spkW, 14, Color(8, 24, 32));
+        renderer.drawRect(boxX + 6, boxY - 10, spkW, 14, Color(224, 248, 208));
+        FontRenderer::drawText(renderer, boxX + 12, boxY - 7, m_speaker, Color(224, 248, 208));
     }
 
     // Current Line with typewriter substring
@@ -160,31 +174,35 @@ void DialogueBox::render(Renderer& renderer) {
     size_t charCount = static_cast<size_t>(m_charProgress);
     std::string visibleText = currentLine.substr(0, std::min(charCount, currentLine.size()));
 
-    // Draw text with word wrapping or multi-line if contains \n
-    FontRenderer::drawText(renderer, boxX + 10, boxY + 12, visibleText, Palette::White);
+    // Draw text in Darkest Ink Black
+    FontRenderer::drawText(renderer, textStartX, boxY + 14, visibleText, Color(8, 24, 32));
 
     // Render Option Choice Panel when active
     if (m_isChoosingOption && !m_options.empty()) {
-        int optH = static_cast<int>(m_options.size()) * 14 + 10;
-        int optW = 160;
-        int optX = boxX + boxW - optW - 8;
-        int optY = boxY - optH + 2;
+        int optH = static_cast<int>(m_options.size()) * 16 + 10;
+        int optW = 180;
+        int optX = boxX + boxW - optW - 4;
+        int optY = boxY - optH - 2;
+        if (optY < 2) optY = 2; // Prevent going off-screen
 
-        renderer.drawPanel(optX, optY, optW, optH, Color(24, 28, 38, 250), Palette::Yellow);
+        renderer.fillRect(optX, optY, optW, optH, Color(224, 248, 208));
+        renderer.drawRect(optX, optY, optW, optH, Color(8, 24, 32));
+        renderer.drawRect(optX + 2, optY + 2, optW - 4, optH - 4, Color(52, 104, 86));
+
         for (size_t i = 0; i < m_options.size(); ++i) {
-            int oy = optY + 6 + static_cast<int>(i) * 14;
+            int oy = optY + 6 + static_cast<int>(i) * 16;
             bool isCur = (m_selectedOptionIndex == static_cast<int>(i));
             if (isCur) {
-                FontRenderer::drawText(renderer, optX + 6, oy, ">", Palette::Yellow);
-                FontRenderer::drawText(renderer, optX + 16, oy, m_options[i], Palette::Yellow);
+                FontRenderer::drawText(renderer, optX + 6, oy, ">", Color(8, 24, 32));
+                FontRenderer::drawText(renderer, optX + 16, oy, m_options[i], Color(8, 24, 32));
             } else {
-                FontRenderer::drawText(renderer, optX + 16, oy, m_options[i], Palette::LightGray);
+                FontRenderer::drawText(renderer, optX + 16, oy, m_options[i], Color(52, 104, 86));
             }
         }
     } else {
-        // Prompt Indicator (Blinking ▼ / [Z])
+        // Prompt Indicator (Blinking ▼)
         if (m_isLineFullyRevealed && m_promptVisible) {
-            FontRenderer::drawText(renderer, boxX + boxW - 20, boxY + boxH - 12, ">", Palette::Jade);
+            FontRenderer::drawText(renderer, boxX + boxW - 16, boxY + boxH - 14, "▼", Color(8, 24, 32));
         }
     }
 }

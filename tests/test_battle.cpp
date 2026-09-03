@@ -390,8 +390,8 @@ bool runFullContentTests() {
     Tilemap tm;
     const int expectedDims[37][2] = {
         {80, 60},   // Map 0: Village Overworld
-        {24, 18},   // Map 1: Tavern Interior
-        {24, 18},   // Map 2: Exorcist Bureau
+        {10, 8},    // Map 1: Tavern Interior (Pokemon Scale)
+        {10, 8},    // Map 2: Exorcist Bureau (Pokemon Scale)
         {40, 120},  // Map 3: Mountain Highway
         {36, 36},   // Map 4: Mountain Cave B1F
         {48, 36},   // Map 5: Boss Temple (묘각)
@@ -441,7 +441,7 @@ bool runFullContentTests() {
         // Verify primary walkable tile in each map is not solid
         int sx = 20, sy = 20;
         if (m == 0) { sx = 20; sy = 30; }
-        else if (m == 1 || m == 2) { sx = 12; sy = 16; }
+        else if (m == 1 || m == 2) { sx = 5; sy = 6; }
         else if (m == 3) { sx = 20; sy = 10; }
         else if (m == 4) { sx = 18; sy = 32; }
         else if (m == 5) { sx = 24; sy = 2; }

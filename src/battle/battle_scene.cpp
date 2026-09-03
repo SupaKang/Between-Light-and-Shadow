@@ -5,6 +5,7 @@
 #include "../ui/font_renderer.hpp"
 #include "../data/data_manager.hpp"
 #include "../audio/audio_engine.hpp"
+#include "../core/gen1_assets.hpp"
 #include <algorithm>
 
 namespace JoseonRPG {
@@ -155,17 +156,17 @@ void BattleScene::update(float dt) {
 }
 
 void BattleScene::render(Renderer& renderer) {
-    // Top Half: Oriental Sky & Mountains
-    renderer.fillRect(0, 0, SCREEN_WIDTH, 80, Color(14, 16, 24));
+    // Top Half: Oriental Sky & Mountains in GB DMG 4-Shade
+    renderer.fillRect(0, 0, SCREEN_WIDTH, 112, Color(224, 248, 208)); // Pale Off-White DMG ground
+    renderer.fillRect(0, 0, SCREEN_WIDTH, 50, Color(136, 192, 112));   // Light Olive sky
 
-    // Ground: Traditional Tatami / Earth platform
-    renderer.fillRect(0, 80, SCREEN_WIDTH, 30, Color(24, 30, 42));
-    renderer.drawLine(0, 110, SCREEN_WIDTH, 110, Palette::MidGray);
+    // Ground platform line
+    renderer.drawLine(0, 112, SCREEN_WIDTH, 112, Color(8, 24, 32));
 
     // Fast-Forward HUD Badge
     if (Input::isDown(Key::Dash) || Input::isDown(Key::ActionA)) {
-        renderer.fillRect(2, 2, 80, 10, Color(18, 18, 24, 200));
-        FontRenderer::drawText(renderer, 4, 3, ">> 2.2x 배속", Palette::Yellow);
+        renderer.fillRect(2, 2, 70, 10, Color(8, 24, 32, 200));
+        FontRenderer::drawText(renderer, 4, 3, ">> 2.2x 배속", Color(224, 248, 208));
     }
 
     // Elemental Skill Particle FX Overlay
@@ -174,26 +175,22 @@ void BattleScene::render(Renderer& renderer) {
     const Yokai* pYokai = m_battle->getActivePlayerYokai();
     const Yokai& eYokai = m_battle->getEnemyYokai();
 
-    // 1. Enemy HUD Box (Top-Left)
-    renderer.drawPanel(8, 4, 144, 46, Color(24, 26, 34, 230), m_isBoss ? Palette::Red : Palette::MidGray);
+    // 1. Enemy HUD Box (Top-Left: X=10, Y=8, W=135, H=42)
+    renderer.fillRect(10, 8, 135, 42, Color(224, 248, 208));
+    renderer.drawRect(10, 8, 135, 42, Color(8, 24, 32));
+    renderer.drawRect(12, 10, 131, 38, Color(52, 104, 86));
+
     std::string eGradeStr = " [G." + std::to_string(static_cast<int>(eYokai.getGrade())) + "]";
-    FontRenderer::drawText(renderer, 14, 8, eYokai.getName() + " Lv." + std::to_string(eYokai.getLevel()), Palette::Red);
-    FontRenderer::drawText(renderer, 112, 8, eGradeStr, Palette::Yellow);
+    FontRenderer::drawText(renderer, 16, 12, eYokai.getName() + " Lv." + std::to_string(eYokai.getLevel()), Color(8, 24, 32));
+    FontRenderer::drawText(renderer, 106, 12, eGradeStr, Color(52, 104, 86));
 
     std::string eHpText = "HP " + std::to_string(m_enemyHpBar.getCurrentValue()) + "/" + std::to_string(eYokai.getStats().maxHp);
-    FontRenderer::drawText(renderer, 14, 18, eHpText, Palette::White);
-    m_enemyHpBar.render(renderer, 14, 27, 132, 5, Palette::Red);
-
-    // Enemy Trait indicator
-    if (eYokai.getTrait() != YokaiTrait::None) {
-        FontRenderer::drawText(renderer, 14, 34, "[" + eYokai.getTraitName() + "]", Palette::Yellow);
-    }
+    FontRenderer::drawText(renderer, 16, 22, eHpText, Color(8, 24, 32));
+    m_enemyHpBar.render(renderer, 16, 32, 120, 5, Color(52, 104, 86));
 
     if (eYokai.getStatus().effect != StatusEffect::None) {
-        renderer.fillRect(76, 34, 72, 10, StatusEffectSystem::getStatusColor(eYokai.getStatus().effect));
-        renderer.drawRect(76, 34, 72, 10, Palette::Black);
-        std::string statStr = std::string(StatusEffectSystem::getStatusName(eYokai.getStatus().effect)) + " " + std::to_string(eYokai.getStatus().durationTurns) + "T";
-        FontRenderer::drawText(renderer, 80, 35, statStr, Palette::Black);
+        std::string statStr = std::string(StatusEffectSystem::getStatusName(eYokai.getStatus().effect));
+        FontRenderer::drawText(renderer, 16, 38, statStr, Color(8, 24, 32));
     }
 
     // Dynamic Idle Breathing & Float + Lunge / Shake
@@ -206,80 +203,74 @@ void BattleScene::render(Renderer& renderer) {
     int pLungeX = static_cast<int>(m_playerLunge);
     int eLungeX = -static_cast<int>(m_enemyLunge);
 
-    // Enemy Elemental Aura Base
-    int eBaseX = SCREEN_WIDTH - 65 + eShakeX + eLungeX;
-    int eBaseY = 24 + eBounceY;
-    Color eAuraCol = Palette::MidGray;
-    if (eYokai.getElement() == Element::Fire) eAuraCol = Palette::CinnabarRed;
-    else if (eYokai.getElement() == Element::Water) eAuraCol = Palette::IndigoBlue;
-    else if (eYokai.getElement() == Element::Earth) eAuraCol = Palette::GardeniaYellow;
-    else if (eYokai.getElement() == Element::Light) eAuraCol = Palette::GoldHalo;
-    else if (eYokai.getElement() == Element::Dark) eAuraCol = Palette::RoyalPurple;
+    // Enemy Sprite (Top-Right: X=220, Y=12) - Gen 1 32x32 / 48x48 Battler
+    int eBaseX = 220 + eShakeX + eLungeX;
+    int eBaseY = 12 + eBounceY;
 
-    renderer.fillRect(eBaseX + 2, eBaseY + 15, 12, 2, Color(eAuraCol.r, eAuraCol.g, eAuraCol.b, 120));
-
-    // Enemy Sprite with flashing support
     if (!m_sequencer.isEnemyFlashing()) {
-        renderer.drawSprite(eBaseX, eBaseY, m_enemySpriteId, static_cast<int>(m_battleAnimTimer * 4.0f) % 2);
+        if (eYokai.getId() == "YOKAI_001") {
+            renderer.drawGen1Bitmap(eBaseX, eBaseY, 32, 32, Gen1Assets::DOKKAEBI_32x32, true);
+        } else if (eYokai.getId() == "YOKAI_002") {
+            renderer.drawGen1Bitmap(eBaseX - 8, eBaseY - 8, 48, 48, Gen1Assets::GUMIHO_48x48, true);
+        } else {
+            renderer.drawSprite(eBaseX, eBaseY, m_enemySpriteId, static_cast<int>(m_battleAnimTimer * 4.0f) % 2);
+        }
     }
 
-    // 2. Player Yokai HUD Box & Combatant
+    // 2. Player Combatant (Bottom-Left: X=36, Y=56) & HUD Box (Bottom-Right: X=180, Y=56, W=132, H=46)
+    int pBaseX = 36 + pShakeX + pLungeX;
+    int pBaseY = 56 + pBounceY;
+
     if (pYokai) {
-        int pBaseX = 35 + pShakeX + pLungeX;
-        int pBaseY = 68 + pBounceY;
-
-        Color pAuraCol = Palette::MidGray;
-        if (pYokai->getElement() == Element::Fire) pAuraCol = Palette::CinnabarRed;
-        else if (pYokai->getElement() == Element::Water) pAuraCol = Palette::IndigoBlue;
-        else if (pYokai->getElement() == Element::Earth) pAuraCol = Palette::GardeniaYellow;
-        else if (pYokai->getElement() == Element::Light) pAuraCol = Palette::GoldHalo;
-        else if (pYokai->getElement() == Element::Dark) pAuraCol = Palette::RoyalPurple;
-
-        renderer.fillRect(pBaseX + 2, pBaseY + 15, 12, 2, Color(pAuraCol.r, pAuraCol.g, pAuraCol.b, 120));
-
         int playerSprite = 0;
-        if (pYokai->getId() == "YOKAI_001") playerSprite = 12;
-        else if (pYokai->getId() == "YOKAI_002") playerSprite = 13;
-        else if (pYokai->getId() == "YOKAI_003") playerSprite = 14;
-        else if (pYokai->getId() == "YOKAI_108") playerSprite = 15;
-
-        if (!m_sequencer.isPlayerFlashing()) {
-            renderer.drawSprite(pBaseX, pBaseY, playerSprite, static_cast<int>(m_battleAnimTimer * 4.0f) % 2);
+        if (pYokai->getId() == "YOKAI_001") {
+            if (!m_sequencer.isPlayerFlashing()) renderer.drawGen1Bitmap(pBaseX, pBaseY, 32, 32, Gen1Assets::DOKKAEBI_32x32, true, true);
+        } else if (pYokai->getId() == "YOKAI_002") {
+            if (!m_sequencer.isPlayerFlashing()) renderer.drawGen1Bitmap(pBaseX, pBaseY, 48, 48, Gen1Assets::GUMIHO_48x48, true, true);
+        } else {
+            if (!m_sequencer.isPlayerFlashing()) renderer.drawSprite(pBaseX, pBaseY, playerSprite, static_cast<int>(m_battleAnimTimer * 4.0f) % 2);
         }
 
-        renderer.drawPanel(165, 58, 147, 50, Color(24, 26, 34, 230), Palette::Blue);
-        FontRenderer::drawText(renderer, 171, 62, pYokai->getName() + " Lv." + std::to_string(pYokai->getLevel()), Palette::Jade);
+        // Player HUD Box (Bottom-Right: X=180, Y=56, W=132, H=46)
+        renderer.fillRect(180, 56, 132, 46, Color(224, 248, 208));
+        renderer.drawRect(180, 56, 132, 46, Color(8, 24, 32));
+        renderer.drawRect(182, 58, 128, 42, Color(52, 104, 86));
+
+        FontRenderer::drawText(renderer, 186, 60, pYokai->getName() + " Lv." + std::to_string(pYokai->getLevel()), Color(8, 24, 32));
 
         std::string pHpText = "HP " + std::to_string(m_playerHpBar.getCurrentValue()) + "/" + std::to_string(pYokai->getStats().maxHp);
-        FontRenderer::drawText(renderer, 171, 72, pHpText, Palette::White);
-        m_playerHpBar.render(renderer, 171, 81, 135, 5, Palette::Green);
+        FontRenderer::drawText(renderer, 186, 72, pHpText, Color(8, 24, 32));
+        m_playerHpBar.render(renderer, 186, 82, 118, 5, Color(52, 104, 86));
 
         std::string pQiText = "Qi " + std::to_string(m_playerQiBar.getCurrentValue()) + "/" + std::to_string(pYokai->getStats().maxQi);
-        FontRenderer::drawText(renderer, 171, 88, pQiText, Palette::Jade);
-        m_playerQiBar.render(renderer, 220, 89, 86, 4, Palette::Blue);
-
-        // Player Trait indicator & Status Badge
-        if (pYokai->getTrait() != YokaiTrait::None) {
-            FontRenderer::drawText(renderer, 171, 96, "특성:" + pYokai->getTraitName(), Palette::Yellow);
+        FontRenderer::drawText(renderer, 186, 90, pQiText, Color(52, 104, 86));
+    } else {
+        // Solo Exorcist Combatant (16x24 Back Sprite at X=36, Y=56)
+        if (!m_sequencer.isPlayerFlashing()) {
+            renderer.drawGen1Bitmap(pBaseX, pBaseY, 16, 24, Gen1Assets::PLAYER_16x24[2], true);
         }
 
-        if (pYokai->getStatus().effect != StatusEffect::None) {
-            renderer.fillRect(238, 95, 70, 10, StatusEffectSystem::getStatusColor(pYokai->getStatus().effect));
-            renderer.drawRect(238, 95, 70, 10, Palette::Black);
-            std::string pStatStr = std::string(StatusEffectSystem::getStatusName(pYokai->getStatus().effect)) + " " + std::to_string(pYokai->getStatus().durationTurns) + "T";
-            FontRenderer::drawText(renderer, 242, 96, pStatStr, Palette::Black);
-        }
+        // Exorcist HUD Box (Bottom-Right: X=180, Y=56, W=132, H=46)
+        renderer.fillRect(180, 56, 132, 46, Color(224, 248, 208));
+        renderer.drawRect(180, 56, 132, 46, Color(8, 24, 32));
+        renderer.drawRect(182, 58, 128, 42, Color(52, 104, 86));
+
+        FontRenderer::drawText(renderer, 186, 60, "영술사 (혈혈단신)", Color(8, 24, 32));
+        FontRenderer::drawText(renderer, 186, 74, "벽사의 부적 소지", Color(52, 104, 86));
+        FontRenderer::drawText(renderer, 186, 88, "[2.계약] 가능", Color(8, 24, 32));
     }
 
-    // 3. Command & Log Region
-    renderer.drawPanel(0, 110, SCREEN_WIDTH, 70, Palette::Black, Palette::MidGray);
+    // 3. Command & Log Region (Bottom: Y=114, H=62)
+    renderer.fillRect(0, 114, SCREEN_WIDTH, 66, Color(224, 248, 208));
+    renderer.drawRect(0, 114, SCREEN_WIDTH, 66, Color(8, 24, 32));
 
     // If Sequencer has active text message, display it cleanly in full width!
     if (!m_sequencer.isFinished() && m_sequencer.isCurrentCommandTextMessage()) {
-        renderer.drawPanel(8, 114, 304, 62, Color(20, 24, 32), Palette::Yellow);
-        FontRenderer::drawText(renderer, 16, 128, m_sequencer.getCurrentText(), Palette::White);
+        renderer.fillRect(6, 118, 308, 56, Color(224, 248, 208));
+        renderer.drawRect(6, 118, 308, 56, Color(8, 24, 32));
+        FontRenderer::drawText(renderer, 14, 130, m_sequencer.getCurrentText(), Color(8, 24, 32));
         if (m_sequencer.isWaitingForInput()) {
-            FontRenderer::drawText(renderer, 290, 160, ">", Palette::Jade);
+            FontRenderer::drawText(renderer, 296, 156, ">", Color(8, 24, 32));
         }
         return;
     }
