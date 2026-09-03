@@ -1,6 +1,7 @@
 #include "dialogue_box.hpp"
 #include "font_renderer.hpp"
 #include "../core/input.hpp"
+#include "../scenes/settings_scene.hpp"
 #include <algorithm>
 
 namespace JoseonRPG {
@@ -37,7 +38,9 @@ void DialogueBox::update(float dt) {
 
     const std::string& currentLine = m_lines[m_currentLineIndex];
     if (!m_isLineFullyRevealed) {
-        m_charProgress += m_charsPerSecond * dt;
+        int speedMode = SettingsScene::getGlobalSettings().textSpeed;
+        float curSpeed = (speedMode == 0) ? 35.0f : (speedMode == 1 ? 75.0f : 9999.0f);
+        m_charProgress += curSpeed * dt;
         if (m_charProgress >= static_cast<float>(currentLine.size())) {
             m_charProgress = static_cast<float>(currentLine.size());
             m_isLineFullyRevealed = true;

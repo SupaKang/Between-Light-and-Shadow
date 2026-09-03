@@ -129,6 +129,7 @@ void AudioEngine::init() {
         std::memset(&s_waveHeaders[i], 0, sizeof(WAVEHDR));
         s_waveHeaders[i].lpData = reinterpret_cast<LPSTR>(s_pcmBuffers[i]);
         s_waveHeaders[i].dwBufferLength = BUFFER_SIZE * sizeof(int16_t);
+        s_waveHeaders[i].dwFlags = WHDR_DONE;
         waveOutPrepareHeader(s_hWaveOut, &s_waveHeaders[i], sizeof(WAVEHDR));
     }
 #endif

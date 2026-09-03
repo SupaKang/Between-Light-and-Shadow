@@ -353,9 +353,9 @@ void WorldScene::render(Renderer& renderer) {
     renderer.fillRect(0, 0, SCREEN_WIDTH, 12, Color(18, 18, 22, 220));
     FontRenderer::drawText(renderer, 4, 2, m_tilemap.getMapName(), Palette::Yellow);
 
-    const Quest* mq = DataManager::getQuestManager().getQuest("MQ_001");
-    if (mq && mq->state == QuestState::InProgress) {
-        std::string qStr = "[임무] " + mq->getCurrentObjective();
+    auto activeQuests = DataManager::getQuestManager().getActiveQuests();
+    if (!activeQuests.empty() && activeQuests[0]) {
+        std::string qStr = "[임무] " + activeQuests[0]->getCurrentObjective();
         FontRenderer::drawText(renderer, 96, 2, qStr, Palette::Jade);
     }
 

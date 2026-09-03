@@ -121,11 +121,21 @@ bool SaveSystem::saveToSlot(int slotIndex, const GameRuntimeContext& ctx) {
 
     // 5. Quest Serialization
     if (ctx.questManager) {
-        const Quest* mq = ctx.questManager->getQuest("MQ_001");
-        if (mq) {
-            std::strncpy(block.currentMainQuestId, mq->id.c_str(), sizeof(block.currentMainQuestId) - 1);
-            block.mainQuestState = static_cast<uint8_t>(mq->state);
-            block.mainQuestStep = static_cast<uint8_t>(mq->currentObjectiveIndex);
+        const Quest* activeMq = nullptr;
+        for (const auto& q : ctx.questManager->getAllQuests()) {
+            if (q.type == QuestType::Main) {
+                if (q.state == QuestState::InProgress) {
+                    activeMq = &q;
+                    break;
+                } else if (q.state == QuestState::Completed) {
+                    activeMq = &q;
+                }
+            }
+        }
+        if (activeMq) {
+            std::strncpy(block.currentMainQuestId, activeMq->id.c_str(), sizeof(block.currentMainQuestId) - 1);
+            block.mainQuestState = static_cast<uint8_t>(activeMq->state);
+            block.mainQuestStep = static_cast<uint8_t>(activeMq->currentObjectiveIndex);
         }
     }
 
@@ -212,6 +222,12 @@ bool SaveSystem::loadFromSlot(int slotIndex, GameRuntimeContext& ctx) {
         if (mq) {
             mq->state = static_cast<QuestState>(block.mainQuestState);
             mq->currentObjectiveIndex = block.mainQuestStep;
+
+            for (auto& q : const_cast<std::vector<Quest>&>(ctx.questManager->getAllQuests())) {
+                if (q.type == QuestType::Main && q.chapter < mq->chapter) {
+                    q.state = QuestState::Completed;
+                }
+            }
         }
     }
 
