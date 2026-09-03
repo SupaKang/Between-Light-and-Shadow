@@ -378,6 +378,41 @@ void WorldScene::update(float dt) {
     m_gridController.update(dt);
     m_camera.update(m_gridController.getPixelX(), m_gridController.getPixelY(), m_tilemap.getWidth(), m_tilemap.getHeight());
     m_weather.update(dt);
+
+    // Procedural Footstep Dust Particles during fast sprint
+    if (m_gridController.isMoving() && m_gridController.isRunning()) {
+        m_dustTimer += dt;
+        if (m_dustTimer >= 0.035f) {
+            m_dustTimer = 0.0f;
+            DustParticle p;
+            p.x = static_cast<float>(m_gridController.getPixelX() + 8);
+            p.y = static_cast<float>(m_gridController.getPixelY() + 14);
+
+            std::uniform_real_distribution<float> jitter(-4.0f, 4.0f);
+            switch (m_gridController.getFacing()) {
+                case Direction::North: p.vy = 14.0f; p.vx = jitter(m_rng); break;
+                case Direction::South: p.vy = -14.0f; p.vx = jitter(m_rng); break;
+                case Direction::West:  p.vx = 14.0f; p.vy = jitter(m_rng); break;
+                case Direction::East:  p.vx = -14.0f; p.vy = jitter(m_rng); break;
+            }
+            p.life = 0.0f;
+            p.maxLife = 0.16f;
+            m_dustParticles.push_back(p);
+        }
+    }
+
+    // Update Dust Particles
+    for (auto& p : m_dustParticles) {
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
+        p.life += dt;
+    }
+    m_dustParticles.erase(
+        std::remove_if(m_dustParticles.begin(), m_dustParticles.end(), [](const DustParticle& p) {
+            return p.life >= p.maxLife;
+        }),
+        m_dustParticles.end()
+    );
 }
 
 void WorldScene::render(Renderer& renderer) {
@@ -392,20 +427,38 @@ void WorldScene::render(Renderer& renderer) {
         renderer.drawSprite(nx, ny, n.spriteId, 0);
     }
 
-    // 3. Render Player Sprite with walk animation
+    // 3. Render Sprint Dust Particles behind player's feet
+    for (const auto& p : m_dustParticles) {
+        int sx = static_cast<int>(p.x) - m_camera.getX();
+        int sy = static_cast<int>(p.y) - m_camera.getY();
+        float t = p.life / p.maxLife;
+        Color dustColor = (t < 0.5f) ? Palette::LightGray : Palette::MidGray;
+        int size = (t < 0.5f) ? 2 : 1;
+        renderer.fillRect(sx - size / 2, sy - size / 2, size, size, dustColor);
+    }
+
+    // 4. Render Player Sprite with walk animation
     int screenPX = m_gridController.getPixelX() - m_camera.getX();
     int screenPY = m_gridController.getPixelY() - m_camera.getY();
     renderer.drawSprite(screenPX, screenPY, 0, m_gridController.getAnimFrame());
 
-    // 4. Regional Ambient Weather and Atmosphere Overlay
+    // 4.1. Subtle Wind Streak / After-image lines when running
+    if (m_gridController.isRunning() && m_gridController.isMoving()) {
+        int wx = screenPX + (m_gridController.getFacing() == Direction::East ? -3 : (m_gridController.getFacing() == Direction::West ? 15 : 6));
+        int wy = screenPY + 11;
+        renderer.setPixel(wx, wy, Palette::White);
+        renderer.setPixel(wx + 1, wy + 1, Palette::LightGray);
+    }
+
+    // 5. Regional Ambient Weather and Atmosphere Overlay
     m_weather.render(renderer);
 
-    // 5. Screen Fade Transition
+    // 6. Screen Fade Transition
     if (m_fadeAlpha > 0.001f) {
         renderer.applyFade(1.0f - m_fadeAlpha);
     }
 
-    // 6. World Top HUD Overlay
+    // 7. World Top HUD Overlay (Clean, Minimalist Design)
     renderer.fillRect(0, 0, SCREEN_WIDTH, 12, Color(18, 18, 22, 220));
     FontRenderer::drawText(renderer, 4, 2, m_tilemap.getMapName(), Palette::Yellow);
 
@@ -442,12 +495,9 @@ void WorldScene::render(Renderer& renderer) {
     }
 
     std::string moneyStr = std::to_string(m_money) + "냥";
-    if (m_gridController.isRunning()) {
-        moneyStr = "[질주] " + moneyStr;
-    }
-    FontRenderer::drawText(renderer, SCREEN_WIDTH - 64, 2, moneyStr, m_gridController.isRunning() ? Palette::Jade : Palette::Yellow);
+    FontRenderer::drawText(renderer, SCREEN_WIDTH - 46, 2, moneyStr, Palette::Yellow);
 
-    // 7. Bottom Controls Hint / System Notice
+    // 8. Bottom Controls Hint / System Notice
     renderer.fillRect(0, SCREEN_HEIGHT - 12, SCREEN_WIDTH, 12, Color(18, 18, 22, 220));
     if (!m_noticeMsg.empty()) {
         FontRenderer::drawText(renderer, 4, SCREEN_HEIGHT - 10, m_noticeMsg, Palette::Yellow);

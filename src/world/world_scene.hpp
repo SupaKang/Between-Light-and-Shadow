@@ -48,6 +48,17 @@ private:
     std::string m_noticeMsg;
     float m_fadeAlpha = 0.0f;
 
+    struct DustParticle {
+        float x = 0.0f;
+        float y = 0.0f;
+        float vx = 0.0f;
+        float vy = 0.0f;
+        float life = 0.0f;
+        float maxLife = 0.18f;
+    };
+    std::vector<DustParticle> m_dustParticles;
+    float m_dustTimer = 0.0f;
+
     // Active Dialogue NPC state
     const NPC* m_activeNPC = nullptr;
 };
