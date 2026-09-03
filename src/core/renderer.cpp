@@ -107,51 +107,60 @@ void Renderer::drawHealthBar(int x, int y, int w, int h, int curVal, int maxVal,
 void Renderer::drawTileProcedural(int px, int py, int tileId) {
     // Procedural 16x16 tile pattern generator for size budget efficiency
     switch (tileId) {
-        case 0: // Grass / Earth (바닥 풀밭)
+        case 0: // Grass / Earth (바닥 풀밭 & 들꽃)
             fillRect(px, py, 16, 16, Color(42, 100, 52));
             setPixel(px + 3, py + 4, Color(60, 140, 75));
             setPixel(px + 4, py + 3, Color(60, 140, 75));
             setPixel(px + 11, py + 12, Color(60, 140, 75));
             setPixel(px + 12, py + 11, Color(60, 140, 75));
+            // Subtle wild white/yellow flower dots
+            setPixel(px + 8, py + 7, Palette::GardeniaYellow);
+            setPixel(px + 14, py + 3, Palette::BaegokWhite);
             break;
-        case 1: // Hanok Wall / Stone Wall (돌담/벽)
+        case 1: // Hanok Wall / Stone Wall (돌담/벽 & 이끼)
             fillRect(px, py, 16, 16, Color(90, 85, 80));
             drawRect(px, py, 16, 16, Color(50, 45, 40));
             drawLine(px, py + 8, px + 15, py + 8, Color(50, 45, 40));
             drawLine(px + 8, py, px + 8, py + 8, Color(50, 45, 40));
             drawLine(px + 4, py + 8, px + 4, py + 15, Color(50, 45, 40));
+            setPixel(px + 1, py + 14, Color(45, 95, 55)); // Moss
+            setPixel(px + 2, py + 14, Color(45, 95, 55));
             break;
-        case 2: // Dirt Road (흙길)
+        case 2: // Dirt Road (황토 흙길 & 자갈)
             fillRect(px, py, 16, 16, Color(160, 130, 90));
             setPixel(px + 2, py + 6, Color(130, 100, 70));
             setPixel(px + 9, py + 3, Color(130, 100, 70));
             setPixel(px + 13, py + 11, Color(130, 100, 70));
+            setPixel(px + 6, py + 13, Color(185, 155, 115)); // Small pebble
             break;
-        case 3: // Hanok Wooden Floor / Maru (마루)
+        case 3: // Hanok Wooden Floor / Maru (대청마루 나무결)
             fillRect(px, py, 16, 16, Color(180, 120, 60));
             drawLine(px, py, px + 15, py, Color(120, 80, 40));
             drawLine(px, py + 4, px + 15, py + 4, Color(120, 80, 40));
             drawLine(px, py + 8, px + 15, py + 8, Color(120, 80, 40));
             drawLine(px, py + 12, px + 15, py + 12, Color(120, 80, 40));
             break;
-        case 4: // Hanok Tile Roof / Giwa (기와 지붕)
+        case 4: // Hanok Tile Roof / Giwa (기와 지붕 & 청기와)
             fillRect(px, py, 16, 16, Color(35, 40, 50));
             drawLine(px, py + 3, px + 15, py + 3, Color(60, 70, 85));
             drawLine(px, py + 7, px + 15, py + 7, Color(60, 70, 85));
             drawLine(px, py + 11, px + 15, py + 11, Color(60, 70, 85));
             drawLine(px, py + 15, px + 15, py + 15, Color(20, 22, 28));
             break;
-        case 5: // Sacred Tree / Dangsan tree (당산나무)
+        case 5: // Sacred Tree / Dangsan tree (당산나무 & 오색 천)
             fillRect(px, py, 16, 16, Color(28, 85, 42));
             fillRect(px + 4, py + 4, 8, 8, Color(45, 125, 65));
             drawRect(px + 2, py + 2, 12, 12, Color(20, 60, 30));
+            setPixel(px + 7, py + 8, Palette::CinnabarRed);     // Red spirit cloth
+            setPixel(px + 8, py + 8, Palette::GardeniaYellow);  // Yellow spirit cloth
+            setPixel(px + 9, py + 8, Palette::IndigoBlue);      // Blue spirit cloth
             break;
-        case 6: // Water / Stream / Sea (시냇물 / 바다)
+        case 6: // Water / Stream / Sea (시냇물 / 바다 & 물결)
             fillRect(px, py, 16, 16, Color(30, 80, 150));
             drawLine(px + 2, py + 4, px + 7, py + 4, Color(70, 130, 210));
             drawLine(px + 9, py + 10, px + 14, py + 10, Color(70, 130, 210));
             break;
-        case 7: // Wooden Bridge (나무 다리)
+        case 7: // Wooden Bridge (나무 다리 & 난간)
             fillRect(px, py, 16, 16, Color(140, 90, 45));
             drawRect(px, py, 16, 16, Color(90, 55, 25));
             drawLine(px + 4, py, px + 4, py + 15, Color(90, 55, 25));
@@ -165,22 +174,136 @@ void Renderer::drawTileProcedural(int px, int py, int tileId) {
             setPixel(px + 4, py + 4, Color(120, 220, 110));
             setPixel(px + 9, py + 3, Color(120, 220, 110));
             break;
-        case 9: // Dark Obsidian Altar (음양당 흑요석 제단)
+        case 9: // Dark Obsidian Altar (음양당 흑요석 제단 & 부적 문양)
             fillRect(px, py, 16, 16, Color(24, 20, 32));
             drawRect(px + 2, py + 2, 12, 12, Color(90, 40, 120));
-            fillRect(px + 6, py + 6, 4, 4, Palette::Red);
+            fillRect(px + 6, py + 6, 4, 4, Palette::CinnabarRed);
+            setPixel(px + 7, py + 7, Palette::GardeniaYellow);
             break;
-        case 10: // Treasure Chest (보물 상자)
+        case 10: // Treasure Chest (보물 상자 & 황금 자물쇠)
             fillRect(px, py, 16, 16, Color(42, 100, 52)); // grass base
             fillRect(px + 2, py + 4, 12, 10, Color(180, 130, 40));
             drawRect(px + 2, py + 4, 12, 10, Color(90, 60, 20));
             fillRect(px + 6, py + 7, 4, 3, Palette::Yellow);
             break;
-        case 11: // Hongsalmun Gate (홍살문 / 관문)
+        case 11: // Hongsalmun Gate (홍살문 / 관문 기둥)
             fillRect(px, py, 16, 16, Color(160, 130, 90)); // dirt base
-            fillRect(px + 1, py + 1, 3, 14, Palette::Red);
-            fillRect(px + 12, py + 1, 3, 14, Palette::Red);
-            fillRect(px + 1, py + 3, 14, 3, Palette::Red);
+            fillRect(px + 1, py + 1, 3, 14, Palette::CinnabarRed);
+            fillRect(px + 12, py + 1, 3, 14, Palette::CinnabarRed);
+            fillRect(px + 1, py + 3, 14, 3, Palette::CinnabarRed);
+            setPixel(px + 7, py + 2, Palette::IndigoBlue); // Taegeuk center
+            setPixel(px + 8, py + 2, Palette::CinnabarRed);
+            break;
+        case 12: // Jangseung & Sotdae (천하대장군 장승 & 솟대 기둥)
+            fillRect(px, py, 16, 16, Color(42, 100, 52)); // grass base
+            fillRect(px + 5, py + 2, 6, 13, Color(130, 85, 45)); // Wood pole
+            fillRect(px + 4, py + 3, 8, 4, Color(155, 105, 55));  // Face block
+            setPixel(px + 5, py + 4, Palette::SongyeonInk);       // Left eye
+            setPixel(px + 8, py + 4, Palette::SongyeonInk);       // Right eye
+            fillRect(px + 6, py + 6, 2, 1, Palette::BaegokWhite); // Big teeth grin
+            // Sotdae bird on top
+            setPixel(px + 7, py + 1, Color(90, 55, 25));
+            setPixel(px + 8, py, Color(90, 55, 25));
+            break;
+        case 13: // Doltap & Spirit Cairns (서낭당 돌탑 & 오색 깃발)
+            fillRect(px, py, 16, 16, Color(42, 100, 52));
+            fillRect(px + 3, py + 10, 10, 5, Color(110, 105, 100)); // Base stone
+            fillRect(px + 5, py + 6, 6, 4, Color(140, 135, 130));   // Middle stone
+            fillRect(px + 7, py + 3, 2, 3, Color(165, 160, 155));   // Top stone
+            setPixel(px + 7, py + 1, Palette::CinnabarRed);         // Small wish cloth
+            setPixel(px + 8, py + 1, Palette::IndigoBlue);
+            break;
+        case 14: // Onggi Kimchi & Soy Pots (장독대 옹기 항아리)
+            fillRect(px, py, 16, 16, Color(150, 140, 130)); // Stone platform
+            // Big Pot L
+            fillRect(px + 2, py + 5, 5, 8, Color(70, 45, 30));
+            fillRect(px + 1, py + 6, 7, 5, Color(85, 55, 35));
+            fillRect(px + 3, py + 4, 3, 2, Color(50, 30, 20)); // Lid
+            // Small Pot R
+            fillRect(px + 9, py + 7, 5, 6, Color(70, 45, 30));
+            fillRect(px + 10, py + 6, 3, 2, Color(50, 30, 20)); // Lid
+            break;
+        case 15: // Straw Thatch Eaves / Chogajip (초가지붕 처마 & 볏짚)
+            fillRect(px, py, 16, 16, Color(210, 165, 75)); // Golden straw
+            drawLine(px, py + 4, px + 15, py + 4, Color(170, 130, 50));
+            drawLine(px, py + 8, px + 15, py + 8, Color(170, 130, 50));
+            drawLine(px, py + 12, px + 15, py + 12, Color(170, 130, 50));
+            drawLine(px, py + 15, px + 15, py + 15, Color(130, 95, 35)); // Rafter shadow
+            break;
+        case 16: // Iron Ore Vein & Blacksmith Anvil (무쇠광산 원석 & 모루)
+            fillRect(px, py, 16, 16, Color(75, 70, 70)); // Mine rock
+            fillRect(px + 4, py + 4, 8, 7, Color(140, 135, 150)); // Raw metallic lump
+            setPixel(px + 6, py + 5, Color(230, 225, 240));       // Silver specular glint
+            setPixel(px + 9, py + 8, Color(230, 225, 240));
+            // Anvil base
+            fillRect(px + 3, py + 12, 10, 3, Color(45, 45, 50));
+            break;
+        case 17: // Bioluminescent Coral & Deep Sea Sponges (심해 산호초 & 해초)
+            fillRect(px, py, 16, 16, Color(15, 35, 75)); // Deep ocean floor
+            // Magenta Coral
+            fillRect(px + 3, py + 6, 4, 8, Color(215, 60, 140));
+            fillRect(px + 2, py + 4, 2, 3, Color(245, 100, 175));
+            fillRect(px + 6, py + 3, 2, 4, Color(245, 100, 175));
+            // Cyan Sea Anemone
+            fillRect(px + 10, py + 8, 4, 6, Color(30, 200, 220));
+            setPixel(px + 11, py + 6, Color(100, 255, 255));
+            setPixel(px + 13, py + 7, Color(100, 255, 255));
+            break;
+        case 18: // Sacred Cloud Platform & Celestial Mist (선계 운해 징검다리)
+            fillRect(px, py, 16, 16, Color(120, 160, 210)); // Sky background
+            fillRect(px + 2, py + 4, 12, 8, Color(245, 250, 255)); // Fluffy cloud
+            fillRect(px + 4, py + 2, 8, 12, Color(230, 240, 255));
+            drawRect(px + 2, py + 4, 12, 8, Color(180, 210, 240));
+            setPixel(px + 7, py + 7, Palette::GardeniaYellow); // Divine aura glint
+            break;
+        case 19: // Glacial Snow & Ice Sheet (백두산 천지 만년설 빙판)
+            fillRect(px, py, 16, 16, Color(220, 235, 250)); // Snow white
+            fillRect(px + 3, py + 4, 10, 8, Color(165, 205, 240)); // Clear blue ice
+            drawLine(px + 4, py + 5, px + 8, py + 5, Color(245, 255, 255)); // Ice glint
+            setPixel(px + 11, py + 9, Color(245, 255, 255));
+            break;
+        case 20: // Obsidian Rune Ward Stone (음양당 결계 비석 & 보라빛 룬)
+            fillRect(px, py, 16, 16, Color(30, 25, 40));
+            fillRect(px + 4, py + 2, 8, 12, Color(60, 45, 75));
+            drawRect(px + 4, py + 2, 8, 12, Color(110, 70, 150));
+            // Glowing Purple Sigil
+            setPixel(px + 7, py + 5, Color(220, 140, 255));
+            setPixel(px + 8, py + 6, Color(220, 140, 255));
+            setPixel(px + 7, py + 7, Color(220, 140, 255));
+            setPixel(px + 8, py + 8, Color(220, 140, 255));
+            break;
+        case 21: // Ghost Ship Broken Timber & Nets (난파선 파손 선체 & 밧줄)
+            fillRect(px, py, 16, 16, Color(40, 70, 110)); // Sea water base
+            fillRect(px + 2, py + 3, 12, 10, Color(80, 55, 35)); // Rotten plank
+            drawLine(px + 2, py + 6, px + 13, py + 6, Color(50, 35, 20));
+            // Weathered green fishing net
+            setPixel(px + 4, py + 8, Color(90, 140, 100));
+            setPixel(px + 6, py + 9, Color(90, 140, 100));
+            setPixel(px + 8, py + 8, Color(90, 140, 100));
+            break;
+        case 22: // Water Lily & Lotus Pond (연꽃 연못 & 찰랑이는 수련)
+            fillRect(px, py, 16, 16, Color(35, 90, 140)); // Pond water
+            fillRect(px + 3, py + 4, 6, 5, Color(45, 135, 65)); // Lotus pad
+            fillRect(px + 8, py + 7, 5, 4, Color(45, 135, 65));
+            // Blooming Pink Lotus Flower
+            setPixel(px + 6, py + 5, Palette::PeonyPink);
+            setPixel(px + 5, py + 5, Palette::BaegokWhite);
+            break;
+        case 23: // Secret Stone Well Rim / Aqueduct Grate (비밀 수로 우물 & 이끼)
+            fillRect(px, py, 16, 16, Color(160, 130, 90)); // Dirt surround
+            fillRect(px + 3, py + 3, 10, 10, Color(90, 85, 80)); // Stone well rim
+            fillRect(px + 5, py + 5, 6, 6, Color(20, 25, 40));   // Dark deep water
+            drawRect(px + 3, py + 3, 10, 10, Color(60, 55, 50));
+            setPixel(px + 4, py + 4, Color(60, 140, 75)); // Green moss
+            setPixel(px + 11, py + 10, Color(60, 140, 75));
+            break;
+        case 24: // Martial Arena Dancheong Banner (환상비무대 단청 깃발)
+            fillRect(px, py, 16, 16, Color(130, 110, 90)); // Arena flagstone
+            fillRect(px + 3, py + 2, 2, 13, Palette::SongyeonInk); // Flagpole
+            // Fluttering Dancheong Banner
+            fillRect(px + 5, py + 2, 8, 3, Palette::CinnabarRed);
+            fillRect(px + 5, py + 5, 8, 3, Palette::IndigoBlue);
+            setPixel(px + 7, py + 3, Palette::GardeniaYellow);
             break;
         default:
             fillRect(px, py, 16, 16, Palette::DarkGray);

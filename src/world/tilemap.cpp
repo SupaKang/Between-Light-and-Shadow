@@ -111,8 +111,21 @@ void Tilemap::initMap0_Village() {
     }
     m_tiles[18 * m_width + 28] = 3;
 
-    // Dangsan Tree
+    // Environmental Props: Jangseung & Sotdae Totems at entrances
+    m_tiles[30 * m_width + 5] = 12; m_collision[30 * m_width + 5] = true;
+    m_tiles[30 * m_width + 74] = 11; // Hongsalmun Gate before Mountain Pass
+
+    // Onggi Kimchi / Soy Pots behind Tavern
+    m_tiles[10 * m_width + 11] = 14; m_collision[10 * m_width + 11] = true;
+    m_tiles[10 * m_width + 12] = 14; m_collision[10 * m_width + 12] = true;
+
+    // Doltap (Spirit Cairns) & Dangsan Tree
     m_tiles[15 * m_width + 68] = 5; m_collision[15 * m_width + 68] = true;
+    m_tiles[16 * m_width + 69] = 13; m_collision[16 * m_width + 69] = true;
+
+    // Lotus Pond in village garden
+    m_tiles[8 * m_width + 45] = 22; m_collision[8 * m_width + 45] = true;
+    m_tiles[8 * m_width + 46] = 22; m_collision[8 * m_width + 46] = true;
 
     // Chests
     m_tiles[8 * m_width + 10] = 10;
@@ -133,7 +146,7 @@ void Tilemap::initMap0_Village() {
     m_tiles[59 * m_width + 75] = 2; m_collision[59 * m_width + 75] = false;
     m_warps.push_back({75, 59, 26, 45, 58}); // To Hanyang Boulevard (Map 26)
 
-    m_tiles[50 * m_width + 20] = 9; m_collision[50 * m_width + 20] = false;
+    m_tiles[50 * m_width + 20] = 23; m_collision[50 * m_width + 20] = false; // Secret Stone Well Rim (Shortcut)
     m_warps.push_back({20, 50, 31, 30, 2}); // To Subterranean Aqueduct (Map 31)
 }
 
@@ -202,6 +215,12 @@ void Tilemap::initMap3_MountainPass() {
         m_tiles[y * m_width + px] = 2;
     }
 
+    // Mountain Highway Props: Doltap & Dangsan Trees
+    m_tiles[20 * m_width + 10] = 13; m_collision[20 * m_width + 10] = true;
+    m_tiles[50 * m_width + 30] = 5;  m_collision[50 * m_width + 30] = true;
+    m_tiles[80 * m_width + 10] = 13; m_collision[80 * m_width + 10] = true;
+    m_tiles[110 * m_width + 25] = 12; m_collision[110 * m_width + 25] = true; // Jangseung
+
     // Cave Entrance (Map 4) at (8, 55)
     m_tiles[55 * m_width + 8] = 9;
     m_warps.push_back({8, 55, 4, 18, 32});
@@ -247,7 +266,7 @@ void Tilemap::initMap4_MountainCave() {
     m_tiles[35 * m_width + 18] = 2; m_collision[35 * m_width + 18] = false;
     m_warps.push_back({18, 35, 3, 8, 56});
 
-    m_tiles[18 * m_width + 35] = 9; m_collision[18 * m_width + 35] = false;
+    m_tiles[18 * m_width + 35] = 23; m_collision[18 * m_width + 35] = false; // Secret Aqueduct Rim
     m_warps.push_back({35, 18, 31, 0, 30});
 }
 
@@ -321,6 +340,11 @@ void Tilemap::initMap7_SobaekCanyon() {
     for (int y = 12; y <= 25; ++y) { m_tiles[y * m_width + 35] = 2; }
     for (int y = 25; y <= 48; ++y) { m_tiles[y * m_width + 85] = 2; }
 
+    // Sobaek Canyon Props: Doltaps & Beacon Banner
+    m_tiles[22 * m_width + 25] = 13; m_collision[22 * m_width + 25] = true;
+    m_tiles[22 * m_width + 70] = 13; m_collision[22 * m_width + 70] = true;
+    m_tiles[23 * m_width + 88] = 24; m_collision[23 * m_width + 88] = true; // Dancheong Banner
+
     // Simmani Hut Entrance (Map 8) at (20, 20)
     m_tiles[20 * m_width + 20] = 4;
     m_warps.push_back({20, 20, 8, 10, 14});
@@ -338,7 +362,7 @@ void Tilemap::initMap7_SobaekCanyon() {
     m_tiles[49 * m_width + 85] = 2; m_collision[49 * m_width + 85] = false;
     m_warps.push_back({85, 49, 11, 30, 2}); // To Namhae Reeds (Map 11)
 
-    m_tiles[10 * m_width + 90] = 9; m_collision[10 * m_width + 90] = false;
+    m_tiles[10 * m_width + 90] = 24; m_collision[10 * m_width + 90] = false; // Beacon Ridge Banner (Map 32)
     m_warps.push_back({90, 10, 32, 0, 60}); // To Beacon Ridge (Map 32)
 }
 
@@ -375,7 +399,7 @@ void Tilemap::initMap9_IronMineUpper() {
 
     for (int y = 10; y <= 40; y += 8) {
         for (int x = 10; x <= 40; x += 8) {
-            m_tiles[y * m_width + x] = 1; m_collision[y * m_width + x] = true;
+            m_tiles[y * m_width + x] = 16; m_collision[y * m_width + x] = true; // Iron Ore Vein
         }
     }
 
@@ -401,6 +425,10 @@ void Tilemap::initMap10_IronMineDeep() {
     m_collision.assign(m_width * m_height, false);
 
     makeBoundaryWalls(m_width, m_height, m_tiles, m_collision);
+
+    // Smelting Anvils & Iron Ore clusters
+    m_tiles[20 * m_width + 15] = 16; m_collision[20 * m_width + 15] = true;
+    m_tiles[20 * m_width + 35] = 16; m_collision[20 * m_width + 35] = true;
 
     m_tiles[12 * m_width + 25] = 9; // Boss Altar
 
@@ -429,19 +457,26 @@ void Tilemap::initMap11_NamhaeReeds() {
             if ((x % 3 == 0) && (y % 3 != 0)) m_tiles[y * m_width + x] = 8;
         }
     }
-    for (int y = 2; y < 58; ++y) { m_tiles[y * m_width + 30] = 2; }
 
-    m_tiles[15 * m_width + 12] = 10;
-    m_chests.push_back({13, 12, 15, "ART_YONGWANG_PEARL", 750, 500, false});
+    // Lotus Pond & Coastal Props
+    m_tiles[15 * m_width + 20] = 22; m_collision[15 * m_width + 20] = true;
+    m_tiles[15 * m_width + 21] = 22; m_collision[15 * m_width + 21] = true;
+    m_tiles[40 * m_width + 45] = 21; m_collision[40 * m_width + 45] = true; // Rotten net/timber
+
+    for (int y = 1; y < 59; ++y) { m_tiles[y * m_width + 30] = 2; }
+    for (int x = 1; x < 59; ++x) { m_tiles[30 * m_width + x] = 2; }
+
+    m_tiles[10 * m_width + 10] = 10;
+    m_chests.push_back({13, 10, 10, "ART_GHOST_BELL", 700, 450, false});
 
     m_tiles[1 * m_width + 30] = 2; m_collision[1 * m_width + 30] = false;
-    m_warps.push_back({30, 1, 7, 85, 48});
+    m_warps.push_back({30, 1, 7, 85, 48}); // Back to Sobaek Canyon (Map 7)
 
     m_tiles[59 * m_width + 30] = 2; m_collision[59 * m_width + 30] = false;
     m_warps.push_back({30, 59, 12, 40, 2}); // To Namhae Port (Map 12)
 
-    m_tiles[50 * m_width + 10] = 9; m_collision[50 * m_width + 10] = false;
-    m_warps.push_back({10, 50, 31, 59, 30}); // To Subterranean Aqueduct (Map 31)
+    m_tiles[50 * m_width + 10] = 23; m_collision[50 * m_width + 10] = false; // Secret Aqueduct Rim (Map 31)
+    m_warps.push_back({10, 50, 31, 58, 30});
 }
 
 // -------------------------------------------------------------
@@ -468,12 +503,17 @@ void Tilemap::initMap12_NamhaePort() {
     for (int y = 1; y <= 38; ++y) { m_tiles[y * m_width + 40] = 2; }
     for (int x = 40; x <= 78; ++x) { m_tiles[25 * m_width + x] = 2; }
 
+    // Harbor Market Props: Onggi pots & Fishing nets
+    m_tiles[15 * m_width + 35] = 14; m_collision[15 * m_width + 35] = true;
+    m_tiles[15 * m_width + 36] = 14; m_collision[15 * m_width + 36] = true;
+    m_tiles[36 * m_width + 25] = 21; m_collision[36 * m_width + 25] = true;
+
     // Haenyeo Shelter (Map 13) at (50, 18)
     m_tiles[18 * m_width + 50] = 4;
     m_warps.push_back({50, 18, 13, 12, 16});
 
     // Ghost Ship (Map 14) at (20, 38)
-    m_tiles[38 * m_width + 20] = 9;
+    m_tiles[38 * m_width + 20] = 21; // Broken Hull Entry
     m_warps.push_back({20, 38, 14, 20, 26});
 
     m_tiles[42 * m_width + 68] = 10;
@@ -865,7 +905,7 @@ void Tilemap::initMap26_HanyangBoulevard() {
         }
     }
 
-    // Royal Government Offices & Stone Pavilions
+    // Royal Government Offices & Stone Pavilions & Dancheong Banners
     for (int y = 10; y <= 50; y += 15) {
         for (int x = 10; x <= 30; x += 10) {
             m_tiles[y * m_width + x] = 7;
@@ -875,7 +915,14 @@ void Tilemap::initMap26_HanyangBoulevard() {
             m_tiles[y * m_width + x] = 7;
             m_collision[y * m_width + x] = true;
         }
+        // Dancheong Banners along the boulevard
+        m_tiles[y * m_width + 40] = 24; m_collision[y * m_width + 40] = true;
+        m_tiles[y * m_width + 50] = 24; m_collision[y * m_width + 50] = true;
     }
+
+    // Hongsalmun Gates at North and South
+    m_tiles[5 * m_width + 45] = 11;
+    m_tiles[55 * m_width + 45] = 11;
 
     // Chests in Treasury
     m_chests.push_back({28, 15, 12, "ART_SCHOLAR_BRUSH", 3000, 2000, false});
@@ -902,16 +949,20 @@ void Tilemap::initMap27_Geumgangsan() {
 
     makeBoundaryWalls(m_width, m_height, m_tiles, m_collision, 1);
 
-    // Mountain rock clusters
+    // Mountain rock clusters & Celestial Cloud Platforms
     for (int y = 10; y < 60; y += 12) {
         for (int x = 15; x < 70; x += 14) {
             m_tiles[y * m_width + x] = 1;
             m_collision[y * m_width + x] = true;
+            // Celestial cloud platform stepping stones
+            m_tiles[(y + 4) * m_width + (x + 4)] = 18;
         }
     }
 
-    // Hermit shrine
+    // Hermit shrine & Dancheong Banners
     m_tiles[20 * m_width + 40] = 9;
+    m_tiles[20 * m_width + 38] = 24; m_collision[20 * m_width + 38] = true;
+    m_tiles[20 * m_width + 42] = 24; m_collision[20 * m_width + 42] = true;
     m_chests.push_back({30, 42, 20, "ART_HERB_GOURD", 4000, 2500, false});
 
     // Warp back to Hanyang (Map 26)
@@ -922,8 +973,8 @@ void Tilemap::initMap27_Geumgangsan() {
     m_tiles[5 * m_width + 75] = 9;
     m_warps.push_back({75, 5, 28, 35, 68});
 
-    m_tiles[65 * m_width + 10] = 9; m_collision[65 * m_width + 10] = false;
-    m_warps.push_back({10, 65, 32, 35, 0}); // To Beacon Ridge (Map 32)
+    m_tiles[65 * m_width + 10] = 24; m_collision[65 * m_width + 10] = false; // Beacon Ridge Banner (Map 32)
+    m_warps.push_back({10, 65, 32, 35, 0});
 }
 
 // -------------------------------------------------------------
@@ -938,10 +989,10 @@ void Tilemap::initMap28_HeuksanDragonPalace() {
 
     makeBoundaryWalls(m_width, m_height, m_tiles, m_collision, 1);
 
-    // Coral columns
+    // Bioluminescent Coral columns & Sponges (17)
     for (int y = 15; y < 60; y += 15) {
         for (int x = 15; x < 60; x += 15) {
-            m_tiles[y * m_width + x] = 9;
+            m_tiles[y * m_width + x] = 17;
             m_collision[y * m_width + x] = true;
         }
     }
@@ -957,8 +1008,8 @@ void Tilemap::initMap28_HeuksanDragonPalace() {
     m_tiles[5 * m_width + 35] = 9;
     m_warps.push_back({35, 5, 29, 40, 78});
 
-    m_tiles[35 * m_width + 10] = 9; m_collision[35 * m_width + 10] = false;
-    m_warps.push_back({10, 35, 33, 49, 25}); // To Sunken Grotto (Map 33)
+    m_tiles[35 * m_width + 10] = 17; m_collision[35 * m_width + 10] = false; // Coral Passage to Sunken Grotto (Map 33)
+    m_warps.push_back({10, 35, 33, 49, 25});
 }
 
 // -------------------------------------------------------------
@@ -973,10 +1024,10 @@ void Tilemap::initMap29_BaekdusanSanctuary() {
 
     makeBoundaryWalls(m_width, m_height, m_tiles, m_collision, 1);
 
-    // Sacred Caldera Lake in center
+    // Sacred Caldera Lake in center with Ice Sheets (19)
     for (int y = 25; y <= 55; ++y) {
         for (int x = 25; x <= 55; ++x) {
-            m_tiles[y * m_width + x] = 4;
+            m_tiles[y * m_width + x] = (x == 25 || x == 55 || y == 25 || y == 55) ? 19 : 4;
             m_collision[y * m_width + x] = true;
         }
     }
@@ -1009,14 +1060,20 @@ void Tilemap::initMap30_PantheonLabyrinth() {
 
     makeBoundaryWalls(m_width, m_height, m_tiles, m_collision, 1);
 
-    // Labyrinth stone pillars
+    // Labyrinth obsidian pillars & Ward stones (20) & Arena Banners (24)
     for (int y = 10; y < 90; y += 10) {
         for (int x = 10; x < 90; x += 10) {
             if (x == 50 && y == 50) continue; // Keep center arena open
-            m_tiles[y * m_width + x] = 9;
+            m_tiles[y * m_width + x] = ((x + y) % 20 == 0) ? 20 : 9;
             m_collision[y * m_width + x] = true;
         }
     }
+
+    // Central Arena Banners
+    m_tiles[48 * m_width + 48] = 24; m_collision[48 * m_width + 48] = true;
+    m_tiles[48 * m_width + 52] = 24; m_collision[48 * m_width + 52] = true;
+    m_tiles[52 * m_width + 48] = 24; m_collision[52 * m_width + 48] = true;
+    m_tiles[52 * m_width + 52] = 24; m_collision[52 * m_width + 52] = true;
 
     // Ultimate Celestial Chest
     m_chests.push_back({33, 50, 10, "ART_TAIJI_BELL", 20000, 10000, false});
@@ -1025,8 +1082,8 @@ void Tilemap::initMap30_PantheonLabyrinth() {
     m_tiles[99 * m_width + 50] = 2; m_collision[99 * m_width + 50] = false;
     m_warps.push_back({50, 99, 29, 40, 6});
 
-    m_tiles[90 * m_width + 10] = 9; m_collision[90 * m_width + 10] = false;
-    m_warps.push_back({10, 90, 35, 59, 55}); // To Secret Catacombs (Map 35)
+    m_tiles[90 * m_width + 10] = 20; m_collision[90 * m_width + 10] = false; // Obsidian Sigil to Catacombs (Map 35)
+    m_warps.push_back({10, 90, 35, 59, 55});
 }
 
 // -------------------------------------------------------------
@@ -1054,15 +1111,15 @@ void Tilemap::initMap31_SubterraneanAqueduct() {
     m_chests.push_back({34, 30, 30, "ART_SUTTA_BELL", 2500, 1500, false});
 
     // North Warp to Map 0 (도선사 마을 우물)
-    m_tiles[0 * m_width + 30] = 2; m_collision[0 * m_width + 30] = false;
+    m_tiles[0 * m_width + 30] = 23; m_collision[0 * m_width + 30] = false; // Well Grate
     m_warps.push_back({30, 0, 0, 20, 50});
 
     // West Warp to Map 4 (북한산 고대 석굴)
-    m_tiles[30 * m_width + 0] = 2; m_collision[30 * m_width + 0] = false;
+    m_tiles[30 * m_width + 0] = 23; m_collision[30 * m_width + 0] = false;
     m_warps.push_back({0, 30, 4, 35, 18});
 
     // East Warp to Map 11 (남해안 갈대밭)
-    m_tiles[30 * m_width + 59] = 2; m_collision[30 * m_width + 59] = false;
+    m_tiles[30 * m_width + 59] = 23; m_collision[30 * m_width + 59] = false;
     m_warps.push_back({59, 30, 11, 10, 50});
 }
 
@@ -1078,16 +1135,18 @@ void Tilemap::initMap32_BeaconRidge() {
 
     makeBoundaryWalls(m_width, m_height, m_tiles, m_collision, 1);
 
-    // Mountain cliffs & rocky ridges
+    // Mountain cliffs & rocky ridges & Doltaps (13)
     for (int y = 15; y < 55; y += 12) {
         for (int x = 15; x < 55; x += 12) {
             m_tiles[y * m_width + x] = 1;
             m_collision[y * m_width + x] = true;
+            m_tiles[(y + 2) * m_width + (x + 2)] = 13; // Cairns along ridge
         }
     }
 
-    // Signal Beacon Tower in center
+    // Signal Beacon Tower in center & Dancheong Banners (24)
     m_tiles[35 * m_width + 35] = 9;
+    m_tiles[34 * m_width + 35] = 24; m_collision[34 * m_width + 35] = true;
     m_chests.push_back({35, 36, 35, "ART_SAMDU_FEATHER", 3500, 2000, false});
 
     // West Warp to Map 7 (소백산맥 대협곡)
@@ -1115,26 +1174,27 @@ void Tilemap::initMap33_SunkenGrotto() {
 
     makeBoundaryWalls(m_width, m_height, m_tiles, m_collision, 1);
 
-    // Coral pillars and water pools
+    // Coral pillars and water pools & Rotten Timber (21)
     for (int y = 12; y < 40; y += 10) {
         for (int x = 12; x < 40; x += 10) {
-            m_tiles[y * m_width + x] = 6;
+            m_tiles[y * m_width + x] = 17; // Coral
             m_collision[y * m_width + x] = true;
+            m_tiles[(y + 2) * m_width + (x + 2)] = 21; // Timber debris
         }
     }
 
     m_chests.push_back({36, 25, 25, "ART_YONGWANG_PEARL", 4000, 2500, false});
 
     // North Warp to Map 14 (난파선 갑판 상층)
-    m_tiles[0 * m_width + 25] = 2; m_collision[0 * m_width + 25] = false;
+    m_tiles[0 * m_width + 25] = 21; m_collision[0 * m_width + 25] = false;
     m_warps.push_back({25, 0, 14, 10, 10});
 
     // South Warp to Map 15 (난파선 선장실)
-    m_tiles[49 * m_width + 25] = 2; m_collision[49 * m_width + 25] = false;
+    m_tiles[49 * m_width + 25] = 21; m_collision[49 * m_width + 25] = false;
     m_warps.push_back({25, 49, 15, 35, 25});
 
     // East Warp to Map 28 (흑산도 심해 용궁)
-    m_tiles[25 * m_width + 49] = 9; m_collision[25 * m_width + 49] = false;
+    m_tiles[25 * m_width + 49] = 17; m_collision[25 * m_width + 49] = false;
     m_warps.push_back({49, 25, 28, 10, 35});
 }
 
@@ -1150,11 +1210,14 @@ void Tilemap::initMap34_FoxLeylinePass() {
 
     makeBoundaryWalls(m_width, m_height, m_tiles, m_collision, 1);
 
-    // Glowing foxfire bamboo clusters
+    // Glowing foxfire bamboo clusters & Dangsan trees (5)
     for (int y = 10; y < 50; y += 8) {
         for (int x = 10; x < 50; x += 8) {
             if ((x + y) % 16 == 0) {
                 m_tiles[y * m_width + x] = 8;
+                m_collision[y * m_width + x] = true;
+            } else if ((x * y) % 24 == 0) {
+                m_tiles[y * m_width + x] = 5; // Sacred Tree
                 m_collision[y * m_width + x] = true;
             }
         }
@@ -1171,7 +1234,7 @@ void Tilemap::initMap34_FoxLeylinePass() {
     m_warps.push_back({30, 59, 20, 5, 45});
 
     // North-East Warp to Map 21 (성채 외성 비밀 침투로)
-    m_tiles[5 * m_width + 59] = 9; m_collision[5 * m_width + 59] = false;
+    m_tiles[5 * m_width + 59] = 20; m_collision[5 * m_width + 59] = false; // Rune ward
     m_warps.push_back({59, 5, 21, 55, 55});
 }
 
@@ -1187,10 +1250,10 @@ void Tilemap::initMap35_SecretCatacombs() {
 
     makeBoundaryWalls(m_width, m_height, m_tiles, m_collision, 1);
 
-    // Prison cell obsidian pillars
+    // Prison cell obsidian pillars & Rune Ward Stones (20)
     for (int y = 12; y < 50; y += 12) {
         for (int x = 12; x < 50; x += 12) {
-            m_tiles[y * m_width + x] = 9;
+            m_tiles[y * m_width + x] = 20;
             m_collision[y * m_width + x] = true;
         }
     }
@@ -1206,7 +1269,7 @@ void Tilemap::initMap35_SecretCatacombs() {
     m_warps.push_back({30, 0, 23, 35, 35});
 
     // South-East Warp to Map 30 (태고 환상비무 미궁)
-    m_tiles[55 * m_width + 59] = 9; m_collision[55 * m_width + 59] = false;
+    m_tiles[55 * m_width + 59] = 20; m_collision[55 * m_width + 59] = false;
     m_warps.push_back({59, 55, 30, 10, 90});
 }
 
