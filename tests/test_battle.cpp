@@ -370,25 +370,25 @@ bool runFullContentTests() {
     std::cout << "  - Verified #050: " << e50->nameKo << " (" << e50->origin << ")" << std::endl;
     std::cout << "  - Verified #108: " << e108->nameKo << " (" << e108->origin << ")" << std::endl;
 
-    // 3. 5 Main Quests & 5 Side Quests
+    // 3. 5 Main Quests & 10 Side Quests
     const auto& qm = DataManager::getQuestManager();
-    if (qm.getAllQuests().size() != 10) {
-        std::cerr << "  FAIL: Expected 10 total quests (5 Main + 5 Side), got " << qm.getAllQuests().size() << std::endl;
+    if (qm.getAllQuests().size() != 15) {
+        std::cerr << "  FAIL: Expected 15 total quests (5 Main + 10 Side), got " << qm.getAllQuests().size() << std::endl;
         return false;
     }
-    std::cout << "  - Verified 5 Main Campaign chapters & 5 Side Quests." << std::endl;
+    std::cout << "  - Verified 5 Main Campaign chapters & 10 Side Quests." << std::endl;
 
-    // 4. 24 Dual-Trait Folklore Artifacts
+    // 4. 27 Dual-Trait Folklore Artifacts
     const auto& allArtifacts = DataManager::getAllArtifacts();
-    if (allArtifacts.size() < 24) {
-        std::cerr << "  FAIL: Expected 24 artifacts, got " << allArtifacts.size() << std::endl;
+    if (allArtifacts.size() < 27) {
+        std::cerr << "  FAIL: Expected 27 artifacts, got " << allArtifacts.size() << std::endl;
         return false;
     }
-    std::cout << "  - Verified 24 dual-trait folklore artifacts loaded." << std::endl;
+    std::cout << "  - Verified 27 dual-trait folklore artifacts loaded." << std::endl;
 
-    // 5. 26 Multi-Floor and Massive Map Regions & Warps & Chests
+    // 5. 31 Multi-Floor and Massive Map Regions & Warps & Chests
     Tilemap tm;
-    const int expectedDims[26][2] = {
+    const int expectedDims[31][2] = {
         {80, 60},   // Map 0: Village Overworld
         {24, 18},   // Map 1: Tavern Interior
         {24, 18},   // Map 2: Exorcist Bureau
@@ -414,10 +414,15 @@ bool runFullContentTests() {
         {60, 60},   // Map 22: Fortress Corridor
         {40, 40},   // Map 23: Guardian Tower
         {50, 50},   // Map 24: Final Sanctum (묵영)
-        {50, 50}    // Map 25: Origin Abyss (천명영호)
+        {50, 50},   // Map 25: Origin Abyss (천명영호)
+        {90, 60},   // Map 26: Hanyang Boulevard & Gyeongbokgung
+        {80, 70},   // Map 27: Mount Geumgang Celestial Realm
+        {70, 70},   // Map 28: Heuksan Deep Sea Dragon Palace
+        {80, 80},   // Map 29: Mount Baekdu Heavenly Lake
+        {100, 100}  // Map 30: Ancient Pantheon Labyrinth
     };
 
-    for (int m = 0; m < 26; ++m) {
+    for (int m = 0; m < 31; ++m) {
         tm.loadMap(m);
         int expW = expectedDims[m][0];
         int expH = expectedDims[m][1];
@@ -452,13 +457,18 @@ bool runFullContentTests() {
         else if (m == 23) { sx = 20; sy = 36; }
         else if (m == 24) { sx = 25; sy = 46; }
         else if (m == 25) { sx = 25; sy = 46; }
+        else if (m == 26) { sx = 45; sy = 30; }
+        else if (m == 27) { sx = 40; sy = 30; }
+        else if (m == 28) { sx = 35; sy = 30; }
+        else if (m == 29) { sx = 40; sy = 40; }
+        else if (m == 30) { sx = 50; sy = 50; }
 
         if (tm.isSolid(sx, sy)) {
             std::cerr << "  FAIL: Map " << m << " spawn point (" << sx << ", " << sy << ") is solid!" << std::endl;
             return false;
         }
     }
-    std::cout << "  - Verified 26 multi-floor & massive region maps (20x16 ~ 100x50, 40x120)." << std::endl;
+    std::cout << "  - Verified 31 multi-floor & massive region maps (20x16 ~ 100x100, 40x120)." << std::endl;
 
     // 6. Verify Warp Connectivity Across Multi-Floor Hierarchy
     // Map 0 -> Map 1 (Village -> Tavern)

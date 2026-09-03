@@ -80,8 +80,8 @@ void WorldScene::checkStepEvents(int newGridX, int newGridY) {
 
     // 2. Wild Encounter Check across dangerous maps (15% roll)
     int mapId = m_tilemap.getMapId();
-    // Exclude safe havens: 0 (Village), 1 (Tavern), 2 (Bureau), 8 (Hut), 12 (Port), 13 (Shelter), 18 (Hermitage)
-    bool isSafeZone = (mapId == 0 || mapId == 1 || mapId == 2 || mapId == 8 || mapId == 12 || mapId == 13 || mapId == 18);
+    // Exclude safe havens: 0 (Village), 1 (Tavern), 2 (Bureau), 8 (Hut), 12 (Port), 13 (Shelter), 18 (Hermitage), 26 (Hanyang)
+    bool isSafeZone = (mapId == 0 || mapId == 1 || mapId == 2 || mapId == 8 || mapId == 12 || mapId == 13 || mapId == 18 || mapId == 26);
     if (!isSafeZone) {
         std::uniform_int_distribution<int> encRoll(1, 100);
         if (encRoll(m_rng) <= 15) {
@@ -110,6 +110,22 @@ void WorldScene::checkStepEvents(int newGridX, int newGridY) {
                 // Zone 5: 음양당 성채 & 수호탑 & 본당 & 태초 심연 (Lv 38 ~ 48)
                 minIdx = 85; maxIdx = std::min<size_t>(107, pool.size() - 6);
                 wildLevel = 38 + (mapId - 21) * 2;
+            } else if (mapId == 27) {
+                // Zone 6A: 금강산 일만이천봉 선계 (Lv 40 ~ 44)
+                minIdx = 50; maxIdx = 90;
+                wildLevel = 42;
+            } else if (mapId == 28) {
+                // Zone 6B: 흑산도 심해 용궁 (Lv 43 ~ 46)
+                minIdx = 60; maxIdx = 95;
+                wildLevel = 45;
+            } else if (mapId == 29) {
+                // Zone 6C: 백두산 천지 백록담 신역 (Lv 46 ~ 49)
+                minIdx = 75; maxIdx = 105;
+                wildLevel = 48;
+            } else if (mapId == 30) {
+                // Zone 6D: 태고의 환상비무 미궁 (Lv 48 ~ 50)
+                minIdx = 85; maxIdx = 107;
+                wildLevel = 50;
             }
 
             maxIdx = std::min(maxIdx, pool.size() - 6);
@@ -166,10 +182,22 @@ void WorldScene::interactWithNPC() {
             m_activeNPC = &n;
             std::string speakerTitle = n.nameKo + " [" + n.titleKo + "]";
 
-            m_dialogueBox.startDialogue(speakerTitle, n.dialogue, [this, n]() {
-                // Actions after dialogue finishes
-                if (n.nameKo == "주모 월선" || n.nameKo == "이 생원") {
-                    if (m_sceneStack) {
+            auto handleNPCAction = [this, n](int optIdx) {
+                if (n.nameKo == "주모 월선") {
+                    if (optIdx == 0) {
+                        AudioEngine::playSfx(SfxId::TavernHeal);
+                        m_party.healAll();
+                        m_noticeMsg = "주막에서 하룻밤 묵었습니다. 파티 전원의 체력/영력 완치!";
+                        DataManager::getQuestManager().advanceQuest("MQ_001");
+                    } else if (optIdx == 1 && m_sceneStack) {
+                        m_sceneStack->pushScene(std::make_unique<YutnoriScene>(m_money));
+                    }
+                }
+                else if (n.nameKo == "훈장 이 생원" || n.nameKo == "해녀대장 진주") {
+                    if (optIdx == 0 && !n.associatedQuestId.empty()) {
+                        DataManager::getQuestManager().startQuest(n.associatedQuestId);
+                        m_noticeMsg = "퀘스트 [" + n.associatedQuestId + "] 수주 완료!";
+                    } else if (optIdx == 1 && m_sceneStack) {
                         m_sceneStack->pushScene(std::make_unique<YutnoriScene>(m_money));
                     }
                 }
@@ -179,6 +207,12 @@ void WorldScene::interactWithNPC() {
                 else if (n.nameKo == "천명영호") {
                     triggerBossBattle("YOKAI_108", "", "", 10000, "★ [환상비무대 제패!] 전설의 영수 천명영호를 꺾고 조선 제일의 음양사로 등극하셨습니다! ★");
                 }
+                else if (n.nameKo == "환상비무대 수호령") {
+                    if (optIdx == 0) {
+                        if (!n.associatedQuestId.empty()) DataManager::getQuestManager().startQuest(n.associatedQuestId);
+                        triggerBossBattle("YOKAI_108", "SQ_010", "", 20000, "★ [태고 환상미궁 제패!] 5대 보스를 모두 격파하고 궁극의 천부인 요령을 획득하셨습니다! ★");
+                    }
+                }
                 else if (n.actionType == NPCActionType::TavernRest) {
                     AudioEngine::playSfx(SfxId::TavernHeal);
                     m_party.healAll();
@@ -186,8 +220,10 @@ void WorldScene::interactWithNPC() {
                     DataManager::getQuestManager().advanceQuest("MQ_001");
                 }
                 else if (n.actionType == NPCActionType::QuestTrigger) {
-                    DataManager::getQuestManager().startQuest(n.associatedQuestId);
-                    m_noticeMsg = "퀘스트 [" + n.associatedQuestId + "] 수주 완료!";
+                    if (optIdx == 0 && !n.associatedQuestId.empty()) {
+                        DataManager::getQuestManager().startQuest(n.associatedQuestId);
+                        m_noticeMsg = "퀘스트 [" + n.associatedQuestId + "] 수주 완료!";
+                    }
                 }
                 else if (n.actionType == NPCActionType::BossEncounter) {
                     std::string bossId = "YOKAI_BOSS_01";
@@ -213,7 +249,15 @@ void WorldScene::interactWithNPC() {
                     triggerBossBattle(bossId, questId, nextQ, rMoney, vNotice);
                 }
                 m_activeNPC = nullptr;
-            });
+            };
+
+            if (!n.options.empty()) {
+                m_dialogueBox.startDialogueWithOptions(speakerTitle, n.dialogue, n.options, handleNPCAction);
+            } else {
+                m_dialogueBox.startDialogue(speakerTitle, n.dialogue, [handleNPCAction]() {
+                    handleNPCAction(0);
+                });
+            }
             return;
         }
     }
@@ -463,7 +507,7 @@ void WorldScene::render(Renderer& renderer) {
     FontRenderer::drawText(renderer, 4, 2, m_tilemap.getMapName(), Palette::Yellow);
 
     int curMap = m_tilemap.getMapId();
-    bool isSafe = (curMap == 0 || curMap == 1 || curMap == 2 || curMap == 8 || curMap == 12 || curMap == 13 || curMap == 18);
+    bool isSafe = (curMap == 0 || curMap == 1 || curMap == 2 || curMap == 8 || curMap == 12 || curMap == 13 || curMap == 18 || curMap == 26);
     if (!isSafe) {
         size_t minIdx = 0, maxIdx = 25;
         if (curMap >= 3 && curMap <= 5) { minIdx = 0; maxIdx = 25; }
@@ -471,6 +515,10 @@ void WorldScene::render(Renderer& renderer) {
         else if (curMap >= 11 && curMap <= 15) { minIdx = 45; maxIdx = 80; }
         else if (curMap >= 16 && curMap <= 20) { minIdx = 65; maxIdx = 100; }
         else if (curMap >= 21 && curMap <= 25) { minIdx = 85; maxIdx = 107; }
+        else if (curMap == 27) { minIdx = 50; maxIdx = 90; }
+        else if (curMap == 28) { minIdx = 60; maxIdx = 95; }
+        else if (curMap == 29) { minIdx = 75; maxIdx = 105; }
+        else if (curMap == 30) { minIdx = 85; maxIdx = 107; }
 
         int uncaptured = 0;
         const auto& codex = DataManager::getEncyclopedia();

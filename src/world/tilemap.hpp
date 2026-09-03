@@ -42,7 +42,7 @@ public:
     const std::string& getMapName() const { return m_mapName; }
     const std::vector<MapChest>& getChests() const { return m_chests; }
 
-    static int getTotalMapCount() { return 26; }
+    static int getTotalMapCount() { return 31; }
 
 private:
     // Chapter 1: 한양 북악산 & 도선사 (6 Maps)
@@ -80,6 +80,13 @@ private:
     void initMap23_GuardianTower();      // 40x40 음양당 사신수 결계탑
     void initMap24_FinalSanctum();       // 50x50 천문음양전 중심 제단 (최종보스 당주 묵영)
     void initMap25_OriginAbyss();        // 50x50 태초의 영맥 심연 (진엔딩 신역)
+
+    // Expanded Endgame & Secret Mythic Regions (5 Maps)
+    void initMap26_HanyangBoulevard();   // 90x60 한양 육조거리 & 경복궁 근정전 외곽
+    void initMap27_Geumgangsan();        // 80x70 금강산 일만이천봉 선계
+    void initMap28_HeuksanDragonPalace();// 70x70 흑산도 심해 용궁
+    void initMap29_BaekdusanSanctuary(); // 80x80 백두산 천지 백록담 신역
+    void initMap30_PantheonLabyrinth();  // 100x100 태고의 환상비무 미궁 (보스러시)
 
     int m_mapId = 0;
     std::string m_mapName;

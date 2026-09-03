@@ -23,6 +23,7 @@ struct NPC {
     std::vector<std::string> dialogue;
     NPCActionType actionType = NPCActionType::None;
     std::string associatedQuestId;
+    std::vector<std::string> options;
 };
 
 } // namespace JoseonRPG

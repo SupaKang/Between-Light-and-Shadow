@@ -272,6 +272,9 @@ void DataManager::init() {
     Artifact suttaBell{"ART_SUTTA_BELL", "만파식적 파편", ArtifactBuffType::DamageReduction, 25, ArtifactDebuffType::QiDrainPerTurn, 4, "온 세상의 파도를 잠재우는 신비한 대나무 피리 조각."};
     Artifact gumihoFur{"ART_GUMIHO_TAIL_FUR", "구미호의 아홉 꼬리털", ArtifactBuffType::CaptureRateBoost, 30, ArtifactDebuffType::DefReduction, 20, "홀리는 매혹으로 요괴를 쉽게 굴복시키나 방어가 약해진다."};
     Artifact taijiCore{"ART_TAIJI_CORE", "태극진령의 핵", ArtifactBuffType::AllStatsBoost, 20, ArtifactDebuffType::HpDrainPerTurn, 5, "우주의 근원 태극의 힘으로 모든 능력을 극대화한다."};
+    Artifact scholarBrush{"ART_SCHOLAR_BRUSH", "규장각 옥필", ArtifactBuffType::DamageReduction, 15, ArtifactDebuffType::DefReduction, 10, "조선 최고의 문장과 부적을 짓는 옥빛 붓."};
+    Artifact herbGourd{"ART_HERB_GOURD", "선계의 불로호롱", ArtifactBuffType::AllStatsBoost, 15, ArtifactDebuffType::SpdReduction, 8, "금강산 신선이 빚은 불로초 영액이 담긴 호롱박."};
+    Artifact taijiBell{"ART_TAIJI_BELL", "천부인 요령", ArtifactBuffType::AllStatsBoost, 30, ArtifactDebuffType::HpDrainPerTurn, 2, "환웅천왕의 삼종신기가 깃든 궁극의 천부령."};
 
     s_artifactDatabase = {
         dokkaebiHat, centipedeEgg, foxShard, demonTile,
@@ -279,112 +282,139 @@ void DataManager::init() {
         samduFeather, baizeTusk, dragonScale, sunOrb,
         cheongoFan, bullRing, hongsalWood, gaksiMask,
         duduriHammer, yongwangPearl, chilseongSword, eumyangMirror,
-        tigerTalon, suttaBell, gumihoFur, taijiCore
+        tigerTalon, suttaBell, gumihoFur, taijiCore,
+        scholarBrush, herbGourd, taijiBell
     };
 
-    // 4. NPCs Database (Across All 5 Regions & 26 Sub-Maps)
-    // * 규칙: 일반 주민과는 절대 배틀하지 않음 (음양당 빌런 술사 및 야생 요괴와만 전투)
+    // 4. NPCs Database (Across All 31 Sub-Maps)
     NPC jumoh{"NPC_001", 1, 8, 6, 2, "주모 월선", "도선사 주막 주모",
              {"어서 오시게! 북한산 꼭대기 도선사에 수상한 음양당 놈들이", "들어앉더니 온 산천에 흉흉한 요기가 돌고 있다오.", "따뜻한 장터국밥 한 그릇 말아드릴 테니 기운 차리시게!", "주막 뒤편 마루는 언제든 편히 쉬어가도 좋소."},
-             NPCActionType::TavernRest, "MQ_001"};
+             NPCActionType::TavernRest, "MQ_001", {"[1] 주막에서 하룻밤 쉰다 (완치)", "[2] 윷놀이 내기를 한다", "[3] 떠난다"}};
 
     NPC merchant{"NPC_002", 0, 36, 28, 3, "벽사 상인 박 서방", "관상감 공인 부적 상인",
                 {"관상감에서 내려온 영술사님이시군요! 반갑습니다.", "음양당 놈들이 부리는 요괴들은 벽사 부적으로 계약할 수 있습니다.", "체력이 깎이고 상태이상에 걸린 요괴일수록 부적이 잘 먹힙니다.", "마을 동쪽 관문으로 나가면 북한산 대협곡 고갯길로 이어집니다."},
-                NPCActionType::TalismanShop, ""};
+                NPCActionType::TalismanShop, "", {"[1] 부적을 구입한다", "[2] 요괴 포획 요령을 듣는다", "[3] 떠난다"}};
 
     NPC bride{"NPC_003", 0, 65, 35, 2, "방귀쟁이 며느리", "근심 가득한 며느리",
              {"흑흑... 영술사님, 제 사정 좀 들어보세요.", "제 몸에 깃든 바람 요괴 때문에", "시아버지 앞에서 큰 방귀 소리를 내어 쫓겨날 판입니다.", "고갯길의 바람 요괴를 진정시켜 주실 수 있을까요?"},
-             NPCActionType::QuestTrigger, "SQ_001"};
+             NPCActionType::QuestTrigger, "SQ_001", {"[1] 며느리를 돕는다 (퀘스트 수주)", "[2] 위로하고 떠난다"}};
 
     NPC scholar{"NPC_011", 0, 20, 45, 1, "훈장 이 생원", "향교 훈장",
                {"주역과 음양오행에 따르면 만물은 상생과 상극이 있는 법!", "화(火)는 수(水)에 약하고, 암(暗)은 광(光)에 정화되느니라.", "108 요괴 도감을 완성하면 나라의 국운이 흥할 것이다."},
-               NPCActionType::QuestTrigger, "SQ_005"};
+               NPCActionType::QuestTrigger, "SQ_005", {"[1] 윷놀이 한판 겨룬다", "[2] 음양오행 상성을 묻는다", "[3] 작별한다"}};
 
     NPC blacksmith{"NPC_012", 0, 48, 45, 4, "대장장이 쇠돌이", "주막마을 대장장이",
                   {"유물은 소지하고만 있어도 강한 힘을 주지만 대가가 따르오.", "만약 위험하다 싶으면 '유물 파괴'를 눌러 영기를 환원하시오!", "체력과 영력이 즉시 차오르고 수련 경험치도 얻게 될 테니 말이오."},
-                  NPCActionType::QuestTrigger, ""};
+                  NPCActionType::QuestTrigger, "", {"[1] 유물 환원법에 대해 묻는다", "[2] 쇠를 삼킨 불가사리 이야기를 듣는다", "[3] 떠난다"}};
 
     NPC judge{"NPC_013", 2, 12, 6, 2, "판관 신 서방", "관상감 벽사청 판관",
              {"어명이오! 음양당의 수괴 묵영이 팔도의 영맥을 끊으려 하고 있소.", "괴승 묘각부터 시작하여 음양당 4대 방주를 모조리 토벌하시오.", "북한산 고갯길 중간에 고대 석굴이 있으니 영험한 유물을 꼭 챙기시오."},
-             NPCActionType::QuestTrigger, "MQ_001"};
+             NPCActionType::QuestTrigger, "MQ_001", {"[1] 관상감 어명을 받든다", "[2] 4대 방주에 대해 묻는다"}};
 
     NPC herbalist{"NPC_014", 3, 20, 60, 3, "약초꾼 삼돌이", "북한산 심마니",
                  {"아이고 깜짝이야! 산에 도깨비불이 어찌나 번쩍이는지...", "수풀을 지날 땐 항상 요괴가 튀어나오니 조심하게나!", "서쪽 절벽 틈새에 숨겨진 동굴로 들어가면 고대 제단이 있다더군."},
-                 NPCActionType::QuestTrigger, ""};
+                 NPCActionType::QuestTrigger, "", {"[1] 약초 채집 팁을 듣는다", "[2] 지나간다"}};
 
     NPC bossMyogak{"NPC_004", 5, 24, 26, 4, "괴승 묘각", "음양당 북악방주 (Chapter 1 Boss)",
                   {"크크크... 관상감의 애송이 영술사가 여기까지 기어들어왔구나!", "천지음양부는 이미 깨어졌고, 조선의 108 요괴는 우리 음양당의 손에 들어갈 것이다!", "폭주한 붉은 도깨비여, 저 놈을 찢어발겨라!"},
-                  NPCActionType::BossEncounter, "MQ_001"};
+                  NPCActionType::BossEncounter, "MQ_001", {"[1] 도선사 대웅전을 정화한다!"}};
 
     NPC passTraveler{"NPC_015", 6, 40, 30, 2, "보부상 조 서방", "죽령 고갯길 보부상",
                     {"소백산맥을 넘으시려는 거요? 큰일 났소!", "철포방 놈들이 무쇠광산을 장악하고 쇠를 먹는 불가사리를 부려 길을 막았소.", "심마니 어르신의 오두막에 들러 대책을 논해보시오."},
-                    NPCActionType::QuestTrigger, ""};
+                    NPCActionType::QuestTrigger, "", {"[1] 죽령 고개 소식을 묻는다", "[2] 길을 서두른다"}};
 
     NPC sobaekElder{"NPC_005", 7, 20, 20, 2, "소백산 심마니", "산길 안내인",
                    {"조심하게나! 소백산 무쇠광산에 거대 불가사리가 나타나", "온 산의 쇠를 먹어치우며 폭주하고 있다네!", "북쪽 광산 갱도로 가면 철포방주 배극과 불가사리가 있네!"},
-                   NPCActionType::QuestTrigger, "MQ_002"};
+                   NPCActionType::QuestTrigger, "MQ_002", {"[1] 무쇠광산 돌파를 결의한다", "[2] 심마니의 지도를 받는다"}};
 
     NPC miner{"NPC_016", 8, 10, 8, 1, "광부 만석", "무쇠광산 탈출 광부",
              {"살려주시오! 철포방주 배극이 요괴에게 쇠를 먹이며 괴물로 키우고 있소!", "광산 깊은 곳엔 쇠를 삼킨 불가사리가 불을 뿜고 있소이다."},
-             NPCActionType::QuestTrigger, ""};
+             NPCActionType::QuestTrigger, "", {"[1] 광산 갱도 비밀통로를 묻는다", "[2] 위로한다"}};
 
     NPC bossIronLord{"NPC_007", 10, 25, 12, 4, "철포방주 배극", "음양당 철포방주 (Chapter 2 Boss)",
                     {"소백산의 모든 무쇠는 우리 음양당의 거대 병기가 될 것이다!", "천년 무쇠 불가사리여, 침입자를 짓밟아라!"},
-                    NPCActionType::BossEncounter, "MQ_002"};
+                    NPCActionType::BossEncounter, "MQ_002", {"[1] 철포방주를 분쇄한다!"}};
 
     NPC fisherman{"NPC_017", 11, 30, 30, 2, "늙은 어부 노인", "남해 갯벌 어부",
                  {"남해 바다가 흉흉하여 배를 띄울 수가 없구먼.", "귀신 갯벌에 나타난 거대한 난파선에서 수살귀 왕이 울부짖고 있네.", "바다의 영기를 품은 야광주 유물을 챙겨두게나."},
-                 NPCActionType::QuestTrigger, ""};
+                 NPCActionType::QuestTrigger, "", {"[1] 갯벌 귀신 이야기를 듣는다", "[2] 지나간다"}};
 
     NPC portMerchant{"NPC_018", 12, 40, 20, 3, "객주 상인 강 서방", "남해 포구 객주",
                     {"남해 포구에 오신 것을 환영하오! 허나 배는 모두 묶여 있소.", "음양당 수로방주가 바다 이무기와 수살귀들을 조종하고 있소이다.", "해녀의 쉼터에 가면 난파선으로 들어가는 비밀 통로를 알 수 있을 거요."},
-                    NPCActionType::TalismanShop, ""};
+                    NPCActionType::TalismanShop, "", {"[1] 바다 부적을 구입한다", "[2] 난파선 정보를 묻는다"}};
 
     NPC haenyeo{"NPC_019", 13, 12, 8, 2, "해녀 바우", "남해 상군 해녀",
                {"물속에 가라앉은 유령 난파선엔 온갖 물귀신들이 가득해요.", "선장실 깊은 곳에 수로방주 흑사가 결계를 치고 도술을 부리고 있어요."},
-               NPCActionType::QuestTrigger, "MQ_003"};
+               NPCActionType::QuestTrigger, "MQ_003", {"[1] 난파선 잠입을 시작한다", "[2] 해녀의 조언을 듣는다"}};
 
     NPC bossWaterLord{"NPC_008", 15, 20, 8, 3, "수로방주 흑사", "음양당 수로방주 (Chapter 3 Boss)",
                      {"남해 바다의 모든 수살귀와 이무기가 우리 명을 받든다.", "심해의 원혼들이여, 영술사의 숨을 끊어라!"},
-                     NPCActionType::BossEncounter, "MQ_003"};
+                     NPCActionType::BossEncounter, "MQ_003", {"[1] 남해 바다의 원혼을 정화한다!"}};
 
     NPC woodcutter{"NPC_020", 16, 30, 30, 2, "나무꾼 칠복", "지리산 나무꾼",
                   {"지리산 천왕봉 아래 대나무 숲은 요술 안개로 가득 차 있소.", "길을 잃기 십상이니 백발 도사님의 산중 암자를 꼭 찾으시오."},
-                  NPCActionType::QuestTrigger, ""};
+                  NPCActionType::QuestTrigger, "", {"[1] 대나무 숲길 길잡이를 청한다", "[2] 지나간다"}};
 
     NPC foxSage{"NPC_009", 17, 30, 35, 2, "지리산 백발 도사", "천년 선인",
                {"음양당의 요술 결계가 지리산의 백발 구미호를 미치게 만들었네.", "어서 여우골 영맥동굴로 가 음양당 좌호법을 처치하고 구미호를 해방하게!"},
-               NPCActionType::QuestTrigger, "MQ_004"};
+               NPCActionType::QuestTrigger, "MQ_004", {"[1] 여우골 구미호 구출을 결의한다", "[2] 선계 비전을 전수받는다"}};
 
     NPC hermitNovice{"NPC_021", 18, 10, 8, 1, "동자승 정원", "지리산 암자 동자",
                     {"도사님께선 구미호가 본래 착한 신령이라 하셨어요.", "음양좌호법의 흑마술 부적을 떼어내면 본래의 백호령으로 돌아올 거예요."},
-                    NPCActionType::QuestTrigger, ""};
+                    NPCActionType::QuestTrigger, "", {"[1] 벽사탕 연금술을 조제한다", "[2] 동자승을 칭찬한다"}};
 
     NPC bossLeftGuardian{"NPC_010", 20, 25, 14, 2, "음양좌호법 설화", "음양당 좌호법 (Chapter 4 Boss)",
                          {"호호호... 천년 백발 구미호의 붉은 여우불 맛을 보겠느냐?", "음양당의 대업을 방해하는 자는 재가 되어 사라질 것이다!"},
-                         NPCActionType::BossEncounter, "MQ_004"};
+                         NPCActionType::BossEncounter, "MQ_004", {"[1] 백발 구미호를 정화한다!"}};
 
     NPC rebelExorcist{"NPC_022", 21, 30, 30, 3, "탈주 술사 묘선", "음양당 전직 술사",
                      {"당주 묵영은 조선의 108 요괴 영혼을 제물로 바쳐 태고의 혼돈을 부활시키려 합니다!", "흑요석 회랑을 지나 결계탑의 사신수를 해제하고 천문음양전으로 진입하십시오!"},
-                     NPCActionType::QuestTrigger, "MQ_005"};
+                     NPCActionType::QuestTrigger, "MQ_005", {"[1] 성채 최종 결전으로 돌입한다", "[2] 음양당 약점을 묻는다"}};
 
     NPC finalBoss{"NPC_006", 24, 25, 15, 10, "당주 묵영", "음양당 총수 (Final Boss)",
                  {"벽사청의 애송이가 마침내 일식의 성채 천문음양전까지 도달했군.", "허나 이미 늦었다. 108 요괴의 원혼으로 태고의 혼돈을 부활시켰다!", "조선의 하늘 아래 새로운 음양의 질서를 세우리라!"},
-                 NPCActionType::BossEncounter, "MQ_005"};
+                 NPCActionType::BossEncounter, "MQ_005", {"[1] 조선의 음양 질서를 수호한다!"}};
 
     NPC divineFox{"NPC_023", 25, 25, 15, 1, "천명영호", "108 전설의 영수",
                  {"영술사여... 음양의 균형을 되찾아주어 고맙구나.", "천지음양부가 온전히 복원되었으니, 조선의 삼천리 강토에 영원한 평화가 깃들 것이다."},
-                 NPCActionType::QuestTrigger, ""};
+                 NPCActionType::QuestTrigger, "", {"[1] 전설의 비무를 청한다", "[2] 조선 제일의 음양사 칭호를 받는다"}};
+
+    // Expansion NPCs (Maps 26 to 30)
+    NPC inspectorPark{"NPC_024", 26, 45, 25, 4, "암행어사 박문수", "왕실 비밀 감찰관",
+                     {"암행어사 출두야! ...음, 관상감 벽사청의 정예 영술사로군.", "도성 한양에 음양당 첩자들이 암약하고 있다는 첩보를 입수했소.", "나와 함께 육조거리의 수상한 자들을 감찰해주겠소?"},
+                     NPCActionType::QuestTrigger, "SQ_006", {"[1] 어사또를 도와 감찰한다 (수주)", "[2] 도성 치안에 대해 묻는다", "[3] 떠난다"}};
+
+    NPC astronomerRyu{"NPC_025", 26, 70, 30, 3, "관상감 류 영감", "수석 천문학자",
+                     {"하늘의 일식과 북두칠성의 운행이 예사롭지 않소.", "일식이 걷히고 성좌가 제자리를 찾았으나, 아직 팔도 영맥에 여파가 남아있소.", "천문 성도(星圖)의 비밀을 풀어보시겠소?"},
+                     NPCActionType::QuestTrigger, "", {"[1] 천문성도의 비밀을 듣는다", "[2] 규장각 옥필 유물을 받는다", "[3] 물러선다"}};
+
+    NPC hermitSage{"NPC_026", 27, 40, 25, 1, "금강산 백운선사", "선계의 백발 신선",
+                  {"허허... 속세의 영술사가 일만이천봉 금강산 선계까지 당도했구려.", "이곳엔 천년 묵은 불로초와 신선들의 도술이 깃들어 있소.", "선계의 불로초 시험을 통과하면 불로호롱을 내어주리다."},
+                  NPCActionType::QuestTrigger, "SQ_007", {"[1] 선계 불로초 시험에 응한다 (수주)", "[2] 신선의 도술 조언을 듣는다", "[3] 하산한다"}};
+
+    NPC haenyeoCaptain{"NPC_027", 28, 35, 30, 2, "해녀대장 진주", "흑산도 심해 잠수사",
+                      {"심해 용궁까지 찾아오시다니 담력이 보통이 아니군요!", "용왕님의 여의보주가 흩어져 바다 요괴들이 소란을 피우고 있어요.", "저와 함께 보주를 회수해 주시겠어요?"},
+                      NPCActionType::QuestTrigger, "SQ_008", {"[1] 용궁 여의보주를 회수한다 (수주)", "[2] 심해 진주 윷놀이를 겨룬다", "[3] 포구로 돌아간다"}};
+
+    NPC whiteDeerSpirit{"NPC_028", 29, 40, 35, 1, "백두산 백록령", "천지의 백록 수호신",
+                       {"성스러운 백두산 천지의 정기가 그대를 맞이합니다...", "음양당의 사악한 잔재가 북방의 설원에 엉겨붙어 있나니,", "순백의 영기로 천지의 영맥을 정화해주시겠습니까?"},
+                       NPCActionType::QuestTrigger, "SQ_009", {"[1] 백두산 천지를 정화한다 (수주)", "[2] 영수 백록의 축복을 받는다", "[3] 묵념한다"}};
+
+    NPC pantheonKeeper{"NPC_029", 30, 50, 45, 10, "환상비무대 수호령", "태고 미궁의 관리인",
+                      {"이곳은 시간과 공간이 교차하는 태고의 환상비무 미궁...", "조선 최강의 음양사만이 역대 5대 보스의 환영과 연속으로 겨룰 수 있다.", "궁극의 환상비무 연전(Boss Rush)에 도전하겠는가?"},
+                      NPCActionType::BossEncounter, "SQ_010", {"[1] 5대 보스 연속 환상비무전에 도전한다!", "[2] 태고 미궁의 비보 위치를 묻는다", "[3] 아직 준비가 부족합니다"}};
 
     s_npcDatabase = {
         jumoh, merchant, bride, scholar, blacksmith, judge,
         herbalist, bossMyogak, passTraveler, sobaekElder, miner,
         bossIronLord, fisherman, portMerchant, haenyeo, bossWaterLord,
         woodcutter, foxSage, hermitNovice, bossLeftGuardian,
-        rebelExorcist, finalBoss, divineFox
+        rebelExorcist, finalBoss, divineFox,
+        inspectorPark, astronomerRyu, hermitSage, haenyeoCaptain,
+        whiteDeerSpirit, pantheonKeeper
     };
 
-    // 5. 5 Main Campaign Chapters & 5 Side Quests
+    // 5. 5 Main Campaign Chapters & 10 Rich Side Quests
     Quest mq1{"MQ_001", QuestType::Main, "제1장: 도선사의 붉은 안개", 1, "관상감 벽사청의 명을 받아 도선사 인근에 번지는 음양당의 요기를 조사하라.",
              {"도선사 주막 주모와 대화하여 정보 수집", "북한산 고갯길을 지나 도선사 대웅전 진입", "음양당 하수인 괴승 묘각 격파"}, 0, {500, 300, "ART_DOKKAEBI_HAT"}, QuestState::InProgress};
 
@@ -415,6 +445,21 @@ void DataManager::init() {
     Quest sq5{"SQ_005", QuestType::Side, "108 요괴 전종 도감의 완성", 0, "조선 팔도에 흩어진 108종의 모든 요괴와 계약하여 음양견문록을 완성하라.",
              {"108종 요괴 전원 도감 계약 달성"}, 0, {5000, 5000, "ART_SUN_ORB"}, QuestState::InProgress};
 
+    Quest sq6{"SQ_006", QuestType::Side, "한양 암행감찰록", 0, "암행어사 박문수와 함께 도성 한양 육조거리의 흉흉한 요기를 조사하라.",
+             {"한양 육조거리 어사 박문수와 대화", "도성 첩자 요괴 색출 및 정화"}, 0, {1500, 1000, "ART_SCHOLAR_BRUSH"}, QuestState::NotStarted};
+
+    Quest sq7{"SQ_007", QuestType::Side, "금강산 불로초 탐색", 0, "금강산 일만이천봉 선계의 백운선사를 찾아 신비한 불로초를 채취하라.",
+             {"금강산 백운선사의 시험 통과", "선계 영초 채취"}, 0, {2500, 1500, "ART_HERB_GOURD"}, QuestState::NotStarted};
+
+    Quest sq8{"SQ_008", QuestType::Side, "심해 용궁의 여의보주", 0, "흑산도 해녀대장 진주와 함께 심해 용궁에 흩어진 여의보주를 회수하라.",
+             {"흑산도 심해 용궁 진입", "여의보주 회수 및 용왕 신령 정화"}, 0, {3500, 2000, "ART_YONGWANG_PEARL"}, QuestState::NotStarted};
+
+    Quest sq9{"SQ_009", QuestType::Side, "백두산 천지의 영기 정화", 0, "백두산 천지 백록담의 백록령을 도와 북방 설원의 영맥을 정화하라.",
+             {"백두산 천지 신역 도달", "백록령과 영맥 정화 의식 거행"}, 0, {5000, 3000, "ART_TAIJI_CORE"}, QuestState::NotStarted};
+
+    Quest sq10{"SQ_010", QuestType::Side, "태고 환상미궁 완전정복", 0, "태고의 환상비무 미궁에서 5대 보스의 환영을 모두 격파하고 궁극의 천부인을 획득하라.",
+              {"환상비무대 수호령과 대화", "5대 보스 연속 환상비무전 제패"}, 0, {10000, 8000, "ART_TAIJI_BELL"}, QuestState::NotStarted};
+
     s_questManager.registerQuest(mq1);
     s_questManager.registerQuest(mq2);
     s_questManager.registerQuest(mq3);
@@ -425,6 +470,11 @@ void DataManager::init() {
     s_questManager.registerQuest(sq3);
     s_questManager.registerQuest(sq4);
     s_questManager.registerQuest(sq5);
+    s_questManager.registerQuest(sq6);
+    s_questManager.registerQuest(sq7);
+    s_questManager.registerQuest(sq8);
+    s_questManager.registerQuest(sq9);
+    s_questManager.registerQuest(sq10);
 }
 
 const std::vector<Yokai>& DataManager::getAllYokaiTemplates() {

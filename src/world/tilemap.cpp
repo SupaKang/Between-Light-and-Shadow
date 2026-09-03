@@ -40,6 +40,11 @@ void Tilemap::loadMap(int mapId) {
         case 23: initMap23_GuardianTower(); break;
         case 24: initMap24_FinalSanctum(); break;
         case 25: initMap25_OriginAbyss(); break;
+        case 26: initMap26_HanyangBoulevard(); break;
+        case 27: initMap27_Geumgangsan(); break;
+        case 28: initMap28_HeuksanDragonPalace(); break;
+        case 29: initMap29_BaekdusanSanctuary(); break;
+        case 30: initMap30_PantheonLabyrinth(); break;
         default: initMap0_Village(); break;
     }
 }
@@ -119,6 +124,9 @@ void Tilemap::initMap0_Village() {
     m_tiles[30 * m_width + 79] = 2; m_collision[30 * m_width + 79] = false;
     m_warps.push_back({79, 30, 3, 20, 2});  // To Mountain Pass (Map 3)
     m_warps.push_back({78, 30, 3, 20, 2});
+
+    m_tiles[59 * m_width + 75] = 2; m_collision[59 * m_width + 75] = false;
+    m_warps.push_back({75, 59, 26, 45, 58}); // To Hanyang Boulevard (Map 26)
 }
 
 // -------------------------------------------------------------
@@ -795,6 +803,180 @@ void Tilemap::initMap25_OriginAbyss() {
 
     m_tiles[49 * m_width + 25] = 2; m_collision[49 * m_width + 25] = false;
     m_warps.push_back({25, 49, 24, 25, 7});
+}
+
+// -------------------------------------------------------------
+// [Map 26] 한양 육조거리 & 경복궁 근정전 외곽 (90 x 60)
+// -------------------------------------------------------------
+void Tilemap::initMap26_HanyangBoulevard() {
+    m_mapName = "한양 육조거리 & 경복궁 외곽";
+    m_width = 90;
+    m_height = 60;
+    m_tiles.assign(m_width * m_height, 2);
+    m_collision.assign(m_width * m_height, false);
+
+    makeBoundaryWalls(m_width, m_height, m_tiles, m_collision, 1);
+
+    // Stone road across center
+    for (int y = 0; y < m_height; ++y) {
+        for (int x = 42; x <= 48; ++x) {
+            m_tiles[y * m_width + x] = 2;
+        }
+    }
+
+    // Royal Government Offices & Stone Pavilions
+    for (int y = 10; y <= 50; y += 15) {
+        for (int x = 10; x <= 30; x += 10) {
+            m_tiles[y * m_width + x] = 7;
+            m_collision[y * m_width + x] = true;
+        }
+        for (int x = 60; x <= 80; x += 10) {
+            m_tiles[y * m_width + x] = 7;
+            m_collision[y * m_width + x] = true;
+        }
+    }
+
+    // Chests in Treasury
+    m_chests.push_back({28, 15, 12, "ART_SCHOLAR_BRUSH", 3000, 2000, false});
+    m_chests.push_back({29, 75, 12, "ART_JADE_MIRROR", 5000, 3500, false});
+
+    // Warp back to Map 0 (도선사 마을 입구)
+    m_tiles[59 * m_width + 45] = 2;
+    m_warps.push_back({45, 59, 0, 75, 30});
+
+    // Warp to Geumgangsan (Map 27) at north gate
+    m_tiles[0 * m_width + 45] = 2; m_collision[0 * m_width + 45] = false;
+    m_warps.push_back({45, 0, 27, 40, 68});
+}
+
+// -------------------------------------------------------------
+// [Map 27] 금강산 일만이천봉 선계 (80 x 70)
+// -------------------------------------------------------------
+void Tilemap::initMap27_Geumgangsan() {
+    m_mapName = "금강산 일만이천봉 선계";
+    m_width = 80;
+    m_height = 70;
+    m_tiles.assign(m_width * m_height, 0);
+    m_collision.assign(m_width * m_height, false);
+
+    makeBoundaryWalls(m_width, m_height, m_tiles, m_collision, 1);
+
+    // Mountain rock clusters
+    for (int y = 10; y < 60; y += 12) {
+        for (int x = 15; x < 70; x += 14) {
+            m_tiles[y * m_width + x] = 1;
+            m_collision[y * m_width + x] = true;
+        }
+    }
+
+    // Hermit shrine
+    m_tiles[20 * m_width + 40] = 9;
+    m_chests.push_back({30, 42, 20, "ART_HERB_GOURD", 4000, 2500, false});
+
+    // Warp back to Hanyang (Map 26)
+    m_tiles[69 * m_width + 40] = 2; m_collision[69 * m_width + 40] = false;
+    m_warps.push_back({40, 69, 26, 45, 2});
+
+    // Warp to Heuksan Dragon Palace (Map 28)
+    m_tiles[5 * m_width + 75] = 9;
+    m_warps.push_back({75, 5, 28, 35, 68});
+}
+
+// -------------------------------------------------------------
+// [Map 28] 흑산도 심해 용궁 (70 x 70)
+// -------------------------------------------------------------
+void Tilemap::initMap28_HeuksanDragonPalace() {
+    m_mapName = "흑산도 심해 용궁";
+    m_width = 70;
+    m_height = 70;
+    m_tiles.assign(m_width * m_height, 4);
+    m_collision.assign(m_width * m_height, false);
+
+    makeBoundaryWalls(m_width, m_height, m_tiles, m_collision, 1);
+
+    // Coral columns
+    for (int y = 15; y < 60; y += 15) {
+        for (int x = 15; x < 60; x += 15) {
+            m_tiles[y * m_width + x] = 9;
+            m_collision[y * m_width + x] = true;
+        }
+    }
+
+    // Dragon King's Pearl Chest
+    m_chests.push_back({31, 35, 15, "ART_DRAGON_SCALE", 8000, 4500, false});
+
+    // Warp back to Geumgangsan (Map 27)
+    m_tiles[69 * m_width + 35] = 2; m_collision[69 * m_width + 35] = false;
+    m_warps.push_back({35, 69, 27, 74, 6});
+
+    // Warp to Baekdusan Sanctuary (Map 29)
+    m_tiles[5 * m_width + 35] = 9;
+    m_warps.push_back({35, 5, 29, 40, 78});
+}
+
+// -------------------------------------------------------------
+// [Map 29] 백두산 천지 백록담 신역 (80 x 80)
+// -------------------------------------------------------------
+void Tilemap::initMap29_BaekdusanSanctuary() {
+    m_mapName = "백두산 천지 백록담 신역";
+    m_width = 80;
+    m_height = 80;
+    m_tiles.assign(m_width * m_height, 0);
+    m_collision.assign(m_width * m_height, false);
+
+    makeBoundaryWalls(m_width, m_height, m_tiles, m_collision, 1);
+
+    // Sacred Caldera Lake in center
+    for (int y = 25; y <= 55; ++y) {
+        for (int x = 25; x <= 55; ++x) {
+            m_tiles[y * m_width + x] = 4;
+            m_collision[y * m_width + x] = true;
+        }
+    }
+    // Bridge to central sacred stone
+    for (int x = 38; x <= 42; ++x) {
+        m_tiles[40 * m_width + x] = 2;
+        m_collision[40 * m_width + x] = false;
+    }
+
+    m_chests.push_back({32, 40, 39, "ART_TAIJI_CORE", 12000, 6000, false});
+
+    // Warp back to Dragon Palace (Map 28)
+    m_tiles[79 * m_width + 40] = 2; m_collision[79 * m_width + 40] = false;
+    m_warps.push_back({40, 79, 28, 35, 6});
+
+    // Warp to Pantheon Labyrinth (Map 30)
+    m_tiles[5 * m_width + 40] = 9;
+    m_warps.push_back({40, 5, 30, 50, 98});
+}
+
+// -------------------------------------------------------------
+// [Map 30] 태고의 환상비무 미궁 (100 x 100)
+// -------------------------------------------------------------
+void Tilemap::initMap30_PantheonLabyrinth() {
+    m_mapName = "태고의 환상비무 미궁 (궁극의 시련)";
+    m_width = 100;
+    m_height = 100;
+    m_tiles.assign(m_width * m_height, 3);
+    m_collision.assign(m_width * m_height, false);
+
+    makeBoundaryWalls(m_width, m_height, m_tiles, m_collision, 1);
+
+    // Labyrinth stone pillars
+    for (int y = 10; y < 90; y += 10) {
+        for (int x = 10; x < 90; x += 10) {
+            if (x == 50 && y == 50) continue; // Keep center arena open
+            m_tiles[y * m_width + x] = 9;
+            m_collision[y * m_width + x] = true;
+        }
+    }
+
+    // Ultimate Celestial Chest
+    m_chests.push_back({33, 50, 10, "ART_TAIJI_BELL", 20000, 10000, false});
+
+    // Warp back to Baekdusan (Map 29)
+    m_tiles[99 * m_width + 50] = 2; m_collision[99 * m_width + 50] = false;
+    m_warps.push_back({50, 99, 29, 40, 6});
 }
 
 void Tilemap::render(Renderer& renderer, int cameraX, int cameraY) const {
