@@ -20,8 +20,15 @@ set(SOURCES
     src/core/renderer.cpp
     src/core/input.cpp
     src/core/window.cpp
+    src/core/task_engine.cpp
+    src/core/scene_stack.cpp
+    src/core/save_system.cpp
     src/ui/font_renderer.cpp
+    src/ui/dialogue_box.cpp
+    src/ui/ui_widgets.cpp
     src/world/tilemap.cpp
+    src/world/grid_controller.cpp
+    src/world/world_scene.cpp
     src/gameplay/yokai.cpp
     src/gameplay/party.cpp
     src/gameplay/artifact.cpp
@@ -29,6 +36,13 @@ set(SOURCES
     src/gameplay/quest.cpp
     src/battle/status_effects.cpp
     src/battle/battle.cpp
+    src/battle/battle_sequencer.cpp
+    src/battle/battle_scene.cpp
+    src/scenes/encyclopedia_scene.cpp
+    src/scenes/party_scene.cpp
+    src/scenes/artifact_scene.cpp
+    src/scenes/quest_scene.cpp
+    src/scenes/title_scene.cpp
     src/data/data_manager.cpp
 )
 
@@ -44,6 +58,8 @@ set(TEST_SOURCES
     tests/test_main.cpp
     tests/test_battle.cpp
     src/core/renderer.cpp
+    src/core/task_engine.cpp
+    src/core/save_system.cpp
     src/world/tilemap.cpp
     src/gameplay/yokai.cpp
     src/gameplay/party.cpp

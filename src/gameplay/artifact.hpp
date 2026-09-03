@@ -14,7 +14,10 @@ enum class ArtifactBuffType {
     MagicAtkBoost,      // 영술 위력 증폭 (%)
     DamageReduction,    // 받는 물리 피해 경감 (%)
     CaptureRateBoost,   // 계약 부적 성공률 증가 (%)
-    StatusChanceBoost   // 상태이상 부여 확률 증폭 (%)
+    StatusChanceBoost,  // 상태이상 부여 확률 증폭 (%)
+    PhysAtkBoost,       // 물리 공격력 증폭 (%)
+    ImmunitySeal,       // 봉인 및 마비 면역
+    AllStatsBoost       // 전능(모든 스탯) 증폭 (%)
 };
 
 enum class ArtifactDebuffType {
@@ -23,7 +26,9 @@ enum class ArtifactDebuffType {
     DefReduction,       // 방어력 감소 (%)
     SpdReduction,       // 신법(SPD) 감소 (%)
     ExpPenalty,         // 획득 경험치 감소 (%)
-    HpDrainPerTurn      // 매 턴 체력(HP) 소모 (%)
+    HpDrainPerTurn,     // 매 턴 체력(HP) 소모 (%)
+    MaxQiReduction,     // 최대 영력 감소 (%)
+    DamageTakenIncrease // 받는 피해 증가 (%)
 };
 
 struct Artifact {
@@ -47,6 +52,7 @@ public:
     const Artifact* getArtifact(size_t index) const;
     size_t getCount() const { return m_artifacts.size(); }
     bool isFull() const { return m_artifacts.size() >= MAX_ARTIFACTS; }
+    void clear() { m_artifacts.clear(); }
 
     // Calculated aggregated modifiers
     int getCritRateBonus() const;

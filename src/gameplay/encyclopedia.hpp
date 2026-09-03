@@ -34,6 +34,8 @@ public:
 
     void markSeen(std::string_view id);
     void markCaptured(std::string_view id);
+    void markSeen(int number);
+    void markCaptured(int number);
 
     const EncyclopediaEntry* getEntry(int number) const;
     const EncyclopediaEntry* getEntryById(std::string_view id) const;

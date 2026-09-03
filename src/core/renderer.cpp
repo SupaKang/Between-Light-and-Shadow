@@ -146,6 +146,42 @@ void Renderer::drawTileProcedural(int px, int py, int tileId) {
             fillRect(px + 4, py + 4, 8, 8, Color(45, 125, 65));
             drawRect(px + 2, py + 2, 12, 12, Color(20, 60, 30));
             break;
+        case 6: // Water / Stream / Sea (시냇물 / 바다)
+            fillRect(px, py, 16, 16, Color(30, 80, 150));
+            drawLine(px + 2, py + 4, px + 7, py + 4, Color(70, 130, 210));
+            drawLine(px + 9, py + 10, px + 14, py + 10, Color(70, 130, 210));
+            break;
+        case 7: // Wooden Bridge (나무 다리)
+            fillRect(px, py, 16, 16, Color(140, 90, 45));
+            drawRect(px, py, 16, 16, Color(90, 55, 25));
+            drawLine(px + 4, py, px + 4, py + 15, Color(90, 55, 25));
+            drawLine(px + 11, py, px + 11, py + 15, Color(90, 55, 25));
+            break;
+        case 8: // Bamboo Forest / Tall Grass (대나무 덤불 / 야생 수풀)
+            fillRect(px, py, 16, 16, Color(35, 90, 45));
+            drawLine(px + 3, py + 14, px + 3, py + 2, Color(70, 180, 80));
+            drawLine(px + 8, py + 14, px + 8, py + 1, Color(90, 200, 100));
+            drawLine(px + 13, py + 14, px + 13, py + 3, Color(70, 180, 80));
+            setPixel(px + 4, py + 4, Color(120, 220, 110));
+            setPixel(px + 9, py + 3, Color(120, 220, 110));
+            break;
+        case 9: // Dark Obsidian Altar (음양당 흑요석 제단)
+            fillRect(px, py, 16, 16, Color(24, 20, 32));
+            drawRect(px + 2, py + 2, 12, 12, Color(90, 40, 120));
+            fillRect(px + 6, py + 6, 4, 4, Palette::Red);
+            break;
+        case 10: // Treasure Chest (보물 상자)
+            fillRect(px, py, 16, 16, Color(42, 100, 52)); // grass base
+            fillRect(px + 2, py + 4, 12, 10, Color(180, 130, 40));
+            drawRect(px + 2, py + 4, 12, 10, Color(90, 60, 20));
+            fillRect(px + 6, py + 7, 4, 3, Palette::Yellow);
+            break;
+        case 11: // Hongsalmun Gate (홍살문 / 관문)
+            fillRect(px, py, 16, 16, Color(160, 130, 90)); // dirt base
+            fillRect(px + 1, py + 1, 3, 14, Palette::Red);
+            fillRect(px + 12, py + 1, 3, 14, Palette::Red);
+            fillRect(px + 1, py + 3, 14, 3, Palette::Red);
+            break;
         default:
             fillRect(px, py, 16, 16, Palette::DarkGray);
             break;

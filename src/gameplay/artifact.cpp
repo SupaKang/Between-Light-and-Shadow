@@ -182,6 +182,12 @@ std::string ArtifactInventory::getBuffDescription(const Artifact& a) {
             return "부적 계약(포획) 성공률 +" + std::to_string(a.buffValue) + "%p";
         case ArtifactBuffType::StatusChanceBoost:
             return "상태이상 부여 확률 +" + std::to_string(a.buffValue) + "%";
+        case ArtifactBuffType::PhysAtkBoost:
+            return "물리 공격력 +" + std::to_string(a.buffValue) + "%";
+        case ArtifactBuffType::ImmunitySeal:
+            return "봉인 및 마비 상태이상 완전 면역";
+        case ArtifactBuffType::AllStatsBoost:
+            return "전능(모든 기본 능력치) +" + std::to_string(a.buffValue) + "%";
         default:
             return "알 수 없는 이점";
     }
@@ -201,6 +207,10 @@ std::string ArtifactInventory::getDebuffDescription(const Artifact& a) {
             return "전투 후 획득 경험치 " + std::to_string(a.debuffValue) + "% 감소";
         case ArtifactDebuffType::HpDrainPerTurn:
             return "매 턴 시작 시 최대 HP의 " + std::to_string(a.debuffValue) + "% 자가 피해";
+        case ArtifactDebuffType::MaxQiReduction:
+            return "최대 영력(Qi) " + std::to_string(a.debuffValue) + "% 감소";
+        case ArtifactDebuffType::DamageTakenIncrease:
+            return "받는 모든 피해 " + std::to_string(a.debuffValue) + "% 증가";
         default:
             return "알 수 없는 대가";
     }

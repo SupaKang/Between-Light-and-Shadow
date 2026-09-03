@@ -45,8 +45,10 @@ public:
 
     bool takeDamage(int amount);
     void healHp(int amount);
+    void setHp(int hp);
     bool consumeQi(int amount);
     void restoreQi(int amount);
+    void setQi(int qi);
 
     // Getters
     int getNumber() const { return m_number; }

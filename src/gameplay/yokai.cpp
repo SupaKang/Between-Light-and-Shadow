@@ -90,6 +90,10 @@ void Yokai::healHp(int amount) {
     m_stats.hp = std::min(m_stats.maxHp, m_stats.hp + amount);
 }
 
+void Yokai::setHp(int hp) {
+    m_stats.hp = std::clamp(hp, 0, m_stats.maxHp);
+}
+
 bool Yokai::consumeQi(int amount) {
     if (m_stats.qi < amount) return false;
     m_stats.qi -= amount;
@@ -98,6 +102,10 @@ bool Yokai::consumeQi(int amount) {
 
 void Yokai::restoreQi(int amount) {
     m_stats.qi = std::min(m_stats.maxQi, m_stats.qi + amount);
+}
+
+void Yokai::setQi(int qi) {
+    m_stats.qi = std::clamp(qi, 0, m_stats.maxQi);
 }
 
 bool Yokai::addSkill(const Skill& skill) {

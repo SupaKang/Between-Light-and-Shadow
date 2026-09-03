@@ -23,6 +23,10 @@ const Yokai* Battle::getActivePlayerYokai() const {
     return m_playerParty.getActiveYokai();
 }
 
+void Battle::update() {
+    // Battle logic update tick if needed
+}
+
 void Battle::onNavigateUp() {
     if (m_state != BattleState::PlayerCommand) return;
     if (m_menuState == BattleMenuState::MainAction) {

@@ -43,6 +43,26 @@ void Encyclopedia::markCaptured(std::string_view id) {
     }
 }
 
+void Encyclopedia::markSeen(int number) {
+    for (auto& entry : m_entries) {
+        if (entry.number == number) {
+            if (entry.status == DiscoveryStatus::Unseen) {
+                entry.status = DiscoveryStatus::Seen;
+            }
+            return;
+        }
+    }
+}
+
+void Encyclopedia::markCaptured(int number) {
+    for (auto& entry : m_entries) {
+        if (entry.number == number) {
+            entry.status = DiscoveryStatus::Captured;
+            return;
+        }
+    }
+}
+
 const EncyclopediaEntry* Encyclopedia::getEntry(int number) const {
     for (const auto& entry : m_entries) {
         if (entry.number == number) return &entry;

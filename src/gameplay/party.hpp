@@ -22,6 +22,7 @@ public:
     size_t getSize() const { return m_members.size(); }
     bool isAllFainted() const;
     void healAll();
+    void clear() { m_members.clear(); }
 
 private:
     std::vector<Yokai> m_members;
