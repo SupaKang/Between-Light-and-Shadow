@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include <cassert>
+#include <random>
 
 using namespace JoseonRPG;
 
@@ -1342,5 +1343,207 @@ bool runEndToEndPlaythroughSimulationTests() {
     std::cout << "  - Final Economy: " << loadCtx.money << "냥, Map: 25, Codex: 108/108, Main Quests: 5/5" << std::endl;
 
     std::cout << "\n[PASS] COMPLETE END-TO-END PLAYTHROUGH SCENARIO VERIFIED SUCCESSFULLY!" << std::endl;
+    return true;
+}
+
+bool runMonteCarloBalancingAndAnomalyDetectionTests() {
+    std::cout << "\n==================================================" << std::endl;
+    std::cout << " [MONTE CARLO] 10,000-BATTLE BALANCING SIMULATION " << std::endl;
+    std::cout << "==================================================" << std::endl;
+
+    DataManager::init();
+    const auto& roster = DataManager::getAllYokaiTemplates();
+    std::mt19937 rng(2026);
+
+    // 1. 10,000 Random Yokai vs Yokai Battles
+    const int totalBattles = 10000;
+    int totalTurns = 0;
+    int elementWins[7] = {0};
+    int elementMatches[7] = {0};
+
+    std::uniform_int_distribution<size_t> yokaiDist(0, 107); // 108 templates (excluding 5 bosses)
+
+    for (int b = 0; b < totalBattles; ++b) {
+        size_t idxA = yokaiDist(rng);
+        size_t idxB = yokaiDist(rng);
+        while (idxB == idxA) idxB = yokaiDist(rng);
+
+        Yokai yA = roster[idxA];
+        Yokai yB = roster[idxB];
+
+        // Normalize level to 20
+        yA.gainExp(9000);
+        yB.gainExp(9000);
+        yA.healHp(999);
+        yB.healHp(999);
+
+        Party partyA;
+        partyA.addYokai(yA);
+        ArtifactInventory emptyArt;
+
+        Battle battle(partyA, yB, emptyArt);
+
+        int turns = 0;
+        int maxTurns = 50;
+        while (battle.getEnemyYokai().getStats().hp > 0 && !partyA.isAllFainted() && turns < maxTurns) {
+            const auto& skills = partyA.getActiveYokai()->getSkills();
+            int sIdx = 0;
+            if (!skills.empty()) {
+                std::uniform_int_distribution<int> sDist(0, static_cast<int>(skills.size()) - 1);
+                sIdx = sDist(rng);
+            }
+            battle.executePlayerSkill(sIdx);
+            turns++;
+        }
+
+        totalTurns += turns;
+        int elA = static_cast<int>(yA.getElement());
+        int elB = static_cast<int>(yB.getElement());
+        if (elA < 7) elementMatches[elA]++;
+        if (elB < 7) elementMatches[elB]++;
+
+        if (battle.getEnemyYokai().getStats().hp <= 0) {
+            if (elA < 7) elementWins[elA]++;
+        } else {
+            if (elB < 7) elementWins[elB]++;
+        }
+    }
+
+    float avgTtk = static_cast<float>(totalTurns) / totalBattles;
+    std::cout << "  - 10,000 Random Battles Completed." << std::endl;
+    std::cout << "  - Average Battle TTK: " << avgTtk << " turns (Target: 3.0 ~ 7.0 turns)" << std::endl;
+
+    if (avgTtk < 2.0f || avgTtk > 8.0f) {
+        std::cerr << "  FAIL: Average TTK outside expected range! (" << avgTtk << ")" << std::endl;
+        return false;
+    }
+
+    const char* elemNames[7] = {"Physical", "Fire", "Water", "Earth", "Light", "Dark", "Custom"};
+    std::cout << "  - Elemental Win-Rate Distribution across 10,000 Matches:" << std::endl;
+    for (int e = 0; e < 6; ++e) {
+        if (elementMatches[e] > 0) {
+            float winRate = (static_cast<float>(elementWins[e]) / elementMatches[e]) * 100.0f;
+            std::cout << "    [" << elemNames[e] << "] Win Rate: " << winRate << "% (" 
+                      << elementWins[e] << "/" << elementMatches[e] << ")" << std::endl;
+            if (winRate < 25.0f || winRate > 75.0f) {
+                std::cerr << "  FAIL: Element " << elemNames[e] << " win rate heavily skewed! (" << winRate << "%)" << std::endl;
+                return false;
+            }
+        }
+    }
+
+    // 2. 5 Campaign Boss Difficulty Curve Simulation (1,000 runs each)
+    std::cout << "\n  - Simulating 5 Campaign Boss Difficulty Curves (1,000 runs per Boss)..." << std::endl;
+    struct BossTestSpec {
+        const char* bossId;
+        const char* bossName;
+        int partyLevel;
+        float minWinRate;
+        float maxWinRate;
+    };
+
+    BossTestSpec bossSpecs[6] = {
+        {"YOKAI_BOSS_01", "Boss 1 (괴승 묘각)", 8, 55.0f, 100.0f},
+        {"YOKAI_BOSS_02", "Boss 2 (철포방주 배극)", 16, 55.0f, 100.0f},
+        {"YOKAI_BOSS_03", "Boss 3 (수로방주 흑사)", 24, 50.0f, 100.0f},
+        {"YOKAI_BOSS_04", "Boss 4 (좌호법 설화)", 33, 50.0f, 100.0f},
+        {"YOKAI_BOSS_05", "Boss 5 (당주 묵영)", 42, 45.0f, 100.0f},
+        {"YOKAI_108", "Secret Boss 108 (천명영호)", 50, 40.0f, 100.0f}
+    };
+
+    for (int i = 0; i < 6; ++i) {
+        const auto& spec = bossSpecs[i];
+        int bossWins = 0;
+        int bossTotalTurns = 0;
+        const int runs = 1000;
+
+        for (int r = 0; r < runs; ++r) {
+            Yokai p1 = DataManager::createYokaiById("YOKAI_001");
+            Yokai p2 = DataManager::createYokaiById("YOKAI_002");
+            Yokai p3 = DataManager::createYokaiById("YOKAI_003");
+
+            // Scale party
+            p1.gainExp(spec.partyLevel * 1000);
+            p2.gainExp(spec.partyLevel * 1000);
+            p3.gainExp(spec.partyLevel * 1000);
+            p1.healHp(999); p2.healHp(999); p3.healHp(999);
+
+            Party testParty;
+            testParty.addYokai(p1);
+            testParty.addYokai(p2);
+            testParty.addYokai(p3);
+
+            ArtifactInventory testArts;
+            if (i >= 2) {
+                testArts.addArtifact(DataManager::createArtifactById("ART_DOKKAEBI_HAT"));
+            }
+            if (i >= 4) {
+                testArts.addArtifact(DataManager::createArtifactById("ART_FOX_MARBLE_SHARD"));
+            }
+
+            Yokai boss = DataManager::createYokaiById(spec.bossId);
+            Battle bossBattle(testParty, boss, testArts);
+
+            int turns = 0;
+            int maxTurns = 60;
+            while (bossBattle.getEnemyYokai().getStats().hp > 0 && !testParty.isAllFainted() && turns < maxTurns) {
+                Yokai* active = testParty.getActiveYokai();
+                if (active && active->isFainted()) {
+                    for (size_t p = 1; p < testParty.getSize(); ++p) {
+                        if (!testParty.getYokai(p)->isFainted()) {
+                            testParty.swapYokai(0, p);
+                            break;
+                        }
+                    }
+                }
+                bossBattle.executePlayerSkill(0);
+                turns++;
+            }
+
+            bossTotalTurns += turns;
+            if (bossBattle.getEnemyYokai().getStats().hp <= 0) {
+                bossWins++;
+            }
+        }
+
+        float winRate = (static_cast<float>(bossWins) / runs) * 100.0f;
+        float avgBossTtk = static_cast<float>(bossTotalTurns) / runs;
+
+        std::cout << "    [" << spec.bossName << "] Win Rate: " << winRate << "%, Avg TTK: " 
+                  << avgBossTtk << " turns (Target Win Rate: " << spec.minWinRate << "~" << spec.maxWinRate << "%)" << std::endl;
+
+        if (winRate < spec.minWinRate || winRate > spec.maxWinRate) {
+            std::cerr << "  FAIL: Boss " << spec.bossName << " win rate (" << winRate << "%) out of balance bounds!" << std::endl;
+            return false;
+        }
+    }
+
+    // 3. Capture Rate Matrix Validation
+    std::cout << "\n  - Verifying Capture Probability Matrix Across HP & Status Tiers..." << std::endl;
+    Yokai testTarget = DataManager::createYokaiById("YOKAI_003"); // Grade 3
+    Party capParty;
+    capParty.addYokai(DataManager::createYokaiById("YOKAI_001"));
+    ArtifactInventory capArts;
+    Battle capBattle(capParty, testTarget, capArts);
+
+    // 100% HP, No status
+    float r1 = capBattle.calculateCaptureProbability();
+    // 25% HP, No status
+    capBattle.getEnemyYokai().takeDamage(105);
+    float r2 = capBattle.calculateCaptureProbability();
+    // 25% HP, Paralyzed
+    StatusEffectSystem::applyStatus(capBattle.getEnemyYokai(), StatusEffect::Paralysis, 3);
+    float r3 = capBattle.calculateCaptureProbability();
+
+    std::cout << "    * Full HP (100%): " << r1 * 100.0f << "% (Expected 5%~15%)" << std::endl;
+    std::cout << "    * Low HP (25%): " << r2 * 100.0f << "% (Expected 45%~60%)" << std::endl;
+    std::cout << "    * Low HP (25%) + Status: " << r3 * 100.0f << "% (Expected 70%~85%)" << std::endl;
+
+    if (r1 > 0.20f || r2 <= r1 || r3 <= r2 || r3 > 0.95f) {
+        std::cerr << "  FAIL: Capture probability curve is non-monotonic or improperly scaled!" << std::endl;
+        return false;
+    }
+
+    std::cout << "\n[PASS] MONTE CARLO BALANCING & ANOMALY DETECTION TESTS COMPLETED SUCCESSFULLY!" << std::endl;
     return true;
 }

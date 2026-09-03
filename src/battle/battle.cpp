@@ -160,8 +160,8 @@ int Battle::calculateDamage(const Yokai& attacker, const Yokai& defender, const 
         }
     }
 
-    // Damage Formula: (ATK * Skill.Power) / (DEF * 2)
-    float baseDmg = (static_cast<float>(effectiveAtk * skill.power) / std::max(1.0f, static_cast<float>(effectiveDef * 2)));
+    // Damage Formula: (ATK * Skill.Power) / (DEF * 1.35)
+    float baseDmg = (static_cast<float>(effectiveAtk * skill.power) / std::max(1.0f, static_cast<float>(effectiveDef * 1.35f)));
 
     // Trait Defense: DuduriProtection (-10% incoming damage)
     if (defender.getTrait() == YokaiTrait::DuduriProtection) {

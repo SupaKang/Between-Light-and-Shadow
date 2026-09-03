@@ -13,6 +13,7 @@ bool runPhase9ObstaclesAndMinigamesTests();
 bool runPhase10SettingsAndEndingTests();
 bool runStep1To3PolishAndBugFixTests();
 bool runEndToEndPlaythroughSimulationTests();
+bool runMonteCarloBalancingAndAnomalyDetectionTests();
 
 int main() {
     std::cout << "========================================" << std::endl;
@@ -33,6 +34,7 @@ int main() {
     if (!runPhase10SettingsAndEndingTests()) passed = false;
     if (!runStep1To3PolishAndBugFixTests()) passed = false;
     if (!runEndToEndPlaythroughSimulationTests()) passed = false;
+    if (!runMonteCarloBalancingAndAnomalyDetectionTests()) passed = false;
 
     std::cout << "----------------------------------------" << std::endl;
     if (passed) {
