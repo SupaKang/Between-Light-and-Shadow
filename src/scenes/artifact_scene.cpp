@@ -42,64 +42,68 @@ void ArtifactScene::handleInput() {
 void ArtifactScene::update(float /*dt*/) {}
 
 void ArtifactScene::render(Renderer& renderer) {
-    renderer.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Color(20, 24, 28));
+    renderer.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Color(224, 248, 208));
 
     // Header Banner
-    renderer.drawPanel(4, 4, 312, 20, Color(32, 38, 44), Palette::Yellow);
-    FontRenderer::drawText(renderer, 10, 8, "=== 유물 보관함 ===", Palette::Yellow);
+    renderer.draw9SliceBox(4, 4, 312, 20, UITheme::Paper);
+    FontRenderer::drawText(renderer, 10, 8, "=== 유물 보관함 (양날의 검) ===", Color(8, 24, 32));
     std::string slotCountStr = "보유: " + std::to_string(m_artifacts.getCount()) + "/8";
-    FontRenderer::drawText(renderer, 240, 8, slotCountStr, Palette::Jade);
+    FontRenderer::drawText(renderer, 240, 8, slotCountStr, Color(52, 104, 86));
 
     // Left List
-    renderer.drawPanel(4, 26, 130, 136, Color(16, 18, 22), Palette::MidGray);
+    renderer.draw9SliceBox(4, 26, 134, 136, UITheme::Paper);
     const auto& artList = m_artifacts.getArtifacts();
 
     if (artList.empty()) {
-        FontRenderer::drawText(renderer, 10, 36, "보유 유물 없음", Palette::LightGray);
+        FontRenderer::drawText(renderer, 12, 36, "보유 유물 없음", Color(52, 104, 86));
     } else {
         for (size_t i = 0; i < artList.size(); ++i) {
             int ay = 30 + static_cast<int>(i) * 16;
-            Color c = (m_cursor == static_cast<int>(i)) ? Palette::Yellow : Palette::White;
-            if (m_cursor == static_cast<int>(i)) {
-                renderer.drawPanel(6, ay - 2, 126, 15, Color(36, 42, 52), Palette::Yellow);
-                FontRenderer::drawText(renderer, 8, ay + 1, ">", Palette::Yellow);
+            bool isCur = (m_cursor == static_cast<int>(i));
+            if (isCur) {
+                renderer.fillRect(8, ay - 1, 126, 15, Color(136, 192, 112));
+                FontRenderer::drawText(renderer, 10, ay + 1, "▶", Color(8, 24, 32));
+                FontRenderer::drawText(renderer, 20, ay + 1, std::to_string(i + 1) + ". " + artList[i].name, Color(8, 24, 32));
+            } else {
+                FontRenderer::drawText(renderer, 20, ay + 1, std::to_string(i + 1) + ". " + artList[i].name, Color(52, 104, 86));
             }
-            FontRenderer::drawText(renderer, 16, ay + 1, std::to_string(i + 1) + ". " + artList[i].name, c);
         }
     }
 
     // Right Details
-    renderer.drawPanel(138, 26, 178, 136, Color(16, 18, 22), Palette::MidGray);
+    renderer.draw9SliceBox(142, 26, 174, 136, UITheme::Paper);
     const auto* selectedArt = m_artifacts.getArtifact(m_cursor);
     if (selectedArt) {
-        FontRenderer::drawText(renderer, 144, 30, selectedArt->name, Palette::Yellow);
+        FontRenderer::drawText(renderer, 148, 30, selectedArt->name, Color(8, 24, 32));
 
-        renderer.drawPanel(144, 44, 166, 22, Color(20, 36, 24), Palette::Jade);
-        FontRenderer::drawText(renderer, 148, 46, "[축복/Buff]", Palette::Jade);
-        FontRenderer::drawText(renderer, 148, 54, ArtifactInventory::getBuffDescription(*selectedArt), Palette::White);
+        // Buff Box
+        renderer.draw9SliceBox(148, 44, 162, 24, UITheme::Paper);
+        FontRenderer::drawText(renderer, 152, 46, "[축복/Buff (+)]", Color(52, 104, 86));
+        FontRenderer::drawText(renderer, 152, 56, ArtifactInventory::getBuffDescription(*selectedArt), Color(8, 24, 32));
 
-        renderer.drawPanel(144, 70, 166, 22, Color(36, 20, 20), Palette::Red);
-        FontRenderer::drawText(renderer, 148, 72, "[저주/Debuff]", Palette::Red);
-        FontRenderer::drawText(renderer, 148, 80, ArtifactInventory::getDebuffDescription(*selectedArt), Palette::White);
+        // Debuff Box
+        renderer.draw9SliceBox(148, 72, 162, 24, UITheme::Paper);
+        FontRenderer::drawText(renderer, 152, 74, "[저주/Debuff (-)]", Color(180, 40, 40));
+        FontRenderer::drawText(renderer, 152, 84, ArtifactInventory::getDebuffDescription(*selectedArt), Color(8, 24, 32));
 
-        FontRenderer::drawText(renderer, 144, 96, "[설화 및 유래]", Palette::Yellow);
-        FontRenderer::drawText(renderer, 144, 108, selectedArt->lore.substr(0, 22), Palette::LightGray);
+        FontRenderer::drawText(renderer, 148, 100, "[설화 및 유래]", Color(52, 104, 86));
+        FontRenderer::drawText(renderer, 148, 112, selectedArt->lore.substr(0, 22), Color(8, 24, 32));
         if (selectedArt->lore.length() > 22) {
-            FontRenderer::drawText(renderer, 144, 118, selectedArt->lore.substr(22, 22), Palette::LightGray);
+            FontRenderer::drawText(renderer, 148, 124, selectedArt->lore.substr(22, 22), Color(8, 24, 32));
         }
 
-        renderer.drawPanel(144, 134, 166, 20, Color(40, 20, 20), Palette::Red);
-        FontRenderer::drawText(renderer, 150, 139, "[Z키: 유물 즉시 파괴]", Palette::Red);
+        renderer.draw9SliceBox(148, 138, 162, 20, UITheme::Inverted);
+        FontRenderer::drawText(renderer, 154, 143, "[Z키: 유물 즉시 파괴]", Color(224, 248, 208));
     }
 
     if (!m_feedbackMsg.empty()) {
-        renderer.fillRect(4, 148, 130, 12, Color(40, 50, 20));
-        FontRenderer::drawText(renderer, 6, 150, m_feedbackMsg, Palette::Yellow);
+        renderer.draw9SliceBox(6, 144, 130, 16, UITheme::Inverted);
+        FontRenderer::drawText(renderer, 10, 147, m_feedbackMsg, Color(224, 248, 208));
     }
 
     // Bottom Help Bar
-    renderer.fillRect(0, SCREEN_HEIGHT - 14, SCREEN_WIDTH, 14, Palette::Black);
-    FontRenderer::drawText(renderer, 4, SCREEN_HEIGHT - 11, "방향키:유물선택 | Z:즉시파괴 | X/C:닫기", Palette::White);
+    renderer.draw9SliceBox(4, 164, 312, 14, UITheme::Inverted);
+    FontRenderer::drawText(renderer, 10, 166, "방향키:유물선택 | Z:즉시파괴 | X/C:닫기", Color(224, 248, 208));
 }
 
 } // namespace JoseonRPG

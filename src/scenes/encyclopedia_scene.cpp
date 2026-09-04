@@ -4,6 +4,7 @@
 #include "../core/scene_stack.hpp"
 #include "../ui/font_renderer.hpp"
 #include "../data/data_manager.hpp"
+#include "../core/gen1_assets.hpp"
 #include <algorithm>
 
 namespace JoseonRPG {
@@ -40,18 +41,18 @@ void EncyclopediaScene::update(float /*dt*/) {
 }
 
 void EncyclopediaScene::render(Renderer& renderer) {
-    renderer.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Color(18, 20, 26));
+    renderer.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Color(224, 248, 208));
 
     // Header Banner
-    renderer.drawPanel(4, 4, 312, 20, Color(28, 32, 42), Palette::Yellow);
-    FontRenderer::drawText(renderer, 10, 8, "=== 108: 음양견문록 도감 ===", Palette::Yellow);
+    renderer.draw9SliceBox(4, 4, 312, 20, UITheme::Paper);
+    FontRenderer::drawText(renderer, 10, 8, "=== 108: 음양견문록 도감 ===", Color(8, 24, 32));
 
     int capCnt = m_encyclopedia.getCapturedCount();
     std::string rateStr = "수집: " + std::to_string(capCnt) + "/108";
-    FontRenderer::drawText(renderer, 228, 8, rateStr, Palette::Jade);
+    FontRenderer::drawText(renderer, 228, 8, rateStr, Color(52, 104, 86));
 
     // Left List Panel
-    renderer.drawPanel(4, 26, 130, 136, Color(16, 18, 24), Palette::MidGray);
+    renderer.draw9SliceBox(4, 26, 134, 136, UITheme::Paper);
     int startSlot = std::max(1, std::min(103, m_cursor - 2));
 
     for (int i = 0; i < 6; ++i) {
@@ -61,31 +62,36 @@ void EncyclopediaScene::render(Renderer& renderer) {
         int ey = 32 + i * 21;
 
         if (m_cursor == slotNum) {
-            renderer.drawPanel(6, ey - 2, 126, 19, Color(40, 44, 56), Palette::Yellow);
-            FontRenderer::drawText(renderer, 8, ey + 3, ">", Palette::Yellow);
+            renderer.fillRect(8, ey - 1, 126, 18, Color(136, 192, 112));
+            FontRenderer::drawText(renderer, 10, ey + 3, ">", Color(8, 24, 32));
         }
 
         std::string numStr = std::string("#") + ((slotNum < 10) ? "00" : (slotNum < 100 ? "0" : "")) + std::to_string(slotNum);
-        FontRenderer::drawText(renderer, 16, ey + 3, numStr, Palette::LightGray);
+        FontRenderer::drawText(renderer, 18, ey + 3, numStr, Color(52, 104, 86));
 
         if (entry) {
             if (entry->status == DiscoveryStatus::Captured) {
-                FontRenderer::drawText(renderer, 50, ey + 3, entry->nameKo, Palette::White);
+                FontRenderer::drawText(renderer, 52, ey + 3, entry->nameKo, Color(8, 24, 32));
             } else if (entry->status == DiscoveryStatus::Seen) {
-                FontRenderer::drawText(renderer, 50, ey + 3, entry->nameKo, Palette::MidGray);
+                FontRenderer::drawText(renderer, 52, ey + 3, entry->nameKo, Color(52, 104, 86));
             } else {
-                FontRenderer::drawText(renderer, 50, ey + 3, "???", Palette::DarkGray);
+                FontRenderer::drawText(renderer, 52, ey + 3, "???", Color(136, 192, 112));
             }
         }
     }
 
     // Right Detail Panel
-    renderer.drawPanel(138, 26, 178, 136, Color(16, 18, 24), Palette::MidGray);
+    renderer.draw9SliceBox(142, 26, 174, 136, UITheme::Paper);
     const auto* selected = m_encyclopedia.getEntry(m_cursor);
     if (selected) {
         std::string numPrefix = std::string("#") + ((selected->number < 10) ? "00" : (selected->number < 100 ? "0" : "")) + std::to_string(selected->number);
         std::string titleNum = numPrefix + " " + ((selected->status != DiscoveryStatus::Unseen) ? selected->nameKo : "???");
-        FontRenderer::drawText(renderer, 144, 30, titleNum, Palette::Yellow);
+        FontRenderer::drawText(renderer, 148, 30, titleNum, Color(8, 24, 32));
+
+        // Draw 32x32 Yokai Battler preview if seen/captured
+        if (selected->status != DiscoveryStatus::Unseen && selected->number >= 1 && selected->number <= 108) {
+            renderer.drawGen1Bitmap(276, 30, 32, 32, Gen1Assets::YOKAI_BATTLERS_32x32[selected->number - 1], true);
+        }
 
         auto getElemName = [](Element el) -> const char* {
             switch (el) {
@@ -98,17 +104,6 @@ void EncyclopediaScene::render(Renderer& renderer) {
             }
         };
 
-        auto getElemCol = [](Element el) -> Color {
-            switch (el) {
-                case Element::Fire: return Palette::CinnabarRed;
-                case Element::Water: return Palette::IndigoBlue;
-                case Element::Earth: return Palette::GardeniaYellow;
-                case Element::Light: return Palette::GoldHalo;
-                case Element::Dark: return Palette::RoyalPurple;
-                default: return Palette::LightGray;
-            }
-        };
-
         auto getHabitat = [](int num) -> const char* {
             if (num <= 25) return "제1구역: 한양 북한산 & 도선사";
             if (num <= 55) return "제2구역: 소백산맥 & 죽령 험로";
@@ -118,24 +113,24 @@ void EncyclopediaScene::render(Renderer& renderer) {
         };
 
         if (selected->status == DiscoveryStatus::Captured) {
-            renderer.fillRect(144, 42, 48, 9, Palette::Jade);
-            FontRenderer::drawText(renderer, 146, 43, "[계약완료]", Palette::Black);
+            renderer.fillRect(148, 44, 48, 12, Color(8, 24, 32));
+            FontRenderer::drawText(renderer, 150, 45, "[계약완료]", Color(224, 248, 208));
 
-            renderer.fillRect(196, 42, 38, 9, getElemCol(selected->element));
-            FontRenderer::drawText(renderer, 198, 43, getElemName(selected->element), Palette::Black);
+            renderer.fillRect(200, 44, 38, 12, Color(52, 104, 86));
+            FontRenderer::drawText(renderer, 202, 45, getElemName(selected->element), Color(224, 248, 208));
 
             std::string gStr = "G." + std::to_string(static_cast<int>(selected->baseGrade));
-            FontRenderer::drawText(renderer, 240, 43, gStr, Palette::White);
+            FontRenderer::drawText(renderer, 244, 45, gStr, Color(8, 24, 32));
 
-            FontRenderer::drawText(renderer, 144, 54, getHabitat(selected->number), Palette::Jade);
+            FontRenderer::drawText(renderer, 148, 60, getHabitat(selected->number), Color(52, 104, 86));
 
             // Fetch template Yokai for trait and skills
             Yokai tempYokai = DataManager::createYokaiById(selected->id);
             if (tempYokai.getTrait() != YokaiTrait::None) {
                 std::string trStr = "특성: " + tempYokai.getTraitName();
-                FontRenderer::drawText(renderer, 144, 65, trStr, Palette::Yellow);
+                FontRenderer::drawText(renderer, 148, 72, trStr, Color(8, 24, 32));
             } else {
-                FontRenderer::drawText(renderer, 144, 65, "출처: " + selected->origin, Palette::LightGray);
+                FontRenderer::drawText(renderer, 148, 72, "출처: " + selected->origin, Color(52, 104, 86));
             }
 
             // Skills Preview
@@ -145,47 +140,46 @@ void EncyclopediaScene::render(Renderer& renderer) {
                 if (k > 0) sklPreview += ", ";
                 sklPreview += skls[k].name;
             }
-            FontRenderer::drawText(renderer, 144, 76, sklPreview, Palette::White);
+            FontRenderer::drawText(renderer, 148, 84, sklPreview, Color(8, 24, 32));
 
             // Lore / Folklore description
-            FontRenderer::drawText(renderer, 144, 88, "[전승 및 배경 설화]", Palette::Yellow);
-            FontRenderer::drawText(renderer, 144, 98, selected->lore.substr(0, 24), Palette::LightGray);
+            FontRenderer::drawText(renderer, 148, 98, "[전승 및 배경 설화]", Color(52, 104, 86));
+            FontRenderer::drawText(renderer, 148, 110, selected->lore.substr(0, 24), Color(8, 24, 32));
             if (selected->lore.length() > 24) {
-                FontRenderer::drawText(renderer, 144, 108, selected->lore.substr(24, 24), Palette::LightGray);
+                FontRenderer::drawText(renderer, 148, 122, selected->lore.substr(24, 24), Color(8, 24, 32));
             }
             if (selected->lore.length() > 48) {
-                FontRenderer::drawText(renderer, 144, 118, selected->lore.substr(48, 24), Palette::LightGray);
+                FontRenderer::drawText(renderer, 148, 134, selected->lore.substr(48, 24), Color(8, 24, 32));
             }
         } else if (selected->status == DiscoveryStatus::Seen) {
-            renderer.fillRect(144, 42, 44, 9, Palette::Blue);
-            FontRenderer::drawText(renderer, 146, 43, "[조우함]", Palette::Black);
+            renderer.fillRect(148, 44, 44, 12, Color(52, 104, 86));
+            FontRenderer::drawText(renderer, 150, 45, "[조우함]", Color(224, 248, 208));
 
-            renderer.fillRect(192, 42, 38, 9, getElemCol(selected->element));
-            FontRenderer::drawText(renderer, 194, 43, getElemName(selected->element), Palette::Black);
+            renderer.fillRect(196, 44, 38, 12, Color(8, 24, 32));
+            FontRenderer::drawText(renderer, 198, 45, getElemName(selected->element), Color(224, 248, 208));
 
-            FontRenderer::drawText(renderer, 144, 56, "[주요 서식지]", Palette::Yellow);
-            FontRenderer::drawText(renderer, 144, 68, getHabitat(selected->number), Palette::Jade);
+            FontRenderer::drawText(renderer, 148, 62, "[주요 서식지]", Color(8, 24, 32));
+            FontRenderer::drawText(renderer, 148, 74, getHabitat(selected->number), Color(52, 104, 86));
 
-            FontRenderer::drawText(renderer, 144, 84, "전투에서 조우하였으나", Palette::LightGray);
-            FontRenderer::drawText(renderer, 144, 96, "아직 계약을 맺지 못함.", Palette::LightGray);
-            FontRenderer::drawText(renderer, 144, 110, "야생에서 다시 찾아", Palette::White);
-            FontRenderer::drawText(renderer, 144, 120, "체력을 깎고 계약하십시오.", Palette::Yellow);
+            FontRenderer::drawText(renderer, 148, 92, "전투에서 조우하였으나", Color(52, 104, 86));
+            FontRenderer::drawText(renderer, 148, 106, "아직 계약을 맺지 못함.", Color(52, 104, 86));
+            FontRenderer::drawText(renderer, 148, 122, "체력을 깎고 계약하십시오.", Color(8, 24, 32));
         } else {
-            renderer.fillRect(144, 42, 44, 9, Palette::DarkGray);
-            FontRenderer::drawText(renderer, 146, 43, "[미확인]", Palette::Black);
+            renderer.fillRect(148, 44, 44, 12, Color(8, 24, 32));
+            FontRenderer::drawText(renderer, 150, 45, "[미확인]", Color(224, 248, 208));
 
-            FontRenderer::drawText(renderer, 144, 60, "[주요 서식지]", Palette::MidGray);
-            FontRenderer::drawText(renderer, 144, 72, getHabitat(selected->number), Palette::MidGray);
+            FontRenderer::drawText(renderer, 148, 64, "[주요 서식지]", Color(52, 104, 86));
+            FontRenderer::drawText(renderer, 148, 76, getHabitat(selected->number), Color(52, 104, 86));
 
-            FontRenderer::drawText(renderer, 144, 92, "조선의 미지의 요괴입니다.", Palette::MidGray);
-            FontRenderer::drawText(renderer, 144, 106, "해당 권역을 탐험하여", Palette::MidGray);
-            FontRenderer::drawText(renderer, 144, 118, "새로운 요괴를 마주하십시오.", Palette::MidGray);
+            FontRenderer::drawText(renderer, 148, 98, "조선의 미지의 요괴입니다.", Color(52, 104, 86));
+            FontRenderer::drawText(renderer, 148, 114, "해당 권역을 탐험하여", Color(52, 104, 86));
+            FontRenderer::drawText(renderer, 148, 128, "새로운 요괴를 마주하십시오.", Color(8, 24, 32));
         }
     }
 
     // Bottom Help Bar
-    renderer.fillRect(0, SCREEN_HEIGHT - 14, SCREEN_WIDTH, 14, Palette::Black);
-    FontRenderer::drawText(renderer, 4, SCREEN_HEIGHT - 11, "방향키:스크롤 | 좌/우:10개 점프 | X/Z:닫기", Palette::White);
+    renderer.draw9SliceBox(4, 164, 312, 14, UITheme::Inverted);
+    FontRenderer::drawText(renderer, 10, 166, "방향키:스크롤 | 좌/우:10개 점프 | X/Z:닫기", Color(224, 248, 208));
 }
 
 } // namespace JoseonRPG

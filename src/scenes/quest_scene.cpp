@@ -33,60 +33,57 @@ void QuestScene::handleInput() {
 void QuestScene::update(float /*dt*/) {}
 
 void QuestScene::render(Renderer& renderer) {
-    renderer.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Color(22, 24, 30));
+    renderer.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Color(224, 248, 208));
 
     // Header Banner
-    renderer.drawPanel(4, 4, 312, 20, Color(34, 38, 48), Palette::Jade);
-    FontRenderer::drawText(renderer, 10, 8, "=== 임무 일지 (QUEST JOURNAL) ===", Palette::Yellow);
+    renderer.draw9SliceBox(4, 4, 312, 20, UITheme::Paper);
+    FontRenderer::drawText(renderer, 10, 8, "=== 임무 일지 (QUEST JOURNAL) ===", Color(8, 24, 32));
 
     auto allQuests = m_questManager.getAllQuests();
 
     // Left Quest List
-    renderer.drawPanel(4, 26, 130, 136, Color(16, 18, 24), Palette::MidGray);
+    renderer.draw9SliceBox(4, 26, 134, 136, UITheme::Paper);
     for (size_t i = 0; i < allQuests.size() && i < 6; ++i) {
         int qy = 32 + static_cast<int>(i) * 22;
         const auto& q = allQuests[i];
+        bool isCur = (m_cursor == static_cast<int>(i));
 
-        if (m_cursor == static_cast<int>(i)) {
-            renderer.drawPanel(6, qy - 2, 126, 20, Color(36, 42, 54), Palette::Yellow);
-            FontRenderer::drawText(renderer, 8, qy + 4, ">", Palette::Yellow);
+        if (isCur) {
+            renderer.fillRect(8, qy - 2, 126, 20, Color(136, 192, 112));
+            FontRenderer::drawText(renderer, 10, qy + 4, "▶", Color(8, 24, 32));
         }
 
-        Color titleCol = Palette::White;
-        if (q.state == QuestState::Completed) titleCol = Palette::LightGray;
-        else if (q.state == QuestState::InProgress) titleCol = Palette::Yellow;
-        else titleCol = Palette::DarkGray;
-
-        FontRenderer::drawText(renderer, 16, qy + 1, q.titleKo.substr(0, 14), titleCol);
+        Color titleCol = Color(8, 24, 32);
+        FontRenderer::drawText(renderer, 20, qy + 1, q.titleKo.substr(0, 14), titleCol);
 
         std::string stStr = (q.state == QuestState::Completed) ? "[완료]" : (q.state == QuestState::InProgress ? "[진행중]" : "[미수주]");
-        Color stCol = (q.state == QuestState::Completed) ? Palette::LightGray : (q.state == QuestState::InProgress ? Palette::Jade : Palette::DarkGray);
-        FontRenderer::drawText(renderer, 16, qy + 11, stStr, stCol);
+        Color stCol = (q.state == QuestState::Completed) ? Color(136, 192, 112) : (q.state == QuestState::InProgress ? Color(52, 104, 86) : Color(136, 192, 112));
+        FontRenderer::drawText(renderer, 20, qy + 11, stStr, stCol);
     }
 
     // Right Quest Details
-    renderer.drawPanel(138, 26, 178, 136, Color(16, 18, 24), Palette::MidGray);
+    renderer.draw9SliceBox(142, 26, 174, 136, UITheme::Paper);
     if (m_cursor < static_cast<int>(allQuests.size())) {
         const auto& q = allQuests[m_cursor];
-        FontRenderer::drawText(renderer, 144, 32, q.titleKo, Palette::Yellow);
+        FontRenderer::drawText(renderer, 148, 30, q.titleKo, Color(8, 24, 32));
 
         std::string typeStr = (q.type == QuestType::Main) ? "구분: 메인 스토리" : "구분: 조선 설화 서브퀘스트";
-        FontRenderer::drawText(renderer, 144, 46, typeStr, Palette::LightGray);
+        FontRenderer::drawText(renderer, 148, 44, typeStr, Color(52, 104, 86));
 
-        FontRenderer::drawText(renderer, 144, 60, "[현재 목표]", Palette::Jade);
-        FontRenderer::drawText(renderer, 144, 72, q.getCurrentObjective(), Palette::White);
+        FontRenderer::drawText(renderer, 148, 58, "[현재 목표]", Color(52, 104, 86));
+        FontRenderer::drawText(renderer, 148, 70, q.getCurrentObjective(), Color(8, 24, 32));
 
-        FontRenderer::drawText(renderer, 144, 94, "[보상 내역]", Palette::Yellow);
+        FontRenderer::drawText(renderer, 148, 94, "[보상 내역]", Color(52, 104, 86));
         std::string rwdStr = "엽전 " + std::to_string(q.reward.money) + "냥 + EXP " + std::to_string(q.reward.exp);
-        FontRenderer::drawText(renderer, 144, 106, rwdStr, Palette::White);
+        FontRenderer::drawText(renderer, 148, 106, rwdStr, Color(8, 24, 32));
         if (!q.reward.artifactId.empty()) {
-            FontRenderer::drawText(renderer, 144, 116, "유물: " + q.reward.artifactId, Palette::Jade);
+            FontRenderer::drawText(renderer, 148, 118, "유물: " + q.reward.artifactId, Color(8, 24, 32));
         }
     }
 
     // Bottom Help Bar
-    renderer.fillRect(0, SCREEN_HEIGHT - 14, SCREEN_WIDTH, 14, Palette::Black);
-    FontRenderer::drawText(renderer, 4, SCREEN_HEIGHT - 11, "방향키:임무선택 | X/Q:닫기", Palette::White);
+    renderer.draw9SliceBox(4, 164, 312, 14, UITheme::Inverted);
+    FontRenderer::drawText(renderer, 10, 166, "방향키:임무선택 | X/Q:닫기", Color(224, 248, 208));
 }
 
 } // namespace JoseonRPG

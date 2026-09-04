@@ -142,31 +142,42 @@ bool DialogueBox::handleInput() {
 void DialogueBox::render(Renderer& renderer) {
     if (!m_active || m_currentLineIndex >= m_lines.size()) return;
 
-    // Main Dialogue Frame at bottom (320x180 resolution) - 1세대 GB 스타일
+    // Main Dialogue Frame at bottom (320x180 resolution) - 9-Slice Paper Frame
     int boxX = 6;
     int boxY = 112;
     int boxW = 308;
-    int boxH = 62;
+    int boxH = 64;
 
-    renderer.fillRect(boxX, boxY, boxW, boxH, Color(224, 248, 208)); // Pale off-white DMG background
-    renderer.drawRect(boxX, boxY, boxW, boxH, Color(8, 24, 32));      // Darkest DMG border
-    renderer.drawRect(boxX + 2, boxY + 2, boxW - 4, boxH - 4, Color(52, 104, 86));
+    renderer.draw9SliceBox(boxX, boxY, boxW, boxH, UITheme::Paper);
 
     // Portrait (48x48 Gen 1 Bust)
     int textStartX = boxX + 10;
-    bool hasPortrait = (m_speaker.find("구미호") != std::string::npos || m_speaker.find("설화") != std::string::npos || m_speaker.find("여우") != std::string::npos);
-    if (hasPortrait) {
-        renderer.drawGen1Bitmap(boxX + 6, boxY + 7, 48, 48, Gen1Assets::PORTRAIT_GUMIHO_48x48, false);
-        renderer.drawRect(boxX + 5, boxY + 6, 50, 50, Color(8, 24, 32));
-        textStartX = boxX + 62;
+    const uint8_t* portraitData = nullptr;
+
+    if (m_speaker.find("구미호") != std::string::npos || m_speaker.find("설화") != std::string::npos || m_speaker.find("여우") != std::string::npos) {
+        portraitData = Gen1Assets::PORTRAIT_GUMIHO_48x48;
+    } else if (m_speaker.find("주인공") != std::string::npos || m_speaker.find("영술사") != std::string::npos || m_speaker.find("퇴마사") != std::string::npos || m_speaker.find("자신") != std::string::npos) {
+        portraitData = Gen1Assets::PORTRAIT_PROTAGONIST_48x48;
+    } else if (m_speaker.find("도사") != std::string::npos || m_speaker.find("성현") != std::string::npos || m_speaker.find("도선") != std::string::npos || m_speaker.find("제조관") != std::string::npos || m_speaker.find("스승") != std::string::npos || m_speaker.find("낭인") != std::string::npos) {
+        portraitData = Gen1Assets::PORTRAIT_DOSA_48x48;
+    } else if (m_speaker.find("주모") != std::string::npos || m_speaker.find("주막") != std::string::npos || m_speaker.find("아낙") != std::string::npos || m_speaker.find("어머니") != std::string::npos) {
+        portraitData = Gen1Assets::PORTRAIT_JUMO_48x48;
+    } else if (m_speaker.find("음양당") != std::string::npos || m_speaker.find("주술사") != std::string::npos || m_speaker.find("묵영") != std::string::npos || m_speaker.find("괴승") != std::string::npos || m_speaker.find("배극") != std::string::npos || m_speaker.find("흑사") != std::string::npos) {
+        portraitData = Gen1Assets::PORTRAIT_CULTIST_48x48;
+    }
+
+    if (portraitData) {
+        renderer.fillRect(boxX + 7, boxY + 7, 50, 50, Color(8, 24, 32));
+        renderer.drawGen1Bitmap(boxX + 8, boxY + 8, 48, 48, portraitData, false);
+        renderer.drawRect(boxX + 7, boxY + 7, 50, 50, Color(52, 104, 86));
+        textStartX = boxX + 64;
     }
 
     // Speaker Nameplate Header
     if (!m_speaker.empty()) {
-        int spkW = static_cast<int>(m_speaker.size() * 8 + 12);
-        renderer.fillRect(boxX + 6, boxY - 10, spkW, 14, Color(8, 24, 32));
-        renderer.drawRect(boxX + 6, boxY - 10, spkW, 14, Color(224, 248, 208));
-        FontRenderer::drawText(renderer, boxX + 12, boxY - 7, m_speaker, Color(224, 248, 208));
+        int spkW = static_cast<int>(m_speaker.size() * 8 + 16);
+        renderer.draw9SliceBox(boxX + 8, boxY - 11, spkW, 15, UITheme::Inverted);
+        FontRenderer::drawText(renderer, boxX + 14, boxY - 9, m_speaker, Color(224, 248, 208));
     }
 
     // Current Line with typewriter substring
@@ -174,25 +185,24 @@ void DialogueBox::render(Renderer& renderer) {
     size_t charCount = static_cast<size_t>(m_charProgress);
     std::string visibleText = currentLine.substr(0, std::min(charCount, currentLine.size()));
 
-    // Draw text in Darkest Ink Black
-    FontRenderer::drawText(renderer, textStartX, boxY + 14, visibleText, Color(8, 24, 32));
+    // Draw text in Darkest Ink Black (Line height 14px)
+    FontRenderer::drawText(renderer, textStartX, boxY + 12, visibleText, Color(8, 24, 32));
 
-    // Render Option Choice Panel when active
+    // Render Option Choice Panel when active (Top-Right Pop-up)
     if (m_isChoosingOption && !m_options.empty()) {
         int optH = static_cast<int>(m_options.size()) * 16 + 10;
         int optW = 180;
-        int optX = boxX + boxW - optW - 4;
-        int optY = boxY - optH - 2;
+        int optX = boxX + boxW - optW - 2;
+        int optY = boxY - optH - 3;
         if (optY < 2) optY = 2; // Prevent going off-screen
 
-        renderer.fillRect(optX, optY, optW, optH, Color(224, 248, 208));
-        renderer.drawRect(optX, optY, optW, optH, Color(8, 24, 32));
-        renderer.drawRect(optX + 2, optY + 2, optW - 4, optH - 4, Color(52, 104, 86));
+        renderer.draw9SliceBox(optX, optY, optW, optH, UITheme::Paper);
 
         for (size_t i = 0; i < m_options.size(); ++i) {
             int oy = optY + 6 + static_cast<int>(i) * 16;
             bool isCur = (m_selectedOptionIndex == static_cast<int>(i));
             if (isCur) {
+                renderer.fillRect(optX + 4, oy - 1, optW - 8, 14, Color(136, 192, 112));
                 FontRenderer::drawText(renderer, optX + 6, oy, ">", Color(8, 24, 32));
                 FontRenderer::drawText(renderer, optX + 16, oy, m_options[i], Color(8, 24, 32));
             } else {
@@ -202,7 +212,7 @@ void DialogueBox::render(Renderer& renderer) {
     } else {
         // Prompt Indicator (Blinking ▼)
         if (m_isLineFullyRevealed && m_promptVisible) {
-            FontRenderer::drawText(renderer, boxX + boxW - 16, boxY + boxH - 14, "▼", Color(8, 24, 32));
+            FontRenderer::drawText(renderer, boxX + boxW - 16, boxY + boxH - 16, "▼", Color(8, 24, 32));
         }
     }
 }

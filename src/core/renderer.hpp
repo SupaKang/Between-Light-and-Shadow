@@ -5,6 +5,13 @@
 
 namespace JoseonRPG {
 
+enum class UITheme {
+    Paper,    // DMG Off-White + Ink Black + Olive Changhoji
+    Dark,     // Dark Slate / Ink Black + Silver Border
+    Royal,    // Joseon Royal Crimson + Gold Border
+    Inverted  // High Contrast Ink Black BG + Pale Off-White Border
+};
+
 class Renderer {
 public:
     Renderer();
@@ -18,6 +25,12 @@ public:
     void drawRect(int x, int y, int w, int h, Color color);
     void fillRect(int x, int y, int w, int h, Color color);
     void drawPanel(int x, int y, int w, int h, Color bg = Palette::DarkGray, Color border = Palette::MidGray);
+    
+    // Enhanced 9-Slice Traditional Korean & DMG Retro Window Frame
+    void draw9SliceBox(int x, int y, int w, int h, UITheme theme = UITheme::Paper);
+
+    // Enhanced Dual-Tone Gauge Bar with Top Highlight
+    void drawGaugeBar(int x, int y, int w, int h, int curVal, int maxVal, Color fillColor, Color bgColor = Color(8, 24, 32), Color borderColor = Color(8, 24, 32));
     void drawHealthBar(int x, int y, int w, int h, int curVal, int maxVal, Color fillColor, Color bgColor = Palette::DarkGray);
     
     // Draw 16x16 tile from procedural pattern / real Gen 1 2-bit DMG bitmap

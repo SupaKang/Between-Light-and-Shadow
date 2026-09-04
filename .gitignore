@@ -23,3 +23,6 @@ out/
 Thumbs.db
 Desktop.ini
 .DS_Store
+
+# Temporary capture output
+screen_*.bmp

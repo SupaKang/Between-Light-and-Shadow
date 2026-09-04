@@ -573,24 +573,25 @@ void WorldScene::update(float dt) {
 }
 
 void WorldScene::renderStartMenu(Renderer& renderer) {
-    // Pokemon Gold Style Right-Side Popup Menu Frame (Pale DMG background with dark border)
-    int menuW = 88;
+    // 30% Dim background overlay
+    renderer.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Color(8, 16, 20, 80));
+
+    // Pokemon Gold Style Right-Side Popup Menu Frame (9-Slice Paper Frame)
+    int menuW = 96;
     int menuH = 126;
     int menuX = SCREEN_WIDTH - menuW - 6;
     int menuY = 6;
 
-    renderer.fillRect(menuX, menuY, menuW, menuH, Color(224, 248, 208)); // Pale off-white
-    renderer.drawRect(menuX, menuY, menuW, menuH, Color(8, 24, 32));      // Darkest ink border
-    renderer.drawRect(menuX + 2, menuY + 2, menuW - 4, menuH - 4, Color(52, 104, 86)); // Dark olive inner
+    renderer.draw9SliceBox(menuX, menuY, menuW, menuH, UITheme::Paper);
 
     const std::string menuItems[7] = {
-        "도 감",
-        "요 괴",
-        "가 방",
-        "임 무",
-        "기 록",
-        "설 정",
-        "닫 기"
+        "1. 도  감",
+        "2. 요  괴",
+        "3. 가  방",
+        "4. 임  무",
+        "5. 기  록",
+        "6. 설  정",
+        "7. 닫  기"
     };
 
     for (int i = 0; i < 7; ++i) {
@@ -598,12 +599,20 @@ void WorldScene::renderStartMenu(Renderer& renderer) {
         bool isSel = (m_menuCursor == i);
 
         if (isSel) {
-            FontRenderer::drawText(renderer, menuX + 8, iy, "▶", Color(8, 24, 32));
-            FontRenderer::drawText(renderer, menuX + 22, iy, menuItems[i], Color(8, 24, 32));
+            renderer.fillRect(menuX + 4, iy - 1, menuW - 8, 14, Color(136, 192, 112));
+            FontRenderer::drawText(renderer, menuX + 6, iy, "▶", Color(8, 24, 32));
+            FontRenderer::drawText(renderer, menuX + 18, iy, menuItems[i], Color(8, 24, 32));
         } else {
-            FontRenderer::drawText(renderer, menuX + 22, iy, menuItems[i], Color(52, 104, 86));
+            FontRenderer::drawText(renderer, menuX + 18, iy, menuItems[i], Color(52, 104, 86));
         }
     }
+
+    // Money & Area Info Sub-Window
+    int infoY = menuY + menuH + 4;
+    int infoH = 38;
+    renderer.draw9SliceBox(menuX, infoY, menuW, infoH, UITheme::Paper);
+    FontRenderer::drawText(renderer, menuX + 8, infoY + 6, "소지금", Color(52, 104, 86));
+    FontRenderer::drawText(renderer, menuX + 8, infoY + 20, std::to_string(m_money) + " 냥", Color(8, 24, 32));
 }
 
 void WorldScene::render(Renderer& renderer) {
@@ -641,22 +650,21 @@ void WorldScene::render(Renderer& renderer) {
         renderer.applyFade(1.0f - m_fadeAlpha);
     }
 
-    // 7. Pokemon Gold Style Minimalist Location Banner (Only when noticeMsg exists)
+    // 7. Minimalist Location Banner (Only when noticeMsg exists)
     if (!m_noticeMsg.empty() && !m_dialogueBox.isActive() && !m_menuOpen) {
-        int notW = static_cast<int>(m_noticeMsg.size() * 8 + 16);
-        renderer.fillRect(4, 4, notW, 16, Color(224, 248, 208));
-        renderer.drawRect(4, 4, notW, 16, Color(8, 24, 32));
-        FontRenderer::drawText(renderer, 8, 8, m_noticeMsg, Color(8, 24, 32));
+        int notW = static_cast<int>(m_noticeMsg.size() * 8 + 18);
+        renderer.draw9SliceBox(4, 4, notW, 18, UITheme::Paper);
+        FontRenderer::drawText(renderer, 8, 7, m_noticeMsg, Color(8, 24, 32));
     }
 
-    // 8. Dialogue Box
-    if (m_dialogueBox.isActive()) {
-        m_dialogueBox.render(renderer);
-    }
-
-    // 9. Pokemon Gold Style Start Menu Popup
+    // 8. Render Start Menu overlay if active
     if (m_menuOpen) {
         renderStartMenu(renderer);
+    }
+
+    // 9. Render Dialogue Box
+    if (m_dialogueBox.isActive()) {
+        m_dialogueBox.render(renderer);
     }
 }
 

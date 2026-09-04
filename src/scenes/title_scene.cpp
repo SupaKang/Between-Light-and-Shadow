@@ -95,17 +95,17 @@ void TitleScene::update(float dt) {
 }
 
 void TitleScene::render(Renderer& renderer) {
-    // Dark Oriental Backdrop
-    renderer.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Color(12, 14, 20));
+    // Pale DMG Background
+    renderer.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Color(224, 248, 208));
 
     // Title Logo Banner
-    renderer.drawPanel(20, 16, 280, 52, Color(24, 28, 40), Palette::Yellow);
-    FontRenderer::drawText(renderer, 58, 24, "108: 음양견문록", Palette::Yellow);
-    FontRenderer::drawText(renderer, 44, 38, "Between Light and Shadow", Palette::White);
-    FontRenderer::drawText(renderer, 76, 50, "C++17 Standalone JRPG", Palette::LightGray);
+    renderer.draw9SliceBox(20, 14, 280, 52, UITheme::Paper);
+    FontRenderer::drawText(renderer, 58, 22, "108: 음양견문록", Color(8, 24, 32));
+    FontRenderer::drawText(renderer, 44, 36, "Between Light and Shadow", Color(52, 104, 86));
+    FontRenderer::drawText(renderer, 76, 48, "C++17 Standalone JRPG", Color(52, 104, 86));
 
     // Menu Options Box
-    renderer.drawPanel(60, 74, 200, 78, Color(20, 24, 32), Palette::MidGray);
+    renderer.draw9SliceBox(60, 72, 200, 78, UITheme::Paper);
 
     const char* options[4] = {
         "1. 새로 시작 (New Game)",
@@ -114,17 +114,17 @@ void TitleScene::render(Renderer& renderer) {
         "4. 게임 종료 (Exit)"
     };
     for (int i = 0; i < 4; ++i) {
-        int oy = 80 + i * 17;
+        int oy = 78 + i * 17;
         bool isSel = (m_cursor == i);
 
         if (isSel) {
-            renderer.fillRect(66, oy - 2, 188, 15, Color(40, 48, 64));
-            FontRenderer::drawText(renderer, 72, oy + 1, ">", Palette::Yellow);
+            renderer.fillRect(66, oy - 2, 188, 15, Color(136, 192, 112));
+            FontRenderer::drawText(renderer, 72, oy + 1, "▶", Color(8, 24, 32));
         }
 
-        Color col = isSel ? Palette::Yellow : Palette::White;
+        Color col = isSel ? Color(8, 24, 32) : Color(52, 104, 86);
         if (i == 1 && !m_hasSave) {
-            col = Palette::DarkGray;
+            col = Color(136, 192, 112);
         }
 
         FontRenderer::drawText(renderer, 84, oy + 1, options[i], col);
@@ -132,13 +132,13 @@ void TitleScene::render(Renderer& renderer) {
 
     // Save Data Summary Preview
     if (m_hasSave) {
-        renderer.drawPanel(40, 156, 240, 18, Color(16, 24, 20), Palette::Jade);
-        FontRenderer::drawText(renderer, 46, 161, "[저장 기록] " + m_saveSummary, Palette::Jade);
+        renderer.draw9SliceBox(40, 154, 240, 18, UITheme::Paper);
+        FontRenderer::drawText(renderer, 46, 158, "[저장 기록] " + m_saveSummary, Color(52, 104, 86));
     }
 
     // Bottom Footer
-    renderer.fillRect(0, SCREEN_HEIGHT - 10, SCREEN_WIDTH, 10, Palette::Black);
-    FontRenderer::drawText(renderer, 4, SCREEN_HEIGHT - 8, "방향키:선택 | Z/Space:확인 | 1.44MB Standalone", Palette::MidGray);
+    renderer.draw9SliceBox(4, 166, 312, 12, UITheme::Inverted);
+    FontRenderer::drawText(renderer, 10, 168, "방향키:선택 | Z/Space:확인 | 1.44MB Standalone", Color(224, 248, 208));
 }
 
 } // namespace JoseonRPG

@@ -116,15 +116,89 @@ void Renderer::drawPanel(int x, int y, int w, int h, Color bg, Color border) {
     drawRect(x + 1, y + 1, w - 2, h - 2, Palette::Black);
 }
 
-void Renderer::drawHealthBar(int x, int y, int w, int h, int curVal, int maxVal, Color fillColor, Color bgColor) {
+void Renderer::draw9SliceBox(int x, int y, int w, int h, UITheme theme) {
+    if (w < 6 || h < 6) return;
+
+    Color bg, borderOuter, borderInner, cornerAccent;
+    switch (theme) {
+        case UITheme::Paper:
+            bg = Color(224, 248, 208);         // Pale DMG Off-White / Hanji
+            borderOuter = Color(8, 24, 32);     // Darkest Ink Black
+            borderInner = Color(52, 104, 86);   // Dark Olive / Changhoji frame
+            cornerAccent = Color(136, 192, 112);
+            break;
+        case UITheme::Dark:
+            bg = Color(14, 18, 24);            // Dark Slate Ink
+            borderOuter = Color(80, 96, 120);   // Steel Blue Border
+            borderInner = Color(36, 44, 58);
+            cornerAccent = Color(180, 195, 215);
+            break;
+        case UITheme::Royal:
+            bg = Color(28, 16, 20);            // Deep Royal Crimson
+            borderOuter = Color(212, 175, 55);  // Royal Gold
+            borderInner = Color(120, 32, 40);
+            cornerAccent = Color(245, 220, 110);
+            break;
+        case UITheme::Inverted:
+            bg = Color(8, 24, 32);
+            borderOuter = Color(224, 248, 208);
+            borderInner = Color(136, 192, 112);
+            cornerAccent = Color(224, 248, 208);
+            break;
+    }
+
+    // 1. Fill Inner Background
+    fillRect(x + 1, y + 1, w - 2, h - 2, bg);
+
+    // 2. Draw Outer 1px Border
+    drawRect(x, y, w, h, borderOuter);
+
+    // 3. Draw Inner Inset 1px Frame
+    if (w >= 10 && h >= 10) {
+        drawRect(x + 2, y + 2, w - 4, h - 4, borderInner);
+        
+        // 4. Korean Lattice / Brass Corner Details
+        setPixel(x + 1, y + 1, borderOuter);
+        setPixel(x + 3, y + 3, cornerAccent);
+        
+        setPixel(x + w - 2, y + 1, borderOuter);
+        setPixel(x + w - 4, y + 3, cornerAccent);
+        
+        setPixel(x + 1, y + h - 2, borderOuter);
+        setPixel(x + 3, y + h - 4, cornerAccent);
+        
+        setPixel(x + w - 2, y + h - 2, borderOuter);
+        setPixel(x + w - 4, y + h - 4, cornerAccent);
+    }
+}
+
+void Renderer::drawGaugeBar(int x, int y, int w, int h, int curVal, int maxVal, Color fillColor, Color bgColor, Color borderColor) {
+    if (w <= 2 || h <= 2) return;
+    
     fillRect(x, y, w, h, bgColor);
-    drawRect(x, y, w, h, Palette::Black);
+    drawRect(x, y, w, h, borderColor);
+
     if (maxVal <= 0) return;
     float ratio = std::clamp(static_cast<float>(curVal) / maxVal, 0.0f, 1.0f);
     int fillW = static_cast<int>((w - 2) * ratio);
+    
     if (fillW > 0) {
         fillRect(x + 1, y + 1, fillW, h - 2, fillColor);
+        
+        // 1px Top Highlight for high-end retro meter feel
+        if (h >= 4) {
+            Color highlight(
+                static_cast<uint8_t>(std::min(255, fillColor.r + 45)),
+                static_cast<uint8_t>(std::min(255, fillColor.g + 45)),
+                static_cast<uint8_t>(std::min(255, fillColor.b + 45))
+            );
+            drawLine(x + 1, y + 1, x + fillW, y + 1, highlight);
+        }
     }
+}
+
+void Renderer::drawHealthBar(int x, int y, int w, int h, int curVal, int maxVal, Color fillColor, Color bgColor) {
+    drawGaugeBar(x, y, w, h, curVal, maxVal, fillColor, bgColor, Palette::Black);
 }
 
 void Renderer::drawTileProcedural(int px, int py, int tileId) {
@@ -412,9 +486,29 @@ void Renderer::drawTileProcedural(int px, int py, int tileId) {
 
 void Renderer::drawSprite(int px, int py, int spriteId, int frame, bool flipX) {
     if (spriteId == 0) {
-        // [0] Player: Joseon Exorcist Soseul (16x24 Gen 1 2-bit DMG Bitmap)
+        // [0] Player: Joseon Exorcist (16x24 Gen 1 2-bit DMG Sprite)
         int animFrame = frame % 8;
         drawGen1Bitmap(px, py - 4, 16, 24, Gen1Assets::PLAYER_16x24[animFrame], true, flipX);
+        return;
+    } else if (spriteId == 1) {
+        // [1] Master Dosa / Doseon (16x24 Gen 1 2-bit DMG Sprite)
+        int animFrame = frame % 8;
+        drawGen1Bitmap(px, py - 4, 16, 24, Gen1Assets::NPC_DOSA_16x24[animFrame], true, flipX);
+        return;
+    } else if (spriteId == 2) {
+        // [2] Tavern Hostess Jumo (16x24 Gen 1 2-bit DMG Sprite)
+        int animFrame = frame % 8;
+        drawGen1Bitmap(px, py - 4, 16, 24, Gen1Assets::NPC_JUMO_16x24[animFrame], true, flipX);
+        return;
+    } else if (spriteId == 3) {
+        // [3] Cultist / Yin-Yang Sorcerer (16x24 Gen 1 2-bit DMG Sprite)
+        int animFrame = frame % 8;
+        drawGen1Bitmap(px, py - 4, 16, 24, Gen1Assets::NPC_CULTIST_16x24[animFrame], true, flipX);
+        return;
+    } else if (spriteId == 5) {
+        // [5] Village Elder / Peddler (16x24 Gen 1 2-bit DMG Sprite)
+        int animFrame = frame % 8;
+        drawGen1Bitmap(px, py - 4, 16, 24, Gen1Assets::NPC_ELDER_16x24[animFrame], true, flipX);
         return;
     } else if (spriteId == 12) {
         // [12] Dokkaebi #001 (32x32 Gen 1 2-bit DMG Battler)

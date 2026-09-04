@@ -175,22 +175,20 @@ void BattleScene::render(Renderer& renderer) {
     const Yokai* pYokai = m_battle->getActivePlayerYokai();
     const Yokai& eYokai = m_battle->getEnemyYokai();
 
-    // 1. Enemy HUD Box (Top-Left: X=10, Y=8, W=135, H=42)
-    renderer.fillRect(10, 8, 135, 42, Color(224, 248, 208));
-    renderer.drawRect(10, 8, 135, 42, Color(8, 24, 32));
-    renderer.drawRect(12, 10, 131, 38, Color(52, 104, 86));
+    // 1. Enemy HUD Box (Top-Left: X=8, Y=8, W=138, H=44)
+    renderer.draw9SliceBox(8, 8, 138, 44, UITheme::Paper);
 
     std::string eGradeStr = " [G." + std::to_string(static_cast<int>(eYokai.getGrade())) + "]";
-    FontRenderer::drawText(renderer, 16, 12, eYokai.getName() + " Lv." + std::to_string(eYokai.getLevel()), Color(8, 24, 32));
+    FontRenderer::drawText(renderer, 14, 12, eYokai.getName() + " Lv." + std::to_string(eYokai.getLevel()), Color(8, 24, 32));
     FontRenderer::drawText(renderer, 106, 12, eGradeStr, Color(52, 104, 86));
 
     std::string eHpText = "HP " + std::to_string(m_enemyHpBar.getCurrentValue()) + "/" + std::to_string(eYokai.getStats().maxHp);
-    FontRenderer::drawText(renderer, 16, 22, eHpText, Color(8, 24, 32));
-    m_enemyHpBar.render(renderer, 16, 32, 120, 5, Color(52, 104, 86));
+    FontRenderer::drawText(renderer, 14, 24, eHpText, Color(8, 24, 32));
+    renderer.drawGaugeBar(14, 36, 126, 6, m_enemyHpBar.getCurrentValue(), eYokai.getStats().maxHp, Color(52, 104, 86));
 
     if (eYokai.getStatus().effect != StatusEffect::None) {
-        std::string statStr = std::string(StatusEffectSystem::getStatusName(eYokai.getStatus().effect));
-        FontRenderer::drawText(renderer, 16, 38, statStr, Color(8, 24, 32));
+        std::string statStr = "[" + std::string(StatusEffectSystem::getStatusName(eYokai.getStatus().effect)) + "]";
+        FontRenderer::drawText(renderer, 90, 24, statStr, Color(180, 40, 40));
     }
 
     // Dynamic Idle Breathing & Float + Lunge / Shake
@@ -203,177 +201,193 @@ void BattleScene::render(Renderer& renderer) {
     int pLungeX = static_cast<int>(m_playerLunge);
     int eLungeX = -static_cast<int>(m_enemyLunge);
 
-    // Enemy Sprite (Top-Right: X=220, Y=12) - Gen 1 32x32 / 48x48 Battler
-    int eBaseX = 220 + eShakeX + eLungeX;
-    int eBaseY = 12 + eBounceY;
+    // Enemy Sprite (Top-Right: X=216, Y=14) - Gen 1 32x32 / 48x48 Battler
+    int eBaseX = 216 + eShakeX + eLungeX;
+    int eBaseY = 14 + eBounceY;
 
     if (!m_sequencer.isEnemyFlashing()) {
-        if (eYokai.getId() == "YOKAI_001") {
-            renderer.drawGen1Bitmap(eBaseX, eBaseY, 32, 32, Gen1Assets::DOKKAEBI_32x32, true);
-        } else if (eYokai.getId() == "YOKAI_002") {
+        if (eYokai.getId() == "YOKAI_002") {
             renderer.drawGen1Bitmap(eBaseX - 8, eBaseY - 8, 48, 48, Gen1Assets::GUMIHO_48x48, true);
         } else {
-            renderer.drawSprite(eBaseX, eBaseY, m_enemySpriteId, static_cast<int>(m_battleAnimTimer * 4.0f) % 2);
+            int yNum = 1;
+            if (eYokai.getId().rfind("YOKAI_", 0) == 0) {
+                try {
+                    yNum = std::stoi(eYokai.getId().substr(6));
+                } catch (...) {
+                    yNum = 1;
+                }
+            }
+            int clampedNum = std::clamp(yNum, 1, 108);
+            renderer.drawGen1Bitmap(eBaseX, eBaseY, 32, 32, Gen1Assets::YOKAI_BATTLERS_32x32[clampedNum - 1], true);
         }
     }
 
-    // 2. Player Combatant (Bottom-Left: X=36, Y=56) & HUD Box (Bottom-Right: X=180, Y=56, W=132, H=46)
-    int pBaseX = 36 + pShakeX + pLungeX;
+    // 2. Player Combatant (Bottom-Left: X=32, Y=56) & HUD Box (Bottom-Right: X=174, Y=58, W=138, H=48)
+    int pBaseX = 32 + pShakeX + pLungeX;
     int pBaseY = 56 + pBounceY;
 
     if (pYokai) {
-        int playerSprite = 0;
-        if (pYokai->getId() == "YOKAI_001") {
-            if (!m_sequencer.isPlayerFlashing()) renderer.drawGen1Bitmap(pBaseX, pBaseY, 32, 32, Gen1Assets::DOKKAEBI_32x32, true, true);
-        } else if (pYokai->getId() == "YOKAI_002") {
-            if (!m_sequencer.isPlayerFlashing()) renderer.drawGen1Bitmap(pBaseX, pBaseY, 48, 48, Gen1Assets::GUMIHO_48x48, true, true);
-        } else {
-            if (!m_sequencer.isPlayerFlashing()) renderer.drawSprite(pBaseX, pBaseY, playerSprite, static_cast<int>(m_battleAnimTimer * 4.0f) % 2);
+        if (!m_sequencer.isPlayerFlashing()) {
+            if (pYokai->getId() == "YOKAI_002") {
+                renderer.drawGen1Bitmap(pBaseX, pBaseY, 48, 48, Gen1Assets::GUMIHO_48x48, true, true);
+            } else {
+                int yNum = 1;
+                if (pYokai->getId().rfind("YOKAI_", 0) == 0) {
+                    try {
+                        yNum = std::stoi(pYokai->getId().substr(6));
+                    } catch (...) {
+                        yNum = 1;
+                    }
+                }
+                int clampedNum = std::clamp(yNum, 1, 108);
+                renderer.drawGen1Bitmap(pBaseX, pBaseY, 32, 32, Gen1Assets::YOKAI_BATTLERS_32x32[clampedNum - 1], true, true);
+            }
         }
 
-        // Player HUD Box (Bottom-Right: X=180, Y=56, W=132, H=46)
-        renderer.fillRect(180, 56, 132, 46, Color(224, 248, 208));
-        renderer.drawRect(180, 56, 132, 46, Color(8, 24, 32));
-        renderer.drawRect(182, 58, 128, 42, Color(52, 104, 86));
+        // Player HUD Box (Bottom-Right: X=174, Y=58, W=138, H=48)
+        renderer.draw9SliceBox(174, 58, 138, 48, UITheme::Paper);
 
-        FontRenderer::drawText(renderer, 186, 60, pYokai->getName() + " Lv." + std::to_string(pYokai->getLevel()), Color(8, 24, 32));
+        FontRenderer::drawText(renderer, 180, 62, pYokai->getName() + " Lv." + std::to_string(pYokai->getLevel()), Color(8, 24, 32));
 
         std::string pHpText = "HP " + std::to_string(m_playerHpBar.getCurrentValue()) + "/" + std::to_string(pYokai->getStats().maxHp);
-        FontRenderer::drawText(renderer, 186, 72, pHpText, Color(8, 24, 32));
-        m_playerHpBar.render(renderer, 186, 82, 118, 5, Color(52, 104, 86));
+        FontRenderer::drawText(renderer, 180, 74, pHpText, Color(8, 24, 32));
+        renderer.drawGaugeBar(180, 84, 126, 5, m_playerHpBar.getCurrentValue(), pYokai->getStats().maxHp, Color(52, 104, 86));
 
         std::string pQiText = "Qi " + std::to_string(m_playerQiBar.getCurrentValue()) + "/" + std::to_string(pYokai->getStats().maxQi);
-        FontRenderer::drawText(renderer, 186, 90, pQiText, Color(52, 104, 86));
+        FontRenderer::drawText(renderer, 180, 92, pQiText, Color(52, 104, 86));
+        renderer.drawGaugeBar(240, 94, 66, 4, m_playerQiBar.getCurrentValue(), pYokai->getStats().maxQi, Color(136, 192, 112));
     } else {
-        // Solo Exorcist Combatant (16x24 Back Sprite at X=36, Y=56)
+        // Solo Exorcist Combatant (16x24 Back Sprite at X=32, Y=56)
         if (!m_sequencer.isPlayerFlashing()) {
             renderer.drawGen1Bitmap(pBaseX, pBaseY, 16, 24, Gen1Assets::PLAYER_16x24[2], true);
         }
 
-        // Exorcist HUD Box (Bottom-Right: X=180, Y=56, W=132, H=46)
-        renderer.fillRect(180, 56, 132, 46, Color(224, 248, 208));
-        renderer.drawRect(180, 56, 132, 46, Color(8, 24, 32));
-        renderer.drawRect(182, 58, 128, 42, Color(52, 104, 86));
+        // Exorcist HUD Box (Bottom-Right: X=174, Y=58, W=138, H=48)
+        renderer.draw9SliceBox(174, 58, 138, 48, UITheme::Paper);
 
-        FontRenderer::drawText(renderer, 186, 60, "영술사 (혈혈단신)", Color(8, 24, 32));
-        FontRenderer::drawText(renderer, 186, 74, "벽사의 부적 소지", Color(52, 104, 86));
-        FontRenderer::drawText(renderer, 186, 88, "[2.계약] 가능", Color(8, 24, 32));
+        FontRenderer::drawText(renderer, 180, 62, "영술사 (혈혈단신)", Color(8, 24, 32));
+        FontRenderer::drawText(renderer, 180, 76, "벽사의 부적 소지", Color(52, 104, 86));
+        FontRenderer::drawText(renderer, 180, 90, "[2.계약] 가능", Color(8, 24, 32));
     }
 
-    // 3. Command & Log Region (Bottom: Y=114, H=62)
-    renderer.fillRect(0, 114, SCREEN_WIDTH, 66, Color(224, 248, 208));
-    renderer.drawRect(0, 114, SCREEN_WIDTH, 66, Color(8, 24, 32));
-
+    // 3. Command & Log Region (Bottom: Y=112, H=64)
     // If Sequencer has active text message, display it cleanly in full width!
     if (!m_sequencer.isFinished() && m_sequencer.isCurrentCommandTextMessage()) {
-        renderer.fillRect(6, 118, 308, 56, Color(224, 248, 208));
-        renderer.drawRect(6, 118, 308, 56, Color(8, 24, 32));
-        FontRenderer::drawText(renderer, 14, 130, m_sequencer.getCurrentText(), Color(8, 24, 32));
+        renderer.draw9SliceBox(6, 112, 308, 64, UITheme::Paper);
+        FontRenderer::drawText(renderer, 16, 126, m_sequencer.getCurrentText(), Color(8, 24, 32));
         if (m_sequencer.isWaitingForInput()) {
-            FontRenderer::drawText(renderer, 296, 156, ">", Color(8, 24, 32));
+            FontRenderer::drawText(renderer, 296, 156, "▼", Color(8, 24, 32));
         }
         return;
     }
 
     if (m_battle->getState() == BattleState::PlayerCommand) {
         if (m_battle->getMenuState() == BattleMenuState::MainAction) {
-            renderer.drawPanel(4, 114, 130, 62, Color(20, 22, 28), Palette::MidGray);
+            // Left Command Panel
+            renderer.draw9SliceBox(6, 112, 134, 64, UITheme::Paper);
 
-            const char* menuLabels[4] = {"1.기술 (Attack)", "2.계약 (Talisman)", "3.교체 (Party)", "4.도망 (Flee)"};
+            const char* menuLabels[4] = {"1.기술", "2.계약", "3.교체", "4.도망"};
             int cur = m_battle->getMainCursor();
 
             for (int i = 0; i < 4; ++i) {
-                int mx = (i % 2 == 0) ? 8 : 68;
-                int my = (i < 2) ? 122 : 146;
-                Color c = (cur == i) ? Palette::Yellow : Palette::White;
-                if (cur == i) {
-                    FontRenderer::drawText(renderer, mx - 4, my, ">", Palette::Yellow);
+                int mx = (i % 2 == 0) ? 12 : 72;
+                int my = (i < 2) ? 120 : 138;
+                bool isCur = (cur == i);
+                if (isCur) {
+                    renderer.fillRect(mx - 2, my - 1, 56, 14, Color(136, 192, 112));
+                    FontRenderer::drawText(renderer, mx, my, menuLabels[i], Color(8, 24, 32));
+                } else {
+                    FontRenderer::drawText(renderer, mx, my, menuLabels[i], Color(52, 104, 86));
                 }
-                FontRenderer::drawText(renderer, mx, my, menuLabels[i], c);
-            }
-
-            // Combat Log Panel
-            renderer.drawPanel(138, 114, 178, 62, Color(16, 18, 22), Palette::MidGray);
-            const auto& log = m_battle->getCombatLog();
-            int logY = 118;
-            int startIdx = std::max(0, static_cast<int>(log.size()) - 4);
-            for (size_t i = startIdx; i < log.size(); ++i) {
-                FontRenderer::drawText(renderer, 142, logY, log[i], Palette::White);
-                logY += 9;
             }
 
             float capRate = m_battle->calculateCaptureProbability();
             std::string capStr = "계약률: " + std::to_string(static_cast<int>(capRate * 100)) + "%";
-            FontRenderer::drawText(renderer, 240, 162, capStr, Palette::Yellow);
+            FontRenderer::drawText(renderer, 14, 156, capStr, Color(8, 24, 32));
+
+            // Right Combat Log Panel
+            renderer.draw9SliceBox(144, 112, 170, 64, UITheme::Paper);
+            const auto& log = m_battle->getCombatLog();
+            int logY = 118;
+            int startIdx = std::max(0, static_cast<int>(log.size()) - 3);
+            for (size_t i = startIdx; i < log.size(); ++i) {
+                FontRenderer::drawText(renderer, 150, logY, log[i], Color(8, 24, 32));
+                logY += 13;
+            }
         }
         else if (m_battle->getMenuState() == BattleMenuState::SkillSelect) {
-            renderer.drawPanel(4, 114, 160, 62, Color(20, 22, 28), Palette::Yellow);
+            // Left Skill Select Panel
+            renderer.draw9SliceBox(6, 112, 148, 64, UITheme::Paper);
 
             if (pYokai) {
                 const auto& skills = pYokai->getSkills();
                 int sCur = m_battle->getSkillCursor();
 
                 for (size_t i = 0; i < 4 && i < skills.size(); ++i) {
-                    int sx = (i % 2 == 0) ? 8 : 84;
-                    int sy = (i < 2) ? 122 : 144;
-                    Color col = (sCur == static_cast<int>(i)) ? Palette::Yellow : Palette::White;
-                    if (sCur == static_cast<int>(i)) {
-                        FontRenderer::drawText(renderer, sx - 4, sy, ">", Palette::Yellow);
+                    int sx = (i % 2 == 0) ? 12 : 80;
+                    int sy = (i < 2) ? 120 : 142;
+                    bool isCur = (sCur == static_cast<int>(i));
+                    if (isCur) {
+                        renderer.fillRect(sx - 2, sy - 1, 64, 18, Color(136, 192, 112));
+                        FontRenderer::drawText(renderer, sx, sy, skills[i].name, Color(8, 24, 32));
+                        FontRenderer::drawText(renderer, sx, sy + 10, "Qi:" + std::to_string(skills[i].qiCost), Color(8, 24, 32));
+                    } else {
+                        FontRenderer::drawText(renderer, sx, sy, skills[i].name, Color(52, 104, 86));
+                        FontRenderer::drawText(renderer, sx, sy + 10, "Qi:" + std::to_string(skills[i].qiCost), Color(52, 104, 86));
                     }
-                    FontRenderer::drawText(renderer, sx, sy, skills[i].name, col);
-                    FontRenderer::drawText(renderer, sx, sy + 8, "Qi:" + std::to_string(skills[i].qiCost), Palette::Jade);
                 }
 
-                // Skill Detail Panel
-                renderer.drawPanel(168, 114, 148, 62, Color(16, 18, 22), Palette::MidGray);
+                // Right Skill Detail Panel
+                renderer.draw9SliceBox(158, 112, 156, 64, UITheme::Paper);
                 if (sCur < static_cast<int>(skills.size())) {
                     const auto& curSkl = skills[sCur];
-                    FontRenderer::drawText(renderer, 172, 118, "위력(Pwr): " + std::to_string(curSkl.power), Palette::White);
-                    FontRenderer::drawText(renderer, 172, 128, "명중(Acc): " + std::to_string(curSkl.accuracy) + "%", Palette::White);
+                    FontRenderer::drawText(renderer, 164, 118, "위력(Pwr): " + std::to_string(curSkl.power), Color(8, 24, 32));
+                    FontRenderer::drawText(renderer, 164, 130, "명중(Acc): " + std::to_string(curSkl.accuracy) + "%", Color(8, 24, 32));
                     if (curSkl.statusEffect != StatusEffect::None) {
-                        FontRenderer::drawText(renderer, 172, 138, StatusEffectSystem::getStatusName(curSkl.statusEffect), StatusEffectSystem::getStatusColor(curSkl.statusEffect));
+                        FontRenderer::drawText(renderer, 164, 142, StatusEffectSystem::getStatusName(curSkl.statusEffect), Color(180, 40, 40));
                     } else {
-                        FontRenderer::drawText(renderer, 172, 138, "상태이상: 없음", Palette::LightGray);
+                        FontRenderer::drawText(renderer, 164, 142, "상태이상: 없음", Color(52, 104, 86));
                     }
-                    FontRenderer::drawText(renderer, 172, 156, "[X키: 뒤로가기]", Palette::MidGray);
+                    FontRenderer::drawText(renderer, 164, 156, "[X: 뒤로가기]", Color(52, 104, 86));
                 }
             }
         }
         else if (m_battle->getMenuState() == BattleMenuState::PartySwapSelect) {
-            renderer.drawPanel(4, 114, 312, 62, Color(20, 22, 28), Palette::Blue);
-            FontRenderer::drawText(renderer, 10, 118, "=== 출전할 요괴를 선택하십시오 (X: 취소) ===", Palette::Yellow);
+            renderer.draw9SliceBox(6, 112, 308, 64, UITheme::Paper);
+            FontRenderer::drawText(renderer, 14, 118, "=== 출전할 요괴 선택 (X: 취소) ===", Color(52, 104, 86));
 
             int swapCur = m_battle->getSwapCursor();
             for (size_t i = 0; i < m_party.getSize(); ++i) {
                 const Yokai* member = m_party.getYokai(i);
                 if (!member) continue;
-                int my = 130 + static_cast<int>(i) * 12;
-                Color c = (swapCur == static_cast<int>(i)) ? Palette::Yellow : Palette::White;
-                if (swapCur == static_cast<int>(i)) {
-                    FontRenderer::drawText(renderer, 8, my, ">", Palette::Yellow);
+                int my = 132 + static_cast<int>(i) * 14;
+                bool isCur = (swapCur == static_cast<int>(i));
+                if (isCur) {
+                    renderer.fillRect(10, my - 1, 300, 13, Color(136, 192, 112));
+                    FontRenderer::drawText(renderer, 12, my, "▶", Color(8, 24, 32));
                 }
                 std::string slotInfo = std::to_string(i + 1) + ". " + member->getName() + " Lv." + std::to_string(member->getLevel()) +
                                        " (HP:" + std::to_string(member->getStats().hp) + "/" + std::to_string(member->getStats().maxHp) + ")";
-                FontRenderer::drawText(renderer, 16, my, slotInfo, c);
+                FontRenderer::drawText(renderer, 26, my, slotInfo, Color(8, 24, 32));
             }
         }
     }
     else if (m_battle->getState() == BattleState::Victory) {
-        renderer.drawPanel(30, 118, 260, 52, Color(16, 40, 24), Palette::Yellow);
+        renderer.draw9SliceBox(20, 112, 280, 64, UITheme::Paper);
         if (m_isBoss) {
-            FontRenderer::drawText(renderer, 70, 126, "★ 음양당 보스 격파 성공! ★", Palette::Yellow);
-            FontRenderer::drawText(renderer, 45, 140, "경험치 " + std::to_string(m_battle->getExpReward()) + " & 300냥 획득 및 퀘스트 완료!", Palette::White);
+            FontRenderer::drawText(renderer, 70, 120, "★ 음양당 보스 격파 성공! ★", Color(8, 24, 32));
+            FontRenderer::drawText(renderer, 36, 136, "경험치 " + std::to_string(m_battle->getExpReward()) + " & 300냥 획득 및 퀘스트 완료!", Color(52, 104, 86));
         } else {
-            FontRenderer::drawText(renderer, 90, 126, "★ 전투 승리! ★", Palette::Yellow);
-            FontRenderer::drawText(renderer, 50, 140, "경험치 " + std::to_string(m_battle->getExpReward()) + " 획득 및 도감 등록!", Palette::White);
+            FontRenderer::drawText(renderer, 90, 120, "★ 전투 승리! ★", Color(8, 24, 32));
+            FontRenderer::drawText(renderer, 48, 136, "경험치 " + std::to_string(m_battle->getExpReward()) + " 획득 및 도감 등록!", Color(52, 104, 86));
         }
-        FontRenderer::drawText(renderer, 70, 154, "[Z / Space 키를 눌러 필드로 복귀]", Palette::Jade);
+        FontRenderer::drawText(renderer, 70, 154, "[Z / Space 키를 눌러 필드로 복귀]", Color(8, 24, 32));
     }
     else if (m_battle->getState() == BattleState::Defeat) {
-        renderer.drawPanel(30, 118, 260, 52, Color(40, 16, 16), Palette::Red);
-        FontRenderer::drawText(renderer, 90, 126, "☠ 파티 전멸 ☠", Palette::Red);
-        FontRenderer::drawText(renderer, 60, 140, "모든 요괴가 기절했습니다...", Palette::White);
-        FontRenderer::drawText(renderer, 70, 154, "[Z / Space 키를 눌러 주막으로 복귀]", Palette::Yellow);
+        renderer.draw9SliceBox(20, 112, 280, 64, UITheme::Inverted);
+        FontRenderer::drawText(renderer, 90, 120, "☠ 파티 전멸 ☠", Color(224, 248, 208));
+        FontRenderer::drawText(renderer, 60, 136, "모든 요괴가 기절했습니다...", Color(136, 192, 112));
+        FontRenderer::drawText(renderer, 64, 154, "[Z / Space 키를 눌러 주막으로 복귀]", Color(224, 248, 208));
     }
 }
 

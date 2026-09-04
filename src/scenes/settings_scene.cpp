@@ -149,11 +149,11 @@ void SettingsScene::update(float /*dt*/) {}
 
 void SettingsScene::render(Renderer& renderer) {
     // Dim background
-    renderer.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Color(16, 18, 24, 230));
+    renderer.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Color(8, 16, 20, 140));
 
     // Main Settings Panel
-    renderer.drawPanel(16, 6, 288, 168, Color(24, 28, 36), Palette::Yellow);
-    FontRenderer::drawText(renderer, 92, 11, "=== 시스템 환경 설정 ===", Palette::Yellow);
+    renderer.draw9SliceBox(16, 6, 288, 168, UITheme::Paper);
+    FontRenderer::drawText(renderer, 92, 11, "=== 시스템 환경 설정 ===", Color(8, 24, 32));
 
     std::string textSpeedNames[3] = {"보통 (Normal)", "빠름 (Fast)", "즉시 (Instant)"};
 
@@ -179,17 +179,17 @@ void SettingsScene::render(Renderer& renderer) {
         bool isSel = (m_cursor == i);
 
         if (isSel) {
-            renderer.fillRect(22, oy - 2, 276, 12, Color(40, 50, 70));
-            FontRenderer::drawText(renderer, 25, oy, ">", Palette::Yellow);
+            renderer.fillRect(22, oy - 2, 276, 13, Color(136, 192, 112));
+            FontRenderer::drawText(renderer, 24, oy, "▶", Color(8, 24, 32));
         }
 
-        Color col = isSel ? Palette::Yellow : Palette::White;
-        if (i == 8) col = isSel ? Palette::Green : Palette::Jade;
+        Color col = isSel ? Color(8, 24, 32) : Color(52, 104, 86);
+        if (i == 8) col = isSel ? Color(8, 24, 32) : Color(8, 24, 32);
 
         FontRenderer::drawText(renderer, 34, oy, labels[i], col);
     }
 
-    FontRenderer::drawText(renderer, 24, 157, "방향키:조절 | Z:결정 | X:닫기 | F11:전체화면", Palette::MidGray);
+    FontRenderer::drawText(renderer, 24, 157, "방향키:조절 | Z:결정 | X:닫기 | F11:전체화면", Color(52, 104, 86));
 }
 
 } // namespace JoseonRPG
