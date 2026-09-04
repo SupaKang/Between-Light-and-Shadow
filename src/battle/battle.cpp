@@ -294,19 +294,27 @@ void Battle::resolveTurnActions(const TurnAction& playerAction, const TurnAction
 
     // 1. Capture Action Check
     if (playerAction.isCapture) {
-        AudioEngine::playSfx(SfxId::CaptureThrow);
         float rate = calculateCaptureProbability();
         std::uniform_real_distribution<float> dist(0.0f, 1.0f);
+        float roll = dist(s_battleRng);
+
+        m_lastCaptureResult.attempted = true;
         m_combatLog.push_back("벽사 봉인 부적을 던졌습니다! (성공률: " + std::to_string(static_cast<int>(rate * 100)) + "%)");
-        if (dist(s_battleRng) <= rate) {
-            AudioEngine::playSfx(SfxId::CaptureSuccess);
+
+        if (roll <= rate) {
+            m_lastCaptureResult.success = true;
+            m_lastCaptureResult.targetShakes = 3;
             m_combatLog.push_back("계약 성공! [" + m_enemyYokai.getName() + "]과 영혼의 계약을 맺었습니다!");
             DataManager::getEncyclopedia().markCaptured(m_enemyYokai.getId());
             m_playerParty.addYokai(m_enemyYokai);
             m_state = BattleState::Victory;
             return;
         } else {
-            AudioEngine::playSfx(SfxId::MenuCancel);
+            m_lastCaptureResult.success = false;
+            if (roll < rate + 0.15f) m_lastCaptureResult.targetShakes = 2;
+            else if (roll < rate + 0.35f) m_lastCaptureResult.targetShakes = 1;
+            else m_lastCaptureResult.targetShakes = 0;
+
             m_combatLog.push_back("부적이 튕겨져 나갔습니다! 계약 실패.");
             // Enemy attacks after failed capture
             if (playerYokai && !playerYokai->isFainted()) {

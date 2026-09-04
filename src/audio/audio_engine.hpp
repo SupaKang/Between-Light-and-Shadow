@@ -28,7 +28,10 @@ enum class SfxId {
     ArtifactDestroy,
     TavernHeal,
     MapWarp,
-    FreezeShatter
+    FreezeShatter,
+    CapturePulse,
+    CaptureBreak,
+    BattleEncounter
 };
 
 class AudioEngine {

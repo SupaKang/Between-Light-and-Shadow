@@ -54,7 +54,125 @@ void BattleScene::onEnter() {
     m_sequencer.addTextMessage(introMsg);
 }
 
+void BattleScene::spawnCaptureBurst(int cx, int cy, bool isGold) {
+    m_captureParticles.clear();
+    for (int i = 0; i < 24; ++i) {
+        CaptureParticle p;
+        p.x = static_cast<float>(cx);
+        p.y = static_cast<float>(cy);
+        float angle = (i / 24.0f) * 6.283185f;
+        float spd = 25.0f + static_cast<float>(rand() % 45);
+        p.vx = std::cos(angle) * spd;
+        p.vy = std::sin(angle) * spd;
+        p.life = 0.0f;
+        p.maxLife = 0.35f + static_cast<float>(rand() % 20) * 0.01f;
+        if (isGold) {
+            p.color = (i % 2 == 0) ? Color(240, 200, 40) : Color(255, 240, 150);
+        } else {
+            p.color = (i % 2 == 0) ? Color(220, 60, 40) : Color(80, 80, 80);
+        }
+        m_captureParticles.push_back(p);
+    }
+}
+
+void BattleScene::updateCaptureAnimation(float dt) {
+    for (auto& p : m_captureParticles) {
+        p.life += dt;
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
+    }
+    m_captureParticles.erase(
+        std::remove_if(m_captureParticles.begin(), m_captureParticles.end(), [](const CaptureParticle& p) {
+            return p.life >= p.maxLife;
+        }),
+        m_captureParticles.end()
+    );
+
+    if (m_captureAnimState == CaptureAnimState::None) return;
+
+    if (m_captureAnimState == CaptureAnimState::Throwing) {
+        m_captureAnimTimer += dt;
+        float progress = m_captureAnimTimer / 0.45f;
+        if (progress >= 1.0f) {
+            m_captureAnimState = CaptureAnimState::Shaking;
+            m_captureAnimTimer = 0.0f;
+            m_currentShakeCount = 0;
+            m_talismanX = 228.0f;
+            m_talismanY = 16.0f;
+        } else {
+            m_talismanX = 40.0f + progress * (228.0f - 40.0f);
+            float arc = std::sin(progress * 3.14159f) * 40.0f;
+            m_talismanY = (65.0f + progress * (16.0f - 65.0f)) - arc;
+        }
+    } else if (m_captureAnimState == CaptureAnimState::Shaking) {
+        m_captureAnimTimer += dt;
+        float shakeInterval = 0.65f;
+        if (m_captureAnimTimer >= shakeInterval) {
+            m_captureAnimTimer = 0.0f;
+            if (m_currentShakeCount < m_targetShakeCount) {
+                m_currentShakeCount++;
+                AudioEngine::playSfx(SfxId::CapturePulse);
+                m_enemyShake = 5.0f + static_cast<float>(m_currentShakeCount) * 2.0f;
+                m_sequencer.addTextMessage("벽사 부적 " + std::to_string(m_currentShakeCount) + "차 영기 결속... (두근!)");
+            } else {
+                if (m_captureWillSucceed) {
+                    m_captureAnimState = CaptureAnimState::SuccessBurst;
+                    m_captureAnimTimer = 0.0f;
+                    AudioEngine::playSfx(SfxId::CaptureSuccess);
+                    spawnCaptureBurst(232, 28, true);
+                    m_sequencer.addTextMessage("★ 계약 성공! [" + m_battle->getEnemyYokai().getName() + "]과 영혼의 계약을 맺었습니다! ★");
+                } else {
+                    m_captureAnimState = CaptureAnimState::Breakout;
+                    m_captureAnimTimer = 0.0f;
+                    AudioEngine::playSfx(SfxId::CaptureBreak);
+                    spawnCaptureBurst(232, 28, false);
+                    m_enemyShake = 12.0f;
+                    m_sequencer.addTextMessage("부적이 찢어지며 [" + m_battle->getEnemyYokai().getName() + "]이(가) 결계를 깨고 탈출했습니다!");
+                }
+            }
+        }
+    } else if (m_captureAnimState == CaptureAnimState::SuccessBurst) {
+        m_captureAnimTimer += dt;
+        if (m_captureAnimTimer >= 0.8f) {
+            m_captureAnimState = CaptureAnimState::None;
+        }
+    } else if (m_captureAnimState == CaptureAnimState::Breakout) {
+        m_captureAnimTimer += dt;
+        if (m_captureAnimTimer >= 0.6f) {
+            m_captureAnimState = CaptureAnimState::None;
+        }
+    }
+}
+
+void BattleScene::renderTalismanCapture(Renderer& renderer) {
+    if (m_captureAnimState == CaptureAnimState::Throwing || m_captureAnimState == CaptureAnimState::Shaking) {
+        int tx = static_cast<int>(m_talismanX);
+        int ty = static_cast<int>(m_talismanY);
+
+        bool glow = (m_captureAnimState == CaptureAnimState::Shaking && (static_cast<int>(m_battleAnimTimer * 10.0f) % 2 == 0));
+        Color bgCol = glow ? Color(255, 240, 100) : Color(240, 195, 45);
+        renderer.fillRect(tx, ty, 8, 12, bgCol);
+        renderer.drawRect(tx, ty, 8, 12, Color(8, 24, 32));
+
+        renderer.setPixel(tx + 3, ty + 2, Color(200, 30, 30));
+        renderer.setPixel(tx + 4, ty + 2, Color(200, 30, 30));
+        renderer.drawLine(tx + 2, ty + 4, tx + 5, ty + 4, Color(200, 30, 30));
+        renderer.drawLine(tx + 3, ty + 5, tx + 3, ty + 9, Color(200, 30, 30));
+        renderer.drawLine(tx + 2, ty + 7, tx + 5, ty + 7, Color(200, 30, 30));
+        renderer.setPixel(tx + 3, ty + 10, Color(200, 30, 30));
+        renderer.setPixel(tx + 4, ty + 10, Color(200, 30, 30));
+    }
+
+    for (const auto& p : m_captureParticles) {
+        renderer.setPixel(static_cast<int>(p.x), static_cast<int>(p.y), p.color);
+    }
+}
+
 void BattleScene::handleInput() {
+    if (m_captureAnimState != CaptureAnimState::None) {
+        return;
+    }
+
     if (!m_sequencer.isFinished()) {
         if (Input::isPressed(Key::ActionA) || Input::isPressed(Key::ActionB)) {
             m_sequencer.advanceText();
@@ -82,10 +200,24 @@ void BattleScene::handleInput() {
 
         if (Input::isPressed(Key::ActionA)) {
             AudioEngine::playSfx(SfxId::MenuSelect);
+            bool wasCapture = (m_battle->getMenuState() == BattleMenuState::MainAction && m_battle->getMainCursor() == 1);
+
             m_battle->onConfirm();
             
-            // Check if turn action was submitted
-            if (m_battle->getState() == BattleState::ExecutingTurn) {
+            if (wasCapture) {
+                auto capRes = m_battle->getLastCaptureResult();
+                if (capRes.attempted) {
+                    m_captureAnimState = CaptureAnimState::Throwing;
+                    m_captureAnimTimer = 0.0f;
+                    m_currentShakeCount = 0;
+                    m_targetShakeCount = capRes.targetShakes;
+                    m_captureWillSucceed = capRes.success;
+                    m_talismanX = 40.0f;
+                    m_talismanY = 65.0f;
+                    AudioEngine::playSfx(SfxId::CaptureThrow);
+                    m_sequencer.addTextMessage("벽사 봉인 부적을 투척했습니다!");
+                }
+            } else if (m_battle->getState() == BattleState::ExecutingTurn) {
                 m_playerLunge = 8.0f;
                 m_enemyLunge = 8.0f;
                 Yokai* py = m_battle->getActivePlayerYokai();
@@ -94,7 +226,6 @@ void BattleScene::handleInput() {
                 }
                 m_skillFx.triggerSkillFx(m_battle->getEnemyYokai().getElement(), 50, 85);
 
-                // Read latest combat log from battle and push to sequencer
                 const auto& log = m_battle->getCombatLog();
                 for (const auto& line : log) {
                     m_sequencer.addTextMessage(line);
@@ -124,11 +255,16 @@ void BattleScene::update(float dt) {
     bool isFast = Input::isDown(Key::Dash) || Input::isDown(Key::ActionA);
     float simDt = isFast ? dt * 2.2f : dt;
 
-    if (isFast && m_sequencer.isCurrentCommandTextMessage()) {
+    if (m_introSlideTimer > 0.0f) {
+        m_introSlideTimer = std::max(0.0f, m_introSlideTimer - simDt);
+    }
+
+    if (isFast && m_sequencer.isCurrentCommandTextMessage() && m_captureAnimState == CaptureAnimState::None) {
         m_sequencer.advanceText();
     }
 
     m_battleAnimTimer += simDt;
+    updateCaptureAnimation(simDt);
     m_sequencer.update(simDt);
     m_skillFx.update(simDt);
 
@@ -175,20 +311,22 @@ void BattleScene::render(Renderer& renderer) {
     const Yokai* pYokai = m_battle->getActivePlayerYokai();
     const Yokai& eYokai = m_battle->getEnemyYokai();
 
+    int slideOffset = (m_introSlideTimer > 0.0f) ? static_cast<int>((m_introSlideTimer / 0.5f) * 120.0f) : 0;
+
     // 1. Enemy HUD Box (Top-Left: X=8, Y=8, W=138, H=44)
-    renderer.draw9SliceBox(8, 8, 138, 44, UITheme::Paper);
+    renderer.draw9SliceBox(8 - slideOffset, 8, 138, 44, UITheme::Paper);
 
     std::string eGradeStr = " [G." + std::to_string(static_cast<int>(eYokai.getGrade())) + "]";
-    FontRenderer::drawText(renderer, 14, 12, eYokai.getName() + " Lv." + std::to_string(eYokai.getLevel()), Color(8, 24, 32));
-    FontRenderer::drawText(renderer, 106, 12, eGradeStr, Color(52, 104, 86));
+    FontRenderer::drawText(renderer, 14 - slideOffset, 12, eYokai.getName() + " Lv." + std::to_string(eYokai.getLevel()), Color(8, 24, 32));
+    FontRenderer::drawText(renderer, 106 - slideOffset, 12, eGradeStr, Color(52, 104, 86));
 
     std::string eHpText = "HP " + std::to_string(m_enemyHpBar.getCurrentValue()) + "/" + std::to_string(eYokai.getStats().maxHp);
-    FontRenderer::drawText(renderer, 14, 24, eHpText, Color(8, 24, 32));
-    renderer.drawGaugeBar(14, 36, 126, 6, m_enemyHpBar.getCurrentValue(), eYokai.getStats().maxHp, Color(52, 104, 86));
+    FontRenderer::drawText(renderer, 14 - slideOffset, 24, eHpText, Color(8, 24, 32));
+    renderer.drawGaugeBar(14 - slideOffset, 36, 126, 6, m_enemyHpBar.getCurrentValue(), eYokai.getStats().maxHp, Color(52, 104, 86));
 
     if (eYokai.getStatus().effect != StatusEffect::None) {
         std::string statStr = "[" + std::string(StatusEffectSystem::getStatusName(eYokai.getStatus().effect)) + "]";
-        FontRenderer::drawText(renderer, 90, 24, statStr, Color(180, 40, 40));
+        FontRenderer::drawText(renderer, 90 - slideOffset, 24, statStr, Color(180, 40, 40));
     }
 
     // Dynamic Idle Breathing & Float + Lunge / Shake
@@ -202,7 +340,7 @@ void BattleScene::render(Renderer& renderer) {
     int eLungeX = -static_cast<int>(m_enemyLunge);
 
     // Enemy Sprite (Top-Right: X=216, Y=14) - Gen 1 32x32 / 48x48 Battler
-    int eBaseX = 216 + eShakeX + eLungeX;
+    int eBaseX = 216 + eShakeX + eLungeX + slideOffset;
     int eBaseY = 14 + eBounceY;
 
     if (!m_sequencer.isEnemyFlashing()) {
@@ -223,7 +361,7 @@ void BattleScene::render(Renderer& renderer) {
     }
 
     // 2. Player Combatant (Bottom-Left: X=32, Y=56) & HUD Box (Bottom-Right: X=174, Y=58, W=138, H=48)
-    int pBaseX = 32 + pShakeX + pLungeX;
+    int pBaseX = 32 + pShakeX + pLungeX - slideOffset;
     int pBaseY = 56 + pBounceY;
 
     if (pYokai) {
@@ -245,30 +383,31 @@ void BattleScene::render(Renderer& renderer) {
         }
 
         // Player HUD Box (Bottom-Right: X=174, Y=58, W=138, H=48)
-        renderer.draw9SliceBox(174, 58, 138, 48, UITheme::Paper);
+        renderer.draw9SliceBox(174 + slideOffset, 58, 138, 48, UITheme::Paper);
 
-        FontRenderer::drawText(renderer, 180, 62, pYokai->getName() + " Lv." + std::to_string(pYokai->getLevel()), Color(8, 24, 32));
+        FontRenderer::drawText(renderer, 180 + slideOffset, 62, pYokai->getName() + " Lv." + std::to_string(pYokai->getLevel()), Color(8, 24, 32));
 
         std::string pHpText = "HP " + std::to_string(m_playerHpBar.getCurrentValue()) + "/" + std::to_string(pYokai->getStats().maxHp);
-        FontRenderer::drawText(renderer, 180, 74, pHpText, Color(8, 24, 32));
-        renderer.drawGaugeBar(180, 84, 126, 5, m_playerHpBar.getCurrentValue(), pYokai->getStats().maxHp, Color(52, 104, 86));
+        FontRenderer::drawText(renderer, 180 + slideOffset, 74, pHpText, Color(8, 24, 32));
+        renderer.drawGaugeBar(180 + slideOffset, 84, 126, 5, m_playerHpBar.getCurrentValue(), pYokai->getStats().maxHp, Color(52, 104, 86));
 
         std::string pQiText = "Qi " + std::to_string(m_playerQiBar.getCurrentValue()) + "/" + std::to_string(pYokai->getStats().maxQi);
-        FontRenderer::drawText(renderer, 180, 92, pQiText, Color(52, 104, 86));
-        renderer.drawGaugeBar(240, 94, 66, 4, m_playerQiBar.getCurrentValue(), pYokai->getStats().maxQi, Color(136, 192, 112));
+        FontRenderer::drawText(renderer, 180 + slideOffset, 92, pQiText, Color(52, 104, 86));
+        renderer.drawGaugeBar(240 + slideOffset, 94, 66, 4, m_playerQiBar.getCurrentValue(), pYokai->getStats().maxQi, Color(136, 192, 112));
     } else {
-        // Solo Exorcist Combatant (16x24 Back Sprite at X=32, Y=56)
         if (!m_sequencer.isPlayerFlashing()) {
             renderer.drawGen1Bitmap(pBaseX, pBaseY, 16, 24, Gen1Assets::PLAYER_16x24[2], true);
         }
 
-        // Exorcist HUD Box (Bottom-Right: X=174, Y=58, W=138, H=48)
-        renderer.draw9SliceBox(174, 58, 138, 48, UITheme::Paper);
+        renderer.draw9SliceBox(174 + slideOffset, 58, 138, 48, UITheme::Paper);
 
-        FontRenderer::drawText(renderer, 180, 62, "영술사 (혈혈단신)", Color(8, 24, 32));
-        FontRenderer::drawText(renderer, 180, 76, "벽사의 부적 소지", Color(52, 104, 86));
-        FontRenderer::drawText(renderer, 180, 90, "[2.계약] 가능", Color(8, 24, 32));
+        FontRenderer::drawText(renderer, 180 + slideOffset, 62, "영술사 (혈혈단신)", Color(8, 24, 32));
+        FontRenderer::drawText(renderer, 180 + slideOffset, 76, "벽사의 부적 소지", Color(52, 104, 86));
+        FontRenderer::drawText(renderer, 180 + slideOffset, 90, "[2.계약] 가능", Color(8, 24, 32));
     }
+
+    // Talisman & Capture Particles Overlay
+    renderTalismanCapture(renderer);
 
     // 3. Command & Log Region (Bottom: Y=112, H=64)
     // If Sequencer has active text message, display it cleanly in full width!

@@ -49,10 +49,32 @@ private:
 
     int m_enemySpriteId = 1;
     float m_battleAnimTimer = 0.0f;
+    float m_introSlideTimer = 0.5f;
     float m_playerLunge = 0.0f;
     float m_enemyLunge = 0.0f;
     float m_playerShake = 0.0f;
     float m_enemyShake = 0.0f;
+
+    // 3-Stage Talisman Capture Animation State
+    enum class CaptureAnimState { None, Throwing, Shaking, SuccessBurst, Breakout };
+    CaptureAnimState m_captureAnimState = CaptureAnimState::None;
+    float m_captureAnimTimer = 0.0f;
+    int m_currentShakeCount = 0;
+    int m_targetShakeCount = 3;
+    bool m_captureWillSucceed = false;
+    float m_talismanX = 0.0f;
+    float m_talismanY = 0.0f;
+
+    struct CaptureParticle {
+        float x = 0.0f, y = 0.0f;
+        float vx = 0.0f, vy = 0.0f;
+        float life = 0.0f, maxLife = 0.5f;
+        Color color;
+    };
+    std::vector<CaptureParticle> m_captureParticles;
+    void spawnCaptureBurst(int cx, int cy, bool isGold);
+    void updateCaptureAnimation(float dt);
+    void renderTalismanCapture(Renderer& renderer);
 };
 
 } // namespace JoseonRPG

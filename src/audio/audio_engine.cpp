@@ -284,6 +284,24 @@ void AudioEngine::playSfx(SfxId sfx) {
                     s_activeSfx[i].freqEnd = 300.0f;
                     s_activeSfx[i].volume = 0.75f;
                     break;
+                case SfxId::CapturePulse:
+                    s_activeSfx[i].duration = 0.16f;
+                    s_activeSfx[i].freqStart = 380.0f;
+                    s_activeSfx[i].freqEnd = 580.0f;
+                    s_activeSfx[i].volume = 0.70f;
+                    break;
+                case SfxId::CaptureBreak:
+                    s_activeSfx[i].duration = 0.32f;
+                    s_activeSfx[i].freqStart = 850.0f;
+                    s_activeSfx[i].freqEnd = 120.0f;
+                    s_activeSfx[i].volume = 0.85f;
+                    break;
+                case SfxId::BattleEncounter:
+                    s_activeSfx[i].duration = 0.45f;
+                    s_activeSfx[i].freqStart = 260.0f;
+                    s_activeSfx[i].freqEnd = 920.0f;
+                    s_activeSfx[i].volume = 0.90f;
+                    break;
             }
             break;
         }

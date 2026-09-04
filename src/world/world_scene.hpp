@@ -70,6 +70,12 @@ private:
     int m_menuCursor = 0;
     void handleStartMenuInput();
     void renderStartMenu(Renderer& renderer);
+
+    // Battle Intro Screen Transition Cutscene State
+    bool m_inBattleTransition = false;
+    float m_battleTransitionTimer = 0.0f;
+    std::unique_ptr<IScene> m_pendingBattleScene = nullptr;
+    void startBattleTransition(std::unique_ptr<IScene> battleScene);
 };
 
 } // namespace JoseonRPG

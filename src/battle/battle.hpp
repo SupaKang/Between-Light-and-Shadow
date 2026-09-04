@@ -66,6 +66,14 @@ public:
     const std::vector<std::string>& getCombatLog() const { return m_combatLog; }
     int getExpReward() const { return m_expReward; }
 
+    struct CaptureResult {
+        bool attempted = false;
+        bool success = false;
+        int targetShakes = 3;
+    };
+
+    CaptureResult getLastCaptureResult() const { return m_lastCaptureResult; }
+
     // Formulas
     float calculateCaptureProbability() const;
     int calculateDamage(const Yokai& attacker, const Yokai& defender, const Skill& skill, bool isPlayerAttacker);
@@ -88,6 +96,7 @@ private:
     int m_swapCursor = 0;   // 0..2
 
     std::vector<std::string> m_combatLog;
+    CaptureResult m_lastCaptureResult;
     int m_lastUsedPlayerSkill = -1;
     int m_lastUsedEnemySkill = -1;
     int m_expReward = 0;
