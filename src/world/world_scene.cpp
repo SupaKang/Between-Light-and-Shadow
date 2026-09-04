@@ -930,10 +930,13 @@ void WorldScene::render(Renderer& renderer) {
     int screenPY = m_gridController.getPixelY() - m_camera.getY();
     renderer.drawSprite(screenPX, screenPY, 0, m_gridController.getAnimFrame());
 
-    // 5. Regional Ambient Weather
+    // 5. Apply Day/Night Lighting & Torchlight
+    m_weather.applyLighting(renderer, screenPX + 8, screenPY + 12, true);
+
+    // 6. Regional Ambient Weather
     m_weather.render(renderer);
 
-    // 6. Screen Fade Transition
+    // 7. Screen Fade Transition
     if (m_fadeAlpha > 0.001f) {
         renderer.applyFade(1.0f - m_fadeAlpha);
     }

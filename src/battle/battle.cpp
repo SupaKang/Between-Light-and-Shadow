@@ -172,15 +172,30 @@ int Battle::calculateDamage(const Yokai& attacker, const Yokai& defender, const 
         baseDmg *= 0.85f;
     }
 
+    // Party Elemental Resonance Modifiers
+    auto resonance = m_playerParty.getActiveResonance();
+    if (isPlayerAttacker) {
+        effectiveAtk = static_cast<int>(effectiveAtk * resonance.atkMod);
+        if (resonance.elemDmgMod > 1.0f) {
+            if ((resonance.type == ResonanceType::FlameEarthSurge && (skill.element == Element::Fire || skill.element == Element::Earth)) ||
+                (resonance.type == ResonanceType::TriadSynergy)) {
+                effectiveAtk = static_cast<int>(effectiveAtk * resonance.elemDmgMod);
+            }
+        }
+    } else {
+        effectiveDef = static_cast<int>(effectiveDef * resonance.defMod);
+    }
+
     // Artifact bonus / reduction & Critical calculation
     if (isPlayerAttacker) {
-        int critRate = 5 + m_artifacts.getCritRateBonus();
+        int critRate = 5 + m_artifacts.getCritRateBonus() + resonance.critBonus;
         if (attacker.getTrait() == YokaiTrait::DokkaebiPower) {
             critRate += 15; // Trait: Dokkaebi power +15%
         }
         std::uniform_int_distribution<int> critRoll(1, 100);
         if (critRoll(s_battleRng) <= critRate) {
             baseDmg *= 1.5f;
+            AudioEngine::playSfx(SfxId::Jing);
             m_combatLog.push_back(">> 치명타(Crit) 발생! <<");
         }
     } else {
@@ -289,6 +304,14 @@ void Battle::resolveTurnActions(const TurnAction& playerAction, const TurnAction
             int healAmt = std::max(1, playerYokai->getStats().maxHp * 5 / 100);
             playerYokai->healHp(healAmt);
             m_combatLog.push_back("[" + playerYokai->getName() + "]의 [벽사의 영기]로 HP +" + std::to_string(healAmt) + " 회복!");
+        }
+
+        // Party Resonance: VitalityFlow (5% HP regen)
+        auto res = m_playerParty.getActiveResonance();
+        if (res.hpRegenRatio > 0.0f) {
+            int resHeal = std::max(1, static_cast<int>(playerYokai->getStats().maxHp * res.hpRegenRatio));
+            playerYokai->healHp(resHeal);
+            m_combatLog.push_back("[" + res.nameKo + "] 공명으로 아군 체력 +" + std::to_string(resHeal) + " 재생!");
         }
     }
 

@@ -528,6 +528,9 @@ void BattleScene::render(Renderer& renderer) {
         FontRenderer::drawText(renderer, 60, 136, "모든 요괴가 기절했습니다...", Color(136, 192, 112));
         FontRenderer::drawText(renderer, 64, 154, "[Z / Space 키를 눌러 주막으로 복귀]", Color(224, 248, 208));
     }
+
+    // Apply Screen Flash overlay
+    renderer.applyFlash();
 }
 
 } // namespace JoseonRPG

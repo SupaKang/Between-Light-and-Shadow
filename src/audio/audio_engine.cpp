@@ -93,6 +93,57 @@ const int kBossBgmBass[] = {
     33, 33, 33, 33, 36, 36, 36, 36, 38, 38, 38, 38, 33, 33, 33, 33
 };
 
+// 1. Hanyang Court Theme (궁중 아악풍 정악 가락)
+const int kHanyangBgmLead[] = {
+    60, 64, 67, 69, 72, 69, 67, 64, 60, 62, 64, 67, 69, 72, 76, 72,
+    69, 67, 64, 67, 69, 72, 69, 67, 64, 62, 60, 62, 64, 62, 60, 0
+};
+const int kHanyangBgmBass[] = {
+    36, 36, 43, 43, 45, 45, 40, 40, 36, 36, 38, 38, 43, 43, 45, 45,
+    36, 36, 43, 43, 45, 45, 40, 40, 38, 38, 43, 43, 36, 0, 36, 0
+};
+
+// 2. Sobaek Mountain Gutgeori Theme (소백산맥 굿거리 장단)
+const int kSobaekBgmLead[] = {
+    64, 67, 71, 69, 67, 64, 62, 64, 67, 69, 72, 71, 69, 67, 64, 62,
+    60, 62, 64, 67, 69, 72, 74, 72, 69, 67, 64, 62, 60, 62, 64, 0
+};
+const int kSobaekBgmBass[] = {
+    40, 0, 40, 43, 0, 43, 45, 0, 45, 40, 0, 40,
+    36, 0, 36, 38, 0, 38, 43, 0, 43, 40, 0, 40,
+    36, 36, 40, 40, 43, 43, 40, 0
+};
+
+// 3. Namhae Reed Coast Theme (남해안 수제천 가락)
+const int kNamhaeBgmLead[] = {
+    62, 65, 67, 69, 72, 69, 67, 65, 62, 65, 67, 70, 72, 70, 67, 65,
+    62, 65, 67, 69, 67, 65, 62, 60, 62, 65, 67, 65, 62, 60, 62, 0
+};
+const int kNamhaeBgmBass[] = {
+    38, 38, 41, 41, 45, 45, 43, 43, 38, 38, 41, 41, 46, 46, 43, 43,
+    38, 38, 41, 41, 43, 43, 38, 38, 36, 36, 41, 41, 38, 0, 38, 0
+};
+
+// 4. Jirisan Mystic Bamboo Forest Theme (지리산 살풀이 신비 가락)
+const int kJirisanBgmLead[] = {
+    57, 60, 64, 65, 69, 65, 64, 60, 57, 60, 64, 69, 72, 69, 64, 60,
+    57, 60, 64, 67, 69, 72, 76, 72, 69, 64, 60, 57, 55, 57, 60, 57
+};
+const int kJirisanBgmBass[] = {
+    33, 0, 33, 0, 36, 0, 36, 0, 40, 0, 40, 0, 36, 0, 36, 0,
+    33, 0, 33, 0, 36, 0, 36, 0, 38, 0, 38, 0, 33, 0, 33, 0
+};
+
+// 5. Eumyang Sanctum Climax Hwimori Theme (음양당 휘모리 결전 가락)
+const int kEumyangBgmLead[] = {
+    57, 60, 63, 65, 69, 67, 65, 63, 57, 60, 63, 65, 72, 70, 69, 65,
+    57, 60, 63, 65, 69, 72, 75, 72, 69, 65, 63, 60, 57, 55, 57, 0
+};
+const int kEumyangBgmBass[] = {
+    33, 33, 33, 33, 36, 36, 39, 39, 33, 33, 33, 33, 41, 41, 39, 39,
+    33, 33, 33, 33, 36, 36, 39, 39, 41, 41, 44, 44, 33, 33, 33, 33
+};
+
 // 4-Channel Synthesizer Audio Stream Generator
 float s_phaseLead = 0.0f;
 float s_phaseHarmony = 0.0f;
@@ -302,6 +353,30 @@ void AudioEngine::playSfx(SfxId sfx) {
                     s_activeSfx[i].freqEnd = 920.0f;
                     s_activeSfx[i].volume = 0.90f;
                     break;
+                case SfxId::Jing:
+                    s_activeSfx[i].duration = 0.65f;
+                    s_activeSfx[i].freqStart = 160.0f;
+                    s_activeSfx[i].freqEnd = 95.0f;
+                    s_activeSfx[i].volume = 0.95f;
+                    break;
+                case SfxId::Kkwaenggwari:
+                    s_activeSfx[i].duration = 0.22f;
+                    s_activeSfx[i].freqStart = 1800.0f;
+                    s_activeSfx[i].freqEnd = 1450.0f;
+                    s_activeSfx[i].volume = 0.85f;
+                    break;
+                case SfxId::Taepyeongso:
+                    s_activeSfx[i].duration = 0.55f;
+                    s_activeSfx[i].freqStart = 780.0f;
+                    s_activeSfx[i].freqEnd = 1560.0f;
+                    s_activeSfx[i].volume = 0.90f;
+                    break;
+                case SfxId::TalismanBurst:
+                    s_activeSfx[i].duration = 0.28f;
+                    s_activeSfx[i].freqStart = 1200.0f;
+                    s_activeSfx[i].freqEnd = 240.0f;
+                    s_activeSfx[i].volume = 0.80f;
+                    break;
             }
             break;
         }
@@ -346,8 +421,25 @@ void AudioEngine::fillAudioBuffer(int16_t* buffer, int numSamples) {
                     bassNotes = kTitleBgmBass;
                     break;
                 case BgmTrack::Village:
-                    leadNotes = kVillageBgmLead;
-                    bassNotes = kVillageBgmBass;
+                case BgmTrack::HanyangCourt:
+                    leadNotes = kHanyangBgmLead;
+                    bassNotes = kHanyangBgmBass;
+                    break;
+                case BgmTrack::SobaekMountain:
+                    leadNotes = kSobaekBgmLead;
+                    bassNotes = kSobaekBgmBass;
+                    break;
+                case BgmTrack::NamhaeReeds:
+                    leadNotes = kNamhaeBgmLead;
+                    bassNotes = kNamhaeBgmBass;
+                    break;
+                case BgmTrack::JirisanMystic:
+                    leadNotes = kJirisanBgmLead;
+                    bassNotes = kJirisanBgmBass;
+                    break;
+                case BgmTrack::EumyangSanctum:
+                    leadNotes = kEumyangBgmLead;
+                    bassNotes = kEumyangBgmBass;
                     break;
                 case BgmTrack::WildBattle:
                     leadNotes = kBattleBgmLead;

@@ -843,4 +843,99 @@ void Renderer::applyFade(float brightness) {
     }
 }
 
+void Renderer::triggerScreenShake(float intensity, float duration) {
+    m_shakeIntensity = intensity;
+    m_shakeTimer = duration;
+}
+
+void Renderer::updateScreenShake(float dt) {
+    if (m_shakeTimer > 0.0f) {
+        m_shakeTimer -= dt;
+        int maxOffset = std::max(1, static_cast<int>(m_shakeIntensity));
+        m_shakeOffsetX = (rand() % (maxOffset * 2 + 1)) - maxOffset;
+        m_shakeOffsetY = (rand() % (maxOffset * 2 + 1)) - maxOffset;
+        if (m_shakeTimer <= 0.0f) {
+            m_shakeOffsetX = 0;
+            m_shakeOffsetY = 0;
+        }
+    } else {
+        m_shakeOffsetX = 0;
+        m_shakeOffsetY = 0;
+    }
+}
+
+void Renderer::triggerFlash(Color flashColor, float duration) {
+    m_flashColor = flashColor;
+    m_flashDuration = (duration > 0.001f) ? duration : 0.2f;
+    m_flashTimer = m_flashDuration;
+}
+
+void Renderer::updateFlash(float dt) {
+    if (m_flashTimer > 0.0f) {
+        m_flashTimer -= dt;
+        if (m_flashTimer < 0.0f) m_flashTimer = 0.0f;
+    }
+}
+
+void Renderer::applyFlash() {
+    if (m_flashTimer <= 0.0f || m_flashDuration <= 0.001f) return;
+    float alpha = (m_flashTimer / m_flashDuration) * 0.75f;
+    alpha = std::clamp(alpha, 0.0f, 1.0f);
+
+    uint8_t fr = m_flashColor.r;
+    uint8_t fg = m_flashColor.g;
+    uint8_t fb = m_flashColor.b;
+
+    for (size_t i = 0; i < m_framebuffer.size(); ++i) {
+        uint32_t c = m_framebuffer[i];
+        uint8_t b = static_cast<uint8_t>((c & 0xFF) * (1.0f - alpha) + fb * alpha);
+        uint8_t g = static_cast<uint8_t>(((c >> 8) & 0xFF) * (1.0f - alpha) + fg * alpha);
+        uint8_t r = static_cast<uint8_t>(((c >> 16) & 0xFF) * (1.0f - alpha) + fr * alpha);
+        m_framebuffer[i] = (0xFF << 24) | (r << 16) | (g << 8) | b;
+    }
+}
+
+void Renderer::applyColorTint(float rScale, float gScale, float bScale) {
+    if (rScale >= 0.999f && gScale >= 0.999f && bScale >= 0.999f) return;
+    for (size_t i = 0; i < m_framebuffer.size(); ++i) {
+        uint32_t c = m_framebuffer[i];
+        uint8_t b = static_cast<uint8_t>(std::min(255.0f, (c & 0xFF) * bScale));
+        uint8_t g = static_cast<uint8_t>(std::min(255.0f, ((c >> 8) & 0xFF) * gScale));
+        uint8_t r = static_cast<uint8_t>(std::min(255.0f, ((c >> 16) & 0xFF) * rScale));
+        m_framebuffer[i] = (0xFF << 24) | (r << 16) | (g << 8) | b;
+    }
+}
+
+void Renderer::applyRadialLighting(int cx, int cy, int radius, float ambientBrightness) {
+    if (radius <= 0) return;
+    ambientBrightness = std::clamp(ambientBrightness, 0.0f, 1.0f);
+    float radiusSq = static_cast<float>(radius * radius);
+
+    for (int y = 0; y < SCREEN_HEIGHT; ++y) {
+        float dy = static_cast<float>(y - cy);
+        float dySq = dy * dy;
+
+        for (int x = 0; x < SCREEN_WIDTH; ++x) {
+            float dx = static_cast<float>(x - cx);
+            float distSq = dx * dx + dySq;
+
+            float lightFactor = ambientBrightness;
+            if (distSq < radiusSq) {
+                float distNorm = std::sqrt(distSq) / radius;
+                float falloff = 1.0f - (distNorm * distNorm);
+                lightFactor = ambientBrightness + (1.0f - ambientBrightness) * falloff;
+            }
+            lightFactor = std::clamp(lightFactor, 0.0f, 1.0f);
+
+            if (lightFactor < 0.999f) {
+                uint32_t c = m_framebuffer[y * SCREEN_WIDTH + x];
+                uint8_t b = static_cast<uint8_t>((c & 0xFF) * lightFactor);
+                uint8_t g = static_cast<uint8_t>(((c >> 8) & 0xFF) * lightFactor);
+                uint8_t r = static_cast<uint8_t>(((c >> 16) & 0xFF) * lightFactor);
+                m_framebuffer[y * SCREEN_WIDTH + x] = (0xFF << 24) | (r << 16) | (g << 8) | b;
+            }
+        }
+    }
+}
+
 } // namespace JoseonRPG

@@ -48,12 +48,38 @@ public:
     // Screen Fade Transition (0.0 = black, 1.0 = fully visible)
     void applyFade(float brightness);
 
+    // Screen Shake & White Flash Juice Engine
+    void triggerScreenShake(float intensity = 4.0f, float duration = 0.3f);
+    void updateScreenShake(float dt);
+    int getShakeOffsetX() const { return m_shakeOffsetX; }
+    int getShakeOffsetY() const { return m_shakeOffsetY; }
+
+    void triggerFlash(Color flashColor = Color(245, 240, 230), float duration = 0.2f);
+    void updateFlash(float dt);
+    void applyFlash();
+
+    // Day/Night & Atmospheric Color Tinting (1.0 = normal)
+    void applyColorTint(float rScale, float gScale, float bScale);
+
+    // Radial Alpha Lighting (Lantern/Torchlight in darkness)
+    void applyRadialLighting(int cx, int cy, int radius, float ambientBrightness = 0.35f);
+
     const uint32_t* getFramebuffer() const { return m_framebuffer.data(); }
     int getWidth() const { return SCREEN_WIDTH; }
     int getHeight() const { return SCREEN_HEIGHT; }
 
 private:
     std::array<uint32_t, SCREEN_WIDTH * SCREEN_HEIGHT> m_framebuffer;
+
+    // Juice & Lighting State
+    float m_shakeIntensity = 0.0f;
+    float m_shakeTimer = 0.0f;
+    int m_shakeOffsetX = 0;
+    int m_shakeOffsetY = 0;
+
+    Color m_flashColor = Color(255, 255, 255);
+    float m_flashDuration = 0.0f;
+    float m_flashTimer = 0.0f;
 };
 
 } // namespace JoseonRPG

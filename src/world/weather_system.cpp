@@ -184,4 +184,38 @@ void WeatherSystem::render(Renderer& renderer) const {
     }
 }
 
+void WeatherSystem::setTimeOfDay(TimeOfDay tod) {
+    m_timeOfDay = tod;
+}
+
+void WeatherSystem::applyLighting(Renderer& renderer, int playerScreenX, int playerScreenY, bool hasLantern) const {
+    switch (m_timeOfDay) {
+        case TimeOfDay::Day:
+            // Normal daylight, no extra tint
+            break;
+        case TimeOfDay::Dusk:
+            // Sunset orange-red tint
+            renderer.applyColorTint(1.08f, 0.92f, 0.82f);
+            break;
+        case TimeOfDay::Night:
+            // Night blue-black tint with radial torch/lantern light
+            renderer.applyColorTint(0.70f, 0.75f, 0.95f);
+            if (hasLantern) {
+                renderer.applyRadialLighting(playerScreenX, playerScreenY, 68, 0.40f);
+            } else {
+                renderer.applyRadialLighting(playerScreenX, playerScreenY, 32, 0.25f);
+            }
+            break;
+        case TimeOfDay::Midnight:
+            // Deep midnight darkness
+            renderer.applyColorTint(0.55f, 0.60f, 0.85f);
+            if (hasLantern) {
+                renderer.applyRadialLighting(playerScreenX, playerScreenY, 52, 0.28f);
+            } else {
+                renderer.applyRadialLighting(playerScreenX, playerScreenY, 22, 0.15f);
+            }
+            break;
+    }
+}
+
 } // namespace JoseonRPG

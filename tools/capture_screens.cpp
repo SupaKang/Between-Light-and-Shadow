@@ -20,6 +20,7 @@
 #include "../src/scenes/artifact_scene.hpp"
 #include "../src/scenes/party_scene.hpp"
 #include "../src/scenes/ending_scene.hpp"
+#include "../src/scenes/art_inspector_scene.hpp"
 
 using namespace JoseonRPG;
 
@@ -161,6 +162,16 @@ int main() {
         saveFramebufferToBMP(renderer.getFramebuffer(), SCREEN_WIDTH, SCREEN_HEIGHT, "screen_07_artifacts.bmp");
     }
 
+    // 7. Capture Art Inspector Scene (108 Yokai Pixel Asset Viewer)
+    {
+        ArtInspectorScene inspector;
+        inspector.onEnter();
+        renderer.clear();
+        inspector.render(renderer);
+        saveFramebufferToBMP(renderer.getFramebuffer(), SCREEN_WIDTH, SCREEN_HEIGHT, "screen_08_art_inspector.bmp");
+    }
+
     std::cout << "\n[ALL SCREENSHOTS GENERATED SUCCESSFULLY!]" << std::endl;
     return 0;
 }
+
