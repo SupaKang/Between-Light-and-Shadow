@@ -26,3 +26,9 @@ Desktop.ini
 
 # Temporary capture output
 screen_*.bmp
+
+# Python cache & temp test artifacts
+__pycache__/
+*.py[cod]
+tools/test_*
+
