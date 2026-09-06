@@ -1,0 +1,9 @@
+{
+  "id": "skill_001",
+  "name_ko": "기본 공격",
+  "power": 10,
+  "qi_cost": 0,
+  "accuracy": 100,
+  "status": "none",
+  "seal_turns": 0
+}

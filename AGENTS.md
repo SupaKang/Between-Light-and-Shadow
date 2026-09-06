@@ -4,13 +4,13 @@
 108:음양견문록 (108: Yin-Yang Chronicle — 조선시대 민속 판타지 턴제 수집 RPG)
 
 ## Primary Goal
-1.44MB 제한(Floppy Disk 용량 한계: 1,474,560 bytes)을 고려한 초소형 Windows 독립 실행 게임 개발
+Windows 독립 실행 게임 개발. 1.44MB 제한은 해제되었으며 Full HD 품질과 콘텐츠를 우선한다.
 
 ## Current Technical Baseline
 - C++17
 - Windows (Win32 Native / Direct2D / Software Framebuffer)
-- 320x180 해상도 (16:9 정수 스케일링 렌더링)
-- 16x16 타일 기반 월드
+- 960x540 논리 해상도 → 1920x1080 출력 (2배 정수 스케일링)
+- 32x32 타일 기반 월드
 - 2D 도트 그래픽
 - Standalone (단일 독립 실행 파일 지향)
 - Offline (네트워크 불필요)
@@ -70,7 +70,7 @@
 - 불확실한 내용은 TODO / VERIFY / TEST로 표시한다.
 - 실제 전승과 창작 설정을 구분한다.
 - 기존 게임의 그래픽/데이터를 복제하지 않는다.
-- 용량(1.44MB 제한)을 항상 고려한다.
+- 용량은 제한값이 아니라 빌드 프로파일별 측정 지표로 관리한다.
 - 새로운 시스템을 추가하기 전에 기존 시스템과의 영향을 검토한다.
 - 문서(`docs/`)와 코드(`src/`)의 일치성을 항시 유지한다.
 

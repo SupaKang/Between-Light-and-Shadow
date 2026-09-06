@@ -1,0 +1,18 @@
+{
+  "file": "C:\\Users\\seank\\Downloads\\포켓몬스터 골드 (한).gbc",
+  "bytes": 2097152,
+  "sha256": "9c273e86e6120c6a038160ccb0153b8b20425b84fc08a496281c1d1bcac492f6",
+  "sha1": "c0ff3999e1093e1af59ef3eea3f1bfd7c1f18a65",
+  "banks_16k": 128,
+  "header": {
+    "title_ascii": "POKEMON_GLDAAUK�",
+    "cgb_flag": "0xC0",
+    "cartridge_type": "0x10",
+    "rom_size_code": "0x06",
+    "rom_size_declared_bytes": 2097152,
+    "ram_size_code": "0x03",
+    "header_checksum": "0x08",
+    "global_checksum": "778A"
+  },
+  "analysis_policy": "read_only_structural_candidates_no_asset_extraction"
+}

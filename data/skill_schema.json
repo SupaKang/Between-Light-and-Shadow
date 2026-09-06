@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "skill": {
+    "id": "skill_001",
+    "name_ko": "TODO",
+    "power": 10,
+    "qi_cost": 3,
+    "accuracy": 100,
+    "status": "none",
+    "seal_turns": 0
+  }
+}

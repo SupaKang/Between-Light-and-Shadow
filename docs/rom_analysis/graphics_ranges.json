@@ -1,0 +1,4006 @@
+{
+  "policy": "read_only_contiguous_graphics_candidates_no_export",
+  "ranges": [
+    {
+      "start": "0x0957B0",
+      "end": "0x0965FF",
+      "bytes": 3664,
+      "tiles": 229,
+      "bank_start": 37,
+      "bank_end": 37
+    },
+    {
+      "start": "0x052C60",
+      "end": "0x0534EF",
+      "bytes": 2192,
+      "tiles": 137,
+      "bank_start": 20,
+      "bank_end": 20
+    },
+    {
+      "start": "0x1E5D10",
+      "end": "0x1E64FF",
+      "bytes": 2032,
+      "tiles": 127,
+      "bank_start": 121,
+      "bank_end": 121
+    },
+    {
+      "start": "0x0CF110",
+      "end": "0x0CF76F",
+      "bytes": 1632,
+      "tiles": 102,
+      "bank_start": 51,
+      "bank_end": 51
+    },
+    {
+      "start": "0x1E3D00",
+      "end": "0x1E42EF",
+      "bytes": 1520,
+      "tiles": 95,
+      "bank_start": 120,
+      "bank_end": 121
+    },
+    {
+      "start": "0x1E6A00",
+      "end": "0x1E6FEF",
+      "bytes": 1520,
+      "tiles": 95,
+      "bank_start": 121,
+      "bank_end": 121
+    },
+    {
+      "start": "0x1E1710",
+      "end": "0x1E1CEF",
+      "bytes": 1504,
+      "tiles": 94,
+      "bank_start": 120,
+      "bank_end": 120
+    },
+    {
+      "start": "0x1E1D10",
+      "end": "0x1E22EF",
+      "bytes": 1504,
+      "tiles": 94,
+      "bank_start": 120,
+      "bank_end": 120
+    },
+    {
+      "start": "0x1E3710",
+      "end": "0x1E3CEF",
+      "bytes": 1504,
+      "tiles": 94,
+      "bank_start": 120,
+      "bank_end": 120
+    },
+    {
+      "start": "0x1E4A10",
+      "end": "0x1E4FEF",
+      "bytes": 1504,
+      "tiles": 94,
+      "bank_start": 121,
+      "bank_end": 121
+    },
+    {
+      "start": "0x1E5710",
+      "end": "0x1E5CEF",
+      "bytes": 1504,
+      "tiles": 94,
+      "bank_start": 121,
+      "bank_end": 121
+    },
+    {
+      "start": "0x1E7710",
+      "end": "0x1E7CEF",
+      "bytes": 1504,
+      "tiles": 94,
+      "bank_start": 121,
+      "bank_end": 121
+    },
+    {
+      "start": "0x1E7D10",
+      "end": "0x1E82EF",
+      "bytes": 1504,
+      "tiles": 94,
+      "bank_start": 121,
+      "bank_end": 122
+    },
+    {
+      "start": "0x1E8A10",
+      "end": "0x1E8FEF",
+      "bytes": 1504,
+      "tiles": 94,
+      "bank_start": 122,
+      "bank_end": 122
+    },
+    {
+      "start": "0x1E9710",
+      "end": "0x1E9CEF",
+      "bytes": 1504,
+      "tiles": 94,
+      "bank_start": 122,
+      "bank_end": 122
+    },
+    {
+      "start": "0x1E9D10",
+      "end": "0x1EA2EF",
+      "bytes": 1504,
+      "tiles": 94,
+      "bank_start": 122,
+      "bank_end": 122
+    },
+    {
+      "start": "0x1EAA10",
+      "end": "0x1EAFEF",
+      "bytes": 1504,
+      "tiles": 94,
+      "bank_start": 122,
+      "bank_end": 122
+    },
+    {
+      "start": "0x08DEA0",
+      "end": "0x08E3CF",
+      "bytes": 1328,
+      "tiles": 83,
+      "bank_start": 35,
+      "bank_end": 35
+    },
+    {
+      "start": "0x1E2A10",
+      "end": "0x1E2F3F",
+      "bytes": 1328,
+      "tiles": 83,
+      "bank_start": 120,
+      "bank_end": 120
+    },
+    {
+      "start": "0x1E1010",
+      "end": "0x1E14FF",
+      "bytes": 1264,
+      "tiles": 79,
+      "bank_start": 120,
+      "bank_end": 120
+    },
+    {
+      "start": "0x1E5010",
+      "end": "0x1E54FF",
+      "bytes": 1264,
+      "tiles": 79,
+      "bank_start": 121,
+      "bank_end": 121
+    },
+    {
+      "start": "0x1E7010",
+      "end": "0x1E74FF",
+      "bytes": 1264,
+      "tiles": 79,
+      "bank_start": 121,
+      "bank_end": 121
+    },
+    {
+      "start": "0x1E9010",
+      "end": "0x1E94FF",
+      "bytes": 1264,
+      "tiles": 79,
+      "bank_start": 122,
+      "bank_end": 122
+    },
+    {
+      "start": "0x0CF780",
+      "end": "0x0CFC2F",
+      "bytes": 1200,
+      "tiles": 75,
+      "bank_start": 51,
+      "bank_end": 51
+    },
+    {
+      "start": "0x1E2600",
+      "end": "0x1E29EF",
+      "bytes": 1008,
+      "tiles": 63,
+      "bank_start": 120,
+      "bank_end": 120
+    },
+    {
+      "start": "0x1E4600",
+      "end": "0x1E49EF",
+      "bytes": 1008,
+      "tiles": 63,
+      "bank_start": 121,
+      "bank_end": 121
+    },
+    {
+      "start": "0x1E6600",
+      "end": "0x1E69EF",
+      "bytes": 1008,
+      "tiles": 63,
+      "bank_start": 121,
+      "bank_end": 121
+    },
+    {
+      "start": "0x1E8600",
+      "end": "0x1E89EF",
+      "bytes": 1008,
+      "tiles": 63,
+      "bank_start": 122,
+      "bank_end": 122
+    },
+    {
+      "start": "0x1EA600",
+      "end": "0x1EA9EF",
+      "bytes": 1008,
+      "tiles": 63,
+      "bank_start": 122,
+      "bank_end": 122
+    },
+    {
+      "start": "0x052330",
+      "end": "0x0526FF",
+      "bytes": 976,
+      "tiles": 61,
+      "bank_start": 20,
+      "bank_end": 20
+    },
+    {
+      "start": "0x052730",
+      "end": "0x052ABF",
+      "bytes": 912,
+      "tiles": 57,
+      "bank_start": 20,
+      "bank_end": 20
+    },
+    {
+      "start": "0x0F29F0",
+      "end": "0x0F2D2F",
+      "bytes": 832,
+      "tiles": 52,
+      "bank_start": 60,
+      "bank_end": 60
+    },
+    {
+      "start": "0x1E31C0",
+      "end": "0x1E34FF",
+      "bytes": 832,
+      "tiles": 52,
+      "bank_start": 120,
+      "bank_end": 120
+    },
+    {
+      "start": "0x053670",
+      "end": "0x05397F",
+      "bytes": 784,
+      "tiles": 49,
+      "bank_start": 20,
+      "bank_end": 20
+    },
+    {
+      "start": "0x0CDAD0",
+      "end": "0x0CDDDF",
+      "bytes": 784,
+      "tiles": 49,
+      "bank_start": 51,
+      "bank_end": 51
+    },
+    {
+      "start": "0x114440",
+      "end": "0x11470F",
+      "bytes": 720,
+      "tiles": 45,
+      "bank_start": 69,
+      "bank_end": 69
+    },
+    {
+      "start": "0x051DA0",
+      "end": "0x05205F",
+      "bytes": 704,
+      "tiles": 44,
+      "bank_start": 20,
+      "bank_end": 20
+    },
+    {
+      "start": "0x0C9490",
+      "end": "0x0C973F",
+      "bytes": 688,
+      "tiles": 43,
+      "bank_start": 50,
+      "bank_end": 50
+    },
+    {
+      "start": "0x00A1B0",
+      "end": "0x00A43F",
+      "bytes": 656,
+      "tiles": 41,
+      "bank_start": 2,
+      "bank_end": 2
+    },
+    {
+      "start": "0x0CE1F0",
+      "end": "0x0CE46F",
+      "bytes": 640,
+      "tiles": 40,
+      "bank_start": 51,
+      "bank_end": 51
+    },
+    {
+      "start": "0x170BD0",
+      "end": "0x170E4F",
+      "bytes": 640,
+      "tiles": 40,
+      "bank_start": 92,
+      "bank_end": 92
+    },
+    {
+      "start": "0x010F80",
+      "end": "0x0111BF",
+      "bytes": 576,
+      "tiles": 36,
+      "bank_start": 4,
+      "bank_end": 4
+    },
+    {
+      "start": "0x0F82F0",
+      "end": "0x0F851F",
+      "bytes": 560,
+      "tiles": 35,
+      "bank_start": 62,
+      "bank_end": 62
+    },
+    {
+      "start": "0x039DA0",
+      "end": "0x039FBF",
+      "bytes": 544,
+      "tiles": 34,
+      "bank_start": 14,
+      "bank_end": 14
+    },
+    {
+      "start": "0x1E8300",
+      "end": "0x1E84FF",
+      "bytes": 512,
+      "tiles": 32,
+      "bank_start": 122,
+      "bank_end": 122
+    },
+    {
+      "start": "0x1E2310",
+      "end": "0x1E24FF",
+      "bytes": 496,
+      "tiles": 31,
+      "bank_start": 120,
+      "bank_end": 120
+    },
+    {
+      "start": "0x1E4310",
+      "end": "0x1E44FF",
+      "bytes": 496,
+      "tiles": 31,
+      "bank_start": 121,
+      "bank_end": 121
+    },
+    {
+      "start": "0x1EA310",
+      "end": "0x1EA4FF",
+      "bytes": 496,
+      "tiles": 31,
+      "bank_start": 122,
+      "bank_end": 122
+    },
+    {
+      "start": "0x039550",
+      "end": "0x03972F",
+      "bytes": 480,
+      "tiles": 30,
+      "bank_start": 14,
+      "bank_end": 14
+    },
+    {
+      "start": "0x0CD3C0",
+      "end": "0x0CD59F",
+      "bytes": 480,
+      "tiles": 30,
+      "bank_start": 51,
+      "bank_end": 51
+    },
+    {
+      "start": "0x114260",
+      "end": "0x11442F",
+      "bytes": 464,
+      "tiles": 29,
+      "bank_start": 69,
+      "bank_end": 69
+    },
+    {
+      "start": "0x004C70",
+      "end": "0x004E2F",
+      "bytes": 448,
+      "tiles": 28,
+      "bank_start": 1,
+      "bank_end": 1
+    },
+    {
+      "start": "0x0156B0",
+      "end": "0x01586F",
+      "bytes": 448,
+      "tiles": 28,
+      "bank_start": 5,
+      "bank_end": 5
+    },
+    {
+      "start": "0x087CD0",
+      "end": "0x087E8F",
+      "bytes": 448,
+      "tiles": 28,
+      "bank_start": 33,
+      "bank_end": 33
+    },
+    {
+      "start": "0x006B50",
+      "end": "0x006CFF",
+      "bytes": 432,
+      "tiles": 27,
+      "bank_start": 1,
+      "bank_end": 1
+    },
+    {
+      "start": "0x03A7B0",
+      "end": "0x03A95F",
+      "bytes": 432,
+      "tiles": 27,
+      "bank_start": 14,
+      "bank_end": 14
+    },
+    {
+      "start": "0x041AA0",
+      "end": "0x041C4F",
+      "bytes": 432,
+      "tiles": 27,
+      "bank_start": 16,
+      "bank_end": 16
+    },
+    {
+      "start": "0x041C60",
+      "end": "0x041E0F",
+      "bytes": 432,
+      "tiles": 27,
+      "bank_start": 16,
+      "bank_end": 16
+    },
+    {
+      "start": "0x08D760",
+      "end": "0x08D90F",
+      "bytes": 432,
+      "tiles": 27,
+      "bank_start": 35,
+      "bank_end": 35
+    },
+    {
+      "start": "0x180000",
+      "end": "0x1801AF",
+      "bytes": 432,
+      "tiles": 27,
+      "bank_start": 96,
+      "bank_end": 96
+    },
+    {
+      "start": "0x1C0C10",
+      "end": "0x1C0DBF",
+      "bytes": 432,
+      "tiles": 27,
+      "bank_start": 112,
+      "bank_end": 112
+    },
+    {
+      "start": "0x00A9B0",
+      "end": "0x00AB4F",
+      "bytes": 416,
+      "tiles": 26,
+      "bank_start": 2,
+      "bank_end": 2
+    },
+    {
+      "start": "0x0418E0",
+      "end": "0x041A7F",
+      "bytes": 416,
+      "tiles": 26,
+      "bank_start": 16,
+      "bank_end": 16
+    },
+    {
+      "start": "0x0CDDF0",
+      "end": "0x0CDF8F",
+      "bytes": 416,
+      "tiles": 26,
+      "bank_start": 51,
+      "bank_end": 51
+    },
+    {
+      "start": "0x1E3010",
+      "end": "0x1E31AF",
+      "bytes": 416,
+      "tiles": 26,
+      "bank_start": 120,
+      "bank_end": 120
+    },
+    {
+      "start": "0x006E90",
+      "end": "0x00701F",
+      "bytes": 400,
+      "tiles": 25,
+      "bank_start": 1,
+      "bank_end": 1
+    },
+    {
+      "start": "0x08E4D0",
+      "end": "0x08E65F",
+      "bytes": 400,
+      "tiles": 25,
+      "bank_start": 35,
+      "bank_end": 35
+    },
+    {
+      "start": "0x0F40C0",
+      "end": "0x0F424F",
+      "bytes": 400,
+      "tiles": 25,
+      "bank_start": 61,
+      "bank_end": 61
+    },
+    {
+      "start": "0x0FB2B0",
+      "end": "0x0FB43F",
+      "bytes": 400,
+      "tiles": 25,
+      "bank_start": 62,
+      "bank_end": 62
+    },
+    {
+      "start": "0x115880",
+      "end": "0x115A0F",
+      "bytes": 400,
+      "tiles": 25,
+      "bank_start": 69,
+      "bank_end": 69
+    },
+    {
+      "start": "0x1EC000",
+      "end": "0x1EC18F",
+      "bytes": 400,
+      "tiles": 25,
+      "bank_start": 123,
+      "bank_end": 123
+    },
+    {
+      "start": "0x03A3B0",
+      "end": "0x03A52F",
+      "bytes": 384,
+      "tiles": 24,
+      "bank_start": 14,
+      "bank_end": 14
+    },
+    {
+      "start": "0x084B50",
+      "end": "0x084CCF",
+      "bytes": 384,
+      "tiles": 24,
+      "bank_start": 33,
+      "bank_end": 33
+    },
+    {
+      "start": "0x0CAA50",
+      "end": "0x0CABCF",
+      "bytes": 384,
+      "tiles": 24,
+      "bank_start": 50,
+      "bank_end": 50
+    },
+    {
+      "start": "0x0042F0",
+      "end": "0x00445F",
+      "bytes": 368,
+      "tiles": 23,
+      "bank_start": 1,
+      "bank_end": 1
+    },
+    {
+      "start": "0x0045B0",
+      "end": "0x00471F",
+      "bytes": 368,
+      "tiles": 23,
+      "bank_start": 1,
+      "bank_end": 1
+    },
+    {
+      "start": "0x004E40",
+      "end": "0x004FAF",
+      "bytes": 368,
+      "tiles": 23,
+      "bank_start": 1,
+      "bank_end": 1
+    },
+    {
+      "start": "0x0CAE90",
+      "end": "0x0CAFFF",
+      "bytes": 368,
+      "tiles": 23,
+      "bank_start": 50,
+      "bank_end": 50
+    },
+    {
+      "start": "0x0CDFA0",
+      "end": "0x0CE10F",
+      "bytes": 368,
+      "tiles": 23,
+      "bank_start": 51,
+      "bank_end": 51
+    },
+    {
+      "start": "0x0C4980",
+      "end": "0x0C4ADF",
+      "bytes": 352,
+      "tiles": 22,
+      "bank_start": 49,
+      "bank_end": 49
+    },
+    {
+      "start": "0x0E18D0",
+      "end": "0x0E1A2F",
+      "bytes": 352,
+      "tiles": 22,
+      "bank_start": 56,
+      "bank_end": 56
+    },
+    {
+      "start": "0x0F1DE0",
+      "end": "0x0F1F3F",
+      "bytes": 352,
+      "tiles": 22,
+      "bank_start": 60,
+      "bank_end": 60
+    },
+    {
+      "start": "0x0F8950",
+      "end": "0x0F8AAF",
+      "bytes": 352,
+      "tiles": 22,
+      "bank_start": 62,
+      "bank_end": 62
+    },
+    {
+      "start": "0x0F8B60",
+      "end": "0x0F8CBF",
+      "bytes": 352,
+      "tiles": 22,
+      "bank_start": 62,
+      "bank_end": 62
+    },
+    {
+      "start": "0x131290",
+      "end": "0x1313EF",
+      "bytes": 352,
+      "tiles": 22,
+      "bank_start": 76,
+      "bank_end": 76
+    },
+    {
+      "start": "0x159E80",
+      "end": "0x159FDF",
+      "bytes": 352,
+      "tiles": 22,
+      "bank_start": 86,
+      "bank_end": 86
+    },
+    {
+      "start": "0x1798E0",
+      "end": "0x179A3F",
+      "bytes": 352,
+      "tiles": 22,
+      "bank_start": 94,
+      "bank_end": 94
+    },
+    {
+      "start": "0x1C5800",
+      "end": "0x1C595F",
+      "bytes": 352,
+      "tiles": 22,
+      "bank_start": 113,
+      "bank_end": 113
+    },
+    {
+      "start": "0x004970",
+      "end": "0x004ABF",
+      "bytes": 336,
+      "tiles": 21,
+      "bank_start": 1,
+      "bank_end": 1
+    },
+    {
+      "start": "0x0069B0",
+      "end": "0x006AFF",
+      "bytes": 336,
+      "tiles": 21,
+      "bank_start": 1,
+      "bank_end": 1
+    },
+    {
+      "start": "0x009E90",
+      "end": "0x009FDF",
+      "bytes": 336,
+      "tiles": 21,
+      "bank_start": 2,
+      "bank_end": 2
+    },
+    {
+      "start": "0x03AF60",
+      "end": "0x03B0AF",
+      "bytes": 336,
+      "tiles": 21,
+      "bank_start": 14,
+      "bank_end": 14
+    },
+    {
+      "start": "0x0521B0",
+      "end": "0x0522FF",
+      "bytes": 336,
+      "tiles": 21,
+      "bank_start": 20,
+      "bank_end": 20
+    },
+    {
+      "start": "0x0935F0",
+      "end": "0x09373F",
+      "bytes": 336,
+      "tiles": 21,
+      "bank_start": 36,
+      "bank_end": 36
+    },
+    {
+      "start": "0x0F07F0",
+      "end": "0x0F093F",
+      "bytes": 336,
+      "tiles": 21,
+      "bank_start": 60,
+      "bank_end": 60
+    },
+    {
+      "start": "0x1041D0",
+      "end": "0x10431F",
+      "bytes": 336,
+      "tiles": 21,
+      "bank_start": 65,
+      "bank_end": 65
+    },
+    {
+      "start": "0x110900",
+      "end": "0x110A4F",
+      "bytes": 336,
+      "tiles": 21,
+      "bank_start": 68,
+      "bank_end": 68
+    },
+    {
+      "start": "0x14D9D0",
+      "end": "0x14DB1F",
+      "bytes": 336,
+      "tiles": 21,
+      "bank_start": 83,
+      "bank_end": 83
+    },
+    {
+      "start": "0x0087D0",
+      "end": "0x00890F",
+      "bytes": 320,
+      "tiles": 20,
+      "bank_start": 2,
+      "bank_end": 2
+    },
+    {
+      "start": "0x041700",
+      "end": "0x04183F",
+      "bytes": 320,
+      "tiles": 20,
+      "bank_start": 16,
+      "bank_end": 16
+    },
+    {
+      "start": "0x053520",
+      "end": "0x05365F",
+      "bytes": 320,
+      "tiles": 20,
+      "bank_start": 20,
+      "bank_end": 20
+    },
+    {
+      "start": "0x087A70",
+      "end": "0x087BAF",
+      "bytes": 320,
+      "tiles": 20,
+      "bank_start": 33,
+      "bank_end": 33
+    },
+    {
+      "start": "0x0E8780",
+      "end": "0x0E88BF",
+      "bytes": 320,
+      "tiles": 20,
+      "bank_start": 58,
+      "bank_end": 58
+    },
+    {
+      "start": "0x0ECC10",
+      "end": "0x0ECD4F",
+      "bytes": 320,
+      "tiles": 20,
+      "bank_start": 59,
+      "bank_end": 59
+    },
+    {
+      "start": "0x1044C0",
+      "end": "0x1045FF",
+      "bytes": 320,
+      "tiles": 20,
+      "bank_start": 65,
+      "bank_end": 65
+    },
+    {
+      "start": "0x12CD80",
+      "end": "0x12CEBF",
+      "bytes": 320,
+      "tiles": 20,
+      "bank_start": 75,
+      "bank_end": 75
+    },
+    {
+      "start": "0x15EDC0",
+      "end": "0x15EEFF",
+      "bytes": 320,
+      "tiles": 20,
+      "bank_start": 87,
+      "bank_end": 87
+    },
+    {
+      "start": "0x0040A0",
+      "end": "0x0041CF",
+      "bytes": 304,
+      "tiles": 19,
+      "bank_start": 1,
+      "bank_end": 1
+    },
+    {
+      "start": "0x051BE0",
+      "end": "0x051D0F",
+      "bytes": 304,
+      "tiles": 19,
+      "bank_start": 20,
+      "bank_end": 20
+    },
+    {
+      "start": "0x0539D0",
+      "end": "0x053AFF",
+      "bytes": 304,
+      "tiles": 19,
+      "bank_start": 20,
+      "bank_end": 20
+    },
+    {
+      "start": "0x0CD1F0",
+      "end": "0x0CD31F",
+      "bytes": 304,
+      "tiles": 19,
+      "bank_start": 51,
+      "bank_end": 51
+    },
+    {
+      "start": "0x0EFD50",
+      "end": "0x0EFE7F",
+      "bytes": 304,
+      "tiles": 19,
+      "bank_start": 59,
+      "bank_end": 59
+    },
+    {
+      "start": "0x104380",
+      "end": "0x1044AF",
+      "bytes": 304,
+      "tiles": 19,
+      "bank_start": 65,
+      "bank_end": 65
+    },
+    {
+      "start": "0x1163B0",
+      "end": "0x1164DF",
+      "bytes": 304,
+      "tiles": 19,
+      "bank_start": 69,
+      "bank_end": 69
+    },
+    {
+      "start": "0x120370",
+      "end": "0x12049F",
+      "bytes": 304,
+      "tiles": 19,
+      "bank_start": 72,
+      "bank_end": 72
+    },
+    {
+      "start": "0x181710",
+      "end": "0x18183F",
+      "bytes": 304,
+      "tiles": 19,
+      "bank_start": 96,
+      "bank_end": 96
+    },
+    {
+      "start": "0x1E0000",
+      "end": "0x1E012F",
+      "bytes": 304,
+      "tiles": 19,
+      "bank_start": 120,
+      "bank_end": 120
+    },
+    {
+      "start": "0x1EB000",
+      "end": "0x1EB12F",
+      "bytes": 304,
+      "tiles": 19,
+      "bank_start": 122,
+      "bank_end": 122
+    },
+    {
+      "start": "0x0080E0",
+      "end": "0x0081FF",
+      "bytes": 288,
+      "tiles": 18,
+      "bank_start": 2,
+      "bank_end": 2
+    },
+    {
+      "start": "0x01EEC0",
+      "end": "0x01EFDF",
+      "bytes": 288,
+      "tiles": 18,
+      "bank_start": 7,
+      "bank_end": 7
+    },
+    {
+      "start": "0x03A560",
+      "end": "0x03A67F",
+      "bytes": 288,
+      "tiles": 18,
+      "bank_start": 14,
+      "bank_end": 14
+    },
+    {
+      "start": "0x043410",
+      "end": "0x04352F",
+      "bytes": 288,
+      "tiles": 18,
+      "bank_start": 16,
+      "bank_end": 16
+    },
+    {
+      "start": "0x0CA900",
+      "end": "0x0CAA1F",
+      "bytes": 288,
+      "tiles": 18,
+      "bank_start": 50,
+      "bank_end": 50
+    },
+    {
+      "start": "0x0CD620",
+      "end": "0x0CD73F",
+      "bytes": 288,
+      "tiles": 18,
+      "bank_start": 51,
+      "bank_end": 51
+    },
+    {
+      "start": "0x0E40B0",
+      "end": "0x0E41CF",
+      "bytes": 288,
+      "tiles": 18,
+      "bank_start": 57,
+      "bank_end": 57
+    },
+    {
+      "start": "0x0F26D0",
+      "end": "0x0F27EF",
+      "bytes": 288,
+      "tiles": 18,
+      "bank_start": 60,
+      "bank_end": 60
+    },
+    {
+      "start": "0x00AB70",
+      "end": "0x00AC7F",
+      "bytes": 272,
+      "tiles": 17,
+      "bank_start": 2,
+      "bank_end": 2
+    },
+    {
+      "start": "0x00BB00",
+      "end": "0x00BC0F",
+      "bytes": 272,
+      "tiles": 17,
+      "bank_start": 2,
+      "bank_end": 2
+    },
+    {
+      "start": "0x018850",
+      "end": "0x01895F",
+      "bytes": 272,
+      "tiles": 17,
+      "bank_start": 6,
+      "bank_end": 6
+    },
+    {
+      "start": "0x0209B0",
+      "end": "0x020ABF",
+      "bytes": 272,
+      "tiles": 17,
+      "bank_start": 8,
+      "bank_end": 8
+    },
+    {
+      "start": "0x03A690",
+      "end": "0x03A79F",
+      "bytes": 272,
+      "tiles": 17,
+      "bank_start": 14,
+      "bank_end": 14
+    },
+    {
+      "start": "0x03B0C0",
+      "end": "0x03B1CF",
+      "bytes": 272,
+      "tiles": 17,
+      "bank_start": 14,
+      "bank_end": 14
+    },
+    {
+      "start": "0x044620",
+      "end": "0x04472F",
+      "bytes": 272,
+      "tiles": 17,
+      "bank_start": 17,
+      "bank_end": 17
+    },
+    {
+      "start": "0x086080",
+      "end": "0x08618F",
+      "bytes": 272,
+      "tiles": 17,
+      "bank_start": 33,
+      "bank_end": 33
+    },
+    {
+      "start": "0x0E1110",
+      "end": "0x0E121F",
+      "bytes": 272,
+      "tiles": 17,
+      "bank_start": 56,
+      "bank_end": 56
+    },
+    {
+      "start": "0x1099E0",
+      "end": "0x109AEF",
+      "bytes": 272,
+      "tiles": 17,
+      "bank_start": 66,
+      "bank_end": 66
+    },
+    {
+      "start": "0x114A00",
+      "end": "0x114B0F",
+      "bytes": 272,
+      "tiles": 17,
+      "bank_start": 69,
+      "bank_end": 69
+    },
+    {
+      "start": "0x1180B0",
+      "end": "0x1181BF",
+      "bytes": 272,
+      "tiles": 17,
+      "bank_start": 70,
+      "bank_end": 70
+    },
+    {
+      "start": "0x0044A0",
+      "end": "0x00459F",
+      "bytes": 256,
+      "tiles": 16,
+      "bank_start": 1,
+      "bank_end": 1
+    },
+    {
+      "start": "0x021BA0",
+      "end": "0x021C9F",
+      "bytes": 256,
+      "tiles": 16,
+      "bank_start": 8,
+      "bank_end": 8
+    },
+    {
+      "start": "0x025720",
+      "end": "0x02581F",
+      "bytes": 256,
+      "tiles": 16,
+      "bank_start": 9,
+      "bank_end": 9
+    },
+    {
+      "start": "0x08DAF0",
+      "end": "0x08DBEF",
+      "bytes": 256,
+      "tiles": 16,
+      "bank_start": 35,
+      "bank_end": 35
+    },
+    {
+      "start": "0x098000",
+      "end": "0x0980FF",
+      "bytes": 256,
+      "tiles": 16,
+      "bank_start": 38,
+      "bank_end": 38
+    },
+    {
+      "start": "0x0C9CB0",
+      "end": "0x0C9DAF",
+      "bytes": 256,
+      "tiles": 16,
+      "bank_start": 50,
+      "bank_end": 50
+    },
+    {
+      "start": "0x0CA6D0",
+      "end": "0x0CA7CF",
+      "bytes": 256,
+      "tiles": 16,
+      "bank_start": 50,
+      "bank_end": 50
+    },
+    {
+      "start": "0x0ED6F0",
+      "end": "0x0ED7EF",
+      "bytes": 256,
+      "tiles": 16,
+      "bank_start": 59,
+      "bank_end": 59
+    },
+    {
+      "start": "0x0F2810",
+      "end": "0x0F290F",
+      "bytes": 256,
+      "tiles": 16,
+      "bank_start": 60,
+      "bank_end": 60
+    },
+    {
+      "start": "0x0F6730",
+      "end": "0x0F682F",
+      "bytes": 256,
+      "tiles": 16,
+      "bank_start": 61,
+      "bank_end": 61
+    },
+    {
+      "start": "0x0F7CF0",
+      "end": "0x0F7DEF",
+      "bytes": 256,
+      "tiles": 16,
+      "bank_start": 61,
+      "bank_end": 61
+    },
+    {
+      "start": "0x1046D0",
+      "end": "0x1047CF",
+      "bytes": 256,
+      "tiles": 16,
+      "bank_start": 65,
+      "bank_end": 65
+    },
+    {
+      "start": "0x118C00",
+      "end": "0x118CFF",
+      "bytes": 256,
+      "tiles": 16,
+      "bank_start": 70,
+      "bank_end": 70
+    },
+    {
+      "start": "0x11C310",
+      "end": "0x11C40F",
+      "bytes": 256,
+      "tiles": 16,
+      "bank_start": 71,
+      "bank_end": 71
+    },
+    {
+      "start": "0x122520",
+      "end": "0x12261F",
+      "bytes": 256,
+      "tiles": 16,
+      "bank_start": 72,
+      "bank_end": 72
+    },
+    {
+      "start": "0x124910",
+      "end": "0x124A0F",
+      "bytes": 256,
+      "tiles": 16,
+      "bank_start": 73,
+      "bank_end": 73
+    },
+    {
+      "start": "0x134D40",
+      "end": "0x134E3F",
+      "bytes": 256,
+      "tiles": 16,
+      "bank_start": 77,
+      "bank_end": 77
+    },
+    {
+      "start": "0x140EA0",
+      "end": "0x140F9F",
+      "bytes": 256,
+      "tiles": 16,
+      "bank_start": 80,
+      "bank_end": 80
+    },
+    {
+      "start": "0x148260",
+      "end": "0x14835F",
+      "bytes": 256,
+      "tiles": 16,
+      "bank_start": 82,
+      "bank_end": 82
+    },
+    {
+      "start": "0x16C870",
+      "end": "0x16C96F",
+      "bytes": 256,
+      "tiles": 16,
+      "bank_start": 91,
+      "bank_end": 91
+    },
+    {
+      "start": "0x171440",
+      "end": "0x17153F",
+      "bytes": 256,
+      "tiles": 16,
+      "bank_start": 92,
+      "bank_end": 92
+    },
+    {
+      "start": "0x0427C0",
+      "end": "0x0428AF",
+      "bytes": 240,
+      "tiles": 15,
+      "bank_start": 16,
+      "bank_end": 16
+    },
+    {
+      "start": "0x052090",
+      "end": "0x05217F",
+      "bytes": 240,
+      "tiles": 15,
+      "bank_start": 20,
+      "bank_end": 20
+    },
+    {
+      "start": "0x098420",
+      "end": "0x09850F",
+      "bytes": 240,
+      "tiles": 15,
+      "bank_start": 38,
+      "bank_end": 38
+    },
+    {
+      "start": "0x0CA260",
+      "end": "0x0CA34F",
+      "bytes": 240,
+      "tiles": 15,
+      "bank_start": 50,
+      "bank_end": 50
+    },
+    {
+      "start": "0x0CA5C0",
+      "end": "0x0CA6AF",
+      "bytes": 240,
+      "tiles": 15,
+      "bank_start": 50,
+      "bank_end": 50
+    },
+    {
+      "start": "0x0CB250",
+      "end": "0x0CB33F",
+      "bytes": 240,
+      "tiles": 15,
+      "bank_start": 50,
+      "bank_end": 50
+    },
+    {
+      "start": "0x0CBA70",
+      "end": "0x0CBB5F",
+      "bytes": 240,
+      "tiles": 15,
+      "bank_start": 50,
+      "bank_end": 50
+    },
+    {
+      "start": "0x0CD840",
+      "end": "0x0CD92F",
+      "bytes": 240,
+      "tiles": 15,
+      "bank_start": 51,
+      "bank_end": 51
+    },
+    {
+      "start": "0x0EFB30",
+      "end": "0x0EFC1F",
+      "bytes": 240,
+      "tiles": 15,
+      "bank_start": 59,
+      "bank_end": 59
+    },
+    {
+      "start": "0x0F8620",
+      "end": "0x0F870F",
+      "bytes": 240,
+      "tiles": 15,
+      "bank_start": 62,
+      "bank_end": 62
+    },
+    {
+      "start": "0x0F91D0",
+      "end": "0x0F92BF",
+      "bytes": 240,
+      "tiles": 15,
+      "bank_start": 62,
+      "bank_end": 62
+    },
+    {
+      "start": "0x1093E0",
+      "end": "0x1094CF",
+      "bytes": 240,
+      "tiles": 15,
+      "bank_start": 66,
+      "bank_end": 66
+    },
+    {
+      "start": "0x116B00",
+      "end": "0x116BEF",
+      "bytes": 240,
+      "tiles": 15,
+      "bank_start": 69,
+      "bank_end": 69
+    },
+    {
+      "start": "0x1210C0",
+      "end": "0x1211AF",
+      "bytes": 240,
+      "tiles": 15,
+      "bank_start": 72,
+      "bank_end": 72
+    },
+    {
+      "start": "0x1218D0",
+      "end": "0x1219BF",
+      "bytes": 240,
+      "tiles": 15,
+      "bank_start": 72,
+      "bank_end": 72
+    },
+    {
+      "start": "0x125630",
+      "end": "0x12571F",
+      "bytes": 240,
+      "tiles": 15,
+      "bank_start": 73,
+      "bank_end": 73
+    },
+    {
+      "start": "0x1416E0",
+      "end": "0x1417CF",
+      "bytes": 240,
+      "tiles": 15,
+      "bank_start": 80,
+      "bank_end": 80
+    },
+    {
+      "start": "0x1502A0",
+      "end": "0x15038F",
+      "bytes": 240,
+      "tiles": 15,
+      "bank_start": 84,
+      "bank_end": 84
+    },
+    {
+      "start": "0x15C000",
+      "end": "0x15C0EF",
+      "bytes": 240,
+      "tiles": 15,
+      "bank_start": 87,
+      "bank_end": 87
+    },
+    {
+      "start": "0x1786E0",
+      "end": "0x1787CF",
+      "bytes": 240,
+      "tiles": 15,
+      "bank_start": 94,
+      "bank_end": 94
+    },
+    {
+      "start": "0x17C7B0",
+      "end": "0x17C89F",
+      "bytes": 240,
+      "tiles": 15,
+      "bank_start": 95,
+      "bank_end": 95
+    },
+    {
+      "start": "0x1C0A60",
+      "end": "0x1C0B4F",
+      "bytes": 240,
+      "tiles": 15,
+      "bank_start": 112,
+      "bank_end": 112
+    },
+    {
+      "start": "0x1E1600",
+      "end": "0x1E16EF",
+      "bytes": 240,
+      "tiles": 15,
+      "bank_start": 120,
+      "bank_end": 120
+    },
+    {
+      "start": "0x1E3600",
+      "end": "0x1E36EF",
+      "bytes": 240,
+      "tiles": 15,
+      "bank_start": 120,
+      "bank_end": 120
+    },
+    {
+      "start": "0x1E5600",
+      "end": "0x1E56EF",
+      "bytes": 240,
+      "tiles": 15,
+      "bank_start": 121,
+      "bank_end": 121
+    },
+    {
+      "start": "0x1E7600",
+      "end": "0x1E76EF",
+      "bytes": 240,
+      "tiles": 15,
+      "bank_start": 121,
+      "bank_end": 121
+    },
+    {
+      "start": "0x1E9600",
+      "end": "0x1E96EF",
+      "bytes": 240,
+      "tiles": 15,
+      "bank_start": 122,
+      "bank_end": 122
+    },
+    {
+      "start": "0x006D20",
+      "end": "0x006DFF",
+      "bytes": 224,
+      "tiles": 14,
+      "bank_start": 1,
+      "bank_end": 1
+    },
+    {
+      "start": "0x008270",
+      "end": "0x00834F",
+      "bytes": 224,
+      "tiles": 14,
+      "bank_start": 2,
+      "bank_end": 2
+    },
+    {
+      "start": "0x0084D0",
+      "end": "0x0085AF",
+      "bytes": 224,
+      "tiles": 14,
+      "bank_start": 2,
+      "bank_end": 2
+    },
+    {
+      "start": "0x0147D0",
+      "end": "0x0148AF",
+      "bytes": 224,
+      "tiles": 14,
+      "bank_start": 5,
+      "bank_end": 5
+    },
+    {
+      "start": "0x01DD90",
+      "end": "0x01DE6F",
+      "bytes": 224,
+      "tiles": 14,
+      "bank_start": 7,
+      "bank_end": 7
+    },
+    {
+      "start": "0x0323C0",
+      "end": "0x03249F",
+      "bytes": 224,
+      "tiles": 14,
+      "bank_start": 12,
+      "bank_end": 12
+    },
+    {
+      "start": "0x03AA50",
+      "end": "0x03AB2F",
+      "bytes": 224,
+      "tiles": 14,
+      "bank_start": 14,
+      "bank_end": 14
+    },
+    {
+      "start": "0x03ACC0",
+      "end": "0x03AD9F",
+      "bytes": 224,
+      "tiles": 14,
+      "bank_start": 14,
+      "bank_end": 14
+    },
+    {
+      "start": "0x03B1F0",
+      "end": "0x03B2CF",
+      "bytes": 224,
+      "tiles": 14,
+      "bank_start": 14,
+      "bank_end": 14
+    },
+    {
+      "start": "0x062850",
+      "end": "0x06292F",
+      "bytes": 224,
+      "tiles": 14,
+      "bank_start": 24,
+      "bank_end": 24
+    },
+    {
+      "start": "0x0C98F0",
+      "end": "0x0C99CF",
+      "bytes": 224,
+      "tiles": 14,
+      "bank_start": 50,
+      "bank_end": 50
+    },
+    {
+      "start": "0x0CBCE0",
+      "end": "0x0CBDBF",
+      "bytes": 224,
+      "tiles": 14,
+      "bank_start": 50,
+      "bank_end": 50
+    },
+    {
+      "start": "0x0DF2E0",
+      "end": "0x0DF3BF",
+      "bytes": 224,
+      "tiles": 14,
+      "bank_start": 55,
+      "bank_end": 55
+    },
+    {
+      "start": "0x0F5A10",
+      "end": "0x0F5AEF",
+      "bytes": 224,
+      "tiles": 14,
+      "bank_start": 61,
+      "bank_end": 61
+    },
+    {
+      "start": "0x0F80F0",
+      "end": "0x0F81CF",
+      "bytes": 224,
+      "tiles": 14,
+      "bank_start": 62,
+      "bank_end": 62
+    },
+    {
+      "start": "0x0F8FD0",
+      "end": "0x0F90AF",
+      "bytes": 224,
+      "tiles": 14,
+      "bank_start": 62,
+      "bank_end": 62
+    },
+    {
+      "start": "0x0F90D0",
+      "end": "0x0F91AF",
+      "bytes": 224,
+      "tiles": 14,
+      "bank_start": 62,
+      "bank_end": 62
+    },
+    {
+      "start": "0x0FC150",
+      "end": "0x0FC22F",
+      "bytes": 224,
+      "tiles": 14,
+      "bank_start": 63,
+      "bank_end": 63
+    },
+    {
+      "start": "0x0FC3E0",
+      "end": "0x0FC4BF",
+      "bytes": 224,
+      "tiles": 14,
+      "bank_start": 63,
+      "bank_end": 63
+    },
+    {
+      "start": "0x10CC10",
+      "end": "0x10CCEF",
+      "bytes": 224,
+      "tiles": 14,
+      "bank_start": 67,
+      "bank_end": 67
+    },
+    {
+      "start": "0x10E5D0",
+      "end": "0x10E6AF",
+      "bytes": 224,
+      "tiles": 14,
+      "bank_start": 67,
+      "bank_end": 67
+    },
+    {
+      "start": "0x11C1C0",
+      "end": "0x11C29F",
+      "bytes": 224,
+      "tiles": 14,
+      "bank_start": 71,
+      "bank_end": 71
+    },
+    {
+      "start": "0x121E20",
+      "end": "0x121EFF",
+      "bytes": 224,
+      "tiles": 14,
+      "bank_start": 72,
+      "bank_end": 72
+    },
+    {
+      "start": "0x125CA0",
+      "end": "0x125D7F",
+      "bytes": 224,
+      "tiles": 14,
+      "bank_start": 73,
+      "bank_end": 73
+    },
+    {
+      "start": "0x140700",
+      "end": "0x1407DF",
+      "bytes": 224,
+      "tiles": 14,
+      "bank_start": 80,
+      "bank_end": 80
+    },
+    {
+      "start": "0x15E410",
+      "end": "0x15E4EF",
+      "bytes": 224,
+      "tiles": 14,
+      "bank_start": 87,
+      "bank_end": 87
+    },
+    {
+      "start": "0x16C490",
+      "end": "0x16C56F",
+      "bytes": 224,
+      "tiles": 14,
+      "bank_start": 91,
+      "bank_end": 91
+    },
+    {
+      "start": "0x181CE0",
+      "end": "0x181DBF",
+      "bytes": 224,
+      "tiles": 14,
+      "bank_start": 96,
+      "bank_end": 96
+    },
+    {
+      "start": "0x194930",
+      "end": "0x194A0F",
+      "bytes": 224,
+      "tiles": 14,
+      "bank_start": 101,
+      "bank_end": 101
+    },
+    {
+      "start": "0x1962A0",
+      "end": "0x19637F",
+      "bytes": 224,
+      "tiles": 14,
+      "bank_start": 101,
+      "bank_end": 101
+    },
+    {
+      "start": "0x1C5A90",
+      "end": "0x1C5B6F",
+      "bytes": 224,
+      "tiles": 14,
+      "bank_start": 113,
+      "bank_end": 113
+    },
+    {
+      "start": "0x004890",
+      "end": "0x00495F",
+      "bytes": 208,
+      "tiles": 13,
+      "bank_start": 1,
+      "bank_end": 1
+    },
+    {
+      "start": "0x0050D0",
+      "end": "0x00519F",
+      "bytes": 208,
+      "tiles": 13,
+      "bank_start": 1,
+      "bank_end": 1
+    },
+    {
+      "start": "0x005390",
+      "end": "0x00545F",
+      "bytes": 208,
+      "tiles": 13,
+      "bank_start": 1,
+      "bank_end": 1
+    },
+    {
+      "start": "0x01B470",
+      "end": "0x01B53F",
+      "bytes": 208,
+      "tiles": 13,
+      "bank_start": 6,
+      "bank_end": 6
+    },
+    {
+      "start": "0x01F740",
+      "end": "0x01F80F",
+      "bytes": 208,
+      "tiles": 13,
+      "bank_start": 7,
+      "bank_end": 7
+    },
+    {
+      "start": "0x030930",
+      "end": "0x0309FF",
+      "bytes": 208,
+      "tiles": 13,
+      "bank_start": 12,
+      "bank_end": 12
+    },
+    {
+      "start": "0x03ADD0",
+      "end": "0x03AE9F",
+      "bytes": 208,
+      "tiles": 13,
+      "bank_start": 14,
+      "bank_end": 14
+    },
+    {
+      "start": "0x0428C0",
+      "end": "0x04298F",
+      "bytes": 208,
+      "tiles": 13,
+      "bank_start": 16,
+      "bank_end": 16
+    },
+    {
+      "start": "0x0853B0",
+      "end": "0x08547F",
+      "bytes": 208,
+      "tiles": 13,
+      "bank_start": 33,
+      "bank_end": 33
+    },
+    {
+      "start": "0x087310",
+      "end": "0x0873DF",
+      "bytes": 208,
+      "tiles": 13,
+      "bank_start": 33,
+      "bank_end": 33
+    },
+    {
+      "start": "0x0C9360",
+      "end": "0x0C942F",
+      "bytes": 208,
+      "tiles": 13,
+      "bank_start": 50,
+      "bank_end": 50
+    },
+    {
+      "start": "0x0CCFC0",
+      "end": "0x0CD08F",
+      "bytes": 208,
+      "tiles": 13,
+      "bank_start": 51,
+      "bank_end": 51
+    },
+    {
+      "start": "0x0CE6B0",
+      "end": "0x0CE77F",
+      "bytes": 208,
+      "tiles": 13,
+      "bank_start": 51,
+      "bank_end": 51
+    },
+    {
+      "start": "0x0DE9D0",
+      "end": "0x0DEA9F",
+      "bytes": 208,
+      "tiles": 13,
+      "bank_start": 55,
+      "bank_end": 55
+    },
+    {
+      "start": "0x0E5870",
+      "end": "0x0E593F",
+      "bytes": 208,
+      "tiles": 13,
+      "bank_start": 57,
+      "bank_end": 57
+    },
+    {
+      "start": "0x0ED4C0",
+      "end": "0x0ED58F",
+      "bytes": 208,
+      "tiles": 13,
+      "bank_start": 59,
+      "bank_end": 59
+    },
+    {
+      "start": "0x0EE2A0",
+      "end": "0x0EE36F",
+      "bytes": 208,
+      "tiles": 13,
+      "bank_start": 59,
+      "bank_end": 59
+    },
+    {
+      "start": "0x10C7A0",
+      "end": "0x10C86F",
+      "bytes": 208,
+      "tiles": 13,
+      "bank_start": 67,
+      "bank_end": 67
+    },
+    {
+      "start": "0x111560",
+      "end": "0x11162F",
+      "bytes": 208,
+      "tiles": 13,
+      "bank_start": 68,
+      "bank_end": 68
+    },
+    {
+      "start": "0x119570",
+      "end": "0x11963F",
+      "bytes": 208,
+      "tiles": 13,
+      "bank_start": 70,
+      "bank_end": 70
+    },
+    {
+      "start": "0x119CB0",
+      "end": "0x119D7F",
+      "bytes": 208,
+      "tiles": 13,
+      "bank_start": 70,
+      "bank_end": 70
+    },
+    {
+      "start": "0x124D40",
+      "end": "0x124E0F",
+      "bytes": 208,
+      "tiles": 13,
+      "bank_start": 73,
+      "bank_end": 73
+    },
+    {
+      "start": "0x129290",
+      "end": "0x12935F",
+      "bytes": 208,
+      "tiles": 13,
+      "bank_start": 74,
+      "bank_end": 74
+    },
+    {
+      "start": "0x129800",
+      "end": "0x1298CF",
+      "bytes": 208,
+      "tiles": 13,
+      "bank_start": 74,
+      "bank_end": 74
+    },
+    {
+      "start": "0x12D8C0",
+      "end": "0x12D98F",
+      "bytes": 208,
+      "tiles": 13,
+      "bank_start": 75,
+      "bank_end": 75
+    },
+    {
+      "start": "0x135710",
+      "end": "0x1357DF",
+      "bytes": 208,
+      "tiles": 13,
+      "bank_start": 77,
+      "bank_end": 77
+    },
+    {
+      "start": "0x135A80",
+      "end": "0x135B4F",
+      "bytes": 208,
+      "tiles": 13,
+      "bank_start": 77,
+      "bank_end": 77
+    },
+    {
+      "start": "0x15B380",
+      "end": "0x15B44F",
+      "bytes": 208,
+      "tiles": 13,
+      "bank_start": 86,
+      "bank_end": 86
+    },
+    {
+      "start": "0x16E490",
+      "end": "0x16E55F",
+      "bytes": 208,
+      "tiles": 13,
+      "bank_start": 91,
+      "bank_end": 91
+    },
+    {
+      "start": "0x0057E0",
+      "end": "0x00589F",
+      "bytes": 192,
+      "tiles": 12,
+      "bank_start": 1,
+      "bank_end": 1
+    },
+    {
+      "start": "0x012150",
+      "end": "0x01220F",
+      "bytes": 192,
+      "tiles": 12,
+      "bank_start": 4,
+      "bank_end": 4
+    },
+    {
+      "start": "0x022450",
+      "end": "0x02250F",
+      "bytes": 192,
+      "tiles": 12,
+      "bank_start": 8,
+      "bank_end": 8
+    },
+    {
+      "start": "0x052B90",
+      "end": "0x052C4F",
+      "bytes": 192,
+      "tiles": 12,
+      "bank_start": 20,
+      "bank_end": 20
+    },
+    {
+      "start": "0x060FE0",
+      "end": "0x06109F",
+      "bytes": 192,
+      "tiles": 12,
+      "bank_start": 24,
+      "bank_end": 24
+    },
+    {
+      "start": "0x06C6E0",
+      "end": "0x06C79F",
+      "bytes": 192,
+      "tiles": 12,
+      "bank_start": 27,
+      "bank_end": 27
+    },
+    {
+      "start": "0x070F20",
+      "end": "0x070FDF",
+      "bytes": 192,
+      "tiles": 12,
+      "bank_start": 28,
+      "bank_end": 28
+    },
+    {
+      "start": "0x087120",
+      "end": "0x0871DF",
+      "bytes": 192,
+      "tiles": 12,
+      "bank_start": 33,
+      "bank_end": 33
+    },
+    {
+      "start": "0x087C00",
+      "end": "0x087CBF",
+      "bytes": 192,
+      "tiles": 12,
+      "bank_start": 33,
+      "bank_end": 33
+    },
+    {
+      "start": "0x092900",
+      "end": "0x0929BF",
+      "bytes": 192,
+      "tiles": 12,
+      "bank_start": 36,
+      "bank_end": 36
+    },
+    {
+      "start": "0x098550",
+      "end": "0x09860F",
+      "bytes": 192,
+      "tiles": 12,
+      "bank_start": 38,
+      "bank_end": 38
+    },
+    {
+      "start": "0x0CB0A0",
+      "end": "0x0CB15F",
+      "bytes": 192,
+      "tiles": 12,
+      "bank_start": 50,
+      "bank_end": 50
+    },
+    {
+      "start": "0x0CB650",
+      "end": "0x0CB70F",
+      "bytes": 192,
+      "tiles": 12,
+      "bank_start": 50,
+      "bank_end": 50
+    },
+    {
+      "start": "0x0E83D0",
+      "end": "0x0E848F",
+      "bytes": 192,
+      "tiles": 12,
+      "bank_start": 58,
+      "bank_end": 58
+    },
+    {
+      "start": "0x0EEEE0",
+      "end": "0x0EEF9F",
+      "bytes": 192,
+      "tiles": 12,
+      "bank_start": 59,
+      "bank_end": 59
+    },
+    {
+      "start": "0x0F1D10",
+      "end": "0x0F1DCF",
+      "bytes": 192,
+      "tiles": 12,
+      "bank_start": 60,
+      "bank_end": 60
+    },
+    {
+      "start": "0x0F8EF0",
+      "end": "0x0F8FAF",
+      "bytes": 192,
+      "tiles": 12,
+      "bank_start": 62,
+      "bank_end": 62
+    },
+    {
+      "start": "0x0FC070",
+      "end": "0x0FC12F",
+      "bytes": 192,
+      "tiles": 12,
+      "bank_start": 63,
+      "bank_end": 63
+    },
+    {
+      "start": "0x108450",
+      "end": "0x10850F",
+      "bytes": 192,
+      "tiles": 12,
+      "bank_start": 66,
+      "bank_end": 66
+    },
+    {
+      "start": "0x111810",
+      "end": "0x1118CF",
+      "bytes": 192,
+      "tiles": 12,
+      "bank_start": 68,
+      "bank_end": 68
+    },
+    {
+      "start": "0x11A160",
+      "end": "0x11A21F",
+      "bytes": 192,
+      "tiles": 12,
+      "bank_start": 70,
+      "bank_end": 70
+    },
+    {
+      "start": "0x124E40",
+      "end": "0x124EFF",
+      "bytes": 192,
+      "tiles": 12,
+      "bank_start": 73,
+      "bank_end": 73
+    },
+    {
+      "start": "0x131920",
+      "end": "0x1319DF",
+      "bytes": 192,
+      "tiles": 12,
+      "bank_start": 76,
+      "bank_end": 76
+    },
+    {
+      "start": "0x1353F0",
+      "end": "0x1354AF",
+      "bytes": 192,
+      "tiles": 12,
+      "bank_start": 77,
+      "bank_end": 77
+    },
+    {
+      "start": "0x138690",
+      "end": "0x13874F",
+      "bytes": 192,
+      "tiles": 12,
+      "bank_start": 78,
+      "bank_end": 78
+    },
+    {
+      "start": "0x13C2F0",
+      "end": "0x13C3AF",
+      "bytes": 192,
+      "tiles": 12,
+      "bank_start": 79,
+      "bank_end": 79
+    },
+    {
+      "start": "0x13DBC0",
+      "end": "0x13DC7F",
+      "bytes": 192,
+      "tiles": 12,
+      "bank_start": 79,
+      "bank_end": 79
+    },
+    {
+      "start": "0x1592C0",
+      "end": "0x15937F",
+      "bytes": 192,
+      "tiles": 12,
+      "bank_start": 86,
+      "bank_end": 86
+    },
+    {
+      "start": "0x15C770",
+      "end": "0x15C82F",
+      "bytes": 192,
+      "tiles": 12,
+      "bank_start": 87,
+      "bank_end": 87
+    },
+    {
+      "start": "0x16D120",
+      "end": "0x16D1DF",
+      "bytes": 192,
+      "tiles": 12,
+      "bank_start": 91,
+      "bank_end": 91
+    },
+    {
+      "start": "0x194ED0",
+      "end": "0x194F8F",
+      "bytes": 192,
+      "tiles": 12,
+      "bank_start": 101,
+      "bank_end": 101
+    },
+    {
+      "start": "0x002D80",
+      "end": "0x002E2F",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 0,
+      "bank_end": 0
+    },
+    {
+      "start": "0x008370",
+      "end": "0x00841F",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 2,
+      "bank_end": 2
+    },
+    {
+      "start": "0x014970",
+      "end": "0x014A1F",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 5,
+      "bank_end": 5
+    },
+    {
+      "start": "0x032C90",
+      "end": "0x032D3F",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 12,
+      "bank_end": 12
+    },
+    {
+      "start": "0x0544F0",
+      "end": "0x05459F",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 21,
+      "bank_end": 21
+    },
+    {
+      "start": "0x079550",
+      "end": "0x0795FF",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 30,
+      "bank_end": 30
+    },
+    {
+      "start": "0x0854E0",
+      "end": "0x08558F",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 33,
+      "bank_end": 33
+    },
+    {
+      "start": "0x087240",
+      "end": "0x0872EF",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 33,
+      "bank_end": 33
+    },
+    {
+      "start": "0x098630",
+      "end": "0x0986DF",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 38,
+      "bank_end": 38
+    },
+    {
+      "start": "0x0C9AC0",
+      "end": "0x0C9B6F",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 50,
+      "bank_end": 50
+    },
+    {
+      "start": "0x0CACB0",
+      "end": "0x0CAD5F",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 50,
+      "bank_end": 50
+    },
+    {
+      "start": "0x0CD760",
+      "end": "0x0CD80F",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 51,
+      "bank_end": 51
+    },
+    {
+      "start": "0x0CE570",
+      "end": "0x0CE61F",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 51,
+      "bank_end": 51
+    },
+    {
+      "start": "0x0E25C0",
+      "end": "0x0E266F",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 56,
+      "bank_end": 56
+    },
+    {
+      "start": "0x0E84E0",
+      "end": "0x0E858F",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 58,
+      "bank_end": 58
+    },
+    {
+      "start": "0x0F8D50",
+      "end": "0x0F8DFF",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 62,
+      "bank_end": 62
+    },
+    {
+      "start": "0x1004E0",
+      "end": "0x10058F",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 64,
+      "bank_end": 64
+    },
+    {
+      "start": "0x108230",
+      "end": "0x1082DF",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 66,
+      "bank_end": 66
+    },
+    {
+      "start": "0x10DAC0",
+      "end": "0x10DB6F",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 67,
+      "bank_end": 67
+    },
+    {
+      "start": "0x1111E0",
+      "end": "0x11128F",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 68,
+      "bank_end": 68
+    },
+    {
+      "start": "0x111EE0",
+      "end": "0x111F8F",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 68,
+      "bank_end": 68
+    },
+    {
+      "start": "0x120C30",
+      "end": "0x120CDF",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 72,
+      "bank_end": 72
+    },
+    {
+      "start": "0x1285F0",
+      "end": "0x12869F",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 74,
+      "bank_end": 74
+    },
+    {
+      "start": "0x128BC0",
+      "end": "0x128C6F",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 74,
+      "bank_end": 74
+    },
+    {
+      "start": "0x131D00",
+      "end": "0x131DAF",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 76,
+      "bank_end": 76
+    },
+    {
+      "start": "0x134670",
+      "end": "0x13471F",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 77,
+      "bank_end": 77
+    },
+    {
+      "start": "0x139D10",
+      "end": "0x139DBF",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 78,
+      "bank_end": 78
+    },
+    {
+      "start": "0x13C8F0",
+      "end": "0x13C99F",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 79,
+      "bank_end": 79
+    },
+    {
+      "start": "0x140330",
+      "end": "0x1403DF",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 80,
+      "bank_end": 80
+    },
+    {
+      "start": "0x148E40",
+      "end": "0x148EEF",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 82,
+      "bank_end": 82
+    },
+    {
+      "start": "0x150BC0",
+      "end": "0x150C6F",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 84,
+      "bank_end": 84
+    },
+    {
+      "start": "0x1545D0",
+      "end": "0x15467F",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 85,
+      "bank_end": 85
+    },
+    {
+      "start": "0x15E0B0",
+      "end": "0x15E15F",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 87,
+      "bank_end": 87
+    },
+    {
+      "start": "0x16DCB0",
+      "end": "0x16DD5F",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 91,
+      "bank_end": 91
+    },
+    {
+      "start": "0x1E02A0",
+      "end": "0x1E034F",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 120,
+      "bank_end": 120
+    },
+    {
+      "start": "0x1EB2A0",
+      "end": "0x1EB34F",
+      "bytes": 176,
+      "tiles": 11,
+      "bank_start": 122,
+      "bank_end": 122
+    },
+    {
+      "start": "0x029E20",
+      "end": "0x029EBF",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 10,
+      "bank_end": 10
+    },
+    {
+      "start": "0x03A9A0",
+      "end": "0x03AA3F",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 14,
+      "bank_end": 14
+    },
+    {
+      "start": "0x041050",
+      "end": "0x0410EF",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 16,
+      "bank_end": 16
+    },
+    {
+      "start": "0x042A70",
+      "end": "0x042B0F",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 16,
+      "bank_end": 16
+    },
+    {
+      "start": "0x042E00",
+      "end": "0x042E9F",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 16,
+      "bank_end": 16
+    },
+    {
+      "start": "0x043680",
+      "end": "0x04371F",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 16,
+      "bank_end": 16
+    },
+    {
+      "start": "0x043960",
+      "end": "0x0439FF",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 16,
+      "bank_end": 16
+    },
+    {
+      "start": "0x05A780",
+      "end": "0x05A81F",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 22,
+      "bank_end": 22
+    },
+    {
+      "start": "0x05E250",
+      "end": "0x05E2EF",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 23,
+      "bank_end": 23
+    },
+    {
+      "start": "0x063E70",
+      "end": "0x063F0F",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 24,
+      "bank_end": 24
+    },
+    {
+      "start": "0x06CF00",
+      "end": "0x06CF9F",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 27,
+      "bank_end": 27
+    },
+    {
+      "start": "0x072ED0",
+      "end": "0x072F6F",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 28,
+      "bank_end": 28
+    },
+    {
+      "start": "0x07A650",
+      "end": "0x07A6EF",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 30,
+      "bank_end": 30
+    },
+    {
+      "start": "0x085DC0",
+      "end": "0x085E5F",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 33,
+      "bank_end": 33
+    },
+    {
+      "start": "0x08D920",
+      "end": "0x08D9BF",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 35,
+      "bank_end": 35
+    },
+    {
+      "start": "0x08DA40",
+      "end": "0x08DADF",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 35,
+      "bank_end": 35
+    },
+    {
+      "start": "0x090AE0",
+      "end": "0x090B7F",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 36,
+      "bank_end": 36
+    },
+    {
+      "start": "0x0CA1B0",
+      "end": "0x0CA24F",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 50,
+      "bank_end": 50
+    },
+    {
+      "start": "0x0CB350",
+      "end": "0x0CB3EF",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 50,
+      "bank_end": 50
+    },
+    {
+      "start": "0x0E4000",
+      "end": "0x0E409F",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 57,
+      "bank_end": 57
+    },
+    {
+      "start": "0x0EC200",
+      "end": "0x0EC29F",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 59,
+      "bank_end": 59
+    },
+    {
+      "start": "0x0EF190",
+      "end": "0x0EF22F",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 59,
+      "bank_end": 59
+    },
+    {
+      "start": "0x0EF560",
+      "end": "0x0EF5FF",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 59,
+      "bank_end": 59
+    },
+    {
+      "start": "0x0F8720",
+      "end": "0x0F87BF",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 62,
+      "bank_end": 62
+    },
+    {
+      "start": "0x0F8E10",
+      "end": "0x0F8EAF",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 62,
+      "bank_end": 62
+    },
+    {
+      "start": "0x108B40",
+      "end": "0x108BDF",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 66,
+      "bank_end": 66
+    },
+    {
+      "start": "0x1181D0",
+      "end": "0x11826F",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 70,
+      "bank_end": 70
+    },
+    {
+      "start": "0x119750",
+      "end": "0x1197EF",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 70,
+      "bank_end": 70
+    },
+    {
+      "start": "0x119FA0",
+      "end": "0x11A03F",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 70,
+      "bank_end": 70
+    },
+    {
+      "start": "0x11C0F0",
+      "end": "0x11C18F",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 71,
+      "bank_end": 71
+    },
+    {
+      "start": "0x129E20",
+      "end": "0x129EBF",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 74,
+      "bank_end": 74
+    },
+    {
+      "start": "0x1303E0",
+      "end": "0x13047F",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 76,
+      "bank_end": 76
+    },
+    {
+      "start": "0x130DE0",
+      "end": "0x130E7F",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 76,
+      "bank_end": 76
+    },
+    {
+      "start": "0x139430",
+      "end": "0x1394CF",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 78,
+      "bank_end": 78
+    },
+    {
+      "start": "0x13CBE0",
+      "end": "0x13CC7F",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 79,
+      "bank_end": 79
+    },
+    {
+      "start": "0x13CE80",
+      "end": "0x13CF1F",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 79,
+      "bank_end": 79
+    },
+    {
+      "start": "0x141360",
+      "end": "0x1413FF",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 80,
+      "bank_end": 80
+    },
+    {
+      "start": "0x1512F0",
+      "end": "0x15138F",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 84,
+      "bank_end": 84
+    },
+    {
+      "start": "0x154DF0",
+      "end": "0x154E8F",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 85,
+      "bank_end": 85
+    },
+    {
+      "start": "0x165C60",
+      "end": "0x165CFF",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 89,
+      "bank_end": 89
+    },
+    {
+      "start": "0x168BC0",
+      "end": "0x168C5F",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 90,
+      "bank_end": 90
+    },
+    {
+      "start": "0x1707B0",
+      "end": "0x17084F",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 92,
+      "bank_end": 92
+    },
+    {
+      "start": "0x175610",
+      "end": "0x1756AF",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 93,
+      "bank_end": 93
+    },
+    {
+      "start": "0x181E20",
+      "end": "0x181EBF",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 96,
+      "bank_end": 96
+    },
+    {
+      "start": "0x1C04E0",
+      "end": "0x1C057F",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 112,
+      "bank_end": 112
+    },
+    {
+      "start": "0x1E0F00",
+      "end": "0x1E0F9F",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 120,
+      "bank_end": 120
+    },
+    {
+      "start": "0x1E2F50",
+      "end": "0x1E2FEF",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 120,
+      "bank_end": 120
+    },
+    {
+      "start": "0x1EBF00",
+      "end": "0x1EBF9F",
+      "bytes": 160,
+      "tiles": 10,
+      "bank_start": 122,
+      "bank_end": 122
+    },
+    {
+      "start": "0x0041E0",
+      "end": "0x00426F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 1,
+      "bank_end": 1
+    },
+    {
+      "start": "0x004730",
+      "end": "0x0047BF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 1,
+      "bank_end": 1
+    },
+    {
+      "start": "0x004BD0",
+      "end": "0x004C5F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 1,
+      "bank_end": 1
+    },
+    {
+      "start": "0x0051E0",
+      "end": "0x00526F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 1,
+      "bank_end": 1
+    },
+    {
+      "start": "0x008730",
+      "end": "0x0087BF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 2,
+      "bank_end": 2
+    },
+    {
+      "start": "0x00BA50",
+      "end": "0x00BADF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 2,
+      "bank_end": 2
+    },
+    {
+      "start": "0x015530",
+      "end": "0x0155BF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 5,
+      "bank_end": 5
+    },
+    {
+      "start": "0x0197F0",
+      "end": "0x01987F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 6,
+      "bank_end": 6
+    },
+    {
+      "start": "0x01D4B0",
+      "end": "0x01D53F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 7,
+      "bank_end": 7
+    },
+    {
+      "start": "0x01E630",
+      "end": "0x01E6BF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 7,
+      "bank_end": 7
+    },
+    {
+      "start": "0x0216B0",
+      "end": "0x02173F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 8,
+      "bank_end": 8
+    },
+    {
+      "start": "0x023650",
+      "end": "0x0236DF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 8,
+      "bank_end": 8
+    },
+    {
+      "start": "0x025480",
+      "end": "0x02550F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 9,
+      "bank_end": 9
+    },
+    {
+      "start": "0x025910",
+      "end": "0x02599F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 9,
+      "bank_end": 9
+    },
+    {
+      "start": "0x025CF0",
+      "end": "0x025D7F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 9,
+      "bank_end": 9
+    },
+    {
+      "start": "0x025E70",
+      "end": "0x025EFF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 9,
+      "bank_end": 9
+    },
+    {
+      "start": "0x028BF0",
+      "end": "0x028C7F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 10,
+      "bank_end": 10
+    },
+    {
+      "start": "0x029830",
+      "end": "0x0298BF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 10,
+      "bank_end": 10
+    },
+    {
+      "start": "0x02AA40",
+      "end": "0x02AACF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 10,
+      "bank_end": 10
+    },
+    {
+      "start": "0x042F50",
+      "end": "0x042FDF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 16,
+      "bank_end": 16
+    },
+    {
+      "start": "0x0435C0",
+      "end": "0x04364F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 16,
+      "bank_end": 16
+    },
+    {
+      "start": "0x054420",
+      "end": "0x0544AF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 21,
+      "bank_end": 21
+    },
+    {
+      "start": "0x059F00",
+      "end": "0x059F8F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 22,
+      "bank_end": 22
+    },
+    {
+      "start": "0x05C1F0",
+      "end": "0x05C27F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 23,
+      "bank_end": 23
+    },
+    {
+      "start": "0x062B00",
+      "end": "0x062B8F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 24,
+      "bank_end": 24
+    },
+    {
+      "start": "0x06FAF0",
+      "end": "0x06FB7F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 27,
+      "bank_end": 27
+    },
+    {
+      "start": "0x0706B0",
+      "end": "0x07073F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 28,
+      "bank_end": 28
+    },
+    {
+      "start": "0x073AC0",
+      "end": "0x073B4F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 28,
+      "bank_end": 28
+    },
+    {
+      "start": "0x0760C0",
+      "end": "0x07614F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 29,
+      "bank_end": 29
+    },
+    {
+      "start": "0x079B20",
+      "end": "0x079BAF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 30,
+      "bank_end": 30
+    },
+    {
+      "start": "0x079D10",
+      "end": "0x079D9F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 30,
+      "bank_end": 30
+    },
+    {
+      "start": "0x07ECA0",
+      "end": "0x07ED2F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 31,
+      "bank_end": 31
+    },
+    {
+      "start": "0x085830",
+      "end": "0x0858BF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 33,
+      "bank_end": 33
+    },
+    {
+      "start": "0x085B20",
+      "end": "0x085BAF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 33,
+      "bank_end": 33
+    },
+    {
+      "start": "0x086F30",
+      "end": "0x086FBF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 33,
+      "bank_end": 33
+    },
+    {
+      "start": "0x08E690",
+      "end": "0x08E71F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 35,
+      "bank_end": 35
+    },
+    {
+      "start": "0x08E7F0",
+      "end": "0x08E87F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 35,
+      "bank_end": 35
+    },
+    {
+      "start": "0x091D70",
+      "end": "0x091DFF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 36,
+      "bank_end": 36
+    },
+    {
+      "start": "0x093930",
+      "end": "0x0939BF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 36,
+      "bank_end": 36
+    },
+    {
+      "start": "0x097CE0",
+      "end": "0x097D6F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 37,
+      "bank_end": 37
+    },
+    {
+      "start": "0x0C79C0",
+      "end": "0x0C7A4F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 49,
+      "bank_end": 49
+    },
+    {
+      "start": "0x0CADF0",
+      "end": "0x0CAE7F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 50,
+      "bank_end": 50
+    },
+    {
+      "start": "0x0CB8B0",
+      "end": "0x0CB93F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 50,
+      "bank_end": 50
+    },
+    {
+      "start": "0x0CBC00",
+      "end": "0x0CBC8F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 50,
+      "bank_end": 50
+    },
+    {
+      "start": "0x0CCE40",
+      "end": "0x0CCECF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 51,
+      "bank_end": 51
+    },
+    {
+      "start": "0x0CDA30",
+      "end": "0x0CDABF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 51,
+      "bank_end": 51
+    },
+    {
+      "start": "0x0CE4D0",
+      "end": "0x0CE55F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 51,
+      "bank_end": 51
+    },
+    {
+      "start": "0x0E1F50",
+      "end": "0x0E1FDF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 56,
+      "bank_end": 56
+    },
+    {
+      "start": "0x0E2050",
+      "end": "0x0E20DF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 56,
+      "bank_end": 56
+    },
+    {
+      "start": "0x0E4B90",
+      "end": "0x0E4C1F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 57,
+      "bank_end": 57
+    },
+    {
+      "start": "0x0E4C40",
+      "end": "0x0E4CCF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 57,
+      "bank_end": 57
+    },
+    {
+      "start": "0x0FC310",
+      "end": "0x0FC39F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 63,
+      "bank_end": 63
+    },
+    {
+      "start": "0x0FC930",
+      "end": "0x0FC9BF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 63,
+      "bank_end": 63
+    },
+    {
+      "start": "0x0FCEC0",
+      "end": "0x0FCF4F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 63,
+      "bank_end": 63
+    },
+    {
+      "start": "0x0FD400",
+      "end": "0x0FD48F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 63,
+      "bank_end": 63
+    },
+    {
+      "start": "0x104630",
+      "end": "0x1046BF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 65,
+      "bank_end": 65
+    },
+    {
+      "start": "0x10D5A0",
+      "end": "0x10D62F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 67,
+      "bank_end": 67
+    },
+    {
+      "start": "0x10E0D0",
+      "end": "0x10E15F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 67,
+      "bank_end": 67
+    },
+    {
+      "start": "0x10E6C0",
+      "end": "0x10E74F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 67,
+      "bank_end": 67
+    },
+    {
+      "start": "0x1106C0",
+      "end": "0x11074F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 68,
+      "bank_end": 68
+    },
+    {
+      "start": "0x114B20",
+      "end": "0x114BAF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 69,
+      "bank_end": 69
+    },
+    {
+      "start": "0x114C40",
+      "end": "0x114CCF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 69,
+      "bank_end": 69
+    },
+    {
+      "start": "0x115A20",
+      "end": "0x115AAF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 69,
+      "bank_end": 69
+    },
+    {
+      "start": "0x1189D0",
+      "end": "0x118A5F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 70,
+      "bank_end": 70
+    },
+    {
+      "start": "0x124000",
+      "end": "0x12408F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 73,
+      "bank_end": 73
+    },
+    {
+      "start": "0x128C80",
+      "end": "0x128D0F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 74,
+      "bank_end": 74
+    },
+    {
+      "start": "0x130980",
+      "end": "0x130A0F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 76,
+      "bank_end": 76
+    },
+    {
+      "start": "0x13D5F0",
+      "end": "0x13D67F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 79,
+      "bank_end": 79
+    },
+    {
+      "start": "0x1440B0",
+      "end": "0x14413F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 81,
+      "bank_end": 81
+    },
+    {
+      "start": "0x144540",
+      "end": "0x1445CF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 81,
+      "bank_end": 81
+    },
+    {
+      "start": "0x145B50",
+      "end": "0x145BDF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 81,
+      "bank_end": 81
+    },
+    {
+      "start": "0x14CB50",
+      "end": "0x14CBDF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 83,
+      "bank_end": 83
+    },
+    {
+      "start": "0x14CC20",
+      "end": "0x14CCAF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 83,
+      "bank_end": 83
+    },
+    {
+      "start": "0x14CE80",
+      "end": "0x14CF0F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 83,
+      "bank_end": 83
+    },
+    {
+      "start": "0x14D530",
+      "end": "0x14D5BF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 83,
+      "bank_end": 83
+    },
+    {
+      "start": "0x150900",
+      "end": "0x15098F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 84,
+      "bank_end": 84
+    },
+    {
+      "start": "0x150CC0",
+      "end": "0x150D4F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 84,
+      "bank_end": 84
+    },
+    {
+      "start": "0x1580E0",
+      "end": "0x15816F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 86,
+      "bank_end": 86
+    },
+    {
+      "start": "0x1591C0",
+      "end": "0x15924F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 86,
+      "bank_end": 86
+    },
+    {
+      "start": "0x15E8A0",
+      "end": "0x15E92F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 87,
+      "bank_end": 87
+    },
+    {
+      "start": "0x164920",
+      "end": "0x1649AF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 89,
+      "bank_end": 89
+    },
+    {
+      "start": "0x1687C0",
+      "end": "0x16884F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 90,
+      "bank_end": 90
+    },
+    {
+      "start": "0x169AB0",
+      "end": "0x169B3F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 90,
+      "bank_end": 90
+    },
+    {
+      "start": "0x16CCB0",
+      "end": "0x16CD3F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 91,
+      "bank_end": 91
+    },
+    {
+      "start": "0x16E650",
+      "end": "0x16E6DF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 91,
+      "bank_end": 91
+    },
+    {
+      "start": "0x174130",
+      "end": "0x1741BF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 93,
+      "bank_end": 93
+    },
+    {
+      "start": "0x174630",
+      "end": "0x1746BF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 93,
+      "bank_end": 93
+    },
+    {
+      "start": "0x1782A0",
+      "end": "0x17832F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 94,
+      "bank_end": 94
+    },
+    {
+      "start": "0x178480",
+      "end": "0x17850F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 94,
+      "bank_end": 94
+    },
+    {
+      "start": "0x179B40",
+      "end": "0x179BCF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 94,
+      "bank_end": 94
+    },
+    {
+      "start": "0x17CC40",
+      "end": "0x17CCCF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 95,
+      "bank_end": 95
+    },
+    {
+      "start": "0x185070",
+      "end": "0x1850FF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 97,
+      "bank_end": 97
+    },
+    {
+      "start": "0x188630",
+      "end": "0x1886BF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 98,
+      "bank_end": 98
+    },
+    {
+      "start": "0x190080",
+      "end": "0x19010F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 100,
+      "bank_end": 100
+    },
+    {
+      "start": "0x190120",
+      "end": "0x1901AF",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 100,
+      "bank_end": 100
+    },
+    {
+      "start": "0x1908F0",
+      "end": "0x19097F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 100,
+      "bank_end": 100
+    },
+    {
+      "start": "0x1989F0",
+      "end": "0x198A7F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 102,
+      "bank_end": 102
+    },
+    {
+      "start": "0x1EC1D0",
+      "end": "0x1EC25F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 123,
+      "bank_end": 123
+    },
+    {
+      "start": "0x1EC2A0",
+      "end": "0x1EC32F",
+      "bytes": 144,
+      "tiles": 9,
+      "bank_start": 123,
+      "bank_end": 123
+    },
+    {
+      "start": "0x003D40",
+      "end": "0x003DBF",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 0,
+      "bank_end": 0
+    },
+    {
+      "start": "0x01B0A0",
+      "end": "0x01B11F",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 6,
+      "bank_end": 6
+    },
+    {
+      "start": "0x020B30",
+      "end": "0x020BAF",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 8,
+      "bank_end": 8
+    },
+    {
+      "start": "0x022EF0",
+      "end": "0x022F6F",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 8,
+      "bank_end": 8
+    },
+    {
+      "start": "0x0282C0",
+      "end": "0x02833F",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 10,
+      "bank_end": 10
+    },
+    {
+      "start": "0x0285C0",
+      "end": "0x02863F",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 10,
+      "bank_end": 10
+    },
+    {
+      "start": "0x030EC0",
+      "end": "0x030F3F",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 12,
+      "bank_end": 12
+    },
+    {
+      "start": "0x031240",
+      "end": "0x0312BF",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 12,
+      "bank_end": 12
+    },
+    {
+      "start": "0x031B10",
+      "end": "0x031B8F",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 12,
+      "bank_end": 12
+    },
+    {
+      "start": "0x0335D0",
+      "end": "0x03364F",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 12,
+      "bank_end": 12
+    },
+    {
+      "start": "0x03A320",
+      "end": "0x03A39F",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 14,
+      "bank_end": 14
+    },
+    {
+      "start": "0x03AC30",
+      "end": "0x03ACAF",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 14,
+      "bank_end": 14
+    },
+    {
+      "start": "0x0426E0",
+      "end": "0x04275F",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 16,
+      "bank_end": 16
+    },
+    {
+      "start": "0x042CC0",
+      "end": "0x042D3F",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 16,
+      "bank_end": 16
+    },
+    {
+      "start": "0x0431C0",
+      "end": "0x04323F",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 16,
+      "bank_end": 16
+    },
+    {
+      "start": "0x051710",
+      "end": "0x05178F",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 20,
+      "bank_end": 20
+    },
+    {
+      "start": "0x055FD0",
+      "end": "0x05604F",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 21,
+      "bank_end": 21
+    },
+    {
+      "start": "0x056070",
+      "end": "0x0560EF",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 21,
+      "bank_end": 21
+    },
+    {
+      "start": "0x05EA10",
+      "end": "0x05EA8F",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 23,
+      "bank_end": 23
+    },
+    {
+      "start": "0x064DF0",
+      "end": "0x064E6F",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 25,
+      "bank_end": 25
+    },
+    {
+      "start": "0x065C20",
+      "end": "0x065C9F",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 25,
+      "bank_end": 25
+    },
+    {
+      "start": "0x066F20",
+      "end": "0x066F9F",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 25,
+      "bank_end": 25
+    },
+    {
+      "start": "0x070030",
+      "end": "0x0700AF",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 28,
+      "bank_end": 28
+    },
+    {
+      "start": "0x071590",
+      "end": "0x07160F",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 28,
+      "bank_end": 28
+    },
+    {
+      "start": "0x071A40",
+      "end": "0x071ABF",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 28,
+      "bank_end": 28
+    },
+    {
+      "start": "0x074060",
+      "end": "0x0740DF",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 29,
+      "bank_end": 29
+    },
+    {
+      "start": "0x077180",
+      "end": "0x0771FF",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 29,
+      "bank_end": 29
+    },
+    {
+      "start": "0x07B650",
+      "end": "0x07B6CF",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 30,
+      "bank_end": 30
+    },
+    {
+      "start": "0x07C750",
+      "end": "0x07C7CF",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 31,
+      "bank_end": 31
+    },
+    {
+      "start": "0x080170",
+      "end": "0x0801EF",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 32,
+      "bank_end": 32
+    },
+    {
+      "start": "0x084A30",
+      "end": "0x084AAF",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 33,
+      "bank_end": 33
+    },
+    {
+      "start": "0x086390",
+      "end": "0x08640F",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 33,
+      "bank_end": 33
+    },
+    {
+      "start": "0x087050",
+      "end": "0x0870CF",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 33,
+      "bank_end": 33
+    },
+    {
+      "start": "0x092E80",
+      "end": "0x092EFF",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 36,
+      "bank_end": 36
+    },
+    {
+      "start": "0x093B10",
+      "end": "0x093B8F",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 36,
+      "bank_end": 36
+    },
+    {
+      "start": "0x095030",
+      "end": "0x0950AF",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 37,
+      "bank_end": 37
+    },
+    {
+      "start": "0x0952A0",
+      "end": "0x09531F",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 37,
+      "bank_end": 37
+    },
+    {
+      "start": "0x0968E0",
+      "end": "0x09695F",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 37,
+      "bank_end": 37
+    },
+    {
+      "start": "0x098380",
+      "end": "0x0983FF",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 38,
+      "bank_end": 38
+    },
+    {
+      "start": "0x0B9A30",
+      "end": "0x0B9AAF",
+      "bytes": 128,
+      "tiles": 8,
+      "bank_start": 46,
+      "bank_end": 46
+    }
+  ],
+  "total_ranges": 570
+}

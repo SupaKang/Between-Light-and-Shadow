@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "artifact": {
+    "id": "artifact_001",
+    "name_ko": "TODO",
+    "origin": "VERIFY",
+    "passive": {},
+    "drawback": {},
+    "destroyable": true
+  }
+}

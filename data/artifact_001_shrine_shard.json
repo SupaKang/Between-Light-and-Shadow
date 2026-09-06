@@ -1,0 +1,8 @@
+{
+  "id": "artifact_001",
+  "name_ko": "부서진 서낭 조각",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "passive": {"attack_bonus": 3, "defense_bonus": 0, "fear_resistance": 0.1},
+  "drawback": {"hp_loss_per_battle": 2},
+  "destroyable": true
+}

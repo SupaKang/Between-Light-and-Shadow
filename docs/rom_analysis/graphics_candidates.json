@@ -1,0 +1,607 @@
+{
+  "policy": "read_only_graphics_shape_candidates_no_export",
+  "tile_bytes": 16,
+  "candidate_count": 59397,
+  "top_candidates": [
+    {
+      "offset": "0x098630",
+      "score": 0.78,
+      "bank": 38
+    },
+    {
+      "offset": "0x087A10",
+      "score": 0.78,
+      "bank": 33
+    },
+    {
+      "offset": "0x087450",
+      "score": 0.78,
+      "bank": 33
+    },
+    {
+      "offset": "0x077F90",
+      "score": 0.78,
+      "bank": 29
+    },
+    {
+      "offset": "0x058610",
+      "score": 0.78,
+      "bank": 22
+    },
+    {
+      "offset": "0x087390",
+      "score": 0.7794,
+      "bank": 33
+    },
+    {
+      "offset": "0x1FC410",
+      "score": 0.7788,
+      "bank": 127
+    },
+    {
+      "offset": "0x1FC1F0",
+      "score": 0.7788,
+      "bank": 127
+    },
+    {
+      "offset": "0x1FC180",
+      "score": 0.7788,
+      "bank": 127
+    },
+    {
+      "offset": "0x1FC030",
+      "score": 0.7788,
+      "bank": 127
+    },
+    {
+      "offset": "0x1EC280",
+      "score": 0.7788,
+      "bank": 123
+    },
+    {
+      "offset": "0x1EC1C0",
+      "score": 0.7788,
+      "bank": 123
+    },
+    {
+      "offset": "0x1C5D50",
+      "score": 0.7788,
+      "bank": 113
+    },
+    {
+      "offset": "0x1C5570",
+      "score": 0.7788,
+      "bank": 113
+    },
+    {
+      "offset": "0x1C53B0",
+      "score": 0.7788,
+      "bank": 113
+    },
+    {
+      "offset": "0x1C5190",
+      "score": 0.7788,
+      "bank": 113
+    },
+    {
+      "offset": "0x1C4950",
+      "score": 0.7788,
+      "bank": 113
+    },
+    {
+      "offset": "0x1C1240",
+      "score": 0.7788,
+      "bank": 112
+    },
+    {
+      "offset": "0x1C08B0",
+      "score": 0.7788,
+      "bank": 112
+    },
+    {
+      "offset": "0x1C02E0",
+      "score": 0.7788,
+      "bank": 112
+    },
+    {
+      "offset": "0x1C02D0",
+      "score": 0.7788,
+      "bank": 112
+    },
+    {
+      "offset": "0x1C0290",
+      "score": 0.7788,
+      "bank": 112
+    },
+    {
+      "offset": "0x1C0220",
+      "score": 0.7788,
+      "bank": 112
+    },
+    {
+      "offset": "0x1C00A0",
+      "score": 0.7788,
+      "bank": 112
+    },
+    {
+      "offset": "0x1B9800",
+      "score": 0.7788,
+      "bank": 110
+    },
+    {
+      "offset": "0x1B97B0",
+      "score": 0.7788,
+      "bank": 110
+    },
+    {
+      "offset": "0x1B96D0",
+      "score": 0.7788,
+      "bank": 110
+    },
+    {
+      "offset": "0x1B9620",
+      "score": 0.7788,
+      "bank": 110
+    },
+    {
+      "offset": "0x1B93F0",
+      "score": 0.7788,
+      "bank": 110
+    },
+    {
+      "offset": "0x1B93E0",
+      "score": 0.7788,
+      "bank": 110
+    },
+    {
+      "offset": "0x1B9390",
+      "score": 0.7788,
+      "bank": 110
+    },
+    {
+      "offset": "0x1B9280",
+      "score": 0.7788,
+      "bank": 110
+    },
+    {
+      "offset": "0x1B91B0",
+      "score": 0.7788,
+      "bank": 110
+    },
+    {
+      "offset": "0x1B9160",
+      "score": 0.7788,
+      "bank": 110
+    },
+    {
+      "offset": "0x1B90B0",
+      "score": 0.7788,
+      "bank": 110
+    },
+    {
+      "offset": "0x1B9090",
+      "score": 0.7788,
+      "bank": 110
+    },
+    {
+      "offset": "0x1B9080",
+      "score": 0.7788,
+      "bank": 110
+    },
+    {
+      "offset": "0x1B9040",
+      "score": 0.7788,
+      "bank": 110
+    },
+    {
+      "offset": "0x1B8EE0",
+      "score": 0.7788,
+      "bank": 110
+    },
+    {
+      "offset": "0x1B8D40",
+      "score": 0.7788,
+      "bank": 110
+    },
+    {
+      "offset": "0x1B8B10",
+      "score": 0.7788,
+      "bank": 110
+    },
+    {
+      "offset": "0x1B89A0",
+      "score": 0.7788,
+      "bank": 110
+    },
+    {
+      "offset": "0x1B8990",
+      "score": 0.7788,
+      "bank": 110
+    },
+    {
+      "offset": "0x1B8760",
+      "score": 0.7788,
+      "bank": 110
+    },
+    {
+      "offset": "0x1B8730",
+      "score": 0.7788,
+      "bank": 110
+    },
+    {
+      "offset": "0x1B8720",
+      "score": 0.7788,
+      "bank": 110
+    },
+    {
+      "offset": "0x1B83C0",
+      "score": 0.7788,
+      "bank": 110
+    },
+    {
+      "offset": "0x1B8200",
+      "score": 0.7788,
+      "bank": 110
+    },
+    {
+      "offset": "0x1B72B0",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B7270",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B6F30",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B6E80",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B6C50",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B6C40",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B6BE0",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B6920",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B6800",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B67D0",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B66C0",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B6380",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B6360",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B6320",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B6250",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B6090",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B6050",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B5DF0",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B5D60",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B5D00",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B5B50",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B58B0",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B5810",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B54F0",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B5340",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B5220",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B5070",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B5050",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B4F40",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B4F10",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B4E70",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B4E30",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B4D40",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B4B40",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B4860",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B47D0",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B4710",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B46E0",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B4440",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B4420",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B4150",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B40B0",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B4060",
+      "score": 0.7788,
+      "bank": 109
+    },
+    {
+      "offset": "0x1B1ED0",
+      "score": 0.7788,
+      "bank": 108
+    },
+    {
+      "offset": "0x1B1EA0",
+      "score": 0.7788,
+      "bank": 108
+    },
+    {
+      "offset": "0x1B1DF0",
+      "score": 0.7788,
+      "bank": 108
+    },
+    {
+      "offset": "0x1B1DB0",
+      "score": 0.7788,
+      "bank": 108
+    },
+    {
+      "offset": "0x1B1CF0",
+      "score": 0.7788,
+      "bank": 108
+    },
+    {
+      "offset": "0x1B1CA0",
+      "score": 0.7788,
+      "bank": 108
+    },
+    {
+      "offset": "0x1B1C30",
+      "score": 0.7788,
+      "bank": 108
+    },
+    {
+      "offset": "0x1B1BA0",
+      "score": 0.7788,
+      "bank": 108
+    },
+    {
+      "offset": "0x1B1B30",
+      "score": 0.7788,
+      "bank": 108
+    },
+    {
+      "offset": "0x1B1AB0",
+      "score": 0.7788,
+      "bank": 108
+    },
+    {
+      "offset": "0x1B19F0",
+      "score": 0.7788,
+      "bank": 108
+    },
+    {
+      "offset": "0x1B1870",
+      "score": 0.7788,
+      "bank": 108
+    },
+    {
+      "offset": "0x1B17A0",
+      "score": 0.7788,
+      "bank": 108
+    },
+    {
+      "offset": "0x1B16B0",
+      "score": 0.7788,
+      "bank": 108
+    },
+    {
+      "offset": "0x1B0AB0",
+      "score": 0.7788,
+      "bank": 108
+    },
+    {
+      "offset": "0x1B0950",
+      "score": 0.7788,
+      "bank": 108
+    },
+    {
+      "offset": "0x1B08B0",
+      "score": 0.7788,
+      "bank": 108
+    },
+    {
+      "offset": "0x1B0860",
+      "score": 0.7788,
+      "bank": 108
+    },
+    {
+      "offset": "0x1B07D0",
+      "score": 0.7788,
+      "bank": 108
+    },
+    {
+      "offset": "0x1B0720",
+      "score": 0.7788,
+      "bank": 108
+    },
+    {
+      "offset": "0x1B0710",
+      "score": 0.7788,
+      "bank": 108
+    },
+    {
+      "offset": "0x1B0690",
+      "score": 0.7788,
+      "bank": 108
+    },
+    {
+      "offset": "0x1B05E0",
+      "score": 0.7788,
+      "bank": 108
+    },
+    {
+      "offset": "0x1B0580",
+      "score": 0.7788,
+      "bank": 108
+    },
+    {
+      "offset": "0x1B0440",
+      "score": 0.7788,
+      "bank": 108
+    },
+    {
+      "offset": "0x1B03D0",
+      "score": 0.7788,
+      "bank": 108
+    },
+    {
+      "offset": "0x1B01E0",
+      "score": 0.7788,
+      "bank": 108
+    },
+    {
+      "offset": "0x1B01C0",
+      "score": 0.7788,
+      "bank": 108
+    },
+    {
+      "offset": "0x1B0080",
+      "score": 0.7788,
+      "bank": 108
+    }
+  ]
+}

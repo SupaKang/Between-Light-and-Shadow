@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "region_id": "village_edge",
+  "encounter_step_interval": 12,
+  "encounters": [
+    {"yokai_id": "yokai_001", "weight": 100, "min_level": 1, "max_level": 3}
+  ]
+}

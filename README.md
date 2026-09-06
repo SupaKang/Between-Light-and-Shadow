@@ -1,10 +1,20 @@
 # 108:음양견문록 (Between Light and Shadow)
 
-> **1.44MB 플로피 디스크 용량 제한**을 고려하여 설계된 초소형 C++17 Windows 독립 실행 조선 민속 턴제 요괴 수집 RPG.
+> 1.44MB 플로피 디스크 용량 제한을 해제하고 Full HD 품질을 우선하는 C++17 Windows 독립 실행 조선 민속 턴제 요괴 수집 RPG.
 
 ---
 
 ## 📌 프로젝트 개요
+
+현재는 Phase 1 기술 스파이크를 진행 중이며, 조작 기준은 `docs/tech/CONTROL_REFERENCE.md`에 정리되어 있습니다.
+
+### 기본 데이터 검증
+
+```powershell
+python tools\validate_data.py
+```
+
+정상 결과는 모든 JSON 콘텐츠 파일의 필수 필드·범위·참조 무결성을 통과했다는 뜻입니다.
 
 | 항목 | 명세 |
 | :--- | :--- |
@@ -12,9 +22,9 @@
 | **장르** | 조선시대 민속 판타지 턴제 요괴 수집 RPG |
 | **대상 플랫폼** | Windows (x64 / x86 Standalone Executable) |
 | **기술 스택** | C++17, Native Win32 API, Software Framebuffer / Direct2D |
-| **해상도** | 320 x 180 (16:9 정수 스케일링 지원) |
-| **타일 규격** | 16 x 16 Pixel Tilemap |
-| **용량 한계** | **최대 1.44MB (1,474,560 Bytes)** 이하 독립 실행 파일 |
+| **해상도** | 960 x 540 논리 캔버스 → 1920 x 1080 출력 |
+| **타일 규격** | 32 x 32 Pixel Tilemap |
+| **용량 정책** | 고정 제한 없음. Release 빌드 크기 측정 및 회귀 관리 |
 | **의존성** | 무설치, 노 서버, 노 브라우저, 외부 대용량 런타임 의존성 0% |
 
 ---
