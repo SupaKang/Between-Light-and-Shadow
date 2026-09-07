@@ -39,6 +39,11 @@ for path in sorted(root.glob("*.json")):
         for key in ("id", "name_ko", "origin", "passive", "drawback", "destroyable"):
             if key not in obj: errors.append(f"{path}: missing {key}")
         if not isinstance(obj.get("destroyable"), bool): errors.append(f"{path}: destroyable must be boolean")
+    if path.name == "battle_commands.json":
+        ids = [c.get("id") for c in obj.get("commands", [])]
+        if len(ids) != len(set(ids)): errors.append(f"{path}: duplicate command id")
+        for command in obj.get("commands", []):
+            if not command.get("id") or not command.get("label_ko"): errors.append(f"{path}: incomplete command")
 if errors:
     print("[FAIL]"); print("\n".join(errors)); sys.exit(1)
 print(f"[PASS] validated {len(list(root.glob('*.json')))} JSON data files")

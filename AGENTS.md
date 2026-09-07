@@ -4,7 +4,7 @@
 108:음양견문록 (108: Yin-Yang Chronicle — 조선시대 민속 판타지 턴제 수집 RPG)
 
 ## Primary Goal
-Windows 독립 실행 게임 개발. 1.44MB 제한은 해제되었으며 Full HD 품질과 콘텐츠를 우선한다.
+Windows 독립 실행 게임 개발. Full HD 품질과 콘텐츠를 우선한다.
 
 ## Current Technical Baseline
 - C++17
@@ -95,7 +95,7 @@ Windows 독립 실행 게임 개발. 1.44MB 제한은 해제되었으며 Full HD
 - 기본 입력 처리 (4방향 이동, 확인, 취소)
 - 기본 스프라이트 렌더링
 - C++17 Release 빌드 구성
-- 실행 파일 크기 측정 및 1.44MB 용량 검증 (`docs/tech/TECH_SPIKE.md`)
+- 실행 파일 크기 측정 및 Release 검증 (`docs/tech/TECH_SPIKE.md`)
 
 ### Phase 2 — Battle Prototype
 - 1 vs 1 턴제 전투 엔진
@@ -136,7 +136,7 @@ Windows 독립 실행 게임 개발. 1.44MB 제한은 해제되었으며 Full HD
 
 1. 이 저장소의 `docs/PROJECT_MASTER.md`와 `AGENTS.md`를 먼저 숙지한다.
 2. 현재 프로젝트는 기획 단계에서 실제 개발 단계로 전환하는 단계이다.
-3. 첫 작업은 108종 콘텐츠 구현이 아니라 **Phase 1 Technical Spike (1.44MB 제한 검증)** 이다.
+3. 첫 작업은 108종 콘텐츠 구현이 아니라 **Phase 1 Technical Spike (렌더링·입력·빌드 검증)** 이다.
 4. 작업 순서:
    - 저장소 구조 분석
    - `PROJECT_MASTER.md`와 `AGENTS.md`의 충돌 여부 확인

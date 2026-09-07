@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "commands": [
+    {"id":"fight", "label_ko":"전투", "enabled":true},
+    {"id":"capture", "label_ko":"계약", "enabled":true},
+    {"id":"run", "label_ko":"도주", "enabled":true}
+  ]
+}

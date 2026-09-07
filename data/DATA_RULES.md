@@ -9,3 +9,4 @@
 - 지역별 조우는 `encounter_*.json`으로 분리하고 가중치·레벨 범위를 명시한다.
 - 상태이상 수치는 `status_effects.json`에서 관리하며 핵심 상태 5종을 유지한다.
 - 유물은 패시브와 디버프를 함께 기록하며 `destroyable`이 true인 경우 인벤토리에서 즉시 파괴할 수 있다.
+- 전투 명령 문구와 활성 상태는 `battle_commands.json`에서 관리한다.

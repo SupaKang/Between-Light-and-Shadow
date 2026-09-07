@@ -1,6 +1,6 @@
 # 108:음양견문록 (Between Light and Shadow)
 
-> 1.44MB 플로피 디스크 용량 제한을 해제하고 Full HD 품질을 우선하는 C++17 Windows 독립 실행 조선 민속 턴제 요괴 수집 RPG.
+> Full HD 품질을 우선하는 C++17 Windows 독립 실행 조선 민속 턴제 요괴 수집 RPG.
 
 ---
 
@@ -65,7 +65,7 @@ joseon-yokai-rpg/
 │   ├── artifact/             # 유물 시스템 (버프+디버프 및 즉시 파괴)
 │   ├── campaign/             # 음양당 메인 스토리 및 민담 서브퀘스트
 │   ├── ui/                   # 320x180 픽셀 UI 레이아웃
-│   ├── tech/                 # 아키텍처, 1.44MB 용량 예산표, 스파이크 계획
+│   ├── tech/                 # 아키텍처, Release 측정, 스파이크 계획
 │   ├── art/                  # 도트 그래픽 및 오방색 팔레트 규격
 │   └── release/              # 릴리즈 및 패키징 체크리스트
 ├── data/                     # 게임 런타임 데이터 (JSON/바이너리)

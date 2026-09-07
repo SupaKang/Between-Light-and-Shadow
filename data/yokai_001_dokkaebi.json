@@ -5,7 +5,7 @@
   "grade": "I",
   "level": 1,
   "stats": {"hp": 100, "qi": 30, "attack": 12, "defense": 9, "speed": 10},
-  "skills": ["skill_001"],
+  "skills": ["skill_001", "skill_002", "skill_003", "skill_004"],
   "trait": "TODO",
   "status_resistance": {"burn": 0, "freeze": 0, "seal": 0, "paralysis": 0, "fear": 0}
 }
