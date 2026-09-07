@@ -7,6 +7,7 @@
 #include "../src/save_rules.h"
 #include "../src/skill_state.h"
 #include "../src/world_state.h"
+#include "../src/korean_font.h"
 #include <cassert>
 #include <cstring>
 #include <string>
@@ -154,5 +155,21 @@ int main() {
     world.advance_quest();
     assert(world.main_quest_step == 2);
 
+    
+    // 10. Korean Font Engine
+    assert(korean_font::GlyphCount >= 340);
+    assert(korean_font::find_glyph(0xAC00) != nullptr); // '가'
+    assert(korean_font::find_glyph(0xB3C4) != nullptr); // '도'
+    assert(korean_font::find_glyph(0xAE68) != nullptr); // '깨'
+    assert(korean_font::find_glyph(0xBE44) != nullptr); // '비'
+    assert(korean_font::find_glyph(0xFFFF) == nullptr); // Non-existent codepoint
+
+    std::vector<std::uint32_t> test_pixels(100 * 100, 0);
+    korean_font::draw_utf8_text(test_pixels.data(), 100, 100, "도깨비 RPG", 10, 10, 1);
+    bool drawn = false;
+    for (auto px : test_pixels) if (px != 0) { drawn = true; break; }
+    assert(drawn); // Pixel data was rendered
+
     return 0;
+
 }

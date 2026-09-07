@@ -7,7 +7,8 @@ namespace skills {
 struct State {
     static constexpr int MaxSlots = 4;
     int ids[MaxSlots] = {0, 0, 0, 0};
-    char names[MaxSlots][16] = {"STRIKE", "EMBER", "FROST", "SEAL"};
+    char names[MaxSlots][32] = {"STRIKE", "EMBER", "FROST", "SEAL"};
+    char names_ko[MaxSlots][32] = {"기본 공격", "잔불 부적", "서리 숨결", "봉인 문양"};
     int powers[MaxSlots] = {20, 8, 6, 4};
     int qi_costs[MaxSlots] = {0, 0, 0, 0};
     int accuracies[MaxSlots] = {100, 95, 90, 85};
@@ -24,7 +25,7 @@ struct State {
     bool usable(int slot, int qi) const;
     void tick();
     void seal(int slot, int turns);
-    void configure_slot(int slot, int id, const char* name, int power, int qi_cost, int accuracy, status_rules::Kind status, int seal_dur);
+    void configure_slot(int slot, int id, const char* name, int power, int qi_cost, int accuracy, status_rules::Kind status, int seal_dur, const char* name_ko = nullptr);
 };
 
 } // namespace skills

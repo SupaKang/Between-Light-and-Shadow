@@ -11,4 +11,6 @@ Kind on_hit_effect(Kind kind);
 int default_duration(Kind kind);
 const char* name(Kind kind);
 const char* short_tag(Kind kind);
+const char* name_ko(Kind kind);
+const char* short_tag_ko(Kind kind);
 }

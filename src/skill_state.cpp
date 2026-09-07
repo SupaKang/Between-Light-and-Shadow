@@ -21,11 +21,15 @@ void State::seal(int slot, int turns) {
     }
 }
 
-void State::configure_slot(int slot, int id, const char* name, int power, int qi_cost, int accuracy, status_rules::Kind status, int seal_dur) {
+void State::configure_slot(int slot, int id, const char* name, int power, int qi_cost, int accuracy, status_rules::Kind status, int seal_dur, const char* name_ko) {
     if (slot < 0 || slot >= MaxSlots) return;
     ids[slot] = id;
     std::strncpy(names[slot], name, sizeof(names[slot]) - 1);
     names[slot][sizeof(names[slot]) - 1] = '\0';
+    if (name_ko) {
+        std::strncpy(names_ko[slot], name_ko, sizeof(names_ko[slot]) - 1);
+        names_ko[slot][sizeof(names_ko[slot]) - 1] = '\0';
+    }
     powers[slot] = power;
     qi_costs[slot] = qi_cost;
     accuracies[slot] = accuracy;

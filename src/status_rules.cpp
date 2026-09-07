@@ -46,4 +46,24 @@ const char* short_tag(Kind kind) {
         default: return "";
     }
 }
+const char* name_ko(Kind kind) {
+    switch (kind) {
+        case Kind::Burn: return "화상";
+        case Kind::Freeze: return "빙결";
+        case Kind::Seal: return "봉인";
+        case Kind::Paralysis: return "마비";
+        case Kind::Fear: return "공포";
+        default: return "정상";
+    }
+}
+const char* short_tag_ko(Kind kind) {
+    switch (kind) {
+        case Kind::Burn: return "[화상]";
+        case Kind::Freeze: return "[빙결]";
+        case Kind::Seal: return "[봉인]";
+        case Kind::Paralysis: return "[마비]";
+        case Kind::Fear: return "[공포]";
+        default: return "";
+    }
+}
 }
