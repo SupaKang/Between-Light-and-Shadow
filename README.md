@@ -32,7 +32,7 @@ python tools\validate_data.py
 ## 🎮 핵심 게임플레이 루프
 
 ```text
-[16x16 타일 탐험] ➔ [야생 요괴 조우] ➔ [1v1 턴제 전투] ➔ [상태이상/약화]
+[32x32 타일 탐험] ➔ [야생 요괴 조우] ➔ [1v1 턴제 전투] ➔ [상태이상/약화]
          ▲                                                       │
          │                                                       ▼
 [새로운 지역 해금] ◀── [파티 3마리 편성] ◀── [성장 및 승급] ◀── [요괴 계약/포획]
@@ -64,7 +64,7 @@ joseon-yokai-rpg/
 │   ├── growth/               # 레벨(1~50) 및 Ⅰ~Ⅴ 등급 승급 시스템
 │   ├── artifact/             # 유물 시스템 (버프+디버프 및 즉시 파괴)
 │   ├── campaign/             # 음양당 메인 스토리 및 민담 서브퀘스트
-│   ├── ui/                   # 320x180 픽셀 UI 레이아웃
+│   ├── ui/                   # 960x540 논리 좌표 UI 레이아웃
 │   ├── tech/                 # 아키텍처, Release 측정, 스파이크 계획
 │   ├── art/                  # 도트 그래픽 및 오방색 팔레트 규격
 │   └── release/              # 릴리즈 및 패키징 체크리스트
@@ -73,10 +73,10 @@ joseon-yokai-rpg/
 │   ├── skills/               # 기술 및 영력 소모 데이터
 │   ├── artifacts/            # 유물 버프/디버프 데이터
 │   ├── quests/               # 메인/서브 퀘스트 데이터
-│   └── maps/                 # 16x16 타일맵 데이터
+│   └── maps/                 # 32x32 타일맵 데이터
 ├── src/                      # C++17 소스 코드
-│   ├── core/                 # 윈도우, 입력, 320x180 소프트웨어 렌더러
-│   ├── world/                # 타일맵 및 2D 카메라
+│   ├── core/                 # 윈도우, 입력, 960x540 소프트웨어 렌더러
+│   ├── world/                # 32x32 타일맵 및 2D 카메라
 │   ├── battle/               # 턴제 전투 엔진 및 상태이상 처리
 │   ├── data/                 # 데이터 매니저
 │   ├── gameplay/             # 요괴, 파티(3마리), 유물 인벤토리
@@ -110,7 +110,7 @@ cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
 cmake --build build --config Release
 
 # 실행 및 바이너리 용량 확인
-.\build\Release\joseon_yokai_rpg.exe
+.\build\Release\YinYangChronicle.exe
 ```
 
 ---
@@ -118,9 +118,9 @@ cmake --build build --config Release
 ## 🚀 로드맵 (Development Roadmap)
 
 - [x] **Phase 0: Repository Bootstrap** — SSOT 문서 체계 및 디렉토리/스키마 구축
-- [x] **Phase 1: Technical Spike** — 320x180 렌더러, 타일 이동, Release 크기 측정 (87KB / 6.04%)
-- [x] **Phase 2: Battle Prototype** — 1v1 턴제, HP/영력, 4기술, 5종 상태이상, 속도 선공권, 포획 수식 (109KB / 7.57%)
-- [x] **Phase 3: Collection Prototype** — 108종 도감(Codex) UI, 3마리 파티, Lv.1~50 성장 & Ⅰ~Ⅴ 승급, 야생 인카운터 (131KB / 9.10%)
-- [x] **Phase 4: Artifact System** — 8종 양날의 검 유물, 버프/디버프 공존, 즉시 파괴 & 영기 환원 (142KB / 9.86%)
-- [x] **Phase 5: Vertical Slice** — 도선사 주막/북한산/대웅전 3개 맵 전환, NPC 대화/주막 완치, 퀘스트 추적, 챕터 1 음양당 보스전 (169KB / 11.74%)
-- [x] **Phase 6: Full Content** — 108종 요괴 전종 도감, 5개 권역 맵 네트워크, 5개 챕터 음양당 메인 캠페인 & 5개 민담 퀘스트 (207KB / 14.37%)
+- [ ] **Phase 1: Technical Spike** — 960x540 렌더러, 32x32 타일 이동, Windows Release 및 실제 입력·화면 검증
+- [ ] **Phase 2: Battle Prototype** — 1v1 턴제, HP/영력, 4기술, 5종 상태이상, 속도 선공권, 포획 수식
+- [ ] **Phase 3: Collection Prototype** — 108종 도감, 3마리 파티, Lv.1~50 성장 및 Ⅰ~Ⅴ 승급
+- [ ] **Phase 4: Artifact System** — 양날의 검 유물, 버프/디버프 공존, 즉시 파괴
+- [ ] **Phase 5: Vertical Slice** — 1개 지역의 탐험·전투·계약·유물·퀘스트 통합 검증
+- [ ] **Phase 6: Full Content** — 108종 요괴, 전체 지역, 메인 캠페인 및 서브 퀘스트
