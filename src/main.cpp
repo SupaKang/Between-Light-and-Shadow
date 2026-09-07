@@ -33,6 +33,7 @@ bool running = true;
 bool dialogue = false;
 bool battle = false;
 bool menu = false;
+bool is_boss_battle = false;
 int save_slot = 1;
 
 battle::State battle_state;
@@ -46,6 +47,7 @@ int player_qi = 30, player_max_qi = 30;
 int player_attack = 12, player_defense = 9, player_speed = 10;
 int player_level = 1, player_xp = 0;
 
+char enemy_name[64] = "DOKKAEBI";
 int enemy_hp = 80, enemy_max_hp = 80;
 int enemy_attack = 10, enemy_defense = 8, enemy_speed = 8;
 int enemy_level = 1;
@@ -59,32 +61,13 @@ int burn_damage = 3;
 double fear_multiplier = 1.5;
 
 int steps = 0;
-int encounter_interval = 12;
-
+char notice_msg[128] = "EXPLORE DOSEONSA AND SPEAK WITH VILLAGERS";
 char battle_msg[128] = "A WILD DOKKAEBI APPEARED!";
+
 int dialogue_page = 0;
-const char* dialogue_lines[] = {
-    "ANCIENT SHRINE OF THE SPIRIT REALM",
-    "THE YIN-YANG BALANCE IS WAVERING...",
-    "BEWARE THE CORRUPTED ENCOUNTERS AHEAD"
-};
-constexpr int dialogue_line_count = 3;
-
-int player_x = 15, player_y = 8;
-
-bool blocked(int x, int y) {
-    if (x < 2 || x > 27 || y < 3 || y > 14) return true;
-    if (x == 15 && y == 7) return true; // Shrine object collision
-    return false;
-}
-
-bool near_shrine() {
-    return world_state.can_interact(player_x, player_y);
-}
-
-void text(const char* s, int x, int y, int scale = 2, std::uint32_t color = 0xFFE8D8A0u) {
-    font::draw_text(pixels.data(), W, H, s, x, y, scale, color);
-}
+int current_dialogue_count = 0;
+char dialogue_speaker[64] = "";
+char dialogue_pages[4][128];
 
 void fill_rect(int rx, int ry, int rw, int rh, std::uint32_t color) {
     int x0 = (std::max)(0, rx);
@@ -105,46 +88,67 @@ void stroke_rect(int rx, int ry, int rw, int rh, int thick, std::uint32_t color)
     fill_rect(rx + rw - thick, ry, thick, rh, color);
 }
 
+void text(const char* s, int x, int y, int scale = 2, std::uint32_t color = 0xFFE8D8A0u) {
+    font::draw_text(pixels.data(), W, H, s, x, y, scale, color);
+}
+
 struct SaveData {
     std::uint32_t magic, version;
     int x, y, hp, qi, level, xp, party, ids[3];
     std::uint8_t contracted, artifact, shrine_seen;
+    int region_id, quest_step;
     std::uint32_t checksum;
 };
 
-std::string slot_file() {
-    return "save_slot_" + std::to_string(save_slot) + ".sav";
+std::string slot_file(int slot) {
+    return "save_slot_" + std::to_string(slot) + ".sav";
 }
 
-void save_game() {
+bool inspect_slot(int slot, SaveData& out_s) {
+    std::ifstream f(slot_file(slot), std::ios::binary);
+    if (!f.is_open()) return false;
+    if (f.read(reinterpret_cast<char*>(&out_s), sizeof(out_s)) &&
+        out_s.magic == save_rules::Magic &&
+        out_s.version == save_rules::Version) {
+        std::uint32_t expected = save_rules::checksum(
+            out_s.version, out_s.x, out_s.y, out_s.hp, out_s.qi, out_s.level, out_s.xp,
+            out_s.party, out_s.ids, out_s.contracted != 0, out_s.artifact != 0, out_s.shrine_seen != 0,
+            out_s.region_id, out_s.quest_step
+        );
+        return out_s.checksum == expected;
+    }
+    return false;
+}
+
+void save_game(int slot) {
     SaveData s{
         save_rules::Magic, save_rules::Version,
-        player_x, player_y, player_hp, player_qi, player_level, player_xp,
+        world_state.player_x, world_state.player_y, player_hp, player_qi, player_level, player_xp,
         collection_state.party_count,
         {collection_state.party_ids[0], collection_state.party_ids[1], collection_state.party_ids[2]},
         static_cast<std::uint8_t>(collection_state.contains(1)),
         static_cast<std::uint8_t>(artifact_owned),
         static_cast<std::uint8_t>(world_state.shrine_event_seen),
+        world_state.region_id, world_state.main_quest_step,
         0
     };
     s.checksum = save_rules::checksum(
         s.version, s.x, s.y, s.hp, s.qi, s.level, s.xp, s.party, s.ids,
-        s.contracted != 0, s.artifact != 0, s.shrine_seen != 0
+        s.contracted != 0, s.artifact != 0, s.shrine_seen != 0,
+        s.region_id, s.quest_step
     );
-    std::ofstream f(slot_file(), std::ios::binary);
+    std::ofstream f(slot_file(slot), std::ios::binary);
     f.write(reinterpret_cast<const char*>(&s), sizeof(s));
+    std::snprintf(notice_msg, sizeof(notice_msg), "SAVED PROGRESS TO SLOT %d", slot);
 }
 
-void load_game() {
+bool load_game(int slot) {
     SaveData s{};
-    std::ifstream f(slot_file(), std::ios::binary);
-    if (f.read(reinterpret_cast<char*>(&s), sizeof(s)) &&
-        s.magic == save_rules::Magic &&
-        s.version == save_rules::Version &&
-        s.checksum == save_rules::checksum(s.version, s.x, s.y, s.hp, s.qi, s.level, s.xp, s.party, s.ids, s.contracted != 0, s.artifact != 0, s.shrine_seen != 0) &&
-        s.x >= 0 && s.x < W / TILE && s.y >= 0 && s.y < H / TILE) {
-        player_x = s.x;
-        player_y = s.y;
+    if (inspect_slot(slot, s)) {
+        world_state.player_x = s.x;
+        world_state.player_y = s.y;
+        world_state.region_id = s.region_id;
+        world_state.main_quest_step = s.quest_step;
         player_hp = s.hp;
         player_qi = s.qi;
         player_level = s.level;
@@ -154,27 +158,67 @@ void load_game() {
         world_state.shrine_event_seen = (s.shrine_seen != 0);
         if (s.contracted) collection_state.discover(1);
         artifact_owned = (s.artifact != 0);
+        std::snprintf(notice_msg, sizeof(notice_msg), "LOADED PROGRESS FROM SLOT %d", slot);
+        return true;
+    }
+    std::snprintf(notice_msg, sizeof(notice_msg), "SLOT %d IS EMPTY OR CORRUPTED", slot);
+    return false;
+}
+
+void trigger_dialogue(const char* speaker, const std::vector<std::string>& lines) {
+    dialogue = true;
+    dialogue_page = 0;
+    current_dialogue_count = static_cast<int>(lines.size());
+    std::strncpy(dialogue_speaker, speaker, sizeof(dialogue_speaker) - 1);
+    for (int i = 0; i < current_dialogue_count && i < 4; ++i) {
+        std::strncpy(dialogue_pages[i], lines[i].c_str(), sizeof(dialogue_pages[i]) - 1);
     }
 }
 
-void begin_battle() {
+void begin_battle(bool boss = false) {
     battle = true;
+    is_boss_battle = boss;
     battle_state.reset();
     battle_state.active = true;
-    battle_state.enemy_level = enemy_level;
-    enemy_max_hp = 80 + enemy_level * 5;
-    enemy_hp = enemy_max_hp;
-    enemy_turns = 0;
-    enemy_status = Status::None;
-    enemy_status_turns = 0;
-    battle_command = battle::Command::Skill1;
-    std::snprintf(battle_msg, sizeof(battle_msg), "A WILD DOKKAEBI APPEARED! CHOOSE ACTION");
+
+    if (boss) {
+        std::strncpy(enemy_name, "CORRUPT MONK MYOGAK", sizeof(enemy_name));
+        enemy_level = 5;
+        enemy_max_hp = 120;
+        enemy_hp = 120;
+        enemy_attack = 16;
+        enemy_defense = 12;
+        enemy_speed = 12;
+        enemy_turns = 0;
+        enemy_status = Status::None;
+        enemy_status_turns = 0;
+        battle_command = battle::Command::Skill1;
+        std::snprintf(battle_msg, sizeof(battle_msg), "BOSS BATTLE: CORRUPT MONK MYOGAK ENGAGES!");
+    } else {
+        std::strncpy(enemy_name, "DOKKAEBI", sizeof(enemy_name));
+        enemy_level = 1 + (world_state.region_id == 2 ? 1 : 0);
+        enemy_max_hp = 80 + enemy_level * 5;
+        enemy_hp = enemy_max_hp;
+        enemy_attack = 10 + enemy_level * 2;
+        enemy_defense = 8 + enemy_level;
+        enemy_speed = 8 + enemy_level;
+        enemy_turns = 0;
+        enemy_status = Status::None;
+        enemy_status_turns = 0;
+        battle_command = battle::Command::Skill1;
+        std::snprintf(battle_msg, sizeof(battle_msg), "A WILD DOKKAEBI APPEARED! CHOOSE ACTION");
+    }
 }
 
 void finish_battle(bool victory) {
     battle = false;
     battle_state.active = false;
     if (victory) {
+        if (is_boss_battle) {
+            world_state.main_quest_step = 2;
+            world_state.boss_defeated = true;
+            std::snprintf(notice_msg, sizeof(notice_msg), "CHAPTER 1 CLEAR! DOKKAEBI SECT QUELLED!");
+        }
         player_xp += enemy_level * 25;
         if (player_xp >= player_level * 100 && player_level < 50) {
             player_xp -= player_level * 100;
@@ -187,6 +231,7 @@ void finish_battle(bool victory) {
             player_qi = player_max_qi;
         }
     }
+    is_boss_battle = false;
 }
 
 void init_game_data() {
@@ -228,7 +273,6 @@ void init_game_data() {
     // 3. Load Encounters
     const std::string enc_raw = data::Registry::load_text("data/encounter_village_edge.json");
     if (!enc_raw.empty()) {
-        encounter_interval = data::Registry::integer(enc_raw, "encounter_step_interval", encounter_interval);
         enemy_level = data::Registry::integer(enc_raw, "min_level", enemy_level);
         enemy_max_hp = 80 + enemy_level * 5;
         enemy_hp = enemy_max_hp;
@@ -249,35 +293,90 @@ void init_game_data() {
         fear_multiplier = data::Registry::number(stat_raw, "damage_taken_multiplier", fear_multiplier);
     }
 
-    // Initialize player party with 1 Dokkaebi ally
     collection_state.add_contract(1);
 }
 
 void render_overworld() {
-    // 1. Terrain Tiles (32x32)
+    int cur_map = world_state.region_id;
+
+    // 1. Terrain Tiles (32x32) based on Map
     for (int ty = 0; ty < H / TILE; ++ty) {
         for (int tx = 0; tx < W / TILE; ++tx) {
-            bool path = (tx >= 13 && tx <= 17) || (ty >= 7 && ty <= 9);
-            std::uint32_t c = path ? 0xFF5D7A4Eu : 0xFF2A452Eu;
+            std::uint32_t c = 0xFF2A452Eu; // Default Grass
+            if (cur_map == 1) { // Village Edge
+                bool path = (tx >= 13 && tx <= 16) || (ty >= 6 && ty <= 8);
+                c = path ? 0xFF6B8250u : 0xFF2F4F35u;
+            } else if (cur_map == 2) { // Mountain Pass
+                bool path = (tx >= 12 && tx <= 17) && (ty >= 2 && ty <= 14);
+                c = path ? 0xFF4A443Cu : 0xFF2A2E28u;
+            } else if (cur_map == 3) { // Daewoongjeon Temple
+                bool courtyard = (tx >= 6 && tx <= 23 && ty >= 5 && ty <= 13);
+                c = courtyard ? 0xFF4A4E54u : 0xFF22262Cu;
+            }
             if ((tx + ty) % 2 == 1) c += 0x00040404u;
             fill_rect(tx * TILE, ty * TILE, TILE, TILE, c);
         }
     }
 
-    // 2. Shrine Monument at (15, 7)
-    fill_rect(15 * TILE + 4, 7 * TILE + 4, 24, 24, 0xFF8A5D3Bu);
-    fill_rect(15 * TILE + 8, 7 * TILE, 16, 6, 0xFFD9C47Au);
-    stroke_rect(15 * TILE + 2, 7 * TILE + 2, 28, 28, 2, 0xFFE8D8A0u);
+    // 2. Map-Specific Landmark Objects & NPCs
+    if (cur_map == 1) {
+        // Tavern House (x: 6..10, y: 4..5)
+        fill_rect(6 * TILE, 4 * TILE, 5 * TILE, 2 * TILE, 0xFF6B4226u);
+        stroke_rect(6 * TILE, 4 * TILE, 5 * TILE, 2 * TILE, 2, 0xFFD9C47Au);
+        text("TAVERN", 6 * TILE + 8, 4 * TILE + 10, 2, 0xFFFFD700u);
+
+        // Tavern Keeper NPC at (8, 6)
+        fill_rect(8 * TILE + 8, 6 * TILE + 4, 16, 24, 0xFFB84A39u);
+        text("JUMO", 8 * TILE, 6 * TILE - 12, 1, 0xFFFFFFFFu);
+
+        // Ancient Shrine at (20, 7)
+        fill_rect(20 * TILE + 4, 7 * TILE + 4, 24, 24, 0xFF8A5D3Bu);
+        fill_rect(20 * TILE + 8, 7 * TILE, 16, 6, 0xFFD9C47Au);
+        stroke_rect(20 * TILE + 2, 7 * TILE + 2, 28, 28, 2, 0xFFE8D8A0u);
+        text("SHRINE", 20 * TILE - 6, 7 * TILE - 12, 1, 0xFFE8D8A0u);
+
+        // North Gate to Mountain Pass
+        stroke_rect(13 * TILE, 2 * TILE, 4 * TILE, 8, 2, 0xFFFFD700u);
+        text("NORTH PASS ^", 13 * TILE, 2 * TILE + 12, 1, 0xFFFFD700u);
+    } else if (cur_map == 2) {
+        // Mountain Pass Signpost at (13, 8)
+        fill_rect(13 * TILE + 12, 8 * TILE + 4, 8, 24, 0xFF8A5D3Bu);
+        fill_rect(13 * TILE + 4, 8 * TILE + 2, 24, 12, 0xFFD9C47Au);
+        text("SIGN", 13 * TILE + 4, 8 * TILE - 10, 1, 0xFFFFFFFFu);
+
+        // Giant Boulder at (14, 8)
+        fill_rect(14 * TILE + 2, 8 * TILE + 2, 28, 28, 0xFF606468u);
+
+        // North & South Gates
+        text("TEMPLE GROUNDS ^", 12 * TILE, 2 * TILE + 12, 1, 0xFFFFD700u);
+        text("VILLAGE EDGE v", 13 * TILE, 14 * TILE, 1, 0xFFFFD700u);
+    } else if (cur_map == 3) {
+        // Temple Hall (x: 8..21, y: 3..5)
+        fill_rect(8 * TILE, 3 * TILE, 14 * TILE, 3 * TILE, 0xFF7A2020u);
+        stroke_rect(8 * TILE, 3 * TILE, 14 * TILE, 3 * TILE, 3, 0xFFFFD700u);
+        text("DAEWOONGJEON MAIN TEMPLE", 9 * TILE, 3 * TILE + 16, 2, 0xFFFFD700u);
+
+        // Boss Corrupt Monk Myogak at (15, 6)
+        if (!world_state.boss_defeated) {
+            fill_rect(15 * TILE + 6, 6 * TILE + 2, 20, 26, 0xFF3D2054u);
+            text("MYOGAK (BOSS)", 14 * TILE, 6 * TILE - 14, 1, 0xFFFF5555u);
+        } else {
+            text("[PURIFIED]", 14 * TILE + 6, 6 * TILE + 8, 1, 0xFF7DDA72u);
+        }
+
+        // South Gate
+        text("MOUNTAIN PASS v", 13 * TILE, 14 * TILE, 1, 0xFFFFD700u);
+    }
 
     // 3. Player Sprite (32x32 Exorcist Traveler)
-    int px = player_x * TILE;
-    int py = player_y * TILE;
-    fill_rect(px + 10, py + 2, 12, 4, 0xFF101410u);  // Gat (Hat) brim
+    int px = world_state.player_x * TILE;
+    int py = world_state.player_y * TILE;
+    fill_rect(px + 10, py + 2, 12, 4, 0xFF101410u);  // Gat brim
     fill_rect(px + 12, py + 6, 8, 4, 0xFF282C28u);   // Hat top
     fill_rect(px + 11, py + 10, 10, 8, 0xFFF0D4B2u); // Face
     fill_rect(px + 13, py + 13, 2, 2, 0xFF101010u);  // Eye L
     fill_rect(px + 17, py + 13, 2, 2, 0xFF101010u);  // Eye R
-    fill_rect(px + 9, py + 18, 14, 12, 0xFFD8D2C2u); // Hanbok Robe
+    fill_rect(px + 9, py + 18, 14, 12, 0xFFD8D2C2u); // Hanbok
     fill_rect(px + 12, py + 20, 8, 3, 0xFF3D5A80u);  // Belt
 
     // 4. Top HUD Bar
@@ -286,22 +385,22 @@ void render_overworld() {
 
     char hud_buf[128];
     std::snprintf(hud_buf, sizeof(hud_buf), "HP:%d/%d", player_hp, player_max_hp);
-    text(hud_buf, 20, 10, 2, 0xFF7DDA72u);
-    fill_rect(140, 12, 120, 10, 0xFF1E2D20u);
-    fill_rect(140, 12, (player_hp * 120) / player_max_hp, 10, 0xFF7DDA72u);
+    text(hud_buf, 16, 10, 2, 0xFF7DDA72u);
+    fill_rect(130, 12, 110, 10, 0xFF1E2D20u);
+    fill_rect(130, 12, (player_hp * 110) / player_max_hp, 10, 0xFF7DDA72u);
 
     std::snprintf(hud_buf, sizeof(hud_buf), "QI:%d/%d", player_qi, player_max_qi);
-    text(hud_buf, 20, 26, 2, 0xFF6EB8EAu);
-    fill_rect(140, 28, 120, 10, 0xFF1E2D20u);
-    fill_rect(140, 28, (player_qi * 120) / player_max_qi, 10, 0xFF6EB8EAu);
+    text(hud_buf, 16, 26, 2, 0xFF6EB8EAu);
+    fill_rect(130, 28, 110, 10, 0xFF1E2D20u);
+    fill_rect(130, 28, (player_qi * 110) / player_max_qi, 10, 0xFF6EB8EAu);
 
-    std::snprintf(hud_buf, sizeof(hud_buf), "LV.%d  XP:%d  STEPS:%d", player_level, player_xp, steps);
-    text(hud_buf, 300, 16, 2, 0xFFE8D8A0u);
+    std::snprintf(hud_buf, sizeof(hud_buf), "LV.%d XP:%d [MAP: %s]", player_level, player_xp, world_state.current_map_name());
+    text(hud_buf, 260, 16, 2, 0xFFE8D8A0u);
 
-    // Party indicators at top right
-    text("PARTY:", 620, 16, 2, 0xFFE8D8A0u);
+    // Party Indicators
+    text("PARTY:", 660, 16, 2, 0xFFE8D8A0u);
     for (int i = 0; i < 3; ++i) {
-        int sx = 720 + i * 44;
+        int sx = 740 + i * 42;
         bool has_member = (i < collection_state.party_count);
         fill_rect(sx, 10, 32, 28, has_member ? 0xFF8A5D3Bu : 0xFF243026u);
         stroke_rect(sx, 10, 32, 28, 2, 0xFFE8D8A0u);
@@ -309,26 +408,30 @@ void render_overworld() {
     }
 
     if (artifact_owned) {
-        text("[ART:SHRINE SHARD]", 860, 16, 1, 0xFFB4A6D8u);
+        text("[SHARD]", 875, 16, 1, 0xFFB4A6D8u);
     }
 
-    // 5. Bottom Controls Guide
+    // 5. Notice Banner
+    fill_rect(0, 48, W, 22, 0xAA0C1410u);
+    text(notice_msg, 20, 52, 1, 0xFFFFD700u);
+
+    // 6. Bottom Controls Guide
     fill_rect(0, H - 28, W, 28, 0xEE121B14u);
-    text("[ARROWS] MOVE   [ENTER/Z] EXAMINE   [B] BATTLE   [M] PARTY & CODEX   [S] SAVE   [L] LOAD", 40, H - 20, 2, 0xFF9EBAA0u);
+    text("[ARROWS] MOVE   [ENTER/Z] TALK/INSPECT   [M] MENU/SLOTS   [B] BATTLE   [1-3] SLOTS   [S] SAVE   [L] LOAD", 20, H - 20, 2, 0xFF9EBAA0u);
 }
 
 void render_battle() {
     // 1. Dark Arena Background
     fill_rect(40, 20, W - 80, H - 40, 0xFF0E161Cu);
-    stroke_rect(40, 20, W - 80, H - 40, 4, 0xFF3D5A40u);
+    stroke_rect(40, 20, W - 80, H - 40, 4, is_boss_battle ? 0xFF8A2020u : 0xFF3D5A40u);
 
     // 2. Enemy Box (Top Right)
     fill_rect(540, 50, 340, 140, 0xFF182428u);
-    stroke_rect(540, 50, 340, 140, 2, 0xFF4A6860u);
+    stroke_rect(540, 50, 340, 140, 2, is_boss_battle ? 0xFFB83020u : 0xFF4A6860u);
 
     char enemy_info[64];
-    std::snprintf(enemy_info, sizeof(enemy_info), "WILD DOKKAEBI  LV.%d", enemy_level);
-    text(enemy_info, 560, 68, 2, 0xFFE8D8A0u);
+    std::snprintf(enemy_info, sizeof(enemy_info), "%s  LV.%d", enemy_name, enemy_level);
+    text(enemy_info, 560, 68, 2, is_boss_battle ? 0xFFFF7777u : 0xFFE8D8A0u);
 
     char hp_str[32];
     std::snprintf(hp_str, sizeof(hp_str), "HP: %d/%d", enemy_hp, enemy_max_hp);
@@ -342,12 +445,19 @@ void render_battle() {
     }
 
     // Enemy Sprite
-    fill_rect(240, 80, 80, 80, 0xFF7D9A62u);
-    fill_rect(255, 65, 10, 20, 0xFFD9C47Au); // Horn L
-    fill_rect(295, 65, 10, 20, 0xFFD9C47Au); // Horn R
-    fill_rect(260, 100, 8, 8, 0xFFB83020u);  // Eye L
-    fill_rect(290, 100, 8, 8, 0xFFB83020u);  // Eye R
-    fill_rect(270, 125, 20, 8, 0xFFE8D8A0u); // Fangs
+    if (is_boss_battle) {
+        fill_rect(240, 70, 80, 90, 0xFF542572u); // Corrupt Monk Robes
+        fill_rect(255, 80, 50, 40, 0xFFD8C4A0u); // Face
+        fill_rect(265, 95, 6, 6, 0xFFFF0000u);  // Red glowing eyes
+        fill_rect(285, 95, 6, 6, 0xFFFF0000u);
+    } else {
+        fill_rect(240, 80, 80, 80, 0xFF7D9A62u); // Dokkaebi Goblin
+        fill_rect(255, 65, 10, 20, 0xFFD9C47Au); // Horn L
+        fill_rect(295, 65, 10, 20, 0xFFD9C47Au); // Horn R
+        fill_rect(260, 100, 8, 8, 0xFFB83020u);  // Eye L
+        fill_rect(290, 100, 8, 8, 0xFFB83020u);  // Eye R
+        fill_rect(270, 125, 20, 8, 0xFFE8D8A0u); // Fangs
+    }
 
     // 3. Player Ally Box (Middle Left)
     fill_rect(80, 180, 340, 130, 0xFF182428u);
@@ -399,62 +509,99 @@ void render_battle() {
     battle_ui::command_detail(current_cmd, skill_state, player_qi, enemy_hp, enemy_max_hp, cap_rate, detail_buf, sizeof(detail_buf));
     text(detail_buf, 100, 452, 2, 0xFFE8D8A0u);
 
-    // Controls at bottom
     text("[LEFT/RIGHT] CHOOSE COMMAND    [ENTER/Z] EXECUTE    [ESC] SURRENDER", 100, 500, 2, 0xFF7D9A82u);
 }
 
 void render_menu() {
-    fill_rect(60, 40, W - 120, H - 80, 0xFF142018u);
-    stroke_rect(60, 40, W - 120, H - 80, 4, 0xFF7D9A62u);
+    fill_rect(40, 20, W - 80, H - 40, 0xFF142018u);
+    stroke_rect(40, 20, W - 80, H - 40, 4, 0xFF7D9A62u);
 
-    text("=== PARTY & 108 YOKAI CODEX ===", 100, 60, 3, 0xFFFFD700u);
+    text("=== PARTY, CODEX & SAVE SLOTS ===", 80, 36, 3, 0xFFFFD700u);
 
-    // Party section
-    text("ACTIVE PARTY (MAX 3):", 100, 110, 2, 0xFFE8D8A0u);
+    // 1. Party section
+    text("ACTIVE PARTY:", 80, 75, 2, 0xFFE8D8A0u);
     for (int i = 0; i < 3; ++i) {
-        int y = 140 + i * 50;
-        fill_rect(100, y, 760, 40, 0xFF1E2D22u);
-        stroke_rect(100, y, 760, 40, 1, 0xFF4D6A58u);
+        int y = 98 + i * 36;
+        fill_rect(80, y, 400, 30, 0xFF1E2D22u);
+        stroke_rect(80, y, 400, 30, 1, 0xFF4D6A58u);
         if (i < collection_state.party_count) {
             char pbuf[128];
-            std::snprintf(pbuf, sizeof(pbuf), "SLOT %d: #%03d DOKKAEBI   GRADE: I   LV.%d   HP: %d/%d   QI: %d/%d",
-                i + 1, collection_state.party_ids[i], player_level, player_hp, player_max_hp, player_qi, player_max_qi);
-            text(pbuf, 120, y + 12, 2, 0xFFFFFFFFu);
+            std::snprintf(pbuf, sizeof(pbuf), "SLOT %d: DOKKAEBI #%03d  LV.%d  HP:%d/%d",
+                i + 1, collection_state.party_ids[i], player_level, player_hp, player_max_hp);
+            text(pbuf, 95, y + 8, 2, 0xFFFFFFFFu);
         } else {
             char pbuf[64];
             std::snprintf(pbuf, sizeof(pbuf), "SLOT %d: [EMPTY SLOT]", i + 1);
-            text(pbuf, 120, y + 12, 2, 0xFF6E8D72u);
+            text(pbuf, 95, y + 8, 2, 0xFF6E8D72u);
         }
     }
 
-    // Codex section
-    text("108 YOKAI CODEX PROGRESS:", 100, 310, 2, 0xFFE8D8A0u);
+    // 2. Save Slots section (Visual Save/Load preview)
+    text("SAVE/LOAD SLOTS (PRESS 1-3 TO SELECT, S TO SAVE, L TO LOAD):", 510, 75, 2, 0xFFE8D8A0u);
+    for (int i = 1; i <= 3; ++i) {
+        int y = 98 + (i - 1) * 62;
+        bool selected = (save_slot == i);
+        fill_rect(510, y, 370, 54, selected ? 0xFF2B4232u : 0xFF1A2620u);
+        stroke_rect(510, y, 370, 54, selected ? 2 : 1, selected ? 0xFFFFD700u : 0xFF4D6A58u);
+
+        SaveData s{};
+        if (inspect_slot(i, s)) {
+            char sbuf[128];
+            std::snprintf(sbuf, sizeof(sbuf), "SLOT %d: LV.%d  HP:%d  PARTY:%d", i, s.level, s.hp, s.party);
+            text(sbuf, 525, y + 10, 2, selected ? 0xFFFFD700u : 0xFFFFFFFFu);
+            const char* rname = (s.region_id == 1) ? "VILLAGE" : (s.region_id == 2 ? "MOUNTAIN PASS" : "DAEWOONGJEON");
+            std::snprintf(sbuf, sizeof(sbuf), "MAP: %s  QUEST:%d/2", rname, s.quest_step);
+            text(sbuf, 525, y + 30, 2, 0xFF9EBAA0u);
+        } else {
+            char sbuf[64];
+            std::snprintf(sbuf, sizeof(sbuf), "SLOT %d: [EMPTY / NO DATA]", i);
+            text(sbuf, 525, y + 18, 2, 0xFF6E8D72u);
+        }
+    }
+
+    // 3. Codex progress
+    text("108 YOKAI CODEX PROGRESS:", 80, 220, 2, 0xFFE8D8A0u);
     char codex_buf[128];
     std::snprintf(codex_buf, sizeof(codex_buf), "DISCOVERED: %d / 108    CONTRACTED: %d / 108",
         collection_state.discovered_count(), collection_state.contracted_count());
-    text(codex_buf, 100, 335, 2, 0xFF7DDA72u);
+    text(codex_buf, 80, 245, 2, 0xFF7DDA72u);
 
-    fill_rect(100, 360, 400, 16, 0xFF28352Au);
+    fill_rect(80, 270, 400, 14, 0xFF28352Au);
     int codex_w = (collection_state.discovered_count() * 400) / 108;
-    fill_rect(100, 360, codex_w, 16, 0xFF7DDA72u);
+    fill_rect(80, 270, codex_w, 14, 0xFF7DDA72u);
 
-    // Artifact section
-    text("EQUIPPED ARTIFACT:", 100, 395, 2, 0xFFE8D8A0u);
-    if (artifact_owned) {
-        text("SHRINE SHARD (+3 ATK BONUS / -2 HP PER BATTLE)   [PRESS D TO DESTROY]", 100, 420, 2, 0xFFB4A6D8u);
+    // 4. Quest & Artifact Status
+    text("CURRENT MISSION:", 80, 305, 2, 0xFFE8D8A0u);
+    if (world_state.main_quest_step == 0) {
+        text("CHAPTER 1: VISIT THE TAVERN JUMO AT DOSEONSA VILLAGE", 80, 330, 2, 0xFFFFCC00u);
+    } else if (world_state.main_quest_step == 1) {
+        text("CHAPTER 1: TRAVEL NORTH AND QUELL CORRUPT MONK MYOGAK", 80, 330, 2, 0xFFFFCC00u);
     } else {
-        text("NO ARTIFACT EQUIPPED (ACQUIRE AT SHRINE EVENTS)", 100, 420, 2, 0xFF6E8D72u);
+        text("CHAPTER 1: COMPLETE! YIN-YANG SECT HAS BEEN EXPELLED!", 80, 330, 2, 0xFF7DDA72u);
     }
 
-    text("[ESC / M] RETURN TO GAME", 100, 465, 2, 0xFF9EBAA0u);
+    text("EQUIPPED ARTIFACT:", 80, 375, 2, 0xFFE8D8A0u);
+    if (artifact_owned) {
+        text("SHRINE SHARD (+3 ATK / -2 HP PER BATTLE)  [PRESS D TO DESTROY]", 80, 400, 2, 0xFFB4A6D8u);
+    } else {
+        text("NO ARTIFACT EQUIPPED (ACQUIRE AT ANCIENT SHRINE)", 80, 400, 2, 0xFF6E8D72u);
+    }
+
+    // Action feedback inside menu
+    fill_rect(80, 440, W - 160, 30, 0xFF0F1812u);
+    text(notice_msg, 100, 448, 2, 0xFFFFD700u);
+
+    text("[1-3] SELECT SLOT   [S] SAVE   [L] LOAD   [D] DESTROY ARTIFACT   [ESC / M] EXIT", 80, 485, 2, 0xFF9EBAA0u);
 }
 
 void render_dialogue() {
     fill_rect(60, H - 160, W - 120, 130, 0xEE142018u);
     stroke_rect(60, H - 160, W - 120, 130, 3, 0xFFE8D8A0u);
 
-    text("--- SHRINE RECORD ---", 90, H - 145, 2, 0xFFFFD700u);
-    text(dialogue_lines[dialogue_page], 90, H - 110, 2, 0xFFFFFFFFu);
+    char title_buf[128];
+    std::snprintf(title_buf, sizeof(title_buf), "--- %s ---", dialogue_speaker);
+    text(title_buf, 90, H - 145, 2, 0xFFFFD700u);
+    text(dialogue_pages[dialogue_page], 90, H - 110, 2, 0xFFFFFFFFu);
     text("[ENTER / Z] CONTINUE", 90, H - 65, 2, 0xFF7DDA72u);
 }
 
@@ -479,23 +626,27 @@ LRESULT CALLBACK wnd_proc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
 
         // Menu Mode Handling
         if (menu) {
-            if (wp == 'M' || wp == VK_ESCAPE) { menu = false; render(); InvalidateRect(hwnd, nullptr, FALSE); return 0; }
+            if (wp >= '1' && wp <= '3') {
+                save_slot = static_cast<int>(wp - '0');
+                render(); InvalidateRect(hwnd, nullptr, FALSE); return 0;
+            }
+            if (wp == 'S') { save_game(save_slot); render(); InvalidateRect(hwnd, nullptr, FALSE); return 0; }
+            if (wp == 'L') { load_game(save_slot); render(); InvalidateRect(hwnd, nullptr, FALSE); return 0; }
             if (wp == 'D' && artifact_owned) {
                 artifact_owned = false;
-                render();
-                InvalidateRect(hwnd, nullptr, FALSE);
-                return 0;
+                std::snprintf(notice_msg, sizeof(notice_msg), "DESTROYED ARTIFACT FOR INVENTORY BALANCE");
+                render(); InvalidateRect(hwnd, nullptr, FALSE); return 0;
             }
+            if (wp == 'M' || wp == VK_RETURN) { menu = false; render(); InvalidateRect(hwnd, nullptr, FALSE); return 0; }
             return 0;
         }
 
         // Dialogue Mode Handling
         if (dialogue) {
             if (wp == VK_RETURN || wp == 'Z') {
-                if (++dialogue_page >= dialogue_line_count) {
+                if (++dialogue_page >= current_dialogue_count) {
                     dialogue = false;
                     dialogue_page = 0;
-                    artifact_owned = true; // Gift shard upon reading shrine
                 }
                 render();
                 InvalidateRect(hwnd, nullptr, FALSE);
@@ -517,22 +668,30 @@ LRESULT CALLBACK wnd_proc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
             if (wp == VK_RETURN || wp == 'Z') {
                 int cmd = static_cast<int>(battle_command);
                 if (cmd == 5) { // Run
-                    std::snprintf(battle_msg, sizeof(battle_msg), "SAFELY FLED FROM BATTLE!");
-                    finish_battle(false);
+                    if (is_boss_battle) {
+                        std::snprintf(battle_msg, sizeof(battle_msg), "CANNOT FLEE FROM BOSS BATTLE!");
+                    } else {
+                        std::snprintf(battle_msg, sizeof(battle_msg), "SAFELY FLED FROM BATTLE!");
+                        finish_battle(false);
+                    }
                     render();
                     InvalidateRect(hwnd, nullptr, FALSE);
                     return 0;
                 }
 
                 if (cmd == 4) { // Capture
-                    int cap_rate = battle::capture_rate_percent(enemy_hp, enemy_max_hp, enemy_status != Status::None);
-                    if (battle::can_capture(enemy_hp, enemy_max_hp, enemy_turns, enemy_status != Status::None)) {
-                        collection_state.discover(1);
-                        collection_state.add_contract(1);
-                        std::snprintf(battle_msg, sizeof(battle_msg), "CONTRACT SUCCESS! DOKKAEBI JOINED PARTY!");
-                        finish_battle(true);
+                    if (is_boss_battle) {
+                        std::snprintf(battle_msg, sizeof(battle_msg), "CANNOT CAPTURE A CORRUPTED BOSS!");
                     } else {
-                        std::snprintf(battle_msg, sizeof(battle_msg), "CONTRACT FAILED (%d%% CHANCE)! ENEMY RESISTED!", cap_rate);
+                        int cap_rate = battle::capture_rate_percent(enemy_hp, enemy_max_hp, enemy_status != Status::None);
+                        if (battle::can_capture(enemy_hp, enemy_max_hp, enemy_turns, enemy_status != Status::None)) {
+                            collection_state.discover(1);
+                            collection_state.add_contract(1);
+                            std::snprintf(battle_msg, sizeof(battle_msg), "CONTRACT SUCCESS! DOKKAEBI JOINED PARTY!");
+                            finish_battle(true);
+                        } else {
+                            std::snprintf(battle_msg, sizeof(battle_msg), "CONTRACT FAILED (%d%% CHANCE)! ENEMY RESISTED!", cap_rate);
+                        }
                     }
                 } else if (cmd >= 0 && cmd < 4) { // Skills 1-4
                     if (!skill_state.usable(cmd, player_qi)) {
@@ -577,7 +736,8 @@ LRESULT CALLBACK wnd_proc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
 
                 // Check Enemy Defeat
                 if (enemy_hp <= 0) {
-                    std::snprintf(battle_msg, sizeof(battle_msg), "VICTORY! EARNED %d XP!", enemy_level * 25);
+                    std::snprintf(battle_msg, sizeof(battle_msg), "VICTORY OVER %s! GAINED %d XP!",
+                        enemy_name, enemy_level * 25);
                     finish_battle(true);
                     render();
                     InvalidateRect(hwnd, nullptr, FALSE);
@@ -596,7 +756,7 @@ LRESULT CALLBACK wnd_proc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
                     int edmg = battle::damage(
                         {enemy_attack, enemy_defense, enemy_hp, 0, enemy_speed},
                         {player_attack, player_defense, player_hp, player_qi, player_speed},
-                        5, enemy_status == Status::Fear, false
+                        is_boss_battle ? 10 : 5, enemy_status == Status::Fear, false
                     );
                     player_hp -= edmg;
                 }
@@ -620,7 +780,8 @@ LRESULT CALLBACK wnd_proc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
                 // Check Player Defeat
                 if (player_hp <= 0) {
                     player_hp = player_max_hp;
-                    std::snprintf(battle_msg, sizeof(battle_msg), "PLAYER COLLAPSED... RETURNED TO SHRINE");
+                    world_state.change_map(1, 14, 8); // Return to Village Tavern
+                    std::snprintf(notice_msg, sizeof(notice_msg), "PLAYER COLLAPSED... RETREATED TO VILLAGE");
                     finish_battle(false);
                 }
 
@@ -634,37 +795,94 @@ LRESULT CALLBACK wnd_proc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
         // Overworld Mode Handling
         if (!dialogue && !battle && !menu) {
             if (wp == 'M') { menu = true; render(); InvalidateRect(hwnd, nullptr, FALSE); return 0; }
-            if (wp == 'B') { begin_battle(); render(); InvalidateRect(hwnd, nullptr, FALSE); return 0; }
-            if (wp == 'S') { save_game(); render(); InvalidateRect(hwnd, nullptr, FALSE); return 0; }
-            if (wp == 'L') { load_game(); render(); InvalidateRect(hwnd, nullptr, FALSE); return 0; }
-            if (wp >= '1' && wp <= '3') { save_slot = static_cast<int>(wp - '0'); return 0; }
+            if (wp == 'B') { begin_battle(false); render(); InvalidateRect(hwnd, nullptr, FALSE); return 0; }
+            if (wp == 'S') { save_game(save_slot); render(); InvalidateRect(hwnd, nullptr, FALSE); return 0; }
+            if (wp == 'L') { load_game(save_slot); render(); InvalidateRect(hwnd, nullptr, FALSE); return 0; }
+            if (wp >= '1' && wp <= '3') {
+                save_slot = static_cast<int>(wp - '0');
+                std::snprintf(notice_msg, sizeof(notice_msg), "SELECTED SAVE SLOT %d", save_slot);
+                render(); InvalidateRect(hwnd, nullptr, FALSE); return 0;
+            }
 
-            int nx = player_x, ny = player_y;
+            int nx = world_state.player_x, ny = world_state.player_y;
             if (wp == VK_LEFT) --nx;
             if (wp == VK_RIGHT) ++nx;
             if (wp == VK_UP) --ny;
             if (wp == VK_DOWN) ++ny;
 
-            if ((wp == VK_LEFT || wp == VK_RIGHT || wp == VK_UP || wp == VK_DOWN) && !blocked(nx, ny)) {
-                player_x = nx;
-                player_y = ny;
-                ++steps;
-                if (encounter_interval > 0 && (steps % encounter_interval == 0)) {
-                    begin_battle();
+            if (wp == VK_LEFT || wp == VK_RIGHT || wp == VK_UP || wp == VK_DOWN) {
+                // Check map transition portal
+                int target_map = 0, target_x = 0, target_y = 0;
+                if (world_state.check_portal(nx, ny, target_map, target_x, target_y)) {
+                    world_state.change_map(target_map, target_x, target_y);
+                    std::snprintf(notice_msg, sizeof(notice_msg), "ARRIVED AT: %s", world_state.current_map_name());
+                    render(); InvalidateRect(hwnd, nullptr, FALSE); return 0;
                 }
-                render();
-                InvalidateRect(hwnd, nullptr, FALSE);
-                return 0;
+
+                if (!world_state.is_blocked(nx, ny)) {
+                    world_state.player_x = nx;
+                    world_state.player_y = ny;
+                    ++steps;
+                    int rate = world_state.map_encounter_rate();
+                    if (rate > 0 && (steps % rate == 0)) {
+                        begin_battle(false);
+                    }
+                    render(); InvalidateRect(hwnd, nullptr, FALSE); return 0;
+                }
             }
 
             if (wp == VK_RETURN || wp == 'Z') {
-                if (near_shrine()) {
-                    dialogue = true;
-                    dialogue_page = 0;
+                int npc = world_state.check_npc_interaction(world_state.player_x, world_state.player_y);
+                if (npc == 1) { // Tavern Jumo
+                    player_hp = player_max_hp;
+                    player_qi = player_max_qi;
+                    if (world_state.main_quest_step == 0) {
+                        world_state.advance_quest();
+                        trigger_dialogue("TAVERN JUMO", {
+                            "WELCOME TRAVELER! REST YOUR SPIRIT AT OUR INN.",
+                            "RUMORS SAY YIN-YANG SECT HAS CORRUPTED THE NORTH TEMPLE!",
+                            "TAKE THE NORTH PASS CAREFULLY AND RESTORE BALANCE."
+                        });
+                    } else {
+                        trigger_dialogue("TAVERN JUMO", {
+                            "YOU RESTED WELL! HP AND QI ARE FULLY RESTORED.",
+                            "MAY THE ANCESTRAL SPIRITS PROTECT YOUR JOURNEY."
+                        });
+                    }
+                    std::snprintf(notice_msg, sizeof(notice_msg), "RESTED AT INN: FULL HP AND QI RECOVERED");
+                    render(); InvalidateRect(hwnd, nullptr, FALSE); return 0;
+                } else if (npc == 2) { // Ancient Shrine
                     world_state.mark_shrine_seen();
-                    render();
-                    InvalidateRect(hwnd, nullptr, FALSE);
-                    return 0;
+                    artifact_owned = true;
+                    trigger_dialogue("ANCIENT SHRINE", {
+                        "ANCIENT SHRINE OF THE SPIRIT REALM...",
+                        "YOU RECEIVED [SHRINE SHARD] (+3 ATK / -2 HP DRAWBACK)!",
+                        "PURIFY THE CORRUPTED SECT TO HEAL THE LAND."
+                    });
+                    std::snprintf(notice_msg, sizeof(notice_msg), "OBTAINED ARTIFACT: SHRINE SHARD");
+                    render(); InvalidateRect(hwnd, nullptr, FALSE); return 0;
+                } else if (npc == 3) { // Mountain Signpost
+                    trigger_dialogue("MOUNTAIN SIGNPOST", {
+                        "--- BUKHANSAN PASS GUIDANCE ---",
+                        "NORTH: DAEWOONGJEON TEMPLE (HAUNTED BY YIN-YANG MONK)",
+                        "SOUTH: DOSEONSA VILLAGE EDGE (INN & SHRINE)"
+                    });
+                    render(); InvalidateRect(hwnd, nullptr, FALSE); return 0;
+                } else if (npc == 4) { // Corrupt Monk Myogak Boss
+                    if (!world_state.boss_defeated) {
+                        trigger_dialogue("CORRUPT MONK MYOGAK", {
+                            "YOU DARE INTRUDE UPON OUR DARK FORBIDDEN RITUAL?!",
+                            "THE YIN ENERGY SHALL CONSUME YOUR FLESH AND SOUL!",
+                            "PREPARE TO PERISH IN THE SHADOWS!"
+                        });
+                        begin_battle(true); // Trigger Boss Battle!
+                    } else {
+                        trigger_dialogue("PURIFIED TEMPLE", {
+                            "THE CORRUPTED INCENSE HAS BURNED AWAY.",
+                            "THE TEMPLE OF DAEWOONGJEON IS AT PEACE ONCE MORE."
+                        });
+                    }
+                    render(); InvalidateRect(hwnd, nullptr, FALSE); return 0;
                 }
             }
         }

@@ -17,14 +17,13 @@ int main() {
     battle::Combatant d{0, 5, 80, 0, 8};
     assert(battle::damage(a, d, 10, false) == 17);
     assert(battle::damage(a, d, 10, true) == 25);
-    // Attacker feared: attack reduced from 12 to 9, value = 9 + 10 - 5 = 14
     assert(battle::damage(a, d, 10, true, false) == 14);
 
     assert(!battle::can_capture(60, 80, 2));
     assert(battle::can_capture(40, 80, 2));
-    assert(battle::capture_rate_percent(60, 80) == 0); // > 50% HP
-    assert(battle::capture_rate_percent(40, 80) == 30); // 50% weakness * 60% = 30%
-    assert(battle::capture_rate_percent(40, 80, true) == 55); // +25% for status effect
+    assert(battle::capture_rate_percent(60, 80) == 0);
+    assert(battle::capture_rate_percent(40, 80) == 30);
+    assert(battle::capture_rate_percent(40, 80, true) == 55);
 
     // 2. Status Rules
     assert(status_rules::tick_damage(status_rules::Kind::Burn, 3) == 3);
@@ -46,19 +45,19 @@ int main() {
     state.reset();
     assert(!state.active && state.enemy_hp == 80 && state.enemy_level == 1);
 
-    // 4. Collection State (3 party limit, 108 codex)
+    // 4. Collection State
     collection::State collection;
     assert(collection.add_contract(1));
-    assert(!collection.add_contract(1)); // duplicate rejected
+    assert(!collection.add_contract(1));
     assert(collection.contains(1));
     assert(collection.add_contract(2));
     assert(collection.add_contract(3));
-    assert(!collection.add_contract(4)); // party full (max 3)
+    assert(!collection.add_contract(4));
     assert(collection.party_count == 3);
-    assert(collection.contracted_count() == 4); // codex contracted tracking
+    assert(collection.contracted_count() == 4);
     assert(collection.discover(108));
     assert(collection.discovered_count() == 5);
-    assert(!collection.discover(109)); // out of range
+    assert(!collection.discover(109));
     assert(collection.swap_party(0, 2));
     assert(collection.party_ids[0] == 3 && collection.party_ids[2] == 1);
     assert(collection.active_yokai_id() == 3);
@@ -88,10 +87,10 @@ int main() {
     // 7. Skills State
     skills::State all_skills;
     for (int i = 0; i < skills::State::MaxSlots; ++i) all_skills.ids[i] = i + 1;
-    assert(all_skills.usable(3, 0)); // default cost 0 is usable
+    assert(all_skills.usable(3, 0));
     all_skills.qi_costs[3] = 5;
-    assert(!all_skills.usable(3, 4)); // insufficient qi
-    assert(all_skills.usable(3, 5)); // sufficient qi
+    assert(!all_skills.usable(3, 4));
+    assert(all_skills.usable(3, 5));
 
     skills::State skills;
     skills.ids[0] = 1;
@@ -107,18 +106,53 @@ int main() {
     battle_ui::command_detail(4, all_skills, 10, 40, 80, 50, buf, sizeof(buf));
     assert(std::strstr(buf, "50%") != nullptr);
 
-    // 8. Save Rules
+    // 8. Save Rules with version 8, region, and quest
     int ids[3] = {1, 2, 3};
-    const auto valid_checksum = save_rules::checksum(save_rules::Version, 1, 2, 100, 30, 1, 0, 3, ids, true, false, true);
-    assert(valid_checksum == save_rules::checksum(save_rules::Version, 1, 2, 100, 30, 1, 0, 3, ids, true, false, true));
-    assert(valid_checksum != save_rules::checksum(save_rules::Version, 1, 2, 99, 30, 1, 0, 3, ids, true, false, true));
+    const auto valid_checksum = save_rules::checksum(save_rules::Version, 1, 2, 100, 30, 1, 0, 3, ids, true, false, true, 2, 1);
+    assert(valid_checksum == save_rules::checksum(save_rules::Version, 1, 2, 100, 30, 1, 0, 3, ids, true, false, true, 2, 1));
+    assert(valid_checksum != save_rules::checksum(save_rules::Version, 1, 2, 99, 30, 1, 0, 3, ids, true, false, true, 2, 1));
+    assert(valid_checksum != save_rules::checksum(save_rules::Version, 1, 2, 100, 30, 1, 0, 3, ids, true, false, true, 1, 0));
 
-    // 9. World State
+    // 9. World State: Multi-map Portals, NPCs, and Quests
     world::State world;
+    assert(world.region_id == 1);
     assert(world.can_interact(15, 7));
     assert(!world.can_interact(1, 1));
     world.mark_shrine_seen();
     assert(world.shrine_event_seen);
+
+    // Check NPC interactions
+    assert(world.check_npc_interaction(8, 7) == 1); // Tavern Keeper
+    assert(world.check_npc_interaction(20, 8) == 2); // Ancient Shrine
+    assert(world.check_npc_interaction(1, 1) == 0); // No NPC
+
+    // Check Portals: Village -> Mountain Pass
+    int target_map = 0, tx = 0, ty = 0;
+    assert(world.check_portal(14, 2, target_map, tx, ty));
+    assert(target_map == 2 && tx == 14 && ty == 13);
+
+    // Transition to Mountain Pass
+    world.change_map(target_map, tx, ty);
+    assert(world.region_id == 2);
+    assert(world.map_encounter_rate() == 8); // Wild encounters active
+    assert(world.check_npc_interaction(13, 9) == 3); // Signpost
+
+    // Check Portals: Mountain Pass -> Daewoongjeon
+    assert(world.check_portal(14, 2, target_map, tx, ty));
+    assert(target_map == 3 && tx == 14 && ty == 13);
+
+    // Transition to Daewoongjeon
+    world.change_map(target_map, tx, ty);
+    assert(world.region_id == 3);
+    assert(world.map_encounter_rate() == 0); // Courtyard
+    assert(world.check_npc_interaction(15, 7) == 4); // Boss Monk
+
+    // Quest progression
+    assert(world.main_quest_step == 0);
+    world.advance_quest();
+    assert(world.main_quest_step == 1);
+    world.advance_quest();
+    assert(world.main_quest_step == 2);
 
     return 0;
 }
