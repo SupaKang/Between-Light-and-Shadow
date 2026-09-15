@@ -8,6 +8,7 @@
 #include "../src/skill_state.h"
 #include "../src/world_state.h"
 #include "../src/korean_font.h"
+#include "../src/generated_sprites.h"
 #include <cassert>
 #include <cstring>
 #include <string>
@@ -170,6 +171,55 @@ int main() {
     for (auto px : test_pixels) if (px != 0) { drawn = true; break; }
     assert(drawn); // Pixel data was rendered
 
-    return 0;
+    // 11. 4bpp RLE Art Pipeline Engine
+    assert(art::PALETTE_DANCHEONG_16[0] == 0x00000000u); // Transparent key
+    for (int i = 1; i < 16; ++i) {
+        assert((art::PALETTE_DANCHEONG_16[i] & 0xFF000000u) == 0xFF000000u); // Full opacity
+    }
 
+    // Check all assets exist with valid dimensions and positive RLE byte size
+    assert(art::SPRITE_tile_village_grass.width == 32 && art::SPRITE_tile_village_grass.height == 32);
+    assert(art::SPRITE_tile_village_grass.rle_size > 0 && art::SPRITE_tile_village_grass.data != nullptr);
+
+    assert(art::SPRITE_tile_village_path.width == 32 && art::SPRITE_tile_village_path.height == 32);
+    assert(art::SPRITE_tile_mountain_rock.width == 32 && art::SPRITE_tile_mountain_rock.height == 32);
+    assert(art::SPRITE_tile_temple_stone.width == 32 && art::SPRITE_tile_temple_stone.height == 32);
+
+    assert(art::SPRITE_hero_field.width == 32 && art::SPRITE_hero_field.height == 32);
+    assert(art::SPRITE_jumo_field.width == 32 && art::SPRITE_jumo_field.height == 32);
+    assert(art::SPRITE_shrine_field.width == 32 && art::SPRITE_shrine_field.height == 32);
+    assert(art::SPRITE_signpost_field.width == 32 && art::SPRITE_signpost_field.height == 32);
+    assert(art::SPRITE_monk_field.width == 32 && art::SPRITE_monk_field.height == 32);
+
+    assert(art::SPRITE_dokkaebi_battle.width == 48 && art::SPRITE_dokkaebi_battle.height == 48);
+    assert(art::SPRITE_dokkaebi_ally_battle.width == 48 && art::SPRITE_dokkaebi_ally_battle.height == 48);
+    assert(art::SPRITE_boss_myogak_battle.width == 48 && art::SPRITE_boss_myogak_battle.height == 48);
+
+    // Test RLE tile rendering into test buffer
+    std::vector<std::uint32_t> test_fb(64 * 64, 0);
+    art::draw_rle_tile(test_fb.data(), 64, 64, art::SPRITE_tile_village_grass, 0, 0);
+    // Every pixel in 32x32 tile must be opaque (non-zero)
+    for (int y = 0; y < 32; ++y) {
+        for (int x = 0; x < 32; ++x) {
+            assert(test_fb[y * 64 + x] != 0);
+        }
+    }
+    // Pixels outside 32x32 must remain 0
+    assert(test_fb[32 * 64 + 32] == 0);
+
+    // Test RLE sprite rendering with transparency (color 0 skipped)
+    art::draw_rle_sprite(test_fb.data(), 64, 64, art::SPRITE_hero_field, 32, 0, 1, true);
+    bool has_hero_pixel = false;
+    for (int y = 0; y < 32; ++y) {
+        for (int x = 32; x < 64; ++x) {
+            if (test_fb[y * 64 + x] != 0) has_hero_pixel = true;
+        }
+    }
+    assert(has_hero_pixel);
+
+    // Test scaling and clipping safety (negative & overflow coords must not crash or corrupt memory)
+    art::draw_rle_sprite(test_fb.data(), 64, 64, art::SPRITE_boss_myogak_battle, -10, -10, 2, true);
+    art::draw_rle_sprite(test_fb.data(), 64, 64, art::SPRITE_dokkaebi_battle, 50, 50, 2, true);
+
+    return 0;
 }

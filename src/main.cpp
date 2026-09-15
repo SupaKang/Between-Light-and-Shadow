@@ -22,6 +22,7 @@
 #include "collection_state.h"
 #include "data_registry.h"
 #include "korean_font.h"
+#include "generated_sprites.h"
 
 namespace {
 
@@ -297,19 +298,16 @@ void render_overworld() {
 
     for (int ty = 0; ty < H / TILE; ++ty) {
         for (int tx = 0; tx < W / TILE; ++tx) {
-            std::uint32_t c = 0xFF2A452Eu;
             if (cur_map == 1) {
                 bool path = (tx >= 13 && tx <= 16) || (ty >= 6 && ty <= 8);
-                c = path ? 0xFF6B8250u : 0xFF2F4F35u;
+                art::draw_rle_tile(pixels.data(), W, H, path ? art::SPRITE_tile_village_path : art::SPRITE_tile_village_grass, tx * TILE, ty * TILE);
             } else if (cur_map == 2) {
                 bool path = (tx >= 12 && tx <= 17) && (ty >= 2 && ty <= 14);
-                c = path ? 0xFF4A443Cu : 0xFF2A2E28u;
+                art::draw_rle_tile(pixels.data(), W, H, path ? art::SPRITE_tile_village_path : art::SPRITE_tile_mountain_rock, tx * TILE, ty * TILE);
             } else if (cur_map == 3) {
                 bool courtyard = (tx >= 6 && tx <= 23 && ty >= 5 && ty <= 13);
-                c = courtyard ? 0xFF4A4E54u : 0xFF22262Cu;
+                art::draw_rle_tile(pixels.data(), W, H, courtyard ? art::SPRITE_tile_temple_stone : art::SPRITE_tile_mountain_rock, tx * TILE, ty * TILE);
             }
-            if ((tx + ty) % 2 == 1) c += 0x00040404u;
-            fill_rect(tx * TILE, ty * TILE, TILE, TILE, c);
         }
     }
 
@@ -318,22 +316,17 @@ void render_overworld() {
         stroke_rect(6 * TILE, 4 * TILE, 5 * TILE, 2 * TILE, 2, 0xFFD9C47Au);
         text("주막", 7 * TILE, 4 * TILE + 10, 2, 0xFFFFD700u);
 
-        fill_rect(8 * TILE + 8, 6 * TILE + 4, 16, 24, 0xFFB84A39u);
-        text("주모", 8 * TILE, 6 * TILE - 12, 1, 0xFFFFFFFFu);
+        art::draw_rle_sprite(pixels.data(), W, H, art::SPRITE_jumo_field, 8 * TILE, 6 * TILE);
+        text("주모", 8 * TILE + 4, 6 * TILE - 12, 1, 0xFFFFFFFFu);
 
-        fill_rect(20 * TILE + 4, 7 * TILE + 4, 24, 24, 0xFF8A5D3Bu);
-        fill_rect(20 * TILE + 8, 7 * TILE, 16, 6, 0xFFD9C47Au);
-        stroke_rect(20 * TILE + 2, 7 * TILE + 2, 28, 28, 2, 0xFFE8D8A0u);
-        text("고대 신목", 19 * TILE, 7 * TILE - 12, 1, 0xFFE8D8A0u);
+        art::draw_rle_sprite(pixels.data(), W, H, art::SPRITE_shrine_field, 20 * TILE, 7 * TILE);
+        text("고대 신목", 19 * TILE + 4, 7 * TILE - 12, 1, 0xFFE8D8A0u);
 
         stroke_rect(13 * TILE, 2 * TILE, 4 * TILE, 8, 2, 0xFFFFD700u);
         text("북한산 고갯길 ^", 13 * TILE, 2 * TILE + 12, 1, 0xFFFFD700u);
     } else if (cur_map == 2) {
-        fill_rect(13 * TILE + 12, 8 * TILE + 4, 8, 24, 0xFF8A5D3Bu);
-        fill_rect(13 * TILE + 4, 8 * TILE + 2, 24, 12, 0xFFD9C47Au);
+        art::draw_rle_sprite(pixels.data(), W, H, art::SPRITE_signpost_field, 13 * TILE, 8 * TILE);
         text("안내판", 13 * TILE + 2, 8 * TILE - 10, 1, 0xFFFFFFFFu);
-
-        fill_rect(14 * TILE + 2, 8 * TILE + 2, 28, 28, 0xFF606468u);
 
         text("도선사 대웅전 ^", 12 * TILE, 2 * TILE + 12, 1, 0xFFFFD700u);
         text("도선사 마을 v", 13 * TILE, 14 * TILE, 1, 0xFFFFD700u);
@@ -343,7 +336,7 @@ void render_overworld() {
         text("도선사 대웅전 경내", 9 * TILE, 3 * TILE + 16, 2, 0xFFFFD700u);
 
         if (!world_state.boss_defeated) {
-            fill_rect(15 * TILE + 6, 6 * TILE + 2, 20, 26, 0xFF3D2054u);
+            art::draw_rle_sprite(pixels.data(), W, H, art::SPRITE_monk_field, 15 * TILE, 6 * TILE);
             text("괴승 묘각 (보스)", 13 * TILE + 16, 6 * TILE - 14, 1, 0xFFFF5555u);
         } else {
             text("[성지 정화 완료]", 13 * TILE + 16, 6 * TILE + 8, 1, 0xFF7DDA72u);
@@ -354,13 +347,7 @@ void render_overworld() {
 
     int px = world_state.player_x * TILE;
     int py = world_state.player_y * TILE;
-    fill_rect(px + 10, py + 2, 12, 4, 0xFF101410u);
-    fill_rect(px + 12, py + 6, 8, 4, 0xFF282C28u);
-    fill_rect(px + 11, py + 10, 10, 8, 0xFFF0D4B2u);
-    fill_rect(px + 13, py + 13, 2, 2, 0xFF101010u);
-    fill_rect(px + 17, py + 13, 2, 2, 0xFF101010u);
-    fill_rect(px + 9, py + 18, 14, 12, 0xFFD8D2C2u);
-    fill_rect(px + 12, py + 20, 8, 3, 0xFF3D5A80u);
+    art::draw_rle_sprite(pixels.data(), W, H, art::SPRITE_hero_field, px, py);
 
     fill_rect(0, 0, W, 48, 0xDD121B14u);
     stroke_rect(0, 0, W, 48, 2, 0xFF3D5A3Du);
@@ -423,17 +410,9 @@ void render_battle() {
     }
 
     if (is_boss_battle) {
-        fill_rect(240, 70, 80, 90, 0xFF542572u);
-        fill_rect(255, 80, 50, 40, 0xFFD8C4A0u);
-        fill_rect(265, 95, 6, 6, 0xFFFF0000u);
-        fill_rect(285, 95, 6, 6, 0xFFFF0000u);
+        art::draw_rle_sprite(pixels.data(), W, H, art::SPRITE_boss_myogak_battle, 230, 65, 2);
     } else {
-        fill_rect(240, 80, 80, 80, 0xFF7D9A62u);
-        fill_rect(255, 65, 10, 20, 0xFFD9C47Au);
-        fill_rect(295, 65, 10, 20, 0xFFD9C47Au);
-        fill_rect(260, 100, 8, 8, 0xFFB83020u);
-        fill_rect(290, 100, 8, 8, 0xFFB83020u);
-        fill_rect(270, 125, 20, 8, 0xFFE8D8A0u);
+        art::draw_rle_sprite(pixels.data(), W, H, art::SPRITE_dokkaebi_battle, 230, 65, 2);
     }
 
     fill_rect(80, 180, 340, 130, 0xFF182428u);
@@ -452,9 +431,7 @@ void render_battle() {
     int qi_bar_w = (std::max)(0, (player_qi * 200) / player_max_qi);
     fill_rect(100, 280, qi_bar_w, 12, 0xFF6EB8EAu);
 
-    fill_rect(640, 210, 70, 70, 0xFFD9C47Au);
-    fill_rect(650, 225, 6, 6, 0xFF101010u);
-    fill_rect(680, 225, 6, 6, 0xFF101010u);
+    art::draw_rle_sprite(pixels.data(), W, H, art::SPRITE_dokkaebi_ally_battle, 625, 195, 2);
 
     fill_rect(80, 330, W - 160, 36, 0xFF1E2E28u);
     stroke_rect(80, 330, W - 160, 36, 2, 0xFF6E8D62u);
