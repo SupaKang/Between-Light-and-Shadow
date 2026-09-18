@@ -1,0 +1,32 @@
+{
+  "id": "yokai_039",
+  "dex_number": 39,
+  "name_ko": "복신",
+  "name_en": "God of Fortune Imp",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 민속신앙",
+  "grade": "I",
+  "element": "Earth",
+  "level": 6,
+  "stats": {
+    "hp": 92,
+    "qi": 35,
+    "attack": 12,
+    "defense": 14,
+    "speed": 10
+  },
+  "skills": [
+    "skill_001",
+    "skill_010",
+    "skill_004",
+    "skill_007"
+  ],
+  "trait": "특성_복신",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

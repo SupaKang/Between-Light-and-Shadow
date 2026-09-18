@@ -1,0 +1,32 @@
+{
+  "id": "yokai_056",
+  "dex_number": 56,
+  "name_ko": "삼신할머니",
+  "name_en": "Birth Goddess",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 무속신앙",
+  "grade": "IV",
+  "element": "Light",
+  "level": 37,
+  "stats": {
+    "hp": 210,
+    "qi": 110,
+    "attack": 30,
+    "defense": 26,
+    "speed": 20
+  },
+  "skills": [
+    "skill_001",
+    "skill_011",
+    "skill_012",
+    "skill_004"
+  ],
+  "trait": "특성_삼신할머니",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

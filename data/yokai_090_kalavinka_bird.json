@@ -1,0 +1,32 @@
+{
+  "id": "yokai_090",
+  "dex_number": 90,
+  "name_ko": "가릉빈가",
+  "name_en": "Kalavinka Bird",
+  "origin": "VERIFY_FOREIGN_FOLKLORE",
+  "folklore_source": "불교 설화",
+  "grade": "III",
+  "element": "Light",
+  "level": 26,
+  "stats": {
+    "hp": 155,
+    "qi": 80,
+    "attack": 24,
+    "defense": 18,
+    "speed": 25
+  },
+  "skills": [
+    "skill_001",
+    "skill_011",
+    "skill_004",
+    "skill_012"
+  ],
+  "trait": "특성_가릉빈가",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

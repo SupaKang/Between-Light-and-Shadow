@@ -1,0 +1,32 @@
+{
+  "id": "yokai_007",
+  "dex_number": 7,
+  "name_ko": "장산범",
+  "name_en": "Jangsan Tiger",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 현대구전문학",
+  "grade": "II",
+  "element": "Dark",
+  "level": 14,
+  "stats": {
+    "hp": 120,
+    "qi": 50,
+    "attack": 24,
+    "defense": 14,
+    "speed": 24
+  },
+  "skills": [
+    "skill_001",
+    "skill_006",
+    "skill_010",
+    "skill_007"
+  ],
+  "trait": "특성_장산범",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

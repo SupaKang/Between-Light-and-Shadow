@@ -1,0 +1,32 @@
+{
+  "id": "yokai_082",
+  "dex_number": 82,
+  "name_ko": "벽력장군",
+  "name_en": "Thunderbolt General",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 무속 뇌신",
+  "grade": "IV",
+  "element": "Light",
+  "level": 39,
+  "stats": {
+    "hp": 220,
+    "qi": 95,
+    "attack": 35,
+    "defense": 23,
+    "speed": 26
+  },
+  "skills": [
+    "skill_001",
+    "skill_005",
+    "skill_012",
+    "skill_007"
+  ],
+  "trait": "특성_벽력장군",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

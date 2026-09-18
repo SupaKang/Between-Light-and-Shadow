@@ -1,0 +1,32 @@
+{
+  "id": "yokai_008",
+  "dex_number": 8,
+  "name_ko": "두시니",
+  "name_en": "Dusini",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 민담",
+  "grade": "I",
+  "element": "Dark",
+  "level": 4,
+  "stats": {
+    "hp": 90,
+    "qi": 25,
+    "attack": 13,
+    "defense": 9,
+    "speed": 11
+  },
+  "skills": [
+    "skill_001",
+    "skill_006",
+    "skill_002",
+    "skill_004"
+  ],
+  "trait": "특성_두시니",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

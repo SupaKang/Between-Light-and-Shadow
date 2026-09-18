@@ -1,0 +1,32 @@
+{
+  "id": "yokai_061",
+  "dex_number": 61,
+  "name_ko": "업신",
+  "name_en": "Wealth Snake Spirit",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 가신신앙",
+  "grade": "II",
+  "element": "Earth",
+  "level": 19,
+  "stats": {
+    "hp": 140,
+    "qi": 55,
+    "attack": 23,
+    "defense": 21,
+    "speed": 16
+  },
+  "skills": [
+    "skill_001",
+    "skill_010",
+    "skill_006",
+    "skill_011"
+  ],
+  "trait": "특성_업신",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

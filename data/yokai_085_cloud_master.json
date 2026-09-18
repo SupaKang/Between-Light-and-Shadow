@@ -1,0 +1,32 @@
+{
+  "id": "yokai_085",
+  "dex_number": 85,
+  "name_ko": "운사",
+  "name_en": "Cloud Master",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 단군신화",
+  "grade": "IV",
+  "element": "Light",
+  "level": 38,
+  "stats": {
+    "hp": 220,
+    "qi": 100,
+    "attack": 31,
+    "defense": 26,
+    "speed": 22
+  },
+  "skills": [
+    "skill_001",
+    "skill_011",
+    "skill_004",
+    "skill_012"
+  ],
+  "trait": "특성_운사",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

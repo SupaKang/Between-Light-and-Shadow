@@ -1,0 +1,32 @@
+{
+  "id": "yokai_027",
+  "dex_number": 27,
+  "name_ko": "비파귀",
+  "name_en": "Lute Ghost",
+  "origin": "VERIFY_FOREIGN_FOLKLORE",
+  "folklore_source": "동양 악기설화",
+  "grade": "I",
+  "element": "Light",
+  "level": 5,
+  "stats": {
+    "hp": 80,
+    "qi": 50,
+    "attack": 11,
+    "defense": 9,
+    "speed": 15
+  },
+  "skills": [
+    "skill_001",
+    "skill_004",
+    "skill_011",
+    "skill_005"
+  ],
+  "trait": "특성_비파귀",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

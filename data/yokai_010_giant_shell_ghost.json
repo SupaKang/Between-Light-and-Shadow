@@ -1,0 +1,32 @@
+{
+  "id": "yokai_010",
+  "dex_number": 10,
+  "name_ko": "거붕귀",
+  "name_en": "Giant Shell Ghost",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 해양설화",
+  "grade": "I",
+  "element": "Earth",
+  "level": 7,
+  "stats": {
+    "hp": 110,
+    "qi": 20,
+    "attack": 11,
+    "defense": 18,
+    "speed": 6
+  },
+  "skills": [
+    "skill_001",
+    "skill_003",
+    "skill_007",
+    "skill_004"
+  ],
+  "trait": "특성_거붕귀",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "id": "yokai_014",
+  "dex_number": 14,
+  "name_ko": "최가영",
+  "name_en": "Choe Spirit",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 야담집",
+  "grade": "I",
+  "element": "Physical",
+  "level": 5,
+  "stats": {
+    "hp": 88,
+    "qi": 24,
+    "attack": 12,
+    "defense": 8,
+    "speed": 13
+  },
+  "skills": [
+    "skill_001",
+    "skill_004",
+    "skill_007",
+    "skill_002"
+  ],
+  "trait": "특성_최가영",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

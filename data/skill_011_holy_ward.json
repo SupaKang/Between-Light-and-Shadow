@@ -1,0 +1,9 @@
+{
+  "id": "skill_011",
+  "name_ko": "벽사 결계",
+  "power": 20,
+  "qi_cost": 10,
+  "accuracy": 100,
+  "status": "seal",
+  "seal_turns": 3
+}

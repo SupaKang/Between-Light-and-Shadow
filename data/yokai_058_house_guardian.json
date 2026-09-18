@@ -1,0 +1,32 @@
+{
+  "id": "yokai_058",
+  "dex_number": 58,
+  "name_ko": "성주신",
+  "name_en": "House Guardian",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 가신신앙",
+  "grade": "III",
+  "element": "Earth",
+  "level": 28,
+  "stats": {
+    "hp": 180,
+    "qi": 65,
+    "attack": 27,
+    "defense": 28,
+    "speed": 14
+  },
+  "skills": [
+    "skill_001",
+    "skill_010",
+    "skill_011",
+    "skill_007"
+  ],
+  "trait": "특성_성주신",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

@@ -1,8 +1,20 @@
 {
-  "schema_version": 1,
   "region_id": "village_edge",
   "encounter_step_interval": 12,
+  "min_level": 1,
+  "max_level": 5,
   "encounters": [
-    {"yokai_id": "yokai_001", "weight": 100, "min_level": 1, "max_level": 3}
+    {
+      "yokai_id": "yokai_001",
+      "weight": 60
+    },
+    {
+      "yokai_id": "yokai_008",
+      "weight": 25
+    },
+    {
+      "yokai_id": "yokai_014",
+      "weight": 15
+    }
   ]
 }

@@ -1,0 +1,32 @@
+{
+  "id": "yokai_071",
+  "dex_number": 71,
+  "name_ko": "봉황",
+  "name_en": "Fenghuang Phoenix",
+  "origin": "VERIFY_FOREIGN_FOLKLORE",
+  "folklore_source": "동양 고대설화",
+  "grade": "IV",
+  "element": "Fire",
+  "level": 39,
+  "stats": {
+    "hp": 215,
+    "qi": 115,
+    "attack": 35,
+    "defense": 23,
+    "speed": 27
+  },
+  "skills": [
+    "skill_001",
+    "skill_002",
+    "skill_008",
+    "skill_012"
+  ],
+  "trait": "특성_봉황",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

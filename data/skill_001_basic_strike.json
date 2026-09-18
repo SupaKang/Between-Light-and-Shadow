@@ -1,7 +1,7 @@
 {
   "id": "skill_001",
   "name_ko": "기본 공격",
-  "power": 10,
+  "power": 20,
   "qi_cost": 0,
   "accuracy": 100,
   "status": "none",

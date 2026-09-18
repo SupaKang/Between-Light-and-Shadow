@@ -1,0 +1,32 @@
+{
+  "id": "yokai_047",
+  "dex_number": 47,
+  "name_ko": "몽달귀신",
+  "name_en": "Bachelor Ghost",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 야담",
+  "grade": "II",
+  "element": "Fire",
+  "level": 14,
+  "stats": {
+    "hp": 115,
+    "qi": 50,
+    "attack": 22,
+    "defense": 15,
+    "speed": 17
+  },
+  "skills": [
+    "skill_001",
+    "skill_002",
+    "skill_008",
+    "skill_007"
+  ],
+  "trait": "특성_몽달귀신",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "id": "yokai_037",
+  "dex_number": 37,
+  "name_ko": "삼두구",
+  "name_en": "Three-Headed Dog",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 저승설화",
+  "grade": "III",
+  "element": "Dark",
+  "level": 23,
+  "stats": {
+    "hp": 160,
+    "qi": 60,
+    "attack": 27,
+    "defense": 20,
+    "speed": 19
+  },
+  "skills": [
+    "skill_001",
+    "skill_006",
+    "skill_010",
+    "skill_007"
+  ],
+  "trait": "특성_삼두구",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

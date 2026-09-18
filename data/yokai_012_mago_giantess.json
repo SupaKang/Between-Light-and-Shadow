@@ -1,0 +1,32 @@
+{
+  "id": "yokai_012",
+  "dex_number": 12,
+  "name_ko": "마고할미",
+  "name_en": "Mago Giantess",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 창세설화",
+  "grade": "IV",
+  "element": "Earth",
+  "level": 38,
+  "stats": {
+    "hp": 240,
+    "qi": 90,
+    "attack": 32,
+    "defense": 28,
+    "speed": 14
+  },
+  "skills": [
+    "skill_001",
+    "skill_007",
+    "skill_010",
+    "skill_011"
+  ],
+  "trait": "특성_마고할미",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

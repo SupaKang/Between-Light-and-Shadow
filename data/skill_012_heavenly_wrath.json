@@ -1,0 +1,9 @@
+{
+  "id": "skill_012",
+  "name_ko": "천벌 벽력",
+  "power": 45,
+  "qi_cost": 16,
+  "accuracy": 85,
+  "status": "paralysis",
+  "seal_turns": 0
+}

@@ -1,0 +1,32 @@
+{
+  "id": "yokai_079",
+  "dex_number": 79,
+  "name_ko": "신령 백호",
+  "name_en": "Sacred White Tiger",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 산신설화",
+  "grade": "IV",
+  "element": "Physical",
+  "level": 38,
+  "stats": {
+    "hp": 230,
+    "qi": 80,
+    "attack": 36,
+    "defense": 26,
+    "speed": 25
+  },
+  "skills": [
+    "skill_001",
+    "skill_007",
+    "skill_006",
+    "skill_012"
+  ],
+  "trait": "특성_신령 백호",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "id": "yokai_050",
+  "dex_number": 50,
+  "name_ko": "묘두사",
+  "name_en": "Cat-Headed Serpent",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 신증동국여지승람",
+  "grade": "III",
+  "element": "Dark",
+  "level": 26,
+  "stats": {
+    "hp": 170,
+    "qi": 70,
+    "attack": 28,
+    "defense": 22,
+    "speed": 21
+  },
+  "skills": [
+    "skill_001",
+    "skill_006",
+    "skill_010",
+    "skill_005"
+  ],
+  "trait": "특성_묘두사",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

@@ -80,6 +80,27 @@ int main() {
     auto artifact_def = data::Registry::parse_artifact("{\"id\":\"art_001\",\"attack_bonus\":3,\"destroyable\":true}");
     assert(artifact_def.attack_bonus == 3 && artifact_def.destroyable);
 
+    // Expanded Content Validation (108 Yokai, 12 Skills, Artifacts)
+    std::string y1_raw = data::Registry::load_text("data/yokai_001_dokkaebi.json");
+    assert(!y1_raw.empty());
+    auto y1 = data::Registry::parse_yokai(y1_raw);
+    assert(y1.id == "yokai_001" && y1.name_ko == "도깨비" && y1.grade == "I");
+
+    std::string y2_raw = data::Registry::load_text("data/yokai_002_nine_tailed_fox.json");
+    assert(!y2_raw.empty());
+    auto y2 = data::Registry::parse_yokai(y2_raw);
+    assert(y2.id == "yokai_002" && y2.name_ko == "구미호" && y2.grade == "II");
+
+    std::string s5_raw = data::Registry::load_text("data/skill_005_thunder.json");
+    assert(!s5_raw.empty());
+    auto s5 = data::Registry::parse_skill(s5_raw);
+    assert(s5.id == "skill_005" && s5.status == status_rules::Kind::Paralysis);
+
+    std::string a2_raw = data::Registry::load_text("data/artifact_002_dokkaebi_token.json");
+    assert(!a2_raw.empty());
+    auto a2 = data::Registry::parse_artifact(a2_raw);
+    assert(a2.id == "artifact_002" && a2.destroyable);
+
     // 6. Battle UI & Navigation
     assert(battle_ui::move_command(0, -1, 3) == 2);
     assert(battle_ui::move_command(2, 1, 3) == 0);

@@ -1,0 +1,9 @@
+{
+  "id": "skill_007",
+  "name_ko": "도깨비 방망이",
+  "power": 35,
+  "qi_cost": 10,
+  "accuracy": 90,
+  "status": "none",
+  "seal_turns": 0
+}

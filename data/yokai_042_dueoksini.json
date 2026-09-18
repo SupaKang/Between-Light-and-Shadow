@@ -1,0 +1,32 @@
+{
+  "id": "yokai_042",
+  "dex_number": 42,
+  "name_ko": "두억시니",
+  "name_en": "Dueoksini",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 민담",
+  "grade": "IV",
+  "element": "Physical",
+  "level": 35,
+  "stats": {
+    "hp": 220,
+    "qi": 70,
+    "attack": 35,
+    "defense": 26,
+    "speed": 18
+  },
+  "skills": [
+    "skill_001",
+    "skill_007",
+    "skill_006",
+    "skill_010"
+  ],
+  "trait": "특성_두억시니",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "id": "yokai_040",
+  "dex_number": 40,
+  "name_ko": "용왕",
+  "name_en": "Dragon King",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 심청전/별주부전",
+  "grade": "IV",
+  "element": "Water",
+  "level": 37,
+  "stats": {
+    "hp": 235,
+    "qi": 100,
+    "attack": 31,
+    "defense": 27,
+    "speed": 21
+  },
+  "skills": [
+    "skill_001",
+    "skill_003",
+    "skill_009",
+    "skill_012"
+  ],
+  "trait": "특성_용왕",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

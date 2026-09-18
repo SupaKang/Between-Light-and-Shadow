@@ -1,0 +1,32 @@
+{
+  "id": "yokai_074",
+  "dex_number": 74,
+  "name_ko": "서낭신",
+  "name_en": "Village Cairn Spirit",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 성황신앙",
+  "grade": "III",
+  "element": "Earth",
+  "level": 27,
+  "stats": {
+    "hp": 170,
+    "qi": 70,
+    "attack": 26,
+    "defense": 26,
+    "speed": 17
+  },
+  "skills": [
+    "skill_001",
+    "skill_010",
+    "skill_011",
+    "skill_004"
+  ],
+  "trait": "특성_서낭신",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

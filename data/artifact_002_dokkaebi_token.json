@@ -1,0 +1,10 @@
+{
+  "id": "artifact_002",
+  "name_ko": "도깨비 은패",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "passive": "영력 소비 20% 감소",
+  "drawback": "방어력 2 감소",
+  "destroyable": true,
+  "attack_bonus": 0,
+  "hp_loss_per_battle": 0
+}

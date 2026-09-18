@@ -1,0 +1,32 @@
+{
+  "id": "yokai_025",
+  "dex_number": 25,
+  "name_ko": "금덕",
+  "name_en": "Golden Toad",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 두꺼비 보은설화",
+  "grade": "II",
+  "element": "Earth",
+  "level": 14,
+  "stats": {
+    "hp": 135,
+    "qi": 45,
+    "attack": 18,
+    "defense": 22,
+    "speed": 11
+  },
+  "skills": [
+    "skill_001",
+    "skill_010",
+    "skill_011",
+    "skill_004"
+  ],
+  "trait": "특성_금덕",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "id": "skill_010",
+  "name_ko": "암흑 발톱",
+  "power": 30,
+  "qi_cost": 9,
+  "accuracy": 95,
+  "status": "fear",
+  "seal_turns": 0
+}

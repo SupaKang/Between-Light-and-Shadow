@@ -1,0 +1,32 @@
+{
+  "id": "yokai_046",
+  "dex_number": 46,
+  "name_ko": "처녀귀신",
+  "name_en": "Virgin Ghost",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 전설의 고향",
+  "grade": "II",
+  "element": "Water",
+  "level": 15,
+  "stats": {
+    "hp": 110,
+    "qi": 65,
+    "attack": 21,
+    "defense": 13,
+    "speed": 20
+  },
+  "skills": [
+    "skill_001",
+    "skill_003",
+    "skill_009",
+    "skill_006"
+  ],
+  "trait": "특성_처녀귀신",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

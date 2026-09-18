@@ -1,0 +1,32 @@
+{
+  "id": "yokai_067",
+  "dex_number": 67,
+  "name_ko": "물귀신",
+  "name_en": "Drowning Ghost",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 민담",
+  "grade": "I",
+  "element": "Water",
+  "level": 10,
+  "stats": {
+    "hp": 95,
+    "qi": 36,
+    "attack": 14,
+    "defense": 10,
+    "speed": 16
+  },
+  "skills": [
+    "skill_001",
+    "skill_003",
+    "skill_006",
+    "skill_009"
+  ],
+  "trait": "특성_물귀신",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

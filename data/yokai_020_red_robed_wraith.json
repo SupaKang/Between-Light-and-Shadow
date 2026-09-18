@@ -1,0 +1,32 @@
+{
+  "id": "yokai_020",
+  "dex_number": 20,
+  "name_ko": "홍도대",
+  "name_en": "Red Robed Wraith",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 야담",
+  "grade": "II",
+  "element": "Fire",
+  "level": 13,
+  "stats": {
+    "hp": 110,
+    "qi": 55,
+    "attack": 19,
+    "defense": 13,
+    "speed": 17
+  },
+  "skills": [
+    "skill_001",
+    "skill_002",
+    "skill_008",
+    "skill_006"
+  ],
+  "trait": "특성_홍도대",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

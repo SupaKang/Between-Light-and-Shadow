@@ -1,0 +1,32 @@
+{
+  "id": "yokai_065",
+  "dex_number": 65,
+  "name_ko": "신립의 망령",
+  "name_en": "General Sin Rip Ghost",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 임진록 야사",
+  "grade": "III",
+  "element": "Water",
+  "level": 29,
+  "stats": {
+    "hp": 175,
+    "qi": 68,
+    "attack": 29,
+    "defense": 23,
+    "speed": 19
+  },
+  "skills": [
+    "skill_001",
+    "skill_003",
+    "skill_007",
+    "skill_006"
+  ],
+  "trait": "특성_신립의 망령",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

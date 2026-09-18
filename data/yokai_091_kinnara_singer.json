@@ -1,0 +1,32 @@
+{
+  "id": "yokai_091",
+  "dex_number": 91,
+  "name_ko": "긴나라",
+  "name_en": "Kinnara Singer",
+  "origin": "VERIFY_FOREIGN_FOLKLORE",
+  "folklore_source": "불교 팔부중",
+  "grade": "III",
+  "element": "Light",
+  "level": 27,
+  "stats": {
+    "hp": 160,
+    "qi": 75,
+    "attack": 25,
+    "defense": 19,
+    "speed": 24
+  },
+  "skills": [
+    "skill_001",
+    "skill_011",
+    "skill_004",
+    "skill_005"
+  ],
+  "trait": "특성_긴나라",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "id": "yokai_023",
+  "dex_number": 23,
+  "name_ko": "묘백",
+  "name_en": "White Cat Spirit",
+  "origin": "VERIFY_FOREIGN_FOLKLORE",
+  "folklore_source": "동양 전승",
+  "grade": "I",
+  "element": "Dark",
+  "level": 7,
+  "stats": {
+    "hp": 84,
+    "qi": 38,
+    "attack": 13,
+    "defense": 9,
+    "speed": 20
+  },
+  "skills": [
+    "skill_001",
+    "skill_006",
+    "skill_010",
+    "skill_004"
+  ],
+  "trait": "특성_묘백",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

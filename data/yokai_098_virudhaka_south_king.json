@@ -1,0 +1,32 @@
+{
+  "id": "yokai_098",
+  "dex_number": 98,
+  "name_ko": "증장천왕",
+  "name_en": "Virudhaka South King",
+  "origin": "VERIFY_FOREIGN_FOLKLORE",
+  "folklore_source": "불교 사천왕",
+  "grade": "IV",
+  "element": "Physical",
+  "level": 39,
+  "stats": {
+    "hp": 230,
+    "qi": 90,
+    "attack": 35,
+    "defense": 26,
+    "speed": 22
+  },
+  "skills": [
+    "skill_001",
+    "skill_007",
+    "skill_011",
+    "skill_010"
+  ],
+  "trait": "특성_증장천왕",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

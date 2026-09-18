@@ -1,0 +1,9 @@
+{
+  "id": "skill_005",
+  "name_ko": "벼락 소환",
+  "power": 28,
+  "qi_cost": 8,
+  "accuracy": 85,
+  "status": "paralysis",
+  "seal_turns": 0
+}

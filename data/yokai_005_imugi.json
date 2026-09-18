@@ -1,0 +1,32 @@
+{
+  "id": "yokai_005",
+  "dex_number": 5,
+  "name_ko": "이무기",
+  "name_en": "Imugi",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 용설화",
+  "grade": "III",
+  "element": "Water",
+  "level": 26,
+  "stats": {
+    "hp": 165,
+    "qi": 75,
+    "attack": 27,
+    "defense": 22,
+    "speed": 18
+  },
+  "skills": [
+    "skill_001",
+    "skill_003",
+    "skill_009",
+    "skill_004"
+  ],
+  "trait": "특성_이무기",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

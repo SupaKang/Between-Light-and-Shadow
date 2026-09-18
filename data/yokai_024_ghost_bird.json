@@ -1,0 +1,32 @@
+{
+  "id": "yokai_024",
+  "dex_number": 24,
+  "name_ko": "귀신새",
+  "name_en": "Ghost Bird",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 민담",
+  "grade": "I",
+  "element": "Dark",
+  "level": 8,
+  "stats": {
+    "hp": 85,
+    "qi": 40,
+    "attack": 14,
+    "defense": 8,
+    "speed": 22
+  },
+  "skills": [
+    "skill_001",
+    "skill_006",
+    "skill_003",
+    "skill_004"
+  ],
+  "trait": "특성_귀신새",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "id": "yokai_092",
+  "dex_number": 92,
+  "name_ko": "마후라가",
+  "name_en": "Mahoraga Great Serpent",
+  "origin": "VERIFY_FOREIGN_FOLKLORE",
+  "folklore_source": "불교 팔부중",
+  "grade": "III",
+  "element": "Earth",
+  "level": 28,
+  "stats": {
+    "hp": 175,
+    "qi": 65,
+    "attack": 28,
+    "defense": 24,
+    "speed": 17
+  },
+  "skills": [
+    "skill_001",
+    "skill_010",
+    "skill_006",
+    "skill_007"
+  ],
+  "trait": "특성_마후라가",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

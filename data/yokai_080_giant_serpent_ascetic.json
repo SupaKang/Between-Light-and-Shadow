@@ -1,0 +1,32 @@
+{
+  "id": "yokai_080",
+  "dex_number": 80,
+  "name_ko": "왕구렁선인",
+  "name_en": "Giant Serpent Ascetic",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 구렁이 설화",
+  "grade": "III",
+  "element": "Water",
+  "level": 27,
+  "stats": {
+    "hp": 168,
+    "qi": 72,
+    "attack": 28,
+    "defense": 22,
+    "speed": 19
+  },
+  "skills": [
+    "skill_001",
+    "skill_003",
+    "skill_009",
+    "skill_011"
+  ],
+  "trait": "특성_왕구렁선인",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

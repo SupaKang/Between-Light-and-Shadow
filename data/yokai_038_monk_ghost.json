@@ -1,0 +1,32 @@
+{
+  "id": "yokai_038",
+  "dex_number": 38,
+  "name_ko": "정업",
+  "name_en": "Monk Ghost",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 설화",
+  "grade": "I",
+  "element": "Light",
+  "level": 9,
+  "stats": {
+    "hp": 94,
+    "qi": 45,
+    "attack": 13,
+    "defense": 11,
+    "speed": 12
+  },
+  "skills": [
+    "skill_001",
+    "skill_004",
+    "skill_011",
+    "skill_002"
+  ],
+  "trait": "특성_정업",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

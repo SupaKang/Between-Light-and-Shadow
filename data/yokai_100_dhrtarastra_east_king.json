@@ -1,0 +1,32 @@
+{
+  "id": "yokai_100",
+  "dex_number": 100,
+  "name_ko": "지국천왕",
+  "name_en": "Dhrtarastra East King",
+  "origin": "VERIFY_FOREIGN_FOLKLORE",
+  "folklore_source": "불교 사천왕",
+  "grade": "IV",
+  "element": "Light",
+  "level": 39,
+  "stats": {
+    "hp": 225,
+    "qi": 100,
+    "attack": 33,
+    "defense": 26,
+    "speed": 24
+  },
+  "skills": [
+    "skill_001",
+    "skill_011",
+    "skill_005",
+    "skill_012"
+  ],
+  "trait": "특성_지국천왕",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

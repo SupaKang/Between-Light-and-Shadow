@@ -1,0 +1,32 @@
+{
+  "id": "yokai_062",
+  "dex_number": 62,
+  "name_ko": "측간귀신",
+  "name_en": "Latrine Wraith",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 민속신앙",
+  "grade": "I",
+  "element": "Dark",
+  "level": 8,
+  "stats": {
+    "hp": 92,
+    "qi": 34,
+    "attack": 14,
+    "defense": 9,
+    "speed": 13
+  },
+  "skills": [
+    "skill_001",
+    "skill_006",
+    "skill_004",
+    "skill_003"
+  ],
+  "trait": "특성_측간귀신",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "id": "yokai_068",
+  "dex_number": 68,
+  "name_ko": "신기원 요화",
+  "name_en": "Mystic Lotus Spirit",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 야담",
+  "grade": "II",
+  "element": "Light",
+  "level": 16,
+  "stats": {
+    "hp": 115,
+    "qi": 65,
+    "attack": 19,
+    "defense": 14,
+    "speed": 19
+  },
+  "skills": [
+    "skill_001",
+    "skill_011",
+    "skill_004",
+    "skill_012"
+  ],
+  "trait": "특성_신기원 요화",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

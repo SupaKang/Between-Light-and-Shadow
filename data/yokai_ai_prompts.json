@@ -394,7 +394,7 @@
     "id": "YOK_018_GANGSRI",
     "dex_number": 18,
     "name_ko": "강시귀",
-    "name_en": "Jiangshi Hopping Ghost",
+    "name_en": "Jiangshi",
     "grade": "II",
     "element": "Dark",
     "folklore_origin": "동양 전승",
@@ -509,7 +509,7 @@
     "id": "YOK_023_MYOBAEK",
     "dex_number": 23,
     "name_ko": "묘백",
-    "name_en": "White Cat Nekomata",
+    "name_en": "White Cat Spirit",
     "grade": "I",
     "element": "Dark",
     "folklore_origin": "동양 전승",
@@ -920,15 +920,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_041_FOLKLORE_041",
+    "id": "YOK_041_GEUSEUNDAE",
     "dex_number": 41,
-    "name_ko": "전승요괴 #041",
-    "name_en": "Folklore Yokai #041",
-    "grade": "II",
+    "name_ko": "그슨대",
+    "name_en": "Geuseundae",
+    "grade": "III",
     "element": "Dark",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #041 associated with Dark element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #041, Mythical eastern folklore beast creature #041 associated with Dark element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "folklore_origin": "한국 민담",
+    "pixel_lab_prompt": "pixel art, 그슨대 (Geuseundae), 한국 민담 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Geuseundae, 그슨대, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -943,15 +943,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_042_FOLKLORE_042",
+    "id": "YOK_042_DUEOKSINI",
     "dex_number": 42,
-    "name_ko": "전승요괴 #042",
-    "name_en": "Folklore Yokai #042",
-    "grade": "II",
+    "name_ko": "두억시니",
+    "name_en": "Dueoksini",
+    "grade": "IV",
     "element": "Physical",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #042 associated with Physical element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #042, Mythical eastern folklore beast creature #042 associated with Physical element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "folklore_origin": "한국 민담",
+    "pixel_lab_prompt": "pixel art, 두억시니 (Dueoksini), 한국 민담 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Dueoksini, 두억시니, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -966,15 +966,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_043_FOLKLORE_043",
+    "id": "YOK_043_EODUKSINI",
     "dex_number": 43,
-    "name_ko": "전승요괴 #043",
-    "name_en": "Folklore Yokai #043",
-    "grade": "II",
-    "element": "Fire",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #043 associated with Fire element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #043, Mythical eastern folklore beast creature #043 associated with Fire element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "name_ko": "어둑시니",
+    "name_en": "Eoduksini",
+    "grade": "III",
+    "element": "Dark",
+    "folklore_origin": "한국 민담",
+    "pixel_lab_prompt": "pixel art, 어둑시니 (Eoduksini), 한국 민담 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Eoduksini, 어둑시니, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -989,15 +989,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_044_FOLKLORE_044",
+    "id": "YOK_044_CHANGGWI",
     "dex_number": 44,
-    "name_ko": "전승요괴 #044",
-    "name_en": "Folklore Yokai #044",
+    "name_ko": "창귀",
+    "name_en": "Changgwi",
     "grade": "II",
-    "element": "Water",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #044 associated with Water element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #044, Mythical eastern folklore beast creature #044 associated with Water element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "element": "Dark",
+    "folklore_origin": "한국 박지원 호질",
+    "pixel_lab_prompt": "pixel art, 창귀 (Changgwi), 한국 박지원 호질 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Changgwi, 창귀, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -1012,15 +1012,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_045_FOLKLORE_045",
+    "id": "YOK_045_SANGUN_MOUNTAIN_LORD",
     "dex_number": 45,
-    "name_ko": "전승요괴 #045",
-    "name_en": "Folklore Yokai #045",
-    "grade": "II",
-    "element": "Earth",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #045 associated with Earth element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #045, Mythical eastern folklore beast creature #045 associated with Earth element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "name_ko": "산군",
+    "name_en": "Sangun Mountain Lord",
+    "grade": "IV",
+    "element": "Physical",
+    "folklore_origin": "한국 호랑이 설화",
+    "pixel_lab_prompt": "pixel art, 산군 (Sangun Mountain Lord), 한국 호랑이 설화 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Sangun Mountain Lord, 산군, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -1035,15 +1035,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_046_FOLKLORE_046",
+    "id": "YOK_046_VIRGIN_GHOST",
     "dex_number": 46,
-    "name_ko": "전승요괴 #046",
-    "name_en": "Folklore Yokai #046",
+    "name_ko": "처녀귀신",
+    "name_en": "Virgin Ghost",
     "grade": "II",
-    "element": "Light",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #046 associated with Light element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #046, Mythical eastern folklore beast creature #046 associated with Light element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "element": "Water",
+    "folklore_origin": "한국 전설의 고향",
+    "pixel_lab_prompt": "pixel art, 처녀귀신 (Virgin Ghost), 한국 전설의 고향 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Virgin Ghost, 처녀귀신, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -1058,15 +1058,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_047_FOLKLORE_047",
+    "id": "YOK_047_BACHELOR_GHOST",
     "dex_number": 47,
-    "name_ko": "전승요괴 #047",
-    "name_en": "Folklore Yokai #047",
+    "name_ko": "몽달귀신",
+    "name_en": "Bachelor Ghost",
     "grade": "II",
-    "element": "Dark",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #047 associated with Dark element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #047, Mythical eastern folklore beast creature #047 associated with Dark element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "element": "Fire",
+    "folklore_origin": "한국 야담",
+    "pixel_lab_prompt": "pixel art, 몽달귀신 (Bachelor Ghost), 한국 야담 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Bachelor Ghost, 몽달귀신, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -1081,15 +1081,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_048_FOLKLORE_048",
+    "id": "YOK_048_EGG_FACE_GHOST",
     "dex_number": 48,
-    "name_ko": "전승요괴 #048",
-    "name_en": "Folklore Yokai #048",
+    "name_ko": "달걀귀신",
+    "name_en": "Egg Face Ghost",
     "grade": "II",
-    "element": "Physical",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #048 associated with Physical element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #048, Mythical eastern folklore beast creature #048 associated with Physical element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "element": "Dark",
+    "folklore_origin": "한국 민담",
+    "pixel_lab_prompt": "pixel art, 달걀귀신 (Egg Face Ghost), 한국 민담 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Egg Face Ghost, 달걀귀신, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -1104,15 +1104,245 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_049_FOLKLORE_049",
+    "id": "YOK_049_SHOE_STEALER_IMP",
     "dex_number": 49,
-    "name_ko": "전승요괴 #049",
-    "name_en": "Folklore Yokai #049",
+    "name_ko": "야광귀",
+    "name_en": "Shoe Stealer Imp",
+    "grade": "I",
+    "element": "Dark",
+    "folklore_origin": "한국 세시풍속",
+    "pixel_lab_prompt": "pixel art, 야광귀 (Shoe Stealer Imp), 한국 세시풍속 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Shoe Stealer Imp, 야광귀, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
+    "target_resolution": {
+      "battle": [
+        48,
+        48
+      ],
+      "field": [
+        16,
+        24
+      ]
+    },
+    "recommended_palette": "dancheong16"
+  },
+  {
+    "id": "YOK_050_CAT_HEADED_SERPENT",
+    "dex_number": 50,
+    "name_ko": "묘두사",
+    "name_en": "Cat-Headed Serpent",
+    "grade": "III",
+    "element": "Dark",
+    "folklore_origin": "한국 신증동국여지승람",
+    "pixel_lab_prompt": "pixel art, 묘두사 (Cat-Headed Serpent), 한국 신증동국여지승람 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Cat-Headed Serpent, 묘두사, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
+    "target_resolution": {
+      "battle": [
+        48,
+        48
+      ],
+      "field": [
+        16,
+        24
+      ]
+    },
+    "recommended_palette": "dancheong16"
+  },
+  {
+    "id": "YOK_051_BIHYEONGRANG",
+    "dex_number": 51,
+    "name_ko": "비형랑",
+    "name_en": "Bihyeongrang",
+    "grade": "IV",
+    "element": "Dark",
+    "folklore_origin": "한국 삼국유사",
+    "pixel_lab_prompt": "pixel art, 비형랑 (Bihyeongrang), 한국 삼국유사 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Bihyeongrang, 비형랑, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
+    "target_resolution": {
+      "battle": [
+        48,
+        48
+      ],
+      "field": [
+        16,
+        24
+      ]
+    },
+    "recommended_palette": "dancheong16"
+  },
+  {
+    "id": "YOK_052_GILDAL",
+    "dex_number": 52,
+    "name_ko": "길달",
+    "name_en": "Gildal",
+    "grade": "II",
+    "element": "Physical",
+    "folklore_origin": "한국 삼국유사",
+    "pixel_lab_prompt": "pixel art, 길달 (Gildal), 한국 삼국유사 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Gildal, 길달, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
+    "target_resolution": {
+      "battle": [
+        48,
+        48
+      ],
+      "field": [
+        16,
+        24
+      ]
+    },
+    "recommended_palette": "dancheong16"
+  },
+  {
+    "id": "YOK_053_GRIM_MESSENGER",
+    "dex_number": 53,
+    "name_ko": "저승사자",
+    "name_en": "Grim Messenger",
+    "grade": "IV",
+    "element": "Dark",
+    "folklore_origin": "한국 무속신앙",
+    "pixel_lab_prompt": "pixel art, 저승사자 (Grim Messenger), 한국 무속신앙 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Grim Messenger, 저승사자, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
+    "target_resolution": {
+      "battle": [
+        48,
+        48
+      ],
+      "field": [
+        16,
+        24
+      ]
+    },
+    "recommended_palette": "dancheong16"
+  },
+  {
+    "id": "YOK_054_GANGRIM_MESSENGER",
+    "dex_number": 54,
+    "name_ko": "강림차사",
+    "name_en": "Gangrim Messenger",
+    "grade": "IV",
+    "element": "Dark",
+    "folklore_origin": "한국 제주 차사본풀이",
+    "pixel_lab_prompt": "pixel art, 강림차사 (Gangrim Messenger), 한국 제주 차사본풀이 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Gangrim Messenger, 강림차사, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
+    "target_resolution": {
+      "battle": [
+        48,
+        48
+      ],
+      "field": [
+        16,
+        24
+      ]
+    },
+    "recommended_palette": "dancheong16"
+  },
+  {
+    "id": "YOK_055_PRINCESS_BARI",
+    "dex_number": 55,
+    "name_ko": "바리데기",
+    "name_en": "Princess Bari",
+    "grade": "V",
+    "element": "Light",
+    "folklore_origin": "한국 바리공주 설화",
+    "pixel_lab_prompt": "pixel art, 바리데기 (Princess Bari), 한국 바리공주 설화 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Princess Bari, 바리데기, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
+    "target_resolution": {
+      "battle": [
+        48,
+        48
+      ],
+      "field": [
+        16,
+        24
+      ]
+    },
+    "recommended_palette": "dancheong16"
+  },
+  {
+    "id": "YOK_056_BIRTH_GODDESS",
+    "dex_number": 56,
+    "name_ko": "삼신할머니",
+    "name_en": "Birth Goddess",
+    "grade": "IV",
+    "element": "Light",
+    "folklore_origin": "한국 무속신앙",
+    "pixel_lab_prompt": "pixel art, 삼신할머니 (Birth Goddess), 한국 무속신앙 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Birth Goddess, 삼신할머니, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
+    "target_resolution": {
+      "battle": [
+        48,
+        48
+      ],
+      "field": [
+        16,
+        24
+      ]
+    },
+    "recommended_palette": "dancheong16"
+  },
+  {
+    "id": "YOK_057_GUIDING_SPIRIT",
+    "dex_number": 57,
+    "name_ko": "가망신",
+    "name_en": "Guiding Spirit",
+    "grade": "II",
+    "element": "Light",
+    "folklore_origin": "한국 무속신앙",
+    "pixel_lab_prompt": "pixel art, 가망신 (Guiding Spirit), 한국 무속신앙 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Guiding Spirit, 가망신, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
+    "target_resolution": {
+      "battle": [
+        48,
+        48
+      ],
+      "field": [
+        16,
+        24
+      ]
+    },
+    "recommended_palette": "dancheong16"
+  },
+  {
+    "id": "YOK_058_HOUSE_GUARDIAN",
+    "dex_number": 58,
+    "name_ko": "성주신",
+    "name_en": "House Guardian",
+    "grade": "III",
+    "element": "Earth",
+    "folklore_origin": "한국 가신신앙",
+    "pixel_lab_prompt": "pixel art, 성주신 (House Guardian), 한국 가신신앙 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, House Guardian, 성주신, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
+    "target_resolution": {
+      "battle": [
+        48,
+        48
+      ],
+      "field": [
+        16,
+        24
+      ]
+    },
+    "recommended_palette": "dancheong16"
+  },
+  {
+    "id": "YOK_059_KITCHEN_FIRE_SPIRIT",
+    "dex_number": 59,
+    "name_ko": "조왕신",
+    "name_en": "Kitchen Fire Spirit",
     "grade": "II",
     "element": "Fire",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #049 associated with Fire element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #049, Mythical eastern folklore beast creature #049 associated with Fire element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "folklore_origin": "한국 가신신앙",
+    "pixel_lab_prompt": "pixel art, 조왕신 (Kitchen Fire Spirit), 한국 가신신앙 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Kitchen Fire Spirit, 조왕신, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -1127,245 +1357,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_050_FOLKLORE_050",
-    "dex_number": 50,
-    "name_ko": "전승요괴 #050",
-    "name_en": "Folklore Yokai #050",
-    "grade": "III",
-    "element": "Water",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #050 associated with Water element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #050, Mythical eastern folklore beast creature #050 associated with Water element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
-    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
-    "target_resolution": {
-      "battle": [
-        48,
-        48
-      ],
-      "field": [
-        16,
-        24
-      ]
-    },
-    "recommended_palette": "dancheong16"
-  },
-  {
-    "id": "YOK_051_FOLKLORE_051",
-    "dex_number": 51,
-    "name_ko": "전승요괴 #051",
-    "name_en": "Folklore Yokai #051",
-    "grade": "III",
-    "element": "Earth",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #051 associated with Earth element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #051, Mythical eastern folklore beast creature #051 associated with Earth element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
-    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
-    "target_resolution": {
-      "battle": [
-        48,
-        48
-      ],
-      "field": [
-        16,
-        24
-      ]
-    },
-    "recommended_palette": "dancheong16"
-  },
-  {
-    "id": "YOK_052_FOLKLORE_052",
-    "dex_number": 52,
-    "name_ko": "전승요괴 #052",
-    "name_en": "Folklore Yokai #052",
-    "grade": "III",
-    "element": "Light",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #052 associated with Light element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #052, Mythical eastern folklore beast creature #052 associated with Light element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
-    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
-    "target_resolution": {
-      "battle": [
-        48,
-        48
-      ],
-      "field": [
-        16,
-        24
-      ]
-    },
-    "recommended_palette": "dancheong16"
-  },
-  {
-    "id": "YOK_053_FOLKLORE_053",
-    "dex_number": 53,
-    "name_ko": "전승요괴 #053",
-    "name_en": "Folklore Yokai #053",
-    "grade": "III",
-    "element": "Dark",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #053 associated with Dark element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #053, Mythical eastern folklore beast creature #053 associated with Dark element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
-    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
-    "target_resolution": {
-      "battle": [
-        48,
-        48
-      ],
-      "field": [
-        16,
-        24
-      ]
-    },
-    "recommended_palette": "dancheong16"
-  },
-  {
-    "id": "YOK_054_FOLKLORE_054",
-    "dex_number": 54,
-    "name_ko": "전승요괴 #054",
-    "name_en": "Folklore Yokai #054",
-    "grade": "III",
-    "element": "Physical",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #054 associated with Physical element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #054, Mythical eastern folklore beast creature #054 associated with Physical element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
-    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
-    "target_resolution": {
-      "battle": [
-        48,
-        48
-      ],
-      "field": [
-        16,
-        24
-      ]
-    },
-    "recommended_palette": "dancheong16"
-  },
-  {
-    "id": "YOK_055_FOLKLORE_055",
-    "dex_number": 55,
-    "name_ko": "전승요괴 #055",
-    "name_en": "Folklore Yokai #055",
-    "grade": "III",
-    "element": "Fire",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #055 associated with Fire element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #055, Mythical eastern folklore beast creature #055 associated with Fire element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
-    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
-    "target_resolution": {
-      "battle": [
-        48,
-        48
-      ],
-      "field": [
-        16,
-        24
-      ]
-    },
-    "recommended_palette": "dancheong16"
-  },
-  {
-    "id": "YOK_056_FOLKLORE_056",
-    "dex_number": 56,
-    "name_ko": "전승요괴 #056",
-    "name_en": "Folklore Yokai #056",
-    "grade": "III",
-    "element": "Water",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #056 associated with Water element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #056, Mythical eastern folklore beast creature #056 associated with Water element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
-    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
-    "target_resolution": {
-      "battle": [
-        48,
-        48
-      ],
-      "field": [
-        16,
-        24
-      ]
-    },
-    "recommended_palette": "dancheong16"
-  },
-  {
-    "id": "YOK_057_FOLKLORE_057",
-    "dex_number": 57,
-    "name_ko": "전승요괴 #057",
-    "name_en": "Folklore Yokai #057",
-    "grade": "III",
-    "element": "Earth",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #057 associated with Earth element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #057, Mythical eastern folklore beast creature #057 associated with Earth element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
-    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
-    "target_resolution": {
-      "battle": [
-        48,
-        48
-      ],
-      "field": [
-        16,
-        24
-      ]
-    },
-    "recommended_palette": "dancheong16"
-  },
-  {
-    "id": "YOK_058_FOLKLORE_058",
-    "dex_number": 58,
-    "name_ko": "전승요괴 #058",
-    "name_en": "Folklore Yokai #058",
-    "grade": "III",
-    "element": "Light",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #058 associated with Light element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #058, Mythical eastern folklore beast creature #058 associated with Light element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
-    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
-    "target_resolution": {
-      "battle": [
-        48,
-        48
-      ],
-      "field": [
-        16,
-        24
-      ]
-    },
-    "recommended_palette": "dancheong16"
-  },
-  {
-    "id": "YOK_059_FOLKLORE_059",
-    "dex_number": 59,
-    "name_ko": "전승요괴 #059",
-    "name_en": "Folklore Yokai #059",
-    "grade": "III",
-    "element": "Dark",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #059 associated with Dark element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #059, Mythical eastern folklore beast creature #059 associated with Dark element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
-    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
-    "target_resolution": {
-      "battle": [
-        48,
-        48
-      ],
-      "field": [
-        16,
-        24
-      ]
-    },
-    "recommended_palette": "dancheong16"
-  },
-  {
-    "id": "YOK_060_FOLKLORE_060",
+    "id": "YOK_060_EARTH_GROUND_SPIRIT",
     "dex_number": 60,
-    "name_ko": "전승요괴 #060",
-    "name_en": "Folklore Yokai #060",
-    "grade": "III",
-    "element": "Physical",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #060 associated with Physical element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #060, Mythical eastern folklore beast creature #060 associated with Physical element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "name_ko": "터주신",
+    "name_en": "Earth Ground Spirit",
+    "grade": "II",
+    "element": "Earth",
+    "folklore_origin": "한국 가신신앙",
+    "pixel_lab_prompt": "pixel art, 터주신 (Earth Ground Spirit), 한국 가신신앙 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Earth Ground Spirit, 터주신, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -1380,15 +1380,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_061_FOLKLORE_061",
+    "id": "YOK_061_WEALTH_SNAKE_SPIRIT",
     "dex_number": 61,
-    "name_ko": "전승요괴 #061",
-    "name_en": "Folklore Yokai #061",
-    "grade": "III",
-    "element": "Fire",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #061 associated with Fire element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #061, Mythical eastern folklore beast creature #061 associated with Fire element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "name_ko": "업신",
+    "name_en": "Wealth Snake Spirit",
+    "grade": "II",
+    "element": "Earth",
+    "folklore_origin": "한국 가신신앙",
+    "pixel_lab_prompt": "pixel art, 업신 (Wealth Snake Spirit), 한국 가신신앙 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Wealth Snake Spirit, 업신, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -1403,15 +1403,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_062_FOLKLORE_062",
+    "id": "YOK_062_LATRINE_WRAITH",
     "dex_number": 62,
-    "name_ko": "전승요괴 #062",
-    "name_en": "Folklore Yokai #062",
-    "grade": "III",
-    "element": "Water",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #062 associated with Water element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #062, Mythical eastern folklore beast creature #062 associated with Water element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "name_ko": "측간귀신",
+    "name_en": "Latrine Wraith",
+    "grade": "I",
+    "element": "Dark",
+    "folklore_origin": "한국 민속신앙",
+    "pixel_lab_prompt": "pixel art, 측간귀신 (Latrine Wraith), 한국 민속신앙 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Latrine Wraith, 측간귀신, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -1426,15 +1426,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_063_FOLKLORE_063",
+    "id": "YOK_063_GATE_WARD_SPIRIT",
     "dex_number": 63,
-    "name_ko": "전승요괴 #063",
-    "name_en": "Folklore Yokai #063",
-    "grade": "III",
-    "element": "Earth",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #063 associated with Earth element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #063, Mythical eastern folklore beast creature #063 associated with Earth element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "name_ko": "문전신",
+    "name_en": "Gate Ward Spirit",
+    "grade": "II",
+    "element": "Light",
+    "folklore_origin": "한국 제주 문전본풀이",
+    "pixel_lab_prompt": "pixel art, 문전신 (Gate Ward Spirit), 한국 제주 문전본풀이 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Gate Ward Spirit, 문전신, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -1449,15 +1449,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_064_FOLKLORE_064",
+    "id": "YOK_064_WINGED_HERO_UTURI",
     "dex_number": 64,
-    "name_ko": "전승요괴 #064",
-    "name_en": "Folklore Yokai #064",
-    "grade": "III",
+    "name_ko": "아기장수 우투리",
+    "name_en": "Winged Hero Uturi",
+    "grade": "IV",
     "element": "Light",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #064 associated with Light element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #064, Mythical eastern folklore beast creature #064 associated with Light element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "folklore_origin": "한국 민담",
+    "pixel_lab_prompt": "pixel art, 아기장수 우투리 (Winged Hero Uturi), 한국 민담 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Winged Hero Uturi, 아기장수 우투리, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -1472,15 +1472,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_065_FOLKLORE_065",
+    "id": "YOK_065_GENERAL_SIN_RIP_GHOST",
     "dex_number": 65,
-    "name_ko": "전승요괴 #065",
-    "name_en": "Folklore Yokai #065",
+    "name_ko": "신립의 망령",
+    "name_en": "General Sin Rip Ghost",
     "grade": "III",
-    "element": "Dark",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #065 associated with Dark element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #065, Mythical eastern folklore beast creature #065 associated with Dark element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "element": "Water",
+    "folklore_origin": "한국 임진록 야사",
+    "pixel_lab_prompt": "pixel art, 신립의 망령 (General Sin Rip Ghost), 한국 임진록 야사 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, General Sin Rip Ghost, 신립의 망령, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -1495,15 +1495,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_066_FOLKLORE_066",
+    "id": "YOK_066_BRASS_IMP",
     "dex_number": 66,
-    "name_ko": "전승요괴 #066",
-    "name_en": "Folklore Yokai #066",
-    "grade": "III",
+    "name_ko": "놋점귀",
+    "name_en": "Brass Imp",
+    "grade": "I",
     "element": "Physical",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #066 associated with Physical element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #066, Mythical eastern folklore beast creature #066 associated with Physical element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "folklore_origin": "한국 야철 설화",
+    "pixel_lab_prompt": "pixel art, 놋점귀 (Brass Imp), 한국 야철 설화 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Brass Imp, 놋점귀, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -1518,15 +1518,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_067_FOLKLORE_067",
+    "id": "YOK_067_DROWNING_GHOST",
     "dex_number": 67,
-    "name_ko": "전승요괴 #067",
-    "name_en": "Folklore Yokai #067",
-    "grade": "III",
-    "element": "Fire",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #067 associated with Fire element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #067, Mythical eastern folklore beast creature #067 associated with Fire element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "name_ko": "물귀신",
+    "name_en": "Drowning Ghost",
+    "grade": "I",
+    "element": "Water",
+    "folklore_origin": "한국 민담",
+    "pixel_lab_prompt": "pixel art, 물귀신 (Drowning Ghost), 한국 민담 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Drowning Ghost, 물귀신, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -1541,15 +1541,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_068_FOLKLORE_068",
+    "id": "YOK_068_MYSTIC_LOTUS_SPIRIT",
     "dex_number": 68,
-    "name_ko": "전승요괴 #068",
-    "name_en": "Folklore Yokai #068",
-    "grade": "III",
-    "element": "Water",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #068 associated with Water element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #068, Mythical eastern folklore beast creature #068 associated with Water element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "name_ko": "신기원 요화",
+    "name_en": "Mystic Lotus Spirit",
+    "grade": "II",
+    "element": "Light",
+    "folklore_origin": "한국 야담",
+    "pixel_lab_prompt": "pixel art, 신기원 요화 (Mystic Lotus Spirit), 한국 야담 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Mystic Lotus Spirit, 신기원 요화, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -1564,15 +1564,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_069_FOLKLORE_069",
+    "id": "YOK_069_BAIZE_OMNISCIENT_BEAST",
     "dex_number": 69,
-    "name_ko": "전승요괴 #069",
-    "name_en": "Folklore Yokai #069",
-    "grade": "III",
-    "element": "Earth",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #069 associated with Earth element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #069, Mythical eastern folklore beast creature #069 associated with Earth element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "name_ko": "백택",
+    "name_en": "Baize Omniscient Beast",
+    "grade": "V",
+    "element": "Light",
+    "folklore_origin": "동양 산해경",
+    "pixel_lab_prompt": "pixel art, 백택 (Baize Omniscient Beast), 동양 산해경 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Baize Omniscient Beast, 백택, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -1587,15 +1587,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_070_FOLKLORE_070",
+    "id": "YOK_070_QILIN_BENEVOLENT_BEAST",
     "dex_number": 70,
-    "name_ko": "전승요괴 #070",
-    "name_en": "Folklore Yokai #070",
-    "grade": "III",
+    "name_ko": "기린",
+    "name_en": "Qilin Benevolent Beast",
+    "grade": "IV",
     "element": "Light",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #070 associated with Light element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #070, Mythical eastern folklore beast creature #070 associated with Light element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "folklore_origin": "동양 설화",
+    "pixel_lab_prompt": "pixel art, 기린 (Qilin Benevolent Beast), 동양 설화 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Qilin Benevolent Beast, 기린, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -1610,15 +1610,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_071_FOLKLORE_071",
+    "id": "YOK_071_FENGHUANG_PHOENIX",
     "dex_number": 71,
-    "name_ko": "전승요괴 #071",
-    "name_en": "Folklore Yokai #071",
-    "grade": "III",
-    "element": "Dark",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #071 associated with Dark element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #071, Mythical eastern folklore beast creature #071 associated with Dark element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "name_ko": "봉황",
+    "name_en": "Fenghuang Phoenix",
+    "grade": "IV",
+    "element": "Fire",
+    "folklore_origin": "동양 고대설화",
+    "pixel_lab_prompt": "pixel art, 봉황 (Fenghuang Phoenix), 동양 고대설화 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Fenghuang Phoenix, 봉황, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -1633,15 +1633,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_072_FOLKLORE_072",
+    "id": "YOK_072_FLYING_CHARIOT_SPIRIT",
     "dex_number": 72,
-    "name_ko": "전승요괴 #072",
-    "name_en": "Folklore Yokai #072",
-    "grade": "III",
+    "name_ko": "비차",
+    "name_en": "Flying Chariot Spirit",
+    "grade": "II",
     "element": "Physical",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #072 associated with Physical element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #072, Mythical eastern folklore beast creature #072 associated with Physical element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "folklore_origin": "한국 임진왜란 비차비기",
+    "pixel_lab_prompt": "pixel art, 비차 (Flying Chariot Spirit), 한국 임진왜란 비차비기 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Flying Chariot Spirit, 비차, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -1656,15 +1656,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_073_FOLKLORE_073",
+    "id": "YOK_073_WOODEN_OX_GOLEM",
     "dex_number": 73,
-    "name_ko": "전승요괴 #073",
-    "name_en": "Folklore Yokai #073",
-    "grade": "III",
-    "element": "Fire",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #073 associated with Fire element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #073, Mythical eastern folklore beast creature #073 associated with Fire element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "name_ko": "목우",
+    "name_en": "Wooden Ox Golem",
+    "grade": "II",
+    "element": "Earth",
+    "folklore_origin": "한국 도술 설화",
+    "pixel_lab_prompt": "pixel art, 목우 (Wooden Ox Golem), 한국 도술 설화 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Wooden Ox Golem, 목우, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -1679,15 +1679,153 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_074_FOLKLORE_074",
+    "id": "YOK_074_VILLAGE_CAIRN_SPIRIT",
     "dex_number": 74,
-    "name_ko": "전승요괴 #074",
-    "name_en": "Folklore Yokai #074",
+    "name_ko": "서낭신",
+    "name_en": "Village Cairn Spirit",
+    "grade": "III",
+    "element": "Earth",
+    "folklore_origin": "한국 성황신앙",
+    "pixel_lab_prompt": "pixel art, 서낭신 (Village Cairn Spirit), 한국 성황신앙 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Village Cairn Spirit, 서낭신, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
+    "target_resolution": {
+      "battle": [
+        48,
+        48
+      ],
+      "field": [
+        16,
+        24
+      ]
+    },
+    "recommended_palette": "dancheong16"
+  },
+  {
+    "id": "YOK_075_SACRED_ZELKOVA",
+    "dex_number": 75,
+    "name_ko": "당산나무 신목",
+    "name_en": "Sacred Zelkova",
+    "grade": "III",
+    "element": "Earth",
+    "folklore_origin": "한국 당산신앙",
+    "pixel_lab_prompt": "pixel art, 당산나무 신목 (Sacred Zelkova), 한국 당산신앙 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Sacred Zelkova, 당산나무 신목, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
+    "target_resolution": {
+      "battle": [
+        48,
+        48
+      ],
+      "field": [
+        16,
+        24
+      ]
+    },
+    "recommended_palette": "dancheong16"
+  },
+  {
+    "id": "YOK_076_JANGSEUNG_TOTEM_DEITY",
+    "dex_number": 76,
+    "name_ko": "장승 목신",
+    "name_en": "Jangseung Totem Deity",
+    "grade": "II",
+    "element": "Physical",
+    "folklore_origin": "한국 장승신앙",
+    "pixel_lab_prompt": "pixel art, 장승 목신 (Jangseung Totem Deity), 한국 장승신앙 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Jangseung Totem Deity, 장승 목신, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
+    "target_resolution": {
+      "battle": [
+        48,
+        48
+      ],
+      "field": [
+        16,
+        24
+      ]
+    },
+    "recommended_palette": "dancheong16"
+  },
+  {
+    "id": "YOK_077_CHILD_GHOST",
+    "dex_number": 77,
+    "name_ko": "동자귀",
+    "name_en": "Child Ghost",
+    "grade": "I",
+    "element": "Light",
+    "folklore_origin": "한국 무속설화",
+    "pixel_lab_prompt": "pixel art, 동자귀 (Child Ghost), 한국 무속설화 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Child Ghost, 동자귀, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
+    "target_resolution": {
+      "battle": [
+        48,
+        48
+      ],
+      "field": [
+        16,
+        24
+      ]
+    },
+    "recommended_palette": "dancheong16"
+  },
+  {
+    "id": "YOK_078_CRAG_FALCON_BEAST",
+    "dex_number": 78,
+    "name_ko": "골매",
+    "name_en": "Crag Falcon Beast",
+    "grade": "II",
+    "element": "Physical",
+    "folklore_origin": "한국 산악설화",
+    "pixel_lab_prompt": "pixel art, 골매 (Crag Falcon Beast), 한국 산악설화 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Crag Falcon Beast, 골매, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
+    "target_resolution": {
+      "battle": [
+        48,
+        48
+      ],
+      "field": [
+        16,
+        24
+      ]
+    },
+    "recommended_palette": "dancheong16"
+  },
+  {
+    "id": "YOK_079_SACRED_WHITE_TIGER",
+    "dex_number": 79,
+    "name_ko": "신령 백호",
+    "name_en": "Sacred White Tiger",
+    "grade": "IV",
+    "element": "Physical",
+    "folklore_origin": "한국 산신설화",
+    "pixel_lab_prompt": "pixel art, 신령 백호 (Sacred White Tiger), 한국 산신설화 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Sacred White Tiger, 신령 백호, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
+    "target_resolution": {
+      "battle": [
+        48,
+        48
+      ],
+      "field": [
+        16,
+        24
+      ]
+    },
+    "recommended_palette": "dancheong16"
+  },
+  {
+    "id": "YOK_080_GIANT_SERPENT_ASCETIC",
+    "dex_number": 80,
+    "name_ko": "왕구렁선인",
+    "name_en": "Giant Serpent Ascetic",
     "grade": "III",
     "element": "Water",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #074 associated with Water element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #074, Mythical eastern folklore beast creature #074 associated with Water element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "folklore_origin": "한국 구렁이 설화",
+    "pixel_lab_prompt": "pixel art, 왕구렁선인 (Giant Serpent Ascetic), 한국 구렁이 설화 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Giant Serpent Ascetic, 왕구렁선인, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -1702,153 +1840,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_075_FOLKLORE_075",
-    "dex_number": 75,
-    "name_ko": "전승요괴 #075",
-    "name_en": "Folklore Yokai #075",
-    "grade": "IV",
-    "element": "Earth",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #075 associated with Earth element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #075, Mythical eastern folklore beast creature #075 associated with Earth element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
-    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
-    "target_resolution": {
-      "battle": [
-        48,
-        48
-      ],
-      "field": [
-        16,
-        24
-      ]
-    },
-    "recommended_palette": "dancheong16"
-  },
-  {
-    "id": "YOK_076_FOLKLORE_076",
-    "dex_number": 76,
-    "name_ko": "전승요괴 #076",
-    "name_en": "Folklore Yokai #076",
-    "grade": "IV",
-    "element": "Light",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #076 associated with Light element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #076, Mythical eastern folklore beast creature #076 associated with Light element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
-    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
-    "target_resolution": {
-      "battle": [
-        48,
-        48
-      ],
-      "field": [
-        16,
-        24
-      ]
-    },
-    "recommended_palette": "dancheong16"
-  },
-  {
-    "id": "YOK_077_FOLKLORE_077",
-    "dex_number": 77,
-    "name_ko": "전승요괴 #077",
-    "name_en": "Folklore Yokai #077",
-    "grade": "IV",
-    "element": "Dark",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #077 associated with Dark element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #077, Mythical eastern folklore beast creature #077 associated with Dark element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
-    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
-    "target_resolution": {
-      "battle": [
-        48,
-        48
-      ],
-      "field": [
-        16,
-        24
-      ]
-    },
-    "recommended_palette": "dancheong16"
-  },
-  {
-    "id": "YOK_078_FOLKLORE_078",
-    "dex_number": 78,
-    "name_ko": "전승요괴 #078",
-    "name_en": "Folklore Yokai #078",
-    "grade": "IV",
-    "element": "Physical",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #078 associated with Physical element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #078, Mythical eastern folklore beast creature #078 associated with Physical element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
-    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
-    "target_resolution": {
-      "battle": [
-        48,
-        48
-      ],
-      "field": [
-        16,
-        24
-      ]
-    },
-    "recommended_palette": "dancheong16"
-  },
-  {
-    "id": "YOK_079_FOLKLORE_079",
-    "dex_number": 79,
-    "name_ko": "전승요괴 #079",
-    "name_en": "Folklore Yokai #079",
-    "grade": "IV",
-    "element": "Fire",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #079 associated with Fire element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #079, Mythical eastern folklore beast creature #079 associated with Fire element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
-    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
-    "target_resolution": {
-      "battle": [
-        48,
-        48
-      ],
-      "field": [
-        16,
-        24
-      ]
-    },
-    "recommended_palette": "dancheong16"
-  },
-  {
-    "id": "YOK_080_FOLKLORE_080",
-    "dex_number": 80,
-    "name_ko": "전승요괴 #080",
-    "name_en": "Folklore Yokai #080",
-    "grade": "IV",
-    "element": "Water",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #080 associated with Water element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #080, Mythical eastern folklore beast creature #080 associated with Water element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
-    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
-    "target_resolution": {
-      "battle": [
-        48,
-        48
-      ],
-      "field": [
-        16,
-        24
-      ]
-    },
-    "recommended_palette": "dancheong16"
-  },
-  {
-    "id": "YOK_081_FOLKLORE_081",
+    "id": "YOK_081_THREE_TERRACES_STAR_LORD",
     "dex_number": 81,
-    "name_ko": "전승요괴 #081",
-    "name_en": "Folklore Yokai #081",
+    "name_ko": "삼태성군",
+    "name_en": "Three Terraces Star Lord",
     "grade": "IV",
-    "element": "Earth",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #081 associated with Earth element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #081, Mythical eastern folklore beast creature #081 associated with Earth element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "element": "Light",
+    "folklore_origin": "도교 성수신앙",
+    "pixel_lab_prompt": "pixel art, 삼태성군 (Three Terraces Star Lord), 도교 성수신앙 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Three Terraces Star Lord, 삼태성군, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -1863,15 +1863,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_082_FOLKLORE_082",
+    "id": "YOK_082_THUNDERBOLT_GENERAL",
     "dex_number": 82,
-    "name_ko": "전승요괴 #082",
-    "name_en": "Folklore Yokai #082",
+    "name_ko": "벽력장군",
+    "name_en": "Thunderbolt General",
     "grade": "IV",
     "element": "Light",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #082 associated with Light element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #082, Mythical eastern folklore beast creature #082 associated with Light element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "folklore_origin": "한국 무속 뇌신",
+    "pixel_lab_prompt": "pixel art, 벽력장군 (Thunderbolt General), 한국 무속 뇌신 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Thunderbolt General, 벽력장군, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -1886,15 +1886,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_083_FOLKLORE_083",
+    "id": "YOK_083_WIND_LORD",
     "dex_number": 83,
-    "name_ko": "전승요괴 #083",
-    "name_en": "Folklore Yokai #083",
+    "name_ko": "풍백",
+    "name_en": "Wind Lord",
     "grade": "IV",
-    "element": "Dark",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #083 associated with Dark element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #083, Mythical eastern folklore beast creature #083 associated with Dark element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "element": "Physical",
+    "folklore_origin": "한국 단군신화",
+    "pixel_lab_prompt": "pixel art, 풍백 (Wind Lord), 한국 단군신화 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Wind Lord, 풍백, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -1909,15 +1909,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_084_FOLKLORE_084",
+    "id": "YOK_084_RAIN_MASTER",
     "dex_number": 84,
-    "name_ko": "전승요괴 #084",
-    "name_en": "Folklore Yokai #084",
+    "name_ko": "우사",
+    "name_en": "Rain Master",
     "grade": "IV",
-    "element": "Physical",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #084 associated with Physical element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #084, Mythical eastern folklore beast creature #084 associated with Physical element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "element": "Water",
+    "folklore_origin": "한국 단군신화",
+    "pixel_lab_prompt": "pixel art, 우사 (Rain Master), 한국 단군신화 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Rain Master, 우사, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -1932,15 +1932,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_085_FOLKLORE_085",
+    "id": "YOK_085_CLOUD_MASTER",
     "dex_number": 85,
-    "name_ko": "전승요괴 #085",
-    "name_en": "Folklore Yokai #085",
+    "name_ko": "운사",
+    "name_en": "Cloud Master",
     "grade": "IV",
-    "element": "Fire",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #085 associated with Fire element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #085, Mythical eastern folklore beast creature #085 associated with Fire element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "element": "Light",
+    "folklore_origin": "한국 단군신화",
+    "pixel_lab_prompt": "pixel art, 운사 (Cloud Master), 한국 단군신화 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Cloud Master, 운사, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -1955,15 +1955,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_086_FOLKLORE_086",
+    "id": "YOK_086_CHIYOU_WAR_GOD",
     "dex_number": 86,
-    "name_ko": "전승요괴 #086",
-    "name_en": "Folklore Yokai #086",
-    "grade": "IV",
-    "element": "Water",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #086 associated with Water element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #086, Mythical eastern folklore beast creature #086 associated with Water element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "name_ko": "치우천왕",
+    "name_en": "Chiyou War God",
+    "grade": "V",
+    "element": "Physical",
+    "folklore_origin": "동양 고대전설",
+    "pixel_lab_prompt": "pixel art, 치우천왕 (Chiyou War God), 동양 고대전설 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Chiyou War God, 치우천왕, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -1978,15 +1978,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_087_FOLKLORE_087",
+    "id": "YOK_087_POLAR_STAR_EMPEROR",
     "dex_number": 87,
-    "name_ko": "전승요괴 #087",
-    "name_en": "Folklore Yokai #087",
-    "grade": "IV",
-    "element": "Earth",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #087 associated with Earth element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #087, Mythical eastern folklore beast creature #087 associated with Earth element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "name_ko": "자미대제",
+    "name_en": "Polar Star Emperor",
+    "grade": "V",
+    "element": "Light",
+    "folklore_origin": "도교 천문신앙",
+    "pixel_lab_prompt": "pixel art, 자미대제 (Polar Star Emperor), 도교 천문신앙 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Polar Star Emperor, 자미대제, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -2001,15 +2001,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_088_FOLKLORE_088",
+    "id": "YOK_088_ABYSSAL_BLACK_DRAGON",
     "dex_number": 88,
-    "name_ko": "전승요괴 #088",
-    "name_en": "Folklore Yokai #088",
-    "grade": "IV",
-    "element": "Light",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #088 associated with Light element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #088, Mythical eastern folklore beast creature #088 associated with Light element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "name_ko": "흑룡",
+    "name_en": "Abyssal Black Dragon",
+    "grade": "V",
+    "element": "Water",
+    "folklore_origin": "한국 용설화",
+    "pixel_lab_prompt": "pixel art, 흑룡 (Abyssal Black Dragon), 한국 용설화 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Abyssal Black Dragon, 흑룡, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -2024,15 +2024,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_089_FOLKLORE_089",
+    "id": "YOK_089_WINGED_RAIN_DRAGON",
     "dex_number": 89,
-    "name_ko": "전승요괴 #089",
-    "name_en": "Folklore Yokai #089",
-    "grade": "IV",
-    "element": "Dark",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #089 associated with Dark element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #089, Mythical eastern folklore beast creature #089 associated with Dark element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "name_ko": "응룡",
+    "name_en": "Winged Rain Dragon",
+    "grade": "V",
+    "element": "Water",
+    "folklore_origin": "동양 산해경",
+    "pixel_lab_prompt": "pixel art, 응룡 (Winged Rain Dragon), 동양 산해경 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Winged Rain Dragon, 응룡, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -2047,15 +2047,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_090_FOLKLORE_090",
+    "id": "YOK_090_KALAVINKA_BIRD",
     "dex_number": 90,
-    "name_ko": "전승요괴 #090",
-    "name_en": "Folklore Yokai #090",
-    "grade": "IV",
-    "element": "Physical",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #090 associated with Physical element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #090, Mythical eastern folklore beast creature #090 associated with Physical element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "name_ko": "가릉빈가",
+    "name_en": "Kalavinka Bird",
+    "grade": "III",
+    "element": "Light",
+    "folklore_origin": "불교 설화",
+    "pixel_lab_prompt": "pixel art, 가릉빈가 (Kalavinka Bird), 불교 설화 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Kalavinka Bird, 가릉빈가, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -2070,15 +2070,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_091_FOLKLORE_091",
+    "id": "YOK_091_KINNARA_SINGER",
     "dex_number": 91,
-    "name_ko": "전승요괴 #091",
-    "name_en": "Folklore Yokai #091",
-    "grade": "IV",
-    "element": "Fire",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #091 associated with Fire element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #091, Mythical eastern folklore beast creature #091 associated with Fire element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "name_ko": "긴나라",
+    "name_en": "Kinnara Singer",
+    "grade": "III",
+    "element": "Light",
+    "folklore_origin": "불교 팔부중",
+    "pixel_lab_prompt": "pixel art, 긴나라 (Kinnara Singer), 불교 팔부중 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Kinnara Singer, 긴나라, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -2093,15 +2093,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_092_FOLKLORE_092",
+    "id": "YOK_092_MAHORAGA_GREAT_SERPENT",
     "dex_number": 92,
-    "name_ko": "전승요괴 #092",
-    "name_en": "Folklore Yokai #092",
-    "grade": "IV",
-    "element": "Water",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #092 associated with Water element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #092, Mythical eastern folklore beast creature #092 associated with Water element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "name_ko": "마후라가",
+    "name_en": "Mahoraga Great Serpent",
+    "grade": "III",
+    "element": "Earth",
+    "folklore_origin": "불교 팔부중",
+    "pixel_lab_prompt": "pixel art, 마후라가 (Mahoraga Great Serpent), 불교 팔부중 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Mahoraga Great Serpent, 마후라가, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -2116,15 +2116,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_093_FOLKLORE_093",
+    "id": "YOK_093_GANDHARVA_SPIRIT",
     "dex_number": 93,
-    "name_ko": "전승요괴 #093",
-    "name_en": "Folklore Yokai #093",
-    "grade": "IV",
-    "element": "Earth",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #093 associated with Earth element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #093, Mythical eastern folklore beast creature #093 associated with Earth element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "name_ko": "건달바",
+    "name_en": "Gandharva Spirit",
+    "grade": "III",
+    "element": "Light",
+    "folklore_origin": "불교 팔부중",
+    "pixel_lab_prompt": "pixel art, 건달바 (Gandharva Spirit), 불교 팔부중 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Gandharva Spirit, 건달바, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -2139,15 +2139,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_094_FOLKLORE_094",
+    "id": "YOK_094_YAKSHA_SWIFT_GUARDIAN",
     "dex_number": 94,
-    "name_ko": "전승요괴 #094",
-    "name_en": "Folklore Yokai #094",
-    "grade": "IV",
-    "element": "Light",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #094 associated with Light element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #094, Mythical eastern folklore beast creature #094 associated with Light element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "name_ko": "야차",
+    "name_en": "Yaksha Swift Guardian",
+    "grade": "III",
+    "element": "Dark",
+    "folklore_origin": "불교 팔부중",
+    "pixel_lab_prompt": "pixel art, 야차 (Yaksha Swift Guardian), 불교 팔부중 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Yaksha Swift Guardian, 야차, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -2162,15 +2162,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_095_FOLKLORE_095",
+    "id": "YOK_095_ASURA_FIGHTING_LORD",
     "dex_number": 95,
-    "name_ko": "전승요괴 #095",
-    "name_en": "Folklore Yokai #095",
+    "name_ko": "아수라",
+    "name_en": "Asura Fighting Lord",
     "grade": "IV",
     "element": "Dark",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #095 associated with Dark element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #095, Mythical eastern folklore beast creature #095 associated with Dark element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "folklore_origin": "불교 팔부중",
+    "pixel_lab_prompt": "pixel art, 아수라 (Asura Fighting Lord), 불교 팔부중 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Asura Fighting Lord, 아수라, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -2185,15 +2185,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_096_FOLKLORE_096",
+    "id": "YOK_096_RAKSHASA_WRATH_DEMON",
     "dex_number": 96,
-    "name_ko": "전승요괴 #096",
-    "name_en": "Folklore Yokai #096",
-    "grade": "IV",
-    "element": "Physical",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #096 associated with Physical element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #096, Mythical eastern folklore beast creature #096 associated with Physical element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "name_ko": "나찰",
+    "name_en": "Rakshasa Wrath Demon",
+    "grade": "III",
+    "element": "Dark",
+    "folklore_origin": "동양 불교설화",
+    "pixel_lab_prompt": "pixel art, 나찰 (Rakshasa Wrath Demon), 동양 불교설화 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Rakshasa Wrath Demon, 나찰, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -2208,15 +2208,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_097_FOLKLORE_097",
+    "id": "YOK_097_VAISRAVANA_NORTH_KING",
     "dex_number": 97,
-    "name_ko": "전승요괴 #097",
-    "name_en": "Folklore Yokai #097",
+    "name_ko": "다문천왕",
+    "name_en": "Vaisravana North King",
     "grade": "IV",
-    "element": "Fire",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #097 associated with Fire element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #097, Mythical eastern folklore beast creature #097 associated with Fire element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "element": "Light",
+    "folklore_origin": "불교 사천왕",
+    "pixel_lab_prompt": "pixel art, 다문천왕 (Vaisravana North King), 불교 사천왕 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Vaisravana North King, 다문천왕, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -2231,15 +2231,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_098_FOLKLORE_098",
+    "id": "YOK_098_VIRUDHAKA_SOUTH_KING",
     "dex_number": 98,
-    "name_ko": "전승요괴 #098",
-    "name_en": "Folklore Yokai #098",
+    "name_ko": "증장천왕",
+    "name_en": "Virudhaka South King",
     "grade": "IV",
-    "element": "Water",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #098 associated with Water element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #098, Mythical eastern folklore beast creature #098 associated with Water element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "element": "Physical",
+    "folklore_origin": "불교 사천왕",
+    "pixel_lab_prompt": "pixel art, 증장천왕 (Virudhaka South King), 불교 사천왕 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Virudhaka South King, 증장천왕, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -2254,15 +2254,130 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_099_FOLKLORE_099",
+    "id": "YOK_099_VIRUPAKSA_WEST_KING",
     "dex_number": 99,
-    "name_ko": "전승요괴 #099",
-    "name_en": "Folklore Yokai #099",
+    "name_ko": "광목천왕",
+    "name_en": "Virupaksa West King",
+    "grade": "IV",
+    "element": "Fire",
+    "folklore_origin": "불교 사천왕",
+    "pixel_lab_prompt": "pixel art, 광목천왕 (Virupaksa West King), 불교 사천왕 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Virupaksa West King, 광목천왕, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
+    "target_resolution": {
+      "battle": [
+        48,
+        48
+      ],
+      "field": [
+        16,
+        24
+      ]
+    },
+    "recommended_palette": "dancheong16"
+  },
+  {
+    "id": "YOK_100_DHRTARASTRA_EAST_KING",
+    "dex_number": 100,
+    "name_ko": "지국천왕",
+    "name_en": "Dhrtarastra East King",
+    "grade": "IV",
+    "element": "Light",
+    "folklore_origin": "불교 사천왕",
+    "pixel_lab_prompt": "pixel art, 지국천왕 (Dhrtarastra East King), 불교 사천왕 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, Dhrtarastra East King, 지국천왕, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
+    "target_resolution": {
+      "battle": [
+        48,
+        48
+      ],
+      "field": [
+        16,
+        24
+      ]
+    },
+    "recommended_palette": "dancheong16"
+  },
+  {
+    "id": "YOK_101_KING_YAMA_FIFTH_COURT",
+    "dex_number": 101,
+    "name_ko": "염라대왕",
+    "name_en": "King Yama Fifth Court",
+    "grade": "V",
+    "element": "Dark",
+    "folklore_origin": "명부 시왕설화",
+    "pixel_lab_prompt": "pixel art, 염라대왕 (King Yama Fifth Court), 명부 시왕설화 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, King Yama Fifth Court, 염라대왕, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
+    "target_resolution": {
+      "battle": [
+        48,
+        48
+      ],
+      "field": [
+        16,
+        24
+      ]
+    },
+    "recommended_palette": "dancheong16"
+  },
+  {
+    "id": "YOK_102_KING_QINGUANG_FIRST_COURT",
+    "dex_number": 102,
+    "name_ko": "진광대왕",
+    "name_en": "King Qinguang First Court",
+    "grade": "IV",
+    "element": "Dark",
+    "folklore_origin": "명부 시왕설화",
+    "pixel_lab_prompt": "pixel art, 진광대왕 (King Qinguang First Court), 명부 시왕설화 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, King Qinguang First Court, 진광대왕, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
+    "target_resolution": {
+      "battle": [
+        48,
+        48
+      ],
+      "field": [
+        16,
+        24
+      ]
+    },
+    "recommended_palette": "dancheong16"
+  },
+  {
+    "id": "YOK_103_KING_CHUJIANG_SECOND_COURT",
+    "dex_number": 103,
+    "name_ko": "초강대왕",
+    "name_en": "King Chujiang Second Court",
+    "grade": "IV",
+    "element": "Water",
+    "folklore_origin": "명부 시왕설화",
+    "pixel_lab_prompt": "pixel art, 초강대왕 (King Chujiang Second Court), 명부 시왕설화 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, King Chujiang Second Court, 초강대왕, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
+    "target_resolution": {
+      "battle": [
+        48,
+        48
+      ],
+      "field": [
+        16,
+        24
+      ]
+    },
+    "recommended_palette": "dancheong16"
+  },
+  {
+    "id": "YOK_104_KING_SONGDI_THIRD_COURT",
+    "dex_number": 104,
+    "name_ko": "송제대왕",
+    "name_en": "King Songdi Third Court",
     "grade": "IV",
     "element": "Earth",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #099 associated with Earth element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #099, Mythical eastern folklore beast creature #099 associated with Earth element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "folklore_origin": "명부 시왕설화",
+    "pixel_lab_prompt": "pixel art, 송제대왕 (King Songdi Third Court), 명부 시왕설화 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, King Songdi Third Court, 송제대왕, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -2277,130 +2392,15 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_100_FOLKLORE_100",
-    "dex_number": 100,
-    "name_ko": "전승요괴 #100",
-    "name_en": "Folklore Yokai #100",
-    "grade": "V",
-    "element": "Light",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #100 associated with Light element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #100, Mythical eastern folklore beast creature #100 associated with Light element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
-    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
-    "target_resolution": {
-      "battle": [
-        48,
-        48
-      ],
-      "field": [
-        16,
-        24
-      ]
-    },
-    "recommended_palette": "dancheong16"
-  },
-  {
-    "id": "YOK_101_FOLKLORE_101",
-    "dex_number": 101,
-    "name_ko": "전승요괴 #101",
-    "name_en": "Folklore Yokai #101",
-    "grade": "V",
-    "element": "Dark",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #101 associated with Dark element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #101, Mythical eastern folklore beast creature #101 associated with Dark element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
-    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
-    "target_resolution": {
-      "battle": [
-        48,
-        48
-      ],
-      "field": [
-        16,
-        24
-      ]
-    },
-    "recommended_palette": "dancheong16"
-  },
-  {
-    "id": "YOK_102_FOLKLORE_102",
-    "dex_number": 102,
-    "name_ko": "전승요괴 #102",
-    "name_en": "Folklore Yokai #102",
-    "grade": "V",
-    "element": "Physical",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #102 associated with Physical element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #102, Mythical eastern folklore beast creature #102 associated with Physical element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
-    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
-    "target_resolution": {
-      "battle": [
-        48,
-        48
-      ],
-      "field": [
-        16,
-        24
-      ]
-    },
-    "recommended_palette": "dancheong16"
-  },
-  {
-    "id": "YOK_103_FOLKLORE_103",
-    "dex_number": 103,
-    "name_ko": "전승요괴 #103",
-    "name_en": "Folklore Yokai #103",
-    "grade": "V",
-    "element": "Fire",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #103 associated with Fire element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #103, Mythical eastern folklore beast creature #103 associated with Fire element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
-    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
-    "target_resolution": {
-      "battle": [
-        48,
-        48
-      ],
-      "field": [
-        16,
-        24
-      ]
-    },
-    "recommended_palette": "dancheong16"
-  },
-  {
-    "id": "YOK_104_FOLKLORE_104",
-    "dex_number": 104,
-    "name_ko": "전승요괴 #104",
-    "name_en": "Folklore Yokai #104",
-    "grade": "V",
-    "element": "Water",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #104 associated with Water element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #104, Mythical eastern folklore beast creature #104 associated with Water element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
-    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
-    "target_resolution": {
-      "battle": [
-        48,
-        48
-      ],
-      "field": [
-        16,
-        24
-      ]
-    },
-    "recommended_palette": "dancheong16"
-  },
-  {
-    "id": "YOK_105_FOLKLORE_105",
+    "id": "YOK_105_KING_WUGUAN_FOURTH_COURT",
     "dex_number": 105,
-    "name_ko": "전승요괴 #105",
-    "name_en": "Folklore Yokai #105",
-    "grade": "V",
-    "element": "Earth",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #105 associated with Earth element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #105, Mythical eastern folklore beast creature #105 associated with Earth element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "name_ko": "오관대왕",
+    "name_en": "King Wuguan Fourth Court",
+    "grade": "IV",
+    "element": "Physical",
+    "folklore_origin": "명부 시왕설화",
+    "pixel_lab_prompt": "pixel art, 오관대왕 (King Wuguan Fourth Court), 명부 시왕설화 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, King Wuguan Fourth Court, 오관대왕, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [
@@ -2415,61 +2415,61 @@
     "recommended_palette": "dancheong16"
   },
   {
-    "id": "YOK_106_FOLKLORE_106",
+    "id": "YOK_106_KING_BIANCHENG_SIXTH_COURT",
     "dex_number": 106,
-    "name_ko": "전승요괴 #106",
-    "name_en": "Folklore Yokai #106",
+    "name_ko": "변성대왕",
+    "name_en": "King Biancheng Sixth Court",
+    "grade": "IV",
+    "element": "Fire",
+    "folklore_origin": "명부 시왕설화",
+    "pixel_lab_prompt": "pixel art, 변성대왕 (King Biancheng Sixth Court), 명부 시왕설화 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, King Biancheng Sixth Court, 변성대왕, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
+    "target_resolution": {
+      "battle": [
+        48,
+        48
+      ],
+      "field": [
+        16,
+        24
+      ]
+    },
+    "recommended_palette": "dancheong16"
+  },
+  {
+    "id": "YOK_107_KING_TAISHAN_SEVENTH_COURT",
+    "dex_number": 107,
+    "name_ko": "태산대왕",
+    "name_en": "King Taishan Seventh Court",
+    "grade": "IV",
+    "element": "Dark",
+    "folklore_origin": "명부 시왕설화",
+    "pixel_lab_prompt": "pixel art, 태산대왕 (King Taishan Seventh Court), 명부 시왕설화 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, King Taishan Seventh Court, 태산대왕, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
+    "target_resolution": {
+      "battle": [
+        48,
+        48
+      ],
+      "field": [
+        16,
+        24
+      ]
+    },
+    "recommended_palette": "dancheong16"
+  },
+  {
+    "id": "YOK_108_KING_TENTH_WHEEL_COURT",
+    "dex_number": 108,
+    "name_ko": "전륜대왕",
+    "name_en": "King Tenth Wheel Court",
     "grade": "V",
     "element": "Light",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #106 associated with Light element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #106, Mythical eastern folklore beast creature #106 associated with Light element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
-    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
-    "target_resolution": {
-      "battle": [
-        48,
-        48
-      ],
-      "field": [
-        16,
-        24
-      ]
-    },
-    "recommended_palette": "dancheong16"
-  },
-  {
-    "id": "YOK_107_FOLKLORE_107",
-    "dex_number": 107,
-    "name_ko": "전승요괴 #107",
-    "name_en": "Folklore Yokai #107",
-    "grade": "V",
-    "element": "Dark",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #107 associated with Dark element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #107, Mythical eastern folklore beast creature #107 associated with Dark element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
-    "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
-    "target_resolution": {
-      "battle": [
-        48,
-        48
-      ],
-      "field": [
-        16,
-        24
-      ]
-    },
-    "recommended_palette": "dancheong16"
-  },
-  {
-    "id": "YOK_108_FOLKLORE_108",
-    "dex_number": 108,
-    "name_ko": "전승요괴 #108",
-    "name_en": "Folklore Yokai #108",
-    "grade": "V",
-    "element": "Physical",
-    "folklore_origin": "한국 고전 야담 및 동양 전승",
-    "pixel_lab_prompt": "pixel art, Mythical eastern folklore beast creature #108 associated with Physical element, traditional Joseon talismans, dynamic combat pose, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
-    "retro_diffusion_prompt": "pixelart, Folklore Yokai #108, Mythical eastern folklore beast creature #108 associated with Physical element, traditional Joseon talismans, dynamic combat pose, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
+    "folklore_origin": "명부 시왕설화",
+    "pixel_lab_prompt": "pixel art, 전륜대왕 (King Tenth Wheel Court), 명부 시왕설화 folklore creature, 16-bit retro sprite, side view battle stance, clean outlines, sharp dithering, Joseon folklore fantasy style, solid black background",
+    "retro_diffusion_prompt": "pixelart, King Tenth Wheel Court, 전륜대왕, Game Boy Advance color palette, crisp 48x48 pixel monster battler, dark background, no antialiasing",
     "negative_prompt": "blurry, smooth gradients, anti-aliased edges, modern 3D render, high-res photograph, mixels, watermark, bad anatomy",
     "target_resolution": {
       "battle": [

@@ -5,6 +5,10 @@ namespace data {
 
 std::string Registry::load_text(const char* path) {
     std::ifstream f(path, std::ios::binary);
+    if (!f.is_open()) {
+        std::string fallback = std::string("../") + path;
+        f.open(fallback, std::ios::binary);
+    }
     if (!f.is_open()) return "";
     return std::string((std::istreambuf_iterator<char>(f)), {});
 }

@@ -1,0 +1,10 @@
+{
+  "id": "artifact_003",
+  "name_ko": "해태의 방울",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "passive": "화상 및 공포 저항",
+  "drawback": "민첩성 2 감소",
+  "destroyable": true,
+  "attack_bonus": 0,
+  "hp_loss_per_battle": 0
+}

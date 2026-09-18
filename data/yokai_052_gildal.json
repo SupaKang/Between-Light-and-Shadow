@@ -1,0 +1,32 @@
+{
+  "id": "yokai_052",
+  "dex_number": 52,
+  "name_ko": "길달",
+  "name_en": "Gildal",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 삼국유사",
+  "grade": "II",
+  "element": "Physical",
+  "level": 17,
+  "stats": {
+    "hp": 125,
+    "qi": 45,
+    "attack": 23,
+    "defense": 16,
+    "speed": 24
+  },
+  "skills": [
+    "skill_001",
+    "skill_007",
+    "skill_010",
+    "skill_002"
+  ],
+  "trait": "특성_길달",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

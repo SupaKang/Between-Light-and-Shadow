@@ -1,0 +1,32 @@
+{
+  "id": "yokai_043",
+  "dex_number": 43,
+  "name_ko": "어둑시니",
+  "name_en": "Eoduksini",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 민담",
+  "grade": "III",
+  "element": "Dark",
+  "level": 24,
+  "stats": {
+    "hp": 165,
+    "qi": 70,
+    "attack": 27,
+    "defense": 20,
+    "speed": 16
+  },
+  "skills": [
+    "skill_001",
+    "skill_006",
+    "skill_010",
+    "skill_004"
+  ],
+  "trait": "특성_어둑시니",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

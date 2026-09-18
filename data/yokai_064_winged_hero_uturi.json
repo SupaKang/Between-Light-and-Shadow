@@ -1,0 +1,32 @@
+{
+  "id": "yokai_064",
+  "dex_number": 64,
+  "name_ko": "아기장수 우투리",
+  "name_en": "Winged Hero Uturi",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 민담",
+  "grade": "IV",
+  "element": "Light",
+  "level": 35,
+  "stats": {
+    "hp": 215,
+    "qi": 80,
+    "attack": 34,
+    "defense": 25,
+    "speed": 27
+  },
+  "skills": [
+    "skill_001",
+    "skill_007",
+    "skill_012",
+    "skill_011"
+  ],
+  "trait": "특성_아기장수 우투리",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

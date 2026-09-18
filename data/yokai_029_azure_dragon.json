@@ -1,0 +1,32 @@
+{
+  "id": "yokai_029",
+  "dex_number": 29,
+  "name_ko": "청룡",
+  "name_en": "Azure Dragon",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 사신도",
+  "grade": "IV",
+  "element": "Water",
+  "level": 39,
+  "stats": {
+    "hp": 230,
+    "qi": 95,
+    "attack": 33,
+    "defense": 26,
+    "speed": 24
+  },
+  "skills": [
+    "skill_001",
+    "skill_003",
+    "skill_009",
+    "skill_005"
+  ],
+  "trait": "특성_청룡",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

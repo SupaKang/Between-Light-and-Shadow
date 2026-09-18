@@ -1,0 +1,32 @@
+{
+  "id": "yokai_019",
+  "dex_number": 19,
+  "name_ko": "백구도래",
+  "name_en": "White Dog Spirit",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 충견설화",
+  "grade": "I",
+  "element": "Light",
+  "level": 6,
+  "stats": {
+    "hp": 86,
+    "qi": 30,
+    "attack": 12,
+    "defense": 10,
+    "speed": 16
+  },
+  "skills": [
+    "skill_001",
+    "skill_011",
+    "skill_004",
+    "skill_005"
+  ],
+  "trait": "특성_백구도래",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

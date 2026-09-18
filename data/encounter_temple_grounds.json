@@ -1,0 +1,20 @@
+{
+  "region_id": "temple_grounds",
+  "encounter_step_interval": 10,
+  "min_level": 15,
+  "max_level": 25,
+  "encounters": [
+    {
+      "yokai_id": "yokai_003",
+      "weight": 35
+    },
+    {
+      "yokai_id": "yokai_041",
+      "weight": 35
+    },
+    {
+      "yokai_id": "yokai_046",
+      "weight": 30
+    }
+  ]
+}

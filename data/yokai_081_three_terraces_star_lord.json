@@ -1,0 +1,32 @@
+{
+  "id": "yokai_081",
+  "dex_number": 81,
+  "name_ko": "삼태성군",
+  "name_en": "Three Terraces Star Lord",
+  "origin": "VERIFY_FOREIGN_FOLKLORE",
+  "folklore_source": "도교 성수신앙",
+  "grade": "IV",
+  "element": "Light",
+  "level": 37,
+  "stats": {
+    "hp": 215,
+    "qi": 105,
+    "attack": 33,
+    "defense": 24,
+    "speed": 23
+  },
+  "skills": [
+    "skill_001",
+    "skill_012",
+    "skill_011",
+    "skill_005"
+  ],
+  "trait": "특성_삼태성군",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

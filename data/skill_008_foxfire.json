@@ -1,0 +1,9 @@
+{
+  "id": "skill_008",
+  "name_ko": "여우불 폭풍",
+  "power": 38,
+  "qi_cost": 12,
+  "accuracy": 90,
+  "status": "burn",
+  "seal_turns": 0
+}

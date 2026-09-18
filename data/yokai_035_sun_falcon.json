@@ -1,0 +1,32 @@
+{
+  "id": "yokai_035",
+  "dex_number": 35,
+  "name_ko": "태호새",
+  "name_en": "Sun Falcon",
+  "origin": "VERIFY_TRADITIONAL_KOREAN_FOLKLORE",
+  "folklore_source": "한국 고대설화",
+  "grade": "II",
+  "element": "Fire",
+  "level": 14,
+  "stats": {
+    "hp": 110,
+    "qi": 50,
+    "attack": 21,
+    "defense": 12,
+    "speed": 24
+  },
+  "skills": [
+    "skill_001",
+    "skill_002",
+    "skill_008",
+    "skill_005"
+  ],
+  "trait": "특성_태호새",
+  "status_resistance": {
+    "burn": 0,
+    "freeze": 0,
+    "seal": 0,
+    "paralysis": 0,
+    "fear": 0
+  }
+}

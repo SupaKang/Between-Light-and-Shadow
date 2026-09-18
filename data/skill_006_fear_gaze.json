@@ -1,0 +1,9 @@
+{
+  "id": "skill_006",
+  "name_ko": "귀기 안광",
+  "power": 18,
+  "qi_cost": 7,
+  "accuracy": 90,
+  "status": "fear",
+  "seal_turns": 0
+}

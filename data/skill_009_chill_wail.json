@@ -1,0 +1,9 @@
+{
+  "id": "skill_009",
+  "name_ko": "서릿발 곡소리",
+  "power": 32,
+  "qi_cost": 11,
+  "accuracy": 85,
+  "status": "freeze",
+  "seal_turns": 0
+}
