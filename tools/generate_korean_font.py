@@ -7,7 +7,7 @@ from PIL import Image, ImageDraw, ImageFont
 # 1. Collect all Korean text in data/ and key game strings
 korean_chars = set()
 
-for path in Path("data").glob("**/*.json"):
+for path in list(Path("data").glob("**/*.json")) + list(Path("src").glob("*.*")):
     try:
         content = path.read_text(encoding="utf-8")
         for ch in content:

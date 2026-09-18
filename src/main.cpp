@@ -1,6 +1,8 @@
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#elif defined(USE_SDL2)
+#include <SDL.h>
 #endif
 
 #include <cstdint>
@@ -556,269 +558,315 @@ void render() {
     if (menu) render_menu();
 }
 
+enum AppKey {
+    KEY_NONE = 0,
+    KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT,
+    KEY_CONFIRM, KEY_CANCEL,
+    KEY_MENU, KEY_BATTLE,
+    KEY_SLOT1, KEY_SLOT2, KEY_SLOT3,
+    KEY_SAVE, KEY_LOAD, KEY_DESTROY
+};
+
+void save_screenshot_bmp(const char* filepath, const std::uint32_t* fb, int w, int h) {
+    std::ofstream f(filepath, std::ios::binary);
+    if (!f.is_open()) return;
+    std::uint32_t file_size = 54 + w * h * 4;
+    std::uint32_t offset = 54;
+    std::uint32_t header_size = 40;
+    std::uint16_t planes = 1, bpp = 32;
+    std::uint32_t zero = 0;
+    f.put('B').put('M');
+    f.write(reinterpret_cast<const char*>(&file_size), 4);
+    f.write(reinterpret_cast<const char*>(&zero), 4);
+    f.write(reinterpret_cast<const char*>(&offset), 4);
+    f.write(reinterpret_cast<const char*>(&header_size), 4);
+    f.write(reinterpret_cast<const char*>(&w), 4);
+    int neg_h = -h;
+    f.write(reinterpret_cast<const char*>(&neg_h), 4);
+    f.write(reinterpret_cast<const char*>(&planes), 2);
+    f.write(reinterpret_cast<const char*>(&bpp), 2);
+    f.write(reinterpret_cast<const char*>(&zero), 4);
+    f.write(reinterpret_cast<const char*>(&zero), 4);
+    f.write(reinterpret_cast<const char*>(&zero), 4);
+    f.write(reinterpret_cast<const char*>(&zero), 4);
+    f.write(reinterpret_cast<const char*>(&zero), 4);
+    f.write(reinterpret_cast<const char*>(&zero), 4);
+    f.write(reinterpret_cast<const char*>(fb), w * h * 4);
+}
+
+void handle_input_key(AppKey k) {
+    if (k == KEY_CANCEL) {
+        if (dialogue) { dialogue = false; return; }
+        if (menu) { menu = false; return; }
+        if (battle) { finish_battle(false); return; }
+        running = false;
+        return;
+    }
+
+    if (menu) {
+        if (k == KEY_SLOT1) { save_slot = 1; return; }
+        if (k == KEY_SLOT2) { save_slot = 2; return; }
+        if (k == KEY_SLOT3) { save_slot = 3; return; }
+        if (k == KEY_SAVE) { save_game(save_slot); return; }
+        if (k == KEY_LOAD) { load_game(save_slot); return; }
+        if (k == KEY_DESTROY && artifact_owned) {
+            artifact_owned = false;
+            std::snprintf(notice_msg, sizeof(notice_msg), "유물을 파괴하여 인벤토리를 비웠습니다.");
+            return;
+        }
+        if (k == KEY_MENU || k == KEY_CONFIRM) { menu = false; return; }
+        return;
+    }
+
+    if (dialogue) {
+        if (k == KEY_CONFIRM) {
+            if (++dialogue_page >= current_dialogue_count) {
+                dialogue = false;
+                dialogue_page = 0;
+            }
+        }
+        return;
+    }
+
+    if (battle) {
+        if (k == KEY_LEFT || k == KEY_RIGHT) {
+            int cur = static_cast<int>(battle_command);
+            int dir = (k == KEY_RIGHT) ? 1 : -1;
+            battle_command = static_cast<battle::Command>(battle_ui::move_command(cur, dir, 6));
+            return;
+        }
+
+        if (k == KEY_CONFIRM) {
+            int cmd = static_cast<int>(battle_command);
+            if (cmd == 5) { // Run
+                if (is_boss_battle) {
+                    std::snprintf(battle_msg, sizeof(battle_msg), "보스 전투에서는 도주할 수 없습니다!");
+                } else {
+                    std::snprintf(battle_msg, sizeof(battle_msg), "전투에서 무사히 도주했습니다!");
+                    finish_battle(false);
+                }
+                return;
+            }
+
+            if (cmd == 4) { // Capture
+                if (is_boss_battle) {
+                    std::snprintf(battle_msg, sizeof(battle_msg), "오염된 보스 요괴는 계약할 수 없습니다!");
+                } else {
+                    int cap_rate = battle::capture_rate_percent(enemy_hp, enemy_max_hp, enemy_status != Status::None);
+                    if (battle::can_capture(enemy_hp, enemy_max_hp, enemy_turns, enemy_status != Status::None)) {
+                        collection_state.discover(1);
+                        collection_state.add_contract(1);
+                        std::snprintf(battle_msg, sizeof(battle_msg), "계약 성공! 도깨비가 동료로 합류했다!");
+                        finish_battle(true);
+                    } else {
+                        std::snprintf(battle_msg, sizeof(battle_msg), "계약 실패(%d%% 성공률)! 도깨비가 저항했다!", cap_rate);
+                    }
+                }
+            } else if (cmd >= 0 && cmd < 4) {
+                if (!skill_state.usable(cmd, player_qi)) {
+                    if (skill_state.sealed_turns[cmd] > 0) {
+                        std::snprintf(battle_msg, sizeof(battle_msg), "사용 불가: 해당 기술은 현재 봉인되어 있습니다!");
+                    } else {
+                        std::snprintf(battle_msg, sizeof(battle_msg), "사용 불가: 영력이 부족합니다!");
+                    }
+                    return;
+                }
+
+                player_qi -= skill_state.qi_costs[cmd];
+
+                int pwr = skill_state.powers[cmd] + (artifact_owned ? artifact_attack_bonus : 0);
+                int dmg = battle::damage(
+                    {player_attack, player_defense, player_hp, player_qi, player_speed},
+                    {enemy_attack, enemy_defense, enemy_hp, 0, enemy_speed},
+                    pwr, false, enemy_status == Status::Fear
+                );
+                enemy_hp -= dmg;
+                enemy_status = status_rules::on_hit_effect(enemy_status);
+
+                Status st = skill_state.statuses[cmd];
+                if (st != Status::None) {
+                    enemy_status = st;
+                    enemy_status_turns = status_rules::default_duration(st);
+                }
+
+                if (skill_state.seal_duration[cmd] > 0) {
+                    skill_state.seal(cmd, skill_state.seal_duration[cmd]);
+                }
+
+                std::snprintf(battle_msg, sizeof(battle_msg), "%s 사용! 적에게 %d의 피해를 입혔다!",
+                    skill_state.names_ko[cmd], dmg);
+            }
+
+            if (enemy_hp <= 0) {
+                std::snprintf(battle_msg, sizeof(battle_msg), "%s 격파 승리! %d 경험치 획득!",
+                    enemy_name, enemy_level * 25);
+                finish_battle(true);
+                return;
+            }
+
+            ++enemy_turns;
+            skill_state.tick();
+
+            bool enemy_skips = status_rules::skips_action(enemy_status, enemy_turns);
+            if (enemy_skips) {
+                std::snprintf(battle_msg, sizeof(battle_msg), "적은 %s 상태여서 행동하지 못했다!",
+                    status_rules::name_ko(enemy_status));
+            } else {
+                int edmg = battle::damage(
+                    {enemy_attack, enemy_defense, enemy_hp, 0, enemy_speed},
+                    {player_attack, player_defense, player_hp, player_qi, player_speed},
+                    is_boss_battle ? 10 : 5, enemy_status == Status::Fear, false
+                );
+                player_hp -= edmg;
+            }
+
+            if (enemy_hp > 0 && enemy_status == Status::Burn) {
+                enemy_hp -= burn_damage;
+            }
+
+            if (artifact_owned && player_hp > 0) {
+                player_hp -= artifact_battle_cost;
+            }
+
+            if (enemy_status_turns > 0) {
+                --enemy_status_turns;
+                if (enemy_status_turns == 0) enemy_status = Status::None;
+            }
+
+            if (player_hp <= 0) {
+                player_hp = player_max_hp;
+                world_state.change_map(1, 14, 8);
+                std::snprintf(notice_msg, sizeof(notice_msg), "기력을 다하여 도선사 주막으로 후송되었습니다.");
+                finish_battle(false);
+            }
+            return;
+        }
+        return;
+    }
+
+    if (!dialogue && !battle && !menu) {
+        if (k == KEY_MENU) { menu = true; return; }
+        if (k == KEY_BATTLE) { begin_battle(false); return; }
+        if (k == KEY_SAVE) { save_game(save_slot); return; }
+        if (k == KEY_LOAD) { load_game(save_slot); return; }
+        if (k == KEY_SLOT1) { save_slot = 1; std::snprintf(notice_msg, sizeof(notice_msg), "저장 슬롯 1번이 선택되었습니다."); return; }
+        if (k == KEY_SLOT2) { save_slot = 2; std::snprintf(notice_msg, sizeof(notice_msg), "저장 슬롯 2번이 선택되었습니다."); return; }
+        if (k == KEY_SLOT3) { save_slot = 3; std::snprintf(notice_msg, sizeof(notice_msg), "저장 슬롯 3번이 선택되었습니다."); return; }
+
+        int nx = world_state.player_x, ny = world_state.player_y;
+        if (k == KEY_LEFT) --nx;
+        if (k == KEY_RIGHT) ++nx;
+        if (k == KEY_UP) --ny;
+        if (k == KEY_DOWN) ++ny;
+
+        if (k == KEY_LEFT || k == KEY_RIGHT || k == KEY_UP || k == KEY_DOWN) {
+            int target_map = 0, target_x = 0, target_y = 0;
+            if (world_state.check_portal(nx, ny, target_map, target_x, target_y)) {
+                world_state.change_map(target_map, target_x, target_y);
+                const char* kname = (target_map == 1) ? "도선사 마을" : (target_map == 2 ? "북한산 고갯길" : "도선사 대웅전");
+                std::snprintf(notice_msg, sizeof(notice_msg), "[%s]에 도착했습니다.", kname);
+                return;
+            }
+
+            if (!world_state.is_blocked(nx, ny)) {
+                world_state.player_x = nx;
+                world_state.player_y = ny;
+                ++steps;
+                int rate = world_state.map_encounter_rate();
+                if (rate > 0 && (steps % rate == 0)) {
+                    begin_battle(false);
+                }
+                return;
+            }
+        }
+
+        if (k == KEY_CONFIRM) {
+            int npc = world_state.check_npc_interaction(world_state.player_x, world_state.player_y);
+            if (npc == 1) { // Tavern Jumo
+                player_hp = player_max_hp;
+                player_qi = player_max_qi;
+                if (world_state.main_quest_step == 0) {
+                    world_state.advance_quest();
+                    trigger_dialogue("주막 주모", {
+                        "주막에 오신 것을 환영하오! 편히 쉬어가시게.",
+                        "음양당의 요기가 북쪽 도선사에 번지고 있소!",
+                        "북쪽 고갯길을 조심히 넘어 균형을 되찾아주시오."
+                    });
+                } else {
+                    trigger_dialogue("주막 주모", {
+                        "체력과 영력이 모두 회복되었소.",
+                        "조상의 영령이 그대의 앞길을 지켜줄 것이오."
+                    });
+                }
+                std::snprintf(notice_msg, sizeof(notice_msg), "주막 휴식: 체력과 영력이 완전 회복되었습니다.");
+                return;
+            } else if (npc == 2) { // Ancient Shrine
+                world_state.mark_shrine_seen();
+                artifact_owned = true;
+                trigger_dialogue("고대 신목", {
+                    "영맥의 균열로 흩어진 요괴들이 날뛰고 있구나...",
+                    "[신목의 파편] 유물을 획득했다! (완력+3 / 전투 체력-2)",
+                    "사악한 음양학파를 저지하여 대지를 치유하라."
+                });
+                std::snprintf(notice_msg, sizeof(notice_msg), "고대 유물 [신목의 파편]을 획득했습니다.");
+                return;
+            } else if (npc == 3) { // Mountain Signpost
+                trigger_dialogue("고갯길 안내판", {
+                    "--- 북한산 고갯길 안내 ---",
+                    "북쪽: 도선사 대웅전 (음양당 괴승 점거)",
+                    "남쪽: 도선사 어귀 마을 (주막 및 고대 신목)"
+                });
+                return;
+            } else if (npc == 4) { // Corrupt Monk Myogak Boss
+                if (!world_state.boss_defeated) {
+                    trigger_dialogue("괴승 묘각", {
+                        "감히 음양당의 금지된 음기 도술을 방해하려 들다니!",
+                        "음기의 영맥으로 너의 혼을 삼켜주마!",
+                        "어둠의 심연 속으로 떨어져라!"
+                    });
+                    begin_battle(true);
+                } else {
+                    trigger_dialogue("도선사 대웅전", {
+                        "사악한 요기가 물러가고 대웅전이 정화되었습니다.",
+                        "조선의 영맥이 조금씩 안정을 되찾고 있습니다."
+                    });
+                }
+                return;
+            }
+        }
+    }
+}
+
 #ifdef _WIN32
 LRESULT CALLBACK wnd_proc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
     if (msg == WM_KEYDOWN) {
-        if (wp == VK_ESCAPE) {
-            if (dialogue) { dialogue = false; render(); InvalidateRect(hwnd, nullptr, FALSE); return 0; }
-            if (menu) { menu = false; render(); InvalidateRect(hwnd, nullptr, FALSE); return 0; }
-            if (battle) { finish_battle(false); render(); InvalidateRect(hwnd, nullptr, FALSE); return 0; }
-            running = false;
-            PostQuitMessage(0);
-            return 0;
+        AppKey k = KEY_NONE;
+        switch (wp) {
+            case VK_ESCAPE: k = KEY_CANCEL; break;
+            case VK_LEFT: k = KEY_LEFT; break;
+            case VK_RIGHT: k = KEY_RIGHT; break;
+            case VK_UP: k = KEY_UP; break;
+            case VK_DOWN: k = KEY_DOWN; break;
+            case VK_RETURN:
+            case 'Z': k = KEY_CONFIRM; break;
+            case 'M': k = KEY_MENU; break;
+            case 'B': k = KEY_BATTLE; break;
+            case 'S': k = KEY_SAVE; break;
+            case 'L': k = KEY_LOAD; break;
+            case 'D': k = KEY_DESTROY; break;
+            case '1': k = KEY_SLOT1; break;
+            case '2': k = KEY_SLOT2; break;
+            case '3': k = KEY_SLOT3; break;
+            default: break;
         }
-
-        if (menu) {
-            if (wp >= '1' && wp <= '3') {
-                save_slot = static_cast<int>(wp - '0');
-                render(); InvalidateRect(hwnd, nullptr, FALSE); return 0;
-            }
-            if (wp == 'S') { save_game(save_slot); render(); InvalidateRect(hwnd, nullptr, FALSE); return 0; }
-            if (wp == 'L') { load_game(save_slot); render(); InvalidateRect(hwnd, nullptr, FALSE); return 0; }
-            if (wp == 'D' && artifact_owned) {
-                artifact_owned = false;
-                std::snprintf(notice_msg, sizeof(notice_msg), "유물을 파괴하여 인벤토리를 비웠습니다.");
-                render(); InvalidateRect(hwnd, nullptr, FALSE); return 0;
-            }
-            if (wp == 'M' || wp == VK_RETURN) { menu = false; render(); InvalidateRect(hwnd, nullptr, FALSE); return 0; }
-            return 0;
-        }
-
-        if (dialogue) {
-            if (wp == VK_RETURN || wp == 'Z') {
-                if (++dialogue_page >= current_dialogue_count) {
-                    dialogue = false;
-                    dialogue_page = 0;
-                }
-                render();
-                InvalidateRect(hwnd, nullptr, FALSE);
-            }
-            return 0;
-        }
-
-        if (battle) {
-            if (wp == VK_LEFT || wp == VK_RIGHT) {
-                int cur = static_cast<int>(battle_command);
-                int dir = (wp == VK_RIGHT) ? 1 : -1;
-                battle_command = static_cast<battle::Command>(battle_ui::move_command(cur, dir, 6));
-                render();
-                InvalidateRect(hwnd, nullptr, FALSE);
-                return 0;
-            }
-
-            if (wp == VK_RETURN || wp == 'Z') {
-                int cmd = static_cast<int>(battle_command);
-                if (cmd == 5) { // Run
-                    if (is_boss_battle) {
-                        std::snprintf(battle_msg, sizeof(battle_msg), "보스 전투에서는 도주할 수 없습니다!");
-                    } else {
-                        std::snprintf(battle_msg, sizeof(battle_msg), "전투에서 무사히 도주했습니다!");
-                        finish_battle(false);
-                    }
-                    render();
-                    InvalidateRect(hwnd, nullptr, FALSE);
-                    return 0;
-                }
-
-                if (cmd == 4) { // Capture
-                    if (is_boss_battle) {
-                        std::snprintf(battle_msg, sizeof(battle_msg), "오염된 보스 요괴는 계약할 수 없습니다!");
-                    } else {
-                        int cap_rate = battle::capture_rate_percent(enemy_hp, enemy_max_hp, enemy_status != Status::None);
-                        if (battle::can_capture(enemy_hp, enemy_max_hp, enemy_turns, enemy_status != Status::None)) {
-                            collection_state.discover(1);
-                            collection_state.add_contract(1);
-                            std::snprintf(battle_msg, sizeof(battle_msg), "계약 성공! 도깨비가 동료로 합류했다!");
-                            finish_battle(true);
-                        } else {
-                            std::snprintf(battle_msg, sizeof(battle_msg), "계약 실패(%d%% 성공률)! 도깨비가 저항했다!", cap_rate);
-                        }
-                    }
-                } else if (cmd >= 0 && cmd < 4) {
-                    if (!skill_state.usable(cmd, player_qi)) {
-                        if (skill_state.sealed_turns[cmd] > 0) {
-                            std::snprintf(battle_msg, sizeof(battle_msg), "사용 불가: 해당 기술은 현재 봉인되어 있습니다!");
-                        } else {
-                            std::snprintf(battle_msg, sizeof(battle_msg), "사용 불가: 영력이 부족합니다!");
-                        }
-                        render();
-                        InvalidateRect(hwnd, nullptr, FALSE);
-                        return 0;
-                    }
-
-                    player_qi -= skill_state.qi_costs[cmd];
-
-                    int pwr = skill_state.powers[cmd] + (artifact_owned ? artifact_attack_bonus : 0);
-                    int dmg = battle::damage(
-                        {player_attack, player_defense, player_hp, player_qi, player_speed},
-                        {enemy_attack, enemy_defense, enemy_hp, 0, enemy_speed},
-                        pwr, false, enemy_status == Status::Fear
-                    );
-                    enemy_hp -= dmg;
-                    enemy_status = status_rules::on_hit_effect(enemy_status);
-
-                    Status st = skill_state.statuses[cmd];
-                    if (st != Status::None) {
-                        enemy_status = st;
-                        enemy_status_turns = status_rules::default_duration(st);
-                    }
-
-                    if (skill_state.seal_duration[cmd] > 0) {
-                        skill_state.seal(cmd, skill_state.seal_duration[cmd]);
-                    }
-
-                    std::snprintf(battle_msg, sizeof(battle_msg), "%s 사용! 적에게 %d의 피해를 입혔다!",
-                        skill_state.names_ko[cmd], dmg);
-                }
-
-                if (enemy_hp <= 0) {
-                    std::snprintf(battle_msg, sizeof(battle_msg), "%s 격파 승리! %d 경험치 획득!",
-                        enemy_name, enemy_level * 25);
-                    finish_battle(true);
-                    render();
-                    InvalidateRect(hwnd, nullptr, FALSE);
-                    return 0;
-                }
-
-                ++enemy_turns;
-                skill_state.tick();
-
-                bool enemy_skips = status_rules::skips_action(enemy_status, enemy_turns);
-                if (enemy_skips) {
-                    std::snprintf(battle_msg, sizeof(battle_msg), "적은 %s 상태여서 행동하지 못했다!",
-                        status_rules::name_ko(enemy_status));
-                } else {
-                    int edmg = battle::damage(
-                        {enemy_attack, enemy_defense, enemy_hp, 0, enemy_speed},
-                        {player_attack, player_defense, player_hp, player_qi, player_speed},
-                        is_boss_battle ? 10 : 5, enemy_status == Status::Fear, false
-                    );
-                    player_hp -= edmg;
-                }
-
-                if (enemy_hp > 0 && enemy_status == Status::Burn) {
-                    enemy_hp -= burn_damage;
-                }
-
-                if (artifact_owned && player_hp > 0) {
-                    player_hp -= artifact_battle_cost;
-                }
-
-                if (enemy_status_turns > 0) {
-                    --enemy_status_turns;
-                    if (enemy_status_turns == 0) enemy_status = Status::None;
-                }
-
-                if (player_hp <= 0) {
-                    player_hp = player_max_hp;
-                    world_state.change_map(1, 14, 8);
-                    std::snprintf(notice_msg, sizeof(notice_msg), "기력을 다하여 도선사 주막으로 후송되었습니다.");
-                    finish_battle(false);
-                }
-
-                render();
-                InvalidateRect(hwnd, nullptr, FALSE);
-                return 0;
-            }
-            return 0;
-        }
-
-        if (!dialogue && !battle && !menu) {
-            if (wp == 'M') { menu = true; render(); InvalidateRect(hwnd, nullptr, FALSE); return 0; }
-            if (wp == 'B') { begin_battle(false); render(); InvalidateRect(hwnd, nullptr, FALSE); return 0; }
-            if (wp == 'S') { save_game(save_slot); render(); InvalidateRect(hwnd, nullptr, FALSE); return 0; }
-            if (wp == 'L') { load_game(save_slot); render(); InvalidateRect(hwnd, nullptr, FALSE); return 0; }
-            if (wp >= '1' && wp <= '3') {
-                save_slot = static_cast<int>(wp - '0');
-                std::snprintf(notice_msg, sizeof(notice_msg), "저장 슬롯 %d번이 선택되었습니다.", save_slot);
-                render(); InvalidateRect(hwnd, nullptr, FALSE); return 0;
-            }
-
-            int nx = world_state.player_x, ny = world_state.player_y;
-            if (wp == VK_LEFT) --nx;
-            if (wp == VK_RIGHT) ++nx;
-            if (wp == VK_UP) --ny;
-            if (wp == VK_DOWN) ++ny;
-
-            if (wp == VK_LEFT || wp == VK_RIGHT || wp == VK_UP || wp == VK_DOWN) {
-                int target_map = 0, target_x = 0, target_y = 0;
-                if (world_state.check_portal(nx, ny, target_map, target_x, target_y)) {
-                    world_state.change_map(target_map, target_x, target_y);
-                    const char* kname = (target_map == 1) ? "도선사 마을" : (target_map == 2 ? "북한산 고갯길" : "도선사 대웅전");
-                    std::snprintf(notice_msg, sizeof(notice_msg), "[%s]에 도착했습니다.", kname);
-                    render(); InvalidateRect(hwnd, nullptr, FALSE); return 0;
-                }
-
-                if (!world_state.is_blocked(nx, ny)) {
-                    world_state.player_x = nx;
-                    world_state.player_y = ny;
-                    ++steps;
-                    int rate = world_state.map_encounter_rate();
-                    if (rate > 0 && (steps % rate == 0)) {
-                        begin_battle(false);
-                    }
-                    render(); InvalidateRect(hwnd, nullptr, FALSE); return 0;
-                }
-            }
-
-            if (wp == VK_RETURN || wp == 'Z') {
-                int npc = world_state.check_npc_interaction(world_state.player_x, world_state.player_y);
-                if (npc == 1) { // Tavern Jumo
-                    player_hp = player_max_hp;
-                    player_qi = player_max_qi;
-                    if (world_state.main_quest_step == 0) {
-                        world_state.advance_quest();
-                        trigger_dialogue("주막 주모", {
-                            "주막에 오신 것을 환영하오! 편히 쉬어가시게.",
-                            "음양당의 요기가 북쪽 도선사에 번지고 있소!",
-                            "북쪽 고갯길을 조심히 넘어 균형을 되찾아주시오."
-                        });
-                    } else {
-                        trigger_dialogue("주막 주모", {
-                            "체력과 영력이 모두 회복되었소.",
-                            "조상의 영령이 그대의 앞길을 지켜줄 것이오."
-                        });
-                    }
-                    std::snprintf(notice_msg, sizeof(notice_msg), "주막 휴식: 체력과 영력이 완전 회복되었습니다.");
-                    render(); InvalidateRect(hwnd, nullptr, FALSE); return 0;
-                } else if (npc == 2) { // Ancient Shrine
-                    world_state.mark_shrine_seen();
-                    artifact_owned = true;
-                    trigger_dialogue("고대 신목", {
-                        "영맥의 균열로 흩어진 요괴들이 날뛰고 있구나...",
-                        "[신목의 파편] 유물을 획득했다! (완력+3 / 전투 체력-2)",
-                        "사악한 음양학파를 저지하여 대지를 치유하라."
-                    });
-                    std::snprintf(notice_msg, sizeof(notice_msg), "고대 유물 [신목의 파편]을 획득했습니다.");
-                    render(); InvalidateRect(hwnd, nullptr, FALSE); return 0;
-                } else if (npc == 3) { // Mountain Signpost
-                    trigger_dialogue("고갯길 안내판", {
-                        "--- 북한산 고갯길 안내 ---",
-                        "북쪽: 도선사 대웅전 (음양당 괴승 점거)",
-                        "남쪽: 도선사 어귀 마을 (주막 및 고대 신목)"
-                    });
-                    render(); InvalidateRect(hwnd, nullptr, FALSE); return 0;
-                } else if (npc == 4) { // Corrupt Monk Myogak Boss
-                    if (!world_state.boss_defeated) {
-                        trigger_dialogue("괴승 묘각", {
-                            "감히 음양당의 금지된 음기 도술을 방해하려 들다니!",
-                            "음기의 영맥으로 너의 혼을 삼켜주마!",
-                            "어둠의 심연 속으로 떨어져라!"
-                        });
-                        begin_battle(true);
-                    } else {
-                        trigger_dialogue("도선사 대웅전", {
-                            "사악한 요기가 물러가고 대웅전이 정화되었습니다.",
-                            "조선의 영맥이 조금씩 안정을 되찾고 있습니다."
-                        });
-                    }
-                    render(); InvalidateRect(hwnd, nullptr, FALSE); return 0;
-                }
-            }
+        if (k != KEY_NONE) {
+            handle_input_key(k);
+            if (!running) PostQuitMessage(0);
+            render();
+            InvalidateRect(hwnd, nullptr, FALSE);
         }
         return 0;
     }
-
     if (msg == WM_DESTROY) {
         running = false;
         PostQuitMessage(0);
@@ -828,11 +876,57 @@ LRESULT CALLBACK wnd_proc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
 }
 #endif
 
+#if defined(USE_SDL2)
+AppKey map_sdl_key(SDL_Keycode sym) {
+    switch (sym) {
+        case SDLK_UP: return KEY_UP;
+        case SDLK_DOWN: return KEY_DOWN;
+        case SDLK_LEFT: return KEY_LEFT;
+        case SDLK_RIGHT: return KEY_RIGHT;
+        case SDLK_RETURN:
+        case SDLK_z: return KEY_CONFIRM;
+        case SDLK_ESCAPE: return KEY_CANCEL;
+        case SDLK_m: return KEY_MENU;
+        case SDLK_b: return KEY_BATTLE;
+        case SDLK_s: return KEY_SAVE;
+        case SDLK_l: return KEY_LOAD;
+        case SDLK_d: return KEY_DESTROY;
+        case SDLK_1: return KEY_SLOT1;
+        case SDLK_2: return KEY_SLOT2;
+        case SDLK_3: return KEY_SLOT3;
+        default: return KEY_NONE;
+    }
+}
+#endif
+
+void generate_snapshots() {
+    render();
+    save_screenshot_bmp("screenshot_overworld.bmp", pixels.data(), W, H);
+
+    begin_battle(false);
+    render();
+    save_screenshot_bmp("screenshot_battle.bmp", pixels.data(), W, H);
+    finish_battle(false);
+
+    begin_battle(true);
+    render();
+    save_screenshot_bmp("screenshot_boss_battle.bmp", pixels.data(), W, H);
+    finish_battle(false);
+
+    menu = true;
+    render();
+    save_screenshot_bmp("screenshot_menu.bmp", pixels.data(), W, H);
+    menu = false;
+
+    render();
+}
+
 } // namespace
 
 #ifdef _WIN32
 int WINAPI wWinMain(HINSTANCE instance, HINSTANCE, PWSTR, int show) {
     init_game_data();
+    generate_snapshots();
 
     const wchar_t* name = L"YinYangChronicleWindow";
     WNDCLASSW wc{};
@@ -877,10 +971,71 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE, PWSTR, int show) {
     }
     return 0;
 }
+#elif defined(USE_SDL2)
+int main(int, char*[]) {
+    init_game_data();
+    generate_snapshots();
+
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+        std::printf("SDL_Init Error: %s\n", SDL_GetError());
+        return 1;
+    }
+
+    SDL_Window* window = SDL_CreateWindow(
+        "108: \xEC\x9D\x8C\xEC\x96\x91\xEA\xB2\xAC\xEB\xAC\xB8\xEB\xA1\x9D (108: Yin-Yang Chronicle)",
+        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+        W * SCALE, H * SCALE,
+        SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI
+    );
+    if (!window) {
+        std::printf("SDL_CreateWindow Error: %s\n", SDL_GetError());
+        SDL_Quit();
+        return 1;
+    }
+
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    if (!renderer) {
+        renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
+    }
+
+    SDL_Texture* texture = SDL_CreateTexture(
+        renderer,
+        SDL_PIXELFORMAT_ARGB8888,
+        SDL_TEXTUREACCESS_STREAMING,
+        W, H
+    );
+
+    SDL_Event e;
+    while (running) {
+        while (SDL_PollEvent(&e)) {
+            if (e.type == SDL_QUIT) {
+                running = false;
+            } else if (e.type == SDL_KEYDOWN) {
+                AppKey k = map_sdl_key(e.key.keysym.sym);
+                if (k != KEY_NONE) {
+                    handle_input_key(k);
+                    render();
+                }
+            }
+        }
+        SDL_UpdateTexture(texture, nullptr, pixels.data(), W * sizeof(std::uint32_t));
+        SDL_RenderClear(renderer);
+        SDL_RenderCopy(renderer, texture, nullptr, nullptr);
+        SDL_RenderPresent(renderer);
+        SDL_Delay(16);
+    }
+
+    SDL_DestroyTexture(texture);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+    return 0;
+}
 #else
 int main() {
     init_game_data();
     render();
+    save_screenshot_bmp("screenshot_overworld.bmp", pixels.data(), W, H);
     return 0;
 }
 #endif

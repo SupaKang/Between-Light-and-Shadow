@@ -25,7 +25,9 @@ Desktop.ini
 .DS_Store
 
 # Temporary capture output
-screen_*.bmp
+/screen_*.bmp
+/screenshot_*.bmp
+/screenshot_*.png
 
 # Python cache & temp test artifacts
 __pycache__/
