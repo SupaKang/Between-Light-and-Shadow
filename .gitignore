@@ -34,3 +34,9 @@ __pycache__/
 *.py[cod]
 tools/test_*
 
+
+# graft's local graph cache — regenerable, not committed (run `graft build`).
+/graft/
+
+# iCloud 동기화 제외 폴더 (빌드 산출물 등)
+*.nosync
