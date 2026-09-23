@@ -1,56 +1,25 @@
 #include "ui.h"
 
 namespace yy {
-std::vector<Map> maps;
-
-// ponytail: maps live in code until the Lua/data map format lands with the event system.
-void build_maps() {
-    Map room;
-    room.indoor = true;
-    room.rows = {
-        "########",
-        "#B==R=J#",
-        "#======#",
-        "#======#",
-        "#======#",
-        "###D####",
-    };
-    room.warps = {{3, 5, VILLAGE, 6, 9, DOWN}};
-
-    Map v;
-    v.indoor = false;
-    v.rows = {
-        "TTTTTTTTTTTT....TTTTTTTTTTTT",
-        "TTTTTTTTTTTG....GTTTTTTTTTTT",
-        "T,,,,,,,,,,,....,,,,,,,,,,,T",
-        "T,,,,,,,,,,,....,,,,,,,,,,,T",
-        "T,SSSSSSSSS,....,,hhhhhh,,,T",
-        "T,S,,,,,,,S,....,,hhhhhh,,,T",
-        "T,S,hhhhh,S,....,,HHeHHH,,,T",
-        "T,S,hhhhh,S,............,,,T",
-        "T,S,HHdHH,S,............,,,T",
-        "T,S,...,JJS,....,,,,,,,,,,,T",
-        "T,S,,,.,JJS,....,,,,W,,,,,,T",
-        "T,S,,,.,,,S,....,,,,,,,,,,,T",
-        "T,S,,,.,,,S,....,,,,,,,,,,,T",
-        "T,SSSS.SSSS,....,,,,,,,,,,,T",
-        "T,,,,,..........,,,,,,,,,,,T",
-        "T,,,,,,,,,,,....,,,,,,,,,,,T",
-        "T,,,,,,,,,,,....,,,,,,,,,,,T",
-        "TTTTTTTTTTTT....TTTTTTTTTTTT",
-        "TTTTTTTTTTTTTTTTTTTTTTTTTTTT",
-    };
-    v.warps = {{6, 8, ROOM, 3, 4, UP}};
-    v.npcs = {{5, 11, DOWN, &art::npc_jumo_field_down, &art::npc_jumo_field_side, &art::npc_jumo_field_up, "주모"},
-              {11, 3, RIGHT, &art::npc_village_elder_field_down, &art::npc_village_elder_field_side,
-               &art::npc_village_elder_field_up, "노인"}};
-    maps = {room, v};
+void load_map(const std::string& id) {
+    g.map_id = id;
+    g.mdef = find_map(id);
+    g.npcs.clear();
+    for (int i = 0; g.mdef && i < g.mdef->npc_n; ++i) {
+        const NpcDef& n = g.mdef->npcs[i];
+        g.npcs.push_back({n.x, n.y, dir_of(n.face), n.name, n.sprite, n.talk_event});
+    }
 }
 
-char tile_at(int m, int x, int y) {
-    const Map& mp = maps[m];
-    if (y < 0 || y >= (int)mp.rows.size() || x < 0 || x >= (int)mp.rows[y].size()) return '~';
-    return mp.rows[y][x];
+char tile_at(int x, int y) {
+    const MapDef* m = g.mdef;
+    if (!m || y < 0 || y >= m->h || x < 0 || x >= m->w) return '~';
+    return m->tiles[y * m->w + x];
+}
+
+Npc* npc_named(const std::string& name) {
+    for (auto& n : g.npcs) if (n.name == name) return &n;
+    return nullptr;
 }
 
 bool solid_tile(char c) { return std::string("#BRJSThHWGe~").find(c) != std::string::npos; }
@@ -58,7 +27,7 @@ bool solid_tile(char c) { return std::string("#BRJSThHWGe~").find(c) != std::str
 // ---------------------------------------------------------------- story beats
 void wake_up() {
     g.scene = Scene::Field;
-    g.map = ROOM;
+    load_map("tavern_room");
     g.px = 1; g.py = 2; g.dir = DOWN;
     g.hp = g.hp_max; g.ng = g.ng_max;
     g.last_phase = phase_of(g.clock.minute);
@@ -66,25 +35,38 @@ void wake_up() {
 
 // ---------------------------------------------------------------- field update
 void on_arrive() {
-    for (auto& w : maps[g.map].warps)
-        if (w.x == g.px && w.y == g.py) {
-            Warp wp = w;
-            transition([wp] { g.map = wp.to; g.px = wp.tx; g.py = wp.ty; g.dir = wp.face; });
+    const MapDef* m = g.mdef;
+    for (int i = 0; i < m->warp_n; ++i) {
+        const WarpDef& w = m->warps[i];
+        if (w.x != g.px || w.y != g.py) continue;
+        if (!warp_valid(w.to_map, w.tx, w.ty)) {  // baked data is checked at build time; stay put if it is still wrong
+            std::fprintf(stderr, "bad warp %s(%d,%d) -> %s(%d,%d)\n", g.map_id.c_str(), w.x, w.y, w.to_map, w.tx, w.ty);
             return;
         }
-    if (g.map == VILLAGE && g.py == 2 && g.px >= 12 && g.px <= 15 && g.quest == 0) {
-        g.dir = UP;
-        say({"어귀의 장승 둘이 붉은 눈으로 이쪽을 내려다본다."}, "", [](int) { start_battle(); });
+        std::string to = w.to_map;
+        int tx = w.tx, ty = w.ty;
+        Dir face = dir_of(w.face);
+        transition([to, tx, ty, face] { load_map(to); g.px = tx; g.py = ty; g.dir = face; });
+        return;
+    }
+    for (int i = 0; i < m->trig_n; ++i) {
+        const TriggerDef& t = m->triggers[i];
+        if (t.x != g.px || t.y != g.py) continue;
+        std::string key = "trig:" + g.map_id + ":" + std::to_string(t.x) + ":" + std::to_string(t.y);
+        if (t.once && g.flags[key]) continue;
+        if (t.once) g.flags[key] = 1;
+        run_event(t.event, t.x, t.y);
+        return;
     }
 }
 
 bool npc_at(int x, int y) {
-    for (auto& n : maps[g.map].npcs) if (n.x == x && n.y == y) return true;
+    for (auto& n : g.npcs) if (n.x == x && n.y == y) return true;
     return false;
 }
 
 void bump_edge(int ny) {
-    if (g.map != VILLAGE) return;
+    if (g.map_id != "village") return;
     if (ny < 0) {
         if (g.quest == 0) say({"장승의 요기가 길을 막고 있다. 먼저 장승을 살펴야 한다."});
         else say({"(도선사 고개 — 이 너머는 다음 구간에서 이어진다.)"});
@@ -116,7 +98,11 @@ void update_field(const Input& in) {
     if (in.pressed[K_START]) { g.menu = true; g.menu_sel = 0; g.panel = -1; return; }
     if (in.pressed[K_A]) {
         int tx = g.px + DX[g.dir], ty = g.py + DY[g.dir];
-        for (auto& n : maps[g.map].npcs) if (n.x == tx && n.y == ty) return talk_npc(n);
+        for (auto& n : g.npcs)
+            if (n.x == tx && n.y == ty) {
+                n.face = (Dir)(g.dir == DOWN ? UP : g.dir == UP ? DOWN : g.dir == LEFT ? RIGHT : LEFT);
+                return run_event(n.talk_event);
+            }
         return search(tx, ty);
     }
     int d = in.held[K_UP] ? UP : in.held[K_DOWN] ? DOWN : in.held[K_LEFT] ? LEFT : in.held[K_RIGHT] ? RIGHT : -1;
@@ -125,7 +111,7 @@ void update_field(const Input& in) {
     g.dir = (Dir)d;
     if (g.turn_wait > 0) { g.turn_wait--; return; }
     int nx = g.px + DX[d], ny = g.py + DY[d];
-    if (solid_tile(tile_at(g.map, nx, ny)) || npc_at(nx, ny)) {
+    if (solid_tile(tile_at(nx, ny)) || npc_at(nx, ny)) {
         if (in.pressed[d]) bump_edge(ny);
         g.chain = false;
         return;
@@ -150,7 +136,7 @@ void draw_dirt(int sx, int sy, int tx, int ty) {
         pset(sx + h % 15, sy + (h >> 8) % 15, EA[1]);
     }
     // Ragged grass fringe where the road meets grass.
-    auto grassy = [&](int x, int y) { char c = tile_at(g.map, x, y); return c == ',' || c == 'T' || c == 'S'; };
+    auto grassy = [&](int x, int y) { char c = tile_at(x, y); return c == ',' || c == 'T' || c == 'S'; };
     for (int i = 0; i < 16; ++i) {
         bool jag = (i + tx + ty) % 3 != 0;
         if (grassy(tx - 1, ty)) { pset(sx, sy + i, GR[1]); if (jag) pset(sx + 1, sy + i, GR[1]); }
@@ -168,8 +154,8 @@ void draw_floor(int sx, int sy) {
 }
 
 void draw_tile(int tx, int ty, int sx, int sy) {
-    char c = tile_at(g.map, tx, ty);
-    bool indoor = maps[g.map].indoor;
+    char c = tile_at(tx, ty);
+    bool indoor = g.mdef->indoor;
     auto floorish = [](char k) { return k == '=' || k == 'B' || k == 'R' || k == 'J' || k == 'D'; };
     switch (c) {
         case '=': draw_floor(sx, sy); break;
@@ -197,7 +183,7 @@ void draw_tile(int tx, int ty, int sx, int sy) {
             pset(sx + 2, sy + 4, EA[0]); pset(sx + 13, sy + 4, EA[0]);
             break;
         case '#':
-            if (floorish(tile_at(g.map, tx, ty + 1))) {
+            if (floorish(tile_at(tx, ty + 1))) {
                 rect(sx, sy, 16, 4, EA[3]);
                 rect(sx, sy + 4, 16, 9, EA[0]);
                 rect(sx, sy + 8, 16, 1, EA[1]);
@@ -230,8 +216,8 @@ void draw_tile(int tx, int ty, int sx, int sy) {
                 }
             break;
         case 'h': {
-            bool top = tile_at(g.map, tx, ty - 1) != 'h', bot = tile_at(g.map, tx, ty + 1) != 'h';
-            bool lft = tile_at(g.map, tx - 1, ty) != 'h', rgt = tile_at(g.map, tx + 1, ty) != 'h';
+            bool top = tile_at(tx, ty - 1) != 'h', bot = tile_at(tx, ty + 1) != 'h';
+            bool lft = tile_at(tx - 1, ty) != 'h', rgt = tile_at(tx + 1, ty) != 'h';
             if (top) draw_grass(sx, sy, tx, ty);
             for (int y = top ? 3 : 0; y < 16; ++y)
                 for (int x = 0; x < 16; ++x) {
@@ -250,7 +236,7 @@ void draw_tile(int tx, int ty, int sx, int sy) {
             rect(sx, sy, 16, 2, EA[1]);
             rect(sx, sy + 13, 16, 3, EA[2]);
             rect(sx, sy + 13, 16, 1, EA[3]);
-            if (tile_at(g.map, tx - 1, ty) != 'H' || tx % 2 == 0) rect(sx, sy, 2, 13, EA[2]);
+            if (tile_at(tx - 1, ty) != 'H' || tx % 2 == 0) rect(sx, sy, 2, 13, EA[2]);
             if (c == 'H' && tx % 2 == 1) {
                 rect(sx + 4, sy + 4, 8, 7, EA[2]);
                 rect(sx + 5, sy + 5, 6, 5, EA[0]);
@@ -287,8 +273,7 @@ void draw_tile(int tx, int ty, int sx, int sy) {
 }
 
 void field_camera(int& cx, int& cy) {
-    const Map& m = maps[g.map];
-    int mw = (int)m.rows[0].size() * 16, mh = (int)m.rows.size() * 16;
+    int mw = g.mdef->w * 16, mh = g.mdef->h * 16;
     int wx = g.px * 16 + DX[g.dir] * g.step, wy = g.py * 16 + DY[g.dir] * g.step;
     cx = mw <= W ? (mw - W) / 2 : std::clamp(wx + 8 - W / 2, 0, mw - W);
     cy = mh <= H ? (mh - H) / 2 : std::clamp(wy + 8 - H / 2, 0, mh - H);
@@ -297,7 +282,7 @@ void field_camera(int& cx, int& cy) {
 void phase_tint(float& r, float& gg, float& b) {
     Phase ph = phase_of(g.clock.minute);
     r = gg = b = 1;
-    if (maps[g.map].indoor) {
+    if (g.mdef->indoor) {
         if (ph == Phase::Night) r = 0.8f, gg = 0.7f, b = 0.62f;
     } else {
         if (ph == Phase::Dawn) r = 0.86f, gg = 0.84f, b = 0.98f;
@@ -307,7 +292,7 @@ void phase_tint(float& r, float& gg, float& b) {
 }
 
 constexpr int kLampIn = 22, kLampOut = 34;  // world pixels
-bool lantern_lit() { return !maps[g.map].indoor && phase_of(g.clock.minute) == Phase::Night; }
+bool lantern_lit() { return !g.mdef->indoor && phase_of(g.clock.minute) == Phase::Night; }
 
 // World layer (320x180): tiles only.
 void render_field() {
@@ -316,7 +301,7 @@ void render_field() {
     clear(0x101010);
     for (int ty = cy / 16 - 1; ty <= (cy + H) / 16 + 1; ++ty)
         for (int tx = cx / 16 - 1; tx <= (cx + W) / 16 + 1; ++tx)
-            if (tile_at(g.map, tx, ty) != '~') draw_tile(tx, ty, tx * 16 - cx, ty * 16 - cy);
+            if (tile_at(tx, ty) != '~') draw_tile(tx, ty, tx * 16 - cx, ty * 16 - cy);
     float r, gg, b;
     phase_tint(r, gg, b);
     if (lantern_lit()) {  // night outdoors: the hero's ghost-fire lantern keeps a small pool of light
@@ -327,9 +312,28 @@ void render_field() {
     }
 }
 
+// Field sprite by name (from map data). nullptr = no art yet; callers draw placeholder().
+const Sprite* field_sprite(const std::string& name, Dir d) {
+    struct Set { const char* name; const Sprite *down, *side, *up; };
+    static const Set sets[] = {
+        {"jumo", &art::npc_jumo_field_down, &art::npc_jumo_field_side, &art::npc_jumo_field_up},
+        {"village_elder", &art::npc_village_elder_field_down, &art::npc_village_elder_field_side, &art::npc_village_elder_field_up},
+    };
+    for (const Set& s : sets)
+        if (name == s.name) return d == UP ? s.up : d == DOWN ? s.down : s.side;
+    return nullptr;
+}
+
+// Stand-in for art that does not exist yet: a labelled silhouette so content stays playable.
+void placeholder(const std::string& label, int x, int y, int w, int h) {
+    rrect(x, y, w, h, UI_EDGE);
+    rrect(x + 1, y + 1, w - 2, h - 2, UI_LINE_D);
+    text(x + w / 2 - text_width(label, Font::Small) / 2, y + h / 2 - 6, label, UI_DIM, -1, Font::Small);
+}
+
 // UI layer (640x360): 32x48 characters at twice the world resolution, Y-sorted by feet.
 void render_actors() {
-    const Map& m = maps[g.map];
+    const MapDef& m = *g.mdef;
     int cx, cy;
     field_camera(cx, cy);
     auto ux = [cx](int wx) { return (wx - cx) * 2; };
@@ -344,9 +348,9 @@ void render_actors() {
     };
     struct D { int y; std::function<void()> f; };
     std::vector<D> ds;
-    for (int ty = 0; ty < (int)m.rows.size(); ++ty)
-        for (int tx = 0; tx < (int)m.rows[ty].size(); ++tx)
-            if (m.rows[ty][tx] == 'G') {
+    for (int ty = 0; ty < m.h; ++ty)
+        for (int tx = 0; tx < m.w; ++tx)
+            if (m.tiles[ty * m.w + tx] == 'G') {
                 int sx = ux(tx * 16), sy = uy(ty * 16);
                 ds.push_back({ty * 16 + 15, [=] {
                     lit(tx * 16, ty * 16);
@@ -354,13 +358,13 @@ void render_actors() {
                     if (g.quest == 0 && (g.frame / 20) % 2) { rect(sx + 10, sy - 20, 2, 2, UI_GLOW); rect(sx + 20, sy - 20, 2, 2, UI_GLOW); }
                 }});
             }
-    for (auto& n : m.npcs) {
+    for (auto& n : g.npcs) {
         int sx = ux(n.x * 16), sy = uy(n.y * 16);
         const Npc* np = &n;
         ds.push_back({n.y * 16 + 15, [=] {
             lit(np->x * 16, np->y * 16);
-            const Sprite* s = np->face == UP ? np->up : np->face == DOWN ? np->down : np->side;
-            sprite(*s, sx, sy - 18, np->face == LEFT);
+            if (const Sprite* s = field_sprite(np->sprite, np->face)) sprite(*s, sx, sy - 18, np->face == LEFT);
+            else placeholder(np->name, sx + 4, sy - 16, 24, 32);
         }});
     }
     int wx = g.px * 16 + DX[g.dir] * g.step, wy = g.py * 16 + DY[g.dir] * g.step;

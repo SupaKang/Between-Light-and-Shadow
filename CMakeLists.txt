@@ -16,15 +16,16 @@ endif()
 
 # Platform-free core: game logic + software framebuffer.
 add_library(core STATIC src/game.cpp src/gfx.cpp src/state.cpp src/world.cpp src/ui.cpp src/menu.cpp
-                        src/battle.cpp src/scenes.cpp src/story.cpp src/data.cpp)
+                        src/battle.cpp src/scenes.cpp src/story.cpp src/data.cpp src/maps.cpp)
 target_include_directories(core PUBLIC src)
 
 # Bake data/ (JSON) into C++ headers before compiling: no runtime parser, single executable.
 find_package(Python3 REQUIRED COMPONENTS Interpreter)
 add_custom_target(bake ALL
   COMMAND ${Python3_EXECUTABLE} tools/bake_data.py
+  COMMAND ${Python3_EXECUTABLE} tools/bake_maps.py
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-  COMMENT "Baking data/*.json")
+  COMMENT "Baking data/*.json and data/maps/*.tmj")
 add_dependencies(core bake)
 
 # SDL2: vcpkg/installed CMake config on Windows, pkg-config on macOS/Linux.

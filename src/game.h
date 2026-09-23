@@ -16,5 +16,5 @@ void game_update(const Input& in);  // fixed 60 Hz step
 void game_render();
 bool game_debug_scene(const std::string& name);  // fixtures for --shot screenshots
 
-struct DebugInfo { int scene, map, x, y, quest; bool busy; };  // busy: dialog/transition/menu open
+struct DebugInfo { int scene; std::string map; int x, y, quest; bool busy; };  // busy: dialog/transition/menu open
 DebugInfo game_debug_info();

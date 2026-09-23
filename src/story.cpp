@@ -34,7 +34,6 @@ void after_place_card() {
 }
 
 void talk_npc(Npc& n) {
-    n.face = (Dir)(g.dir == DOWN ? UP : g.dir == UP ? DOWN : g.dir == LEFT ? RIGHT : LEFT);
     bool night = phase_of(g.clock.minute) == Phase::Night;
     if (n.name == "주모") {
         if (g.quest == 0)
@@ -62,8 +61,8 @@ void give(const std::string& item, int n, const std::string& msg) {
 }
 
 void search(int x, int y) {
-    char c = tile_at(g.map, x, y);
-    long key = (long)g.map * 100000 + y * 1000 + x;
+    char c = tile_at(x, y);
+    std::string key = g.map_id + ":" + std::to_string(x) + ":" + std::to_string(y);
     bool again = g.searched.count(key) > 0;
     bool night = phase_of(g.clock.minute) == Phase::Night;
     switch (c) {
@@ -102,6 +101,18 @@ void search(int x, int y) {
         case 'H': case 'h': return say({"초가집이다."});
         default: break;
     }
+}
+
+// Event dispatch by name (map data: npc talk_event, triggers). Lua replaces this in Task 5.
+void run_event(const std::string& name, int x, int y) {
+    if (name == "talk_jumo") { if (Npc* n = npc_named("주모")) talk_npc(*n); }
+    else if (name == "talk_elder") { if (Npc* n = npc_named("노인")) talk_npc(*n); }
+    else if (name == "gate_jangseung") {
+        if (g.quest != 0) return;
+        g.dir = UP;
+        say({"어귀의 장승 둘이 붉은 눈으로 이쪽을 내려다본다."}, "", [](int) { start_battle(); });
+    } else if (name == "search") search(x, y);
+    else std::fprintf(stderr, "unknown event %s\n", name.c_str());
 }
 
 }  // namespace yy

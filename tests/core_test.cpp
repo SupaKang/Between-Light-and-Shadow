@@ -5,6 +5,7 @@
 #include "../src/game.h"
 #include "../src/gfx.h"
 #include "../src/data.h"
+#include "../src/maps_api.h"
 
 int main() {
     // Clock phases and rest rule: rest always wakes on the next day at 06:00.
@@ -44,13 +45,13 @@ int main() {
     auto tap = [&](int key) { frame(key, true); frame(-1, false); };
     auto until = [&](auto cond, auto step, int cap) { while (!cond() && cap--) step(); return cond(); };
     auto info = game_debug_info;
-    const int FIELD = 3, BATTLE = 4, ROOM = 0, VILLAGE = 1;
+    const int FIELD = 3, BATTLE = 4;
     tap(K_A);
     assert(until([&] { return info().scene == FIELD && !info().busy; }, [&] { tap(K_A); }, 3000));
-    assert(info().map == ROOM);
+    assert(info().map == "tavern_room");
     auto walk = [&](int key, auto cond) { return until(cond, [&] { frame(key, false); }, 2000); };
     assert(walk(K_RIGHT, [&] { return info().x == 3 && !info().busy; }));
-    assert(walk(K_DOWN, [&] { return info().map == VILLAGE && !info().busy; }));
+    assert(walk(K_DOWN, [&] { return info().map == "village" && !info().busy; }));
     assert(walk(K_DOWN, [&] { return info().y == 14 && !info().busy; }));
     assert(walk(K_RIGHT, [&] { return info().x == 12 && !info().busy; }));
     assert(walk(K_UP, [&] { return info().y == 2; }));
@@ -68,6 +69,16 @@ int main() {
     int korean = 0;
     for (int i = 0; i < data::yokai_count(); ++i) korean += data::yokai_at(i).korean;
     assert(korean == 76);  // AGENTS: 70% Korean folklore
+
+    // Baked maps: same layout as the old in-code maps; bad warps are rejected.
+    const MapDef* v = find_map("village");
+    assert(v && v->w == 28 && v->h == 19 && !v->indoor);
+    assert(v->tiles[1 * v->w + 11] == 'G');  // left jangseung
+    assert(find_map("tavern_room")->indoor);
+    assert(warp_valid("tavern_room", 3, 4));
+    assert(!warp_valid("tavern_room", 0, 0));  // wall
+    assert(!warp_valid("no_such_map", 1, 1));
+    assert(!warp_valid("village", 99, 99));    // out of bounds
 
     std::puts("core_test ok");
 }

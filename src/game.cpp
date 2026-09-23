@@ -6,7 +6,6 @@ using namespace yy;
 void game_init(unsigned seed) {
     g = Game{};
     g.rng.seed(seed);
-    build_maps();
 }
 
 void game_update(const Input& in) {
@@ -72,7 +71,7 @@ bool game_debug_scene(const std::string& name) {
     auto finish_text = [] { for (auto& d : g.dq) d.shown = 999; };
     auto village = [](int hour) {
         wake_up();
-        g.map = VILLAGE; g.px = 13; g.py = 9; g.dir = DOWN;
+        load_map("village"); g.px = 13; g.py = 9; g.dir = DOWN;
         g.clock.minute = hour * 60.f;
         g.last_phase = phase_of(g.clock.minute);
     };
@@ -87,7 +86,7 @@ bool game_debug_scene(const std::string& name) {
     if (name == "gate") { village(12); g.px = 13; g.py = 3; g.dir = UP; return true; }
     if (name == "dusk") { village(18); return true; }
     if (name == "night") { village(22); g.px = 18; g.py = 10; g.dir = RIGHT; return true; }
-    if (name == "talk") { village(10); g.px = 5; g.py = 12; g.dir = UP; talk_npc(maps[VILLAGE].npcs[0]); finish_text(); return true; }
+    if (name == "talk") { village(10); g.px = 5; g.py = 12; g.dir = UP; g.npcs[0].face = DOWN; run_event("talk_jumo"); finish_text(); return true; }
     if (name == "rest") { wake_up(); g.dir = UP; g.px = 1; g.py = 2; search(1, 1); finish_text(); return true; }
     if (name == "menu") { village(12); g.menu = true; g.menu_sel = 3; g.panel = 3; return true; }
     if (name == "shop") { village(12); g.px = 20; g.py = 7; g.dir = UP; g.shop = true; return true; }
@@ -106,5 +105,5 @@ bool game_debug_scene(const std::string& name) {
 }
 
 DebugInfo game_debug_info() {
-    return {(int)g.scene, g.map, g.px, g.py, g.quest, !g.dq.empty() || g.trans_t >= 0 || g.menu || g.shop || g.moving};
+    return {(int)g.scene, g.map_id, g.px, g.py, g.quest, !g.dq.empty() || g.trans_t >= 0 || g.menu || g.shop || g.moving};
 }

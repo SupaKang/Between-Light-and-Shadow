@@ -14,6 +14,7 @@
 #include "art_gen.h"
 #include "art_legacy.h"
 #include "data.h"
+#include "maps_api.h"
 #include "game.h"
 #include "gfx.h"
 
@@ -27,11 +28,10 @@ using gfx::Font;
 enum Dir { DOWN, UP, LEFT, RIGHT };
 const int DX[] = {0, 0, -1, 1}, DY[] = {1, -1, 0, 0};
 
-struct Warp { int x, y, to, tx, ty; Dir face; };
-struct Npc { int x, y; Dir face; const Sprite* down; const Sprite* side; const Sprite* up; std::string name; };
-struct Map { std::vector<std::string> rows; std::vector<Warp> warps; std::vector<Npc> npcs; bool indoor; };
+// Runtime NPC on the current map (built from the baked NpcDef by load_map).
+struct Npc { int x, y; Dir face; std::string name, sprite, talk_event; };
+inline Dir dir_of(char c) { return c == 'U' ? UP : c == 'L' ? LEFT : c == 'R' ? RIGHT : DOWN; }
 
-enum { ROOM, VILLAGE };
 
 
 
@@ -70,7 +70,11 @@ struct Game {
     Clock clock;
     Phase last_phase = Phase::Dawn;
 
-    int map = ROOM, px = 1, py = 2;
+    std::string map_id = "tavern_room";
+    const MapDef* mdef = nullptr;    // cached find_map(map_id); set by load_map
+    std::vector<Npc> npcs;           // runtime NPCs of the current map
+    std::map<std::string, int> flags;
+    int px = 1, py = 2;
     Dir dir = DOWN;
     int step = 0, turn_wait = 0;
     bool moving = false, chain = false;
@@ -78,7 +82,7 @@ struct Game {
     int hp = 40, hp_max = 40, ng = 20, ng_max = 20, level = 1, money = 120;
     std::map<std::string, int> items{{"cheongsimhwan", 1}};  // item id -> count (ids from data/items.json)
     int quest = 0;  // 0: village-gate yokai not yet purified, 1: done
-    std::set<long> searched;
+    std::set<std::string> searched;  // "map:x:y" objects searched today
 
     std::deque<Dialog> dq;
     bool menu = false;
@@ -107,9 +111,10 @@ const Color* const ST = art::RAMP_STONE;
 
 extern Game g;
 inline int have(const std::string& id) { auto it = g.items.find(id); return it == g.items.end() ? 0 : it->second; }
-extern std::vector<Map> maps;
-void build_maps();
-char tile_at(int m, int x, int y);
+void load_map(const std::string& id);
+char tile_at(int x, int y);             // current map; '~' outside
+void run_event(const std::string& name, int x = -1, int y = -1);
+Npc* npc_named(const std::string& name);
 bool solid_tile(char c);
 void say(std::vector<std::string> texts, std::string speaker = "", std::function<void(int)> done = {},
          std::vector<std::string> choices = {});
@@ -149,6 +154,8 @@ void phase_tint(float& r, float& gg, float& b);
 bool lantern_lit();
 void render_field();
 void render_actors();
+const Sprite* field_sprite(const std::string& name, Dir d);
+void placeholder(const std::string& label, int x, int y, int w, int h);
 void cursor(int x, int y);
 void more_mark(int x, int y);
 void name_tag(int x, int y, const std::string& s);
