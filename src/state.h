@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <deque>
 #include <functional>
+#include <map>
 #include <random>
 #include <set>
 #include <string>
@@ -12,6 +13,7 @@
 #include "art.h"
 #include "art_gen.h"
 #include "art_legacy.h"
+#include "data.h"
 #include "game.h"
 #include "gfx.h"
 
@@ -31,14 +33,7 @@ struct Map { std::vector<std::string> rows; std::vector<Warp> warps; std::vector
 
 enum { ROOM, VILLAGE };
 
-// ---------------------------------------------------------------- items
-struct ItemDef { const char* name; const char* desc; int price; };
-const ItemDef ITEMS[] = {
-    {"한지", "부적을 쓰는 데 드는 종이. 부적 조제 재료.", 5},
-    {"청심환", "체력을 20 회복한다.", 30},
-    {"계약 부적", "약해진 요괴와 약조를 맺을 때 쓴다.", 40},
-};
-enum { HANJI, CHEONGSIM, CONTRACT, ITEM_COUNT };
+
 
 // ---------------------------------------------------------------- state
 enum class Scene { Title, Prologue, PlaceCard, Field, Battle };
@@ -81,7 +76,7 @@ struct Game {
     bool moving = false, chain = false;
 
     int hp = 40, hp_max = 40, ng = 20, ng_max = 20, level = 1, money = 120;
-    int items[ITEM_COUNT] = {0, 1, 0};
+    std::map<std::string, int> items{{"cheongsimhwan", 1}};  // item id -> count (ids from data/items.json)
     int quest = 0;  // 0: village-gate yokai not yet purified, 1: done
     std::set<long> searched;
 
@@ -111,6 +106,7 @@ const Color* const EA = art::RAMP_EARTH;
 const Color* const ST = art::RAMP_STONE;
 
 extern Game g;
+inline int have(const std::string& id) { auto it = g.items.find(id); return it == g.items.end() ? 0 : it->second; }
 extern std::vector<Map> maps;
 void build_maps();
 char tile_at(int m, int x, int y);
@@ -126,7 +122,7 @@ void wake_up();
 void start_prologue();
 void after_place_card();
 void talk_npc(Npc& n);
-void give(int item, int n, const std::string& msg);
+void give(const std::string& item, int n, const std::string& msg);
 void search(int x, int y);
 void bmsg(std::string t, std::function<void()> fx = {});
 void end_battle(bool won);

@@ -1,0 +1,5 @@
+[
+  {"id": "hanji", "name_ko": "한지", "desc": "부적을 쓰는 데 드는 종이. 부적 조제 재료.", "price": 5, "usable_in_battle": false},
+  {"id": "cheongsimhwan", "name_ko": "청심환", "desc": "체력을 20 회복한다.", "price": 30, "usable_in_battle": true},
+  {"id": "contract_talisman", "name_ko": "계약 부적", "desc": "약해진 요괴와 약조를 맺을 때 쓴다.", "price": 40, "usable_in_battle": true}
+]

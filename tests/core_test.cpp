@@ -4,6 +4,7 @@
 #include <cstdio>
 #include "../src/game.h"
 #include "../src/gfx.h"
+#include "../src/data.h"
 
 int main() {
     // Clock phases and rest rule: rest always wakes on the next day at 06:00.
@@ -55,6 +56,18 @@ int main() {
     assert(walk(K_UP, [&] { return info().y == 2; }));
     assert(until([&] { return info().scene == BATTLE; }, [&] { tap(K_A); }, 3000));
     assert(until([&] { return info().scene == FIELD && info().quest == 1 && !info().busy; }, [&] { tap(K_A); }, 6000));
+
+    // Baked game data: 108 yokai with five-phase elements, items with prices.
+    assert(data::yokai_count() == 108);
+    assert(data::find_yokai("yokai_076")->element == data::Element::Wood);   // 장승 목신
+    assert(data::find_yokai("yokai_006")->element == data::Element::Water);  // 해태: fire ward
+    assert(data::overcomes(data::Element::Metal, data::Element::Wood));
+    assert(!data::overcomes(data::Element::Wood, data::Element::Metal));
+    assert(data::find_item("contract_talisman")->price == 40);
+    assert(data::find_item("nope") == nullptr);
+    int korean = 0;
+    for (int i = 0; i < data::yokai_count(); ++i) korean += data::yokai_at(i).korean;
+    assert(korean == 76);  // AGENTS: 70% Korean folklore
 
     std::puts("core_test ok");
 }

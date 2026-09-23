@@ -56,7 +56,7 @@ void talk_npc(Npc& n) {
     }
 }
 
-void give(int item, int n, const std::string& msg) {
+void give(const std::string& item, int n, const std::string& msg) {
     g.items[item] += n;
     say({msg});
 }
@@ -70,13 +70,13 @@ void search(int x, int y) {
         case 'R':
             if (again) return say({"쌀이 반쯤 차 있는 뒤주다."});
             g.searched.insert(key);
-            return give(HANJI, 2, "뒤주 안 쌀 사이에서 한지 2장을 찾았다!");
+            return give("hanji", 2, "뒤주 안 쌀 사이에서 한지 2장을 찾았다!");
         case 'J': {
             if (again) return say({"이미 들여다본 항아리다."});
             g.searched.insert(key);
             unsigned h = hash3(g.clock.day, x, y) % 3;
             if (h == 0) { g.money += 10; return say({"항아리 바닥에서 엽전 10냥을 찾았다!"}); }
-            if (h == 1) return give(CHEONGSIM, 1, "항아리 속에 청심환 1개가 숨겨져 있었다!");
+            if (h == 1) return give("cheongsimhwan", 1, "항아리 속에 청심환 1개가 숨겨져 있었다!");
             return say({"장 냄새만 가득하다. 아무것도 없다."});
         }
         case 'W':

@@ -54,8 +54,11 @@ std::vector<Entry> battle_entries(int list) {
     if (list == 1) return {{"금침술 (金)", "내공 5 · 금(金)은 목(木)을 누른다", g.ng >= 5},
                            {"소환", "계약한 요괴가 없다", false}};
     std::vector<Entry> e;
-    for (int i : {CHEONGSIM, CONTRACT})
-        if (g.items[i] > 0) e.push_back({std::string(ITEMS[i].name) + " x" + std::to_string(g.items[i]), ITEMS[i].desc, true});
+    for (const char* id : {"cheongsimhwan", "contract_talisman"})
+        if (have(id) > 0) {
+            const data::ItemDef* d = data::find_item(id);
+            e.push_back({std::string(d->name_ko) + " x" + std::to_string(have(id)), d->desc, true});
+        }
     return e;
 }
 
@@ -74,15 +77,15 @@ void battle_act(int list, int sel) {
         bmsg("금(金)이 목(木)을 누른다! 효과가 굉장하다!");
         hit_enemy(rnd(6, 7) * 2);
     } else {
-        auto items = std::vector<int>{};
-        for (int i : {CHEONGSIM, CONTRACT}) if (g.items[i] > 0) items.push_back(i);
-        int it = items[sel];
-        if (it == CONTRACT) {
+        std::vector<std::string> items;
+        for (const char* id : {"cheongsimhwan", "contract_talisman"}) if (have(id) > 0) items.push_back(id);
+        std::string it = items[sel];
+        if (it == "contract_talisman") {
             bmsg("요기에 물든 장승이다. 약조를 맺을 수 없다!");
             b.after = [] { g.bt.st = Battle::Cmd; };
             return;
         }
-        g.items[CHEONGSIM]--;
+        g.items["cheongsimhwan"]--;
         g.hp = std::min(g.hp_max, g.hp + 20);
         int v = g.hp;
         bmsg("청심환을 먹었다. 체력이 회복되었다.", [v] { g.bt.dhp = v; });
