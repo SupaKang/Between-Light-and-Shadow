@@ -16,6 +16,7 @@ extern Color out[UW * UH];
 void target_world();  // subsequent draws go to the 320x180 world layer
 void target_ui();     // subsequent draws go to the 640x360 output
 void compose();       // world x2 -> output
+std::uint64_t frame_hash();  // FNV-1a over the 640x360 output, for render regression tests
 
 // Rows are strings of w chars: hex digits index the sprite's palette (4-colour ramps or the 16-colour
 // GHOST palette), '.' = transparent.

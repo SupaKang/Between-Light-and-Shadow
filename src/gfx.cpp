@@ -19,6 +19,12 @@ void compose() {
         for (int x = 0; x < UW; ++x) out[y * UW + x] = world[(y / 2) * W + x / 2];
 }
 
+std::uint64_t frame_hash() {
+    std::uint64_t h = 1469598103934665603ull;
+    for (Color c : out) { h ^= c; h *= 1099511628211ull; }
+    return h;
+}
+
 void clear(Color c) { std::fill(tgt, tgt + tw * th, c); }
 
 void pset(int x, int y, Color c) {

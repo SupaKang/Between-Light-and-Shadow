@@ -37,3 +37,7 @@ target_link_libraries(YinYangChronicle PRIVATE core ${SDL_LIBS})
 add_executable(CoreTest tests/core_test.cpp)
 target_link_libraries(CoreTest PRIVATE core)
 add_test(NAME CoreTest COMMAND CoreTest)
+
+add_executable(RenderHashTest tests/render_hash_test.cpp)
+target_link_libraries(RenderHashTest PRIVATE core)
+add_test(NAME RenderHashTest COMMAND RenderHashTest)
