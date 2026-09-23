@@ -15,7 +15,8 @@ else()
 endif()
 
 # Platform-free core: game logic + software framebuffer.
-add_library(core STATIC src/game.cpp src/gfx.cpp)
+add_library(core STATIC src/game.cpp src/gfx.cpp src/state.cpp src/world.cpp src/ui.cpp src/menu.cpp
+                        src/battle.cpp src/scenes.cpp src/story.cpp)
 target_include_directories(core PUBLIC src)
 
 # SDL2: vcpkg/installed CMake config on Windows, pkg-config on macOS/Linux.
