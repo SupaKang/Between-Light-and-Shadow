@@ -43,3 +43,6 @@ tools/test_*
 
 # Sanitizer build
 build-asan/
+
+# Plan execution workspaces (superpowers)
+.superpowers/

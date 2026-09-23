@@ -7,11 +7,12 @@
 Windows 독립 실행 게임 개발. Full HD 품질과 콘텐츠를 우선한다.
 
 ## Current Technical Baseline
+> 2026-09-23 재개발 결정 반영 (`docs/superpowers/specs/2026-09-23-rebuild-design.md`)
 - C++17
-- Windows (Win32 Native / Direct2D / Software Framebuffer)
-- 960x540 논리 해상도 → 1920x1080 출력 (2배 정수 스케일링)
-- 32x32 타일 기반 월드
-- 2D 도트 그래픽
+- SDL2 단일 백엔드 (Windows 1차 타깃, macOS 개발/검증) + 320x180 Software Framebuffer
+- 320x180 논리 해상도 → 정수배 출력 (1920x1080 = 6배)
+- 16x16 타일 기반 월드
+- 2D 도트 그래픽 (향후 HD-2D식 3D 표현을 위해 로직은 타일 좌표만 사용)
 - Standalone (단일 독립 실행 파일 지향)
 - Offline (네트워크 불필요)
 - No server (서버 의존성 전무)

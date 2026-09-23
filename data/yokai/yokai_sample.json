@@ -6,7 +6,7 @@
     "name_en": "Dokkaebi",
     "origin": "KOREAN_FOLKLORE",
     "grade": 2,
-    "element": "FIRE",
+    "element": "Fire",
     "base_stats": {
       "hp": 95,
       "qi": 60,
@@ -20,7 +20,12 @@
       "name_ko": "씨름광",
       "description": "물리 공격 명중 시 20% 확률로 대상을 1턴 기절시킨다."
     },
-    "skills": ["SKL_CLUB_STRIKE", "SKL_GOBLIN_FIRE", "SKL_TAUNT", "SKL_EARTH_SLAM"],
+    "skills": [
+      "SKL_CLUB_STRIKE",
+      "SKL_GOBLIN_FIRE",
+      "SKL_TAUNT",
+      "SKL_EARTH_SLAM"
+    ],
     "lore": "방망이와 씨름을 좋아하는 조선의 대표적 익살맞은 요괴. 사람에게 해를 끼치기보다 장난을 치거나 재물을 안겨준다."
   },
   {
@@ -30,7 +35,7 @@
     "name_en": "Gumiho",
     "origin": "KOREAN_FOLKLORE",
     "grade": 4,
-    "element": "FIRE",
+    "element": "Fire",
     "base_stats": {
       "hp": 110,
       "qi": 100,
@@ -44,7 +49,12 @@
       "name_ko": "매혹의 여우불",
       "description": "공격 시 25% 확률로 적에게 [공포] 상태이상을 부여한다."
     },
-    "skills": ["SKL_FOX_FIRE", "SKL_ILLUSION_STRIKE", "SKL_SPIRIT_DRAIN", "SKL_NINE_TAIL_TEMPEST"],
+    "skills": [
+      "SKL_FOX_FIRE",
+      "SKL_ILLUSION_STRIKE",
+      "SKL_SPIRIT_DRAIN",
+      "SKL_NINE_TAIL_TEMPEST"
+    ],
     "lore": "천 년 묵은 아홉 꼬리의 여우 요괴. 둔갑술과 영술에 능하며 신비로운 여우구슬을 지니고 있다."
   },
   {
@@ -54,7 +64,7 @@
     "name_en": "Bulgasari",
     "origin": "KOREAN_FOLKLORE",
     "grade": 3,
-    "element": "EARTH",
+    "element": "Earth",
     "base_stats": {
       "hp": 140,
       "qi": 50,
@@ -62,13 +72,18 @@
       "def": 28,
       "spd": 10
     },
-    "growth_rate": 1.50,
+    "growth_rate": 1.5,
     "trait": {
       "id": "TRAIT_IRON_EATER",
       "name_ko": "철식(鐵食)",
       "description": "물리 공격 피격 시 받는 피해의 20%를 경감한다."
     },
-    "skills": ["SKL_IRON_CHARGE", "SKL_FLAME_BREATH", "SKL_HARDEN", "SKL_METAL_ROAR"],
+    "skills": [
+      "SKL_IRON_CHARGE",
+      "SKL_FLAME_BREATH",
+      "SKL_HARDEN",
+      "SKL_METAL_ROAR"
+    ],
     "lore": "밥풀을 뭉쳐 만든 뒤 쇠를 먹고 거대해진 전설의 괴수. 오직 불로만 제어할 수 있다."
   },
   {
@@ -78,7 +93,7 @@
     "name_en": "Geuseundae",
     "origin": "KOREAN_FOLKLORE",
     "grade": 3,
-    "element": "DARK",
+    "element": "Water",
     "base_stats": {
       "hp": 120,
       "qi": 70,
@@ -86,13 +101,18 @@
       "def": 19,
       "spd": 15
     },
-    "growth_rate": 1.50,
+    "growth_rate": 1.5,
     "trait": {
       "id": "TRAIT_DARK_EXPANSION",
       "name_ko": "어둠의 팽창",
       "description": "매 턴마다 공격력이 10%씩 최대 50%까지 누적 증가한다."
     },
-    "skills": ["SKL_SHADOW_CLAW", "SKL_DARK_HAZE", "SKL_FEAR_GAZE", "SKL_GIANT_CRUSH"],
+    "skills": [
+      "SKL_SHADOW_CLAW",
+      "SKL_DARK_HAZE",
+      "SKL_FEAR_GAZE",
+      "SKL_GIANT_CRUSH"
+    ],
     "lore": "어둠 속에서 어린아이 모습으로 나타났다가 쳐다볼수록 키가 거대하게 커지는 요괴."
   },
   {
@@ -102,7 +122,7 @@
     "name_en": "Cheonyeogwishin",
     "origin": "KOREAN_FOLKLORE",
     "grade": 2,
-    "element": "WATER",
+    "element": "Water",
     "base_stats": {
       "hp": 85,
       "qi": 80,
@@ -116,7 +136,12 @@
       "name_ko": "원한의 한기",
       "description": "기절 시 공격자에게 100% 확률로 [빙결] 상태이상을 부여한다."
     },
-    "skills": ["SKL_CHILL_WAIL", "SKL_GHOST_TEAR", "SKL_FROST_TOUCH", "SKL_HAUNT"],
+    "skills": [
+      "SKL_CHILL_WAIL",
+      "SKL_GHOST_TEAR",
+      "SKL_FROST_TOUCH",
+      "SKL_HAUNT"
+    ],
     "lore": "억울한 죽음으로 성불하지 못한 채 소복을 입고 구만리 한을 품은 한국의 전통 귀신."
   },
   {
@@ -126,7 +151,7 @@
     "name_en": "Baize",
     "origin": "EAST_ASIAN_FOLKLORE",
     "grade": 5,
-    "element": "LIGHT",
+    "element": "Fire",
     "base_stats": {
       "hp": 160,
       "qi": 120,
@@ -134,13 +159,18 @@
       "def": 30,
       "spd": 25
     },
-    "growth_rate": 2.30,
+    "growth_rate": 2.3,
     "trait": {
       "id": "TRAIT_ALL_KNOWING",
       "name_ko": "만물통달",
       "description": "아군 전체가 받는 상태이상 지속 턴 수를 1턴 감소시킨다."
     },
-    "skills": ["SKL_HOLY_RAY", "SKL_PURIFICATION", "SKL_OMNISCIENCE", "SKL_CELESTIAL_ROAR"],
+    "skills": [
+      "SKL_HOLY_RAY",
+      "SKL_PURIFICATION",
+      "SKL_OMNISCIENCE",
+      "SKL_CELESTIAL_ROAR"
+    ],
     "lore": "동양 산해경에 등장하는 전설의 영수. 세상 11,520종 모든 귀신과 요괴의 이름과 퇴치법을 알고 있다."
   }
 ]

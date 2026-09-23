@@ -9,9 +9,10 @@ for path in sorted(root.glob("*.json")):
     except Exception as exc: errors.append(f"{path}: invalid JSON ({exc})"); continue
     if not isinstance(obj, dict): continue
     if path.name.startswith("yokai_") and "schema" not in path.name:
-        for key in ("id","name_ko","origin","grade","level","stats","skills"):
+        for key in ("id","name_ko","origin","grade","level","stats","skills","element"):
             if key not in obj: errors.append(f"{path}: missing {key}")
         if obj.get("grade") not in {"I","II","III","IV","V"}: errors.append(f"{path}: invalid grade")
+        if obj.get("element") not in {"Wood","Fire","Earth","Metal","Water"}: errors.append(f"{path}: element must be one of the five phases (Wood/Fire/Earth/Metal/Water)")
         if not 1 <= obj.get("level",0) <= 50: errors.append(f"{path}: invalid level")
         if len(obj.get("skills",[])) > 4: errors.append(f"{path}: more than 4 skills")
         for ref in obj.get("skills",[]):

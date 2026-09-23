@@ -1,0 +1,670 @@
+{
+  "_note": "Subjects for the art prompt library. tools/make_art_prompts.py merges this with game data and writes assets/prompts/manifest.json + docs/art/PROMPT_LIBRARY.md. Descriptions are English for the image model. VERIFY/TODO mark unconfirmed story or folklore details.",
+  "style": {
+    "global": "Pixel art for a dark Joseon-dynasty Korean folk-horror (gwaedam) RPG. Crisp hard-edged square pixels on a strict low-resolution grid, no anti-aliasing, no gradients, no painterly blur, 1px dark outlines, limited palette dominated by black and deep greens (near-black, moss, sickly phosphor green, pale bone white) with only rare accents of dried-blood red and sallow skin. Eerie, quiet, moonless-night mood, faint green ghost-fire (dokkaebibul) light.",
+    "sprite_bg": "Solid flat pure magenta (#FF00FF) background filling the entire canvas. No text, no frame, no grid lines, no ground shadow.",
+    "types": {
+      "portrait": {
+        "size": "96x96",
+        "layout": "single bust portrait, head and shoulders, three-quarter view facing left, clear readable facial features and strong face outline",
+        "import": {
+          "size": [
+            96,
+            96
+          ]
+        }
+      },
+      "battle_front": {
+        "size": "128x128",
+        "layout": "single monster battle sprite, full body, facing the viewer, menacing pose, Pokemon-style battler framing",
+        "import": {
+          "size": [
+            128,
+            128
+          ]
+        }
+      },
+      "battle_back": {
+        "size": "128x128",
+        "layout": "single back view battle sprite seen from behind and slightly to the side, upper body filling the frame, cropped at the bottom edge",
+        "import": {
+          "size": [
+            128,
+            128
+          ]
+        }
+      },
+      "tileset": {
+        "size": "32x32 per tile",
+        "layout": "top-down 3/4 RPG tileset sheet on an exact 32px grid, 8 columns x 8 rows of tiles, seamless repeating ground tiles, no characters, no magenta needed (fill unused cells with black)",
+        "import": {
+          "tile": [
+            32,
+            32
+          ],
+          "grid": [
+            8,
+            8
+          ]
+        }
+      },
+      "item_icon": {
+        "size": "32x32",
+        "layout": "single inventory item icon, centered, slightly angled, readable silhouette",
+        "import": {
+          "size": [
+            32,
+            32
+          ]
+        }
+      },
+      "ui_sheet": {
+        "size": "native 640x360 UI pixels",
+        "layout": "UI parts sheet on a black background, parts separated by empty space",
+        "import": {
+          "slice": "manual"
+        }
+      },
+      "concept": {
+        "size": "wide 16:9 illustration",
+        "layout": "concept art screenshot mockup of the game at 640x360, top-down 3/4 view, no UI",
+        "import": null
+      },
+      "field_down": {
+        "size": "about 512x768, one character",
+        "layout": "single full-body standing character sprite for a top-down RPG, 2-head-tall chibi proportions with a slightly small head, clearly separated arms and legs, visible feet, FRONT VIEW facing the viewer, symmetrical pose",
+        "import": {
+          "view": "down",
+          "frame": [
+            32,
+            48
+          ]
+        }
+      },
+      "field_side": {
+        "size": "about 512x768, one character",
+        "layout": "single full-body standing character sprite for a top-down RPG, 2-head-tall chibi proportions with a slightly small head, clearly separated arms and legs, visible feet, SIDE PROFILE VIEW facing left, walking pose",
+        "import": {
+          "view": "side",
+          "frame": [
+            32,
+            48
+          ]
+        }
+      },
+      "field_up": {
+        "size": "about 512x768, one character",
+        "layout": "single full-body standing character sprite for a top-down RPG, 2-head-tall chibi proportions with a slightly small head, clearly separated arms and legs, visible feet, BACK VIEW seen from behind, face not visible",
+        "import": {
+          "view": "up",
+          "frame": [
+            32,
+            48
+          ]
+        }
+      }
+    }
+  },
+  "npcs": [
+    {
+      "id": "hero",
+      "name_ko": "주인공 (벽사청 음양사)",
+      "chapter": 1,
+      "types": [
+        "field_down",
+        "field_side",
+        "field_up",
+        "portrait",
+        "battle_back"
+      ],
+      "desc": "young Korean yin-yang master (eumyangsa) of the royal Byeoksacheong exorcist bureau: black conical satgat straw hat, short black hair, pale face, dark green dopo robe tied at the waist with a blood-red sash, white collar, white socks, black shoes, holding a long wooden staff with a brass ring finial firmly in the right hand, the staff touching the ground (approved portrait design)",
+      "age": 22
+    },
+    {
+      "id": "hero_night",
+      "name_ko": "주인공 (밤: 등불)",
+      "chapter": 1,
+      "types": [
+        "field_down",
+        "field_side",
+        "field_up"
+      ],
+      "age": 22,
+      "desc": "young Korean yin-yang master (eumyangsa) of the royal Byeoksacheong exorcist bureau: black conical satgat straw hat, short black hair, pale face, dark green dopo robe tied at the waist with a blood-red sash, white collar, white socks, black shoes, holding a long wooden staff in the right hand and a small paper lantern glowing green hanging from the left hand, both held close to the body (approved portrait design)"
+    },
+    {
+      "id": "old_monk",
+      "name_ko": "정체불명의 노승 (프롤로그 화자)",
+      "chapter": 0,
+      "types": [
+        "portrait",
+        "field_down",
+        "field_side",
+        "field_up"
+      ],
+      "desc": "mysterious elderly Buddhist monk, wide conical straw satgat hat shading his eyes, long white beard, gray jangsam robe with a faded red kasaya, wooden prayer beads, a knowing smile (TODO: identity, relation to Myogak open)",
+      "age": 80
+    },
+    {
+      "id": "jumo",
+      "name_ko": "주막 주모",
+      "chapter": 1,
+      "types": [
+        "field_down",
+        "field_side",
+        "field_up",
+        "portrait"
+      ],
+      "desc": "tavern keeper woman in her mid-fifties: plump sturdy build, round face with wrinkles and laugh lines, graying black hair in a low chignon with a wooden binyeo pin, faded white jeogori with a dark red ribbon, long dark chima skirt with an apron, sleeves rolled up, tired kind eyes",
+      "age": 55
+    },
+    {
+      "id": "village_elder",
+      "name_ko": "마을 어귀 노인",
+      "chapter": 1,
+      "types": [
+        "field_down",
+        "field_side",
+        "field_up",
+        "portrait"
+      ],
+      "desc": "super-deformed chibi old village man, head as large as the body: black horsehair gat hat with a wide flat brim and tall crown, white hanbok coat, long white goatee, furrowed brows, gnarled wooden cane",
+      "age": 72
+    },
+    {
+      "id": "talisman_seller",
+      "name_ko": "부적방 주인",
+      "chapter": 1,
+      "types": [
+        "field_down",
+        "field_side",
+        "field_up",
+        "portrait"
+      ],
+      "desc": "thin talisman shop owner with ink-stained fingers, round spectacles, headband, holding a stack of yellow paper talismans",
+      "age": 45
+    },
+    {
+      "id": "bureau_chief",
+      "name_ko": "벽사청 상관 (TODO: 이름)",
+      "chapter": 1,
+      "types": [
+        "portrait"
+      ],
+      "desc": "stern senior official of the exorcist bureau, black official hat (samo), dark crimson official robe with a crane rank badge, scar across one eyebrow",
+      "age": 52
+    },
+    {
+      "id": "myogak",
+      "name_ko": "괴승 묘각 (1장 보스)",
+      "chapter": 1,
+      "types": [
+        "field_down",
+        "field_side",
+        "field_up",
+        "portrait",
+        "battle_front"
+      ],
+      "desc": "sinister renegade monk of the Eumyangdang, shaved head tattooed with black sutra script, tattered black robe, rosary of small skulls, red-glowing eyes, holding a staff wrapped in forbidden talismans",
+      "age": 45
+    },
+    {
+      "id": "eumyangdang_acolyte",
+      "name_ko": "음양당 하수인 술사",
+      "chapter": 1,
+      "types": [
+        "field_down",
+        "field_side",
+        "field_up",
+        "portrait",
+        "battle_front"
+      ],
+      "desc": "masked cult sorcerer of the Eumyangdang, black hooded robe with a white yin-yang sigil broken in half, paper mask with painted eyes, bundle of cursed talismans",
+      "age": 30
+    },
+    {
+      "id": "sobaek_sorcerer",
+      "name_ko": "음양당 술사 (2장)",
+      "chapter": 2,
+      "types": [
+        "portrait",
+        "battle_front"
+      ],
+      "desc": "gaunt mountain sorcerer with iron chains and an iron mask, commands the iron-eating Bulgasari",
+      "age": 50
+    },
+    {
+      "id": "waterway_master",
+      "name_ko": "음양당 수로방주 (3장 보스)",
+      "chapter": 3,
+      "types": [
+        "portrait",
+        "battle_front"
+      ],
+      "desc": "drowned-looking cult master of the waterways, soaked black robes, seaweed hair, pale bloated hands holding a rope of drowned souls",
+      "age": 48
+    },
+    {
+      "id": "left_guardian",
+      "name_ko": "음양당 좌호법 (4장 보스)",
+      "chapter": 4,
+      "types": [
+        "portrait",
+        "battle_front"
+      ],
+      "desc": "elegant cult lieutenant in white robes with fox-fur collar, fan in hand, cold beauty, bamboo forest behind",
+      "age": 35
+    },
+    {
+      "id": "mukyeong",
+      "name_ko": "음양당 당주 묵영 (최종 보스)",
+      "chapter": 5,
+      "types": [
+        "portrait",
+        "battle_front"
+      ],
+      "desc": "leader of the Eumyangdang, figure in ink-black robes that bleed into shadow, half of the face covered by a cracked yin-yang mask, eyes like an eclipse",
+      "age": 60
+    },
+    {
+      "id": "ferryman",
+      "name_ko": "나루터 뱃사공",
+      "chapter": 3,
+      "types": [
+        "field_down",
+        "field_side",
+        "field_up",
+        "portrait"
+      ],
+      "desc": "weathered ferryman with a straw raincoat (dorongi) and straw hat, long oar, lantern on the boat bow",
+      "age": 60
+    },
+    {
+      "id": "daughter_in_law",
+      "name_ko": "방귀쟁이 며느리 (SQ-01)",
+      "chapter": 1,
+      "types": [
+        "field_down",
+        "field_side",
+        "field_up",
+        "portrait"
+      ],
+      "desc": "embarrassed young daughter-in-law in a plain hanbok covering her mouth, wind swirling around her skirt",
+      "age": 20
+    },
+    {
+      "id": "toad_girl",
+      "name_ko": "은혜 갚은 소녀 (SQ-02)",
+      "chapter": 4,
+      "types": [
+        "field_down",
+        "field_side",
+        "field_up",
+        "portrait"
+      ],
+      "desc": "brave village girl in a worn hanbok holding a bowl of rice for a toad, braided hair",
+      "age": 14
+    },
+    {
+      "id": "dajagu_grandma",
+      "name_ko": "다자구 할머니 (SQ-03)",
+      "chapter": 2,
+      "types": [
+        "field_down",
+        "field_side",
+        "field_up",
+        "portrait"
+      ],
+      "desc": "sly old grandmother on a mountain pass, hunched, with a walking stick and a secret grin, calling out into the night",
+      "age": 78
+    },
+    {
+      "id": "shrine_shaman",
+      "name_ko": "서낭당 무녀",
+      "chapter": 1,
+      "types": [
+        "field_down",
+        "field_side",
+        "field_up",
+        "portrait"
+      ],
+      "desc": "shaman woman (mudang) with a red and white ritual robe, brass bells and a fan, face calm and unreadable",
+      "age": 50
+    },
+    {
+      "id": "mountain_hut_widow",
+      "name_ko": "산속 민가 노파 (휴식 거점)",
+      "chapter": 1,
+      "types": [
+        "field_down",
+        "field_side",
+        "field_up",
+        "portrait"
+      ],
+      "desc": "old widow living alone in a mountain hut, white headscarf, weaving straw sandals by a small fire",
+      "age": 75
+    },
+    {
+      "id": "villager_child",
+      "name_ko": "마을 아이",
+      "chapter": 1,
+      "types": [
+        "field_down",
+        "field_side",
+        "field_up"
+      ],
+      "desc": "small village child with a pigtail and a pinwheel, curious but frightened",
+      "age": 8
+    },
+    {
+      "id": "constable",
+      "name_ko": "포졸",
+      "chapter": 1,
+      "types": [
+        "field_down",
+        "field_side",
+        "field_up",
+        "portrait"
+      ],
+      "desc": "Joseon constable with a black felt hat marked with red, blue uniform, wooden club",
+      "age": 35
+    },
+    {
+      "id": "peddler",
+      "name_ko": "보부상",
+      "chapter": 2,
+      "types": [
+        "field_down",
+        "field_side",
+        "field_up",
+        "portrait"
+      ],
+      "desc": "traveling peddler with a big A-frame pack (jige) and a bamboo hat with cotton tufts",
+      "age": 40
+    },
+    {
+      "id": "hunter",
+      "name_ko": "지리산 포수",
+      "chapter": 4,
+      "types": [
+        "field_down",
+        "field_side",
+        "field_up",
+        "portrait"
+      ],
+      "desc": "tiger hunter with a matchlock rifle, fur vest, scar across the cheek",
+      "age": 42
+    },
+    {
+      "id": "haenyeo",
+      "name_ko": "남해 해녀",
+      "chapter": 3,
+      "types": [
+        "field_down",
+        "field_side",
+        "field_up",
+        "portrait"
+      ],
+      "desc": "sea diver woman in dark diving clothes with a gourd float (taewak) and net",
+      "age": 50
+    },
+    {
+      "id": "temple_monk",
+      "name_ko": "천년 사찰 승려",
+      "chapter": 2,
+      "types": [
+        "field_down",
+        "field_side",
+        "field_up",
+        "portrait"
+      ],
+      "desc": "calm young temple monk sweeping leaves, gray robe, shaved head",
+      "age": 25
+    },
+    {
+      "id": "exorcist_rival",
+      "name_ko": "떠돌이 퇴마사 (트레이너형 NPC)",
+      "chapter": 1,
+      "types": [
+        "field_down",
+        "field_side",
+        "field_up",
+        "portrait",
+        "battle_back"
+      ],
+      "desc": "arrogant wandering exorcist with a sword and paper charms tucked in the belt, challenges travelers",
+      "age": 24
+    }
+  ],
+  "tilesets": [
+    {
+      "id": "village_outskirts",
+      "region": "REG_01 한양 외곽",
+      "desc": "Joseon village at night: grass, dirt paths with edges and corners, tall encounter grass, thatched-roof (choga) houses split into roof/wall/door/window tiles, stone walls (doldam), wattle fences, jangdokdae jar platforms, a stone well, village gate jangseung poles, sotdae bird poles, zelkova tree, cairn (seonangdang) with cloth strips"
+    },
+    {
+      "id": "tavern_interior",
+      "region": "REG_01 주막 내부",
+      "desc": "tavern interior: oiled-paper ondol floor, hanji paper walls with wooden posts, lattice doors, low table (soban), folded bedding, rice chest (duiju), clay jars, oil lamp, kitchen hearth (agungi), wooden beams"
+    },
+    {
+      "id": "doseonsa_pass",
+      "region": "REG_01 도선사 고개",
+      "desc": "mountain pass with red fog: rocky slopes, one-way ledges, pine trees, dead trees, stone steps, broken shrine, temple gate, fallen talismans on the ground, crows"
+    },
+    {
+      "id": "sobaek_mountains",
+      "region": "REG_02 소백산맥",
+      "desc": "rugged mountains: cliffs, waterfalls, deep valleys, hermitage (amja), rope bridge, cave entrances, iron-scarred rocks"
+    },
+    {
+      "id": "temple",
+      "region": "REG_02 천년 사찰",
+      "desc": "old Buddhist temple: dancheong-painted eaves faded to gray-green, stone pagoda, lanterns, temple bell pavilion, wooden floors, guardian king statues"
+    },
+    {
+      "id": "south_coast",
+      "region": "REG_03 남해 포구",
+      "desc": "fishing harbor and ghostly tidal flats: wooden piers, moored boats, wrecked ships, nets drying, mudflats with pools, fog, lighthouse beacon fire"
+    },
+    {
+      "id": "jirisan_bamboo",
+      "region": "REG_04 지리산 죽림",
+      "desc": "dense bamboo forest and fox valley: bamboo walls, abandoned shrine, ancient burial mounds (gobun), stone path, will-o-wisps"
+    },
+    {
+      "id": "eumyangdang_fortress",
+      "region": "REG_05 음양당 본거지",
+      "desc": "eclipse fortress of the cult: black stone floors inlaid with broken taegeuk circles, barrier towers, ritual altars, chained talisman pillars, distorted ley-line cracks glowing green"
+    },
+    {
+      "id": "battle_backgrounds",
+      "region": "전투 배경",
+      "desc": "set of battle background strips (grassland at night, mountain pass fog, temple courtyard, tidal flat, bamboo forest, cult altar), each 640x230, top-down-ish ground with a platform ellipse for each combatant"
+    }
+  ],
+  "items": [
+    {
+      "id": "hanji",
+      "name_ko": "한지",
+      "desc": "stack of handmade mulberry paper sheets tied with a string"
+    },
+    {
+      "id": "cheongsimhwan",
+      "name_ko": "청심환",
+      "desc": "round herbal pill wrapped in gold foil inside a small lacquered case"
+    },
+    {
+      "id": "contract_talisman",
+      "name_ko": "계약 부적",
+      "desc": "yellow paper talisman with red cinnabar script and a knot of red thread"
+    },
+    {
+      "id": "fire_talisman",
+      "name_ko": "화부 (火符)",
+      "desc": "talisman with a flame sigil, edges smoldering"
+    },
+    {
+      "id": "water_talisman",
+      "name_ko": "수부 (水符)",
+      "desc": "talisman with a wave sigil, dripping water"
+    },
+    {
+      "id": "wood_talisman",
+      "name_ko": "목부 (木符)",
+      "desc": "talisman with a sprout sigil, a leaf growing from it"
+    },
+    {
+      "id": "metal_talisman",
+      "name_ko": "금부 (金符)",
+      "desc": "talisman with a needle sigil, metallic sheen"
+    },
+    {
+      "id": "earth_talisman",
+      "name_ko": "토부 (土符)",
+      "desc": "talisman with a mountain sigil, dusted with soil"
+    },
+    {
+      "id": "coins",
+      "name_ko": "엽전",
+      "desc": "string of square-holed brass coins (sangpyeong tongbo)"
+    },
+    {
+      "id": "buckwheat_jelly",
+      "name_ko": "메밀묵",
+      "desc": "slab of buckwheat jelly on a wooden plate, dokkaebi's favorite offering"
+    },
+    {
+      "id": "lamp_oil",
+      "name_ko": "등불 기름",
+      "desc": "small clay bottle of lamp oil glowing faintly green"
+    },
+    {
+      "id": "salt_pouch",
+      "name_ko": "소금 주머니",
+      "desc": "cloth pouch of coarse salt used to ward off spirits"
+    },
+    {
+      "id": "skill_scroll",
+      "name_ko": "도술 비급",
+      "desc": "rolled secret-technique scroll sealed with a talisman"
+    },
+    {
+      "id": "cheonji_fragment",
+      "name_ko": "천지음양부 조각 (핵심 아이템)",
+      "desc": "torn fragment of an ancient talisman, half black half white, glowing along the tear"
+    },
+    {
+      "id": "bureau_badge",
+      "name_ko": "벽사청 호패",
+      "desc": "wooden identification tag (hopae) branded with the exorcist bureau mark"
+    },
+    {
+      "id": "ART_DOKKAEBI_HAT",
+      "name_ko": "도깨비 감투",
+      "desc": "goblin's invisibility cap, worn black horsehair cap with a faint shimmer"
+    },
+    {
+      "id": "ART_CENTIPEDE_EGG",
+      "name_ko": "백년 묵은 지네의 알",
+      "desc": "sickly green centipede egg with veins, faintly pulsing"
+    },
+    {
+      "id": "ART_FOX_MARBLE_SHARD",
+      "name_ko": "깨진 여우구슬",
+      "desc": "cracked fox bead glowing from inside"
+    },
+    {
+      "id": "ART_DEMON_TILE",
+      "name_ko": "귀면와 (도깨비 기와)",
+      "desc": "roof-end tile with a goblin face relief"
+    },
+    {
+      "id": "ART_JADE_MIRROR",
+      "name_ko": "벽사 옥경 (玉鏡)",
+      "desc": "jade exorcism mirror with a bronze frame"
+    },
+    {
+      "id": "ART_GOLDEN_BELL",
+      "name_ko": "신령 무당방울",
+      "desc": "shaman's cluster of brass bells on a handle with colored ribbons"
+    },
+    {
+      "id": "ART_SHADOW_INCENSE",
+      "name_ko": "음기도방의 향로",
+      "desc": "black bronze incense burner leaking green smoke"
+    },
+    {
+      "id": "ART_REAPER_SCROLL",
+      "name_ko": "저승사자의 명부 조각",
+      "desc": "torn page of the underworld register with names written in red"
+    },
+    {
+      "id": "artifact_001",
+      "name_ko": "신목의 파편",
+      "desc": "splinter of a sacred tree wrapped in straw rope and white paper"
+    },
+    {
+      "id": "artifact_002",
+      "name_ko": "도깨비 은패",
+      "desc": "silver goblin medallion with a horned face"
+    },
+    {
+      "id": "artifact_003",
+      "name_ko": "해태의 방울",
+      "desc": "bell shaped like a haetae head"
+    }
+  ],
+  "ui": [
+    {
+      "id": "ui_windows",
+      "desc": "window frame 9-slice parts: black panel with double moss-green border lines, small knot ornaments at corners; name tag; choice box; dialog box; all on black"
+    },
+    {
+      "id": "ui_icons_menu",
+      "desc": "16x16 menu icons in one row: yokai (horned mask), bestiary book, pouch, yin-yang master (taegeuk), brush (save), knot (settings), close X, staff (skill), talisman (spell), feet (flee)"
+    },
+    {
+      "id": "ui_icons_elements",
+      "desc": "five 16x16 elemental icons for wood, fire, earth, metal, water (Chinese characters 木 火 土 金 水 carved on dark stone tokens)"
+    },
+    {
+      "id": "ui_icons_status",
+      "desc": "five 16x16 status icons: burn (flame), freeze (ice crystal), seal (talisman with a lock), paralysis (lightning), fear (skull-like ghost face)"
+    },
+    {
+      "id": "ui_cursor",
+      "desc": "small pixel cursor pointing right, a green ghost-fire flame shape, plus a bouncing down-arrow for 'more text'"
+    }
+  ],
+  "concepts": [
+    {
+      "id": "key_title",
+      "desc": "title screen key art: the hero with a green ghost-fire lantern standing before two cursed jangseung poles at a village entrance under a moonless sky, red fog creeping"
+    },
+    {
+      "id": "key_prologue",
+      "desc": "the mysterious old monk telling a story by an oil lamp in a dark room, only his beard and smile lit"
+    },
+    {
+      "id": "key_ch1",
+      "desc": "chapter 1 Doseonsa red fog: mountain temple wrapped in red fog, silhouettes of goblins, the renegade monk Myogak on the stairs"
+    },
+    {
+      "id": "key_ch2",
+      "desc": "chapter 2 Sobaek iron beast: giant Bulgasari devouring an iron bell in a rocky valley"
+    },
+    {
+      "id": "key_ch3",
+      "desc": "chapter 3 silent harbor: drowned ghosts rising from tidal flats around a wrecked boat at night"
+    },
+    {
+      "id": "key_ch4",
+      "desc": "chapter 4 fox valley maze: white-haired nine-tailed fox in a bamboo forest labyrinth"
+    },
+    {
+      "id": "key_final",
+      "desc": "final chapter eclipse fortress: the cult leader Mukyeong under a black sun, barrier towers glowing green"
+    }
+  ]
+}

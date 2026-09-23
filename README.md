@@ -6,7 +6,18 @@
 
 ## 📌 프로젝트 개요
 
-현재는 Phase 1 기술 스파이크를 진행 중이며, 조작 기준은 `docs/tech/CONTROL_REFERENCE.md`에 정리되어 있습니다.
+2026-09-23 전면 재개발 중입니다. 기준 설계: `docs/superpowers/specs/2026-09-23-rebuild-design.md` (이전 코드는 `legacy-v0` 태그).
+
+### 빌드 · 실행
+
+```sh
+cmake -S . -B build/v1 && cmake --build build/v1
+./build/v1/CoreTest                 # 규칙 + 입력 스크립트 플레이스루
+./build/v1/YinYangChronicle         # Z 확인 · X 취소/달리기 · Enter 메뉴 · F11 전체화면
+./build/v1/YinYangChronicle --shot battle out.bmp   # 1920x1080 스크린샷
+```
+
+macOS: `brew install sdl2`. Windows: vcpkg `sdl2` (VERIFY: Windows 빌드 미검증).
 
 ### 기본 데이터 검증
 
@@ -21,9 +32,9 @@ python tools\validate_data.py
 | **프로젝트명** | **108:음양견문록** (108: Yin-Yang Chronicle) |
 | **장르** | 조선시대 민속 판타지 턴제 요괴 수집 RPG |
 | **대상 플랫폼** | Windows (x64 / x86 Standalone Executable) |
-| **기술 스택** | C++17, Native Win32 API, Software Framebuffer / Direct2D |
-| **해상도** | 960 x 540 논리 캔버스 → 1920 x 1080 출력 |
-| **타일 규격** | 32 x 32 Pixel Tilemap |
+| **기술 스택** | C++17, SDL2, 320x180 Software Framebuffer |
+| **해상도** | 320 x 180 논리 캔버스 → 정수배 출력 (1920 x 1080 = 6배) |
+| **타일 규격** | 16 x 16 Pixel Tilemap |
 | **용량 정책** | 고정 제한 없음. Release 빌드 크기 측정 및 회귀 관리 |
 | **의존성** | 무설치, 노 서버, 노 브라우저, 외부 대용량 런타임 의존성 0% |
 
