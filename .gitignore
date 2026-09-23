@@ -40,3 +40,6 @@ tools/test_*
 
 # iCloud 동기화 제외 폴더 (빌드 산출물 등)
 *.nosync
+
+# Sanitizer build
+build-asan/

@@ -31,7 +31,7 @@ namespace {
 constexpr int W = 960, H = 540, SCALE = 2, TILE = 32;
 using Status = status_rules::Kind;
 
-std::vector<std::uint32_t> pixels(W * H);
+std::vector<std::uint32_t> pixels(static_cast<std::size_t>(W) * H);
 bool running = true;
 bool dialogue = false;
 bool battle = false;
@@ -591,7 +591,7 @@ void save_screenshot_bmp(const char* filepath, const std::uint32_t* fb, int w, i
     f.write(reinterpret_cast<const char*>(&zero), 4);
     f.write(reinterpret_cast<const char*>(&zero), 4);
     f.write(reinterpret_cast<const char*>(&zero), 4);
-    f.write(reinterpret_cast<const char*>(fb), w * h * 4);
+    f.write(reinterpret_cast<const char*>(fb), static_cast<std::streamsize>(w) * h * 4);
 }
 
 void handle_input_key(AppKey k) {
