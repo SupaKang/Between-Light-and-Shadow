@@ -1,5 +1,5 @@
 # Build directories
-build/
+build
 bin/
 obj/
 out/
@@ -42,7 +42,7 @@ tools/test_*
 *.nosync
 
 # Sanitizer build
-build-asan/
+build-asan
 
 # Plan execution workspaces (superpowers)
 .superpowers/
