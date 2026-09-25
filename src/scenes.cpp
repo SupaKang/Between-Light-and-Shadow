@@ -37,12 +37,9 @@ void title_ui() {
     text(171 - text_width("108") / 2, 86, "108", UI_TEXT);
     text(204, 66, "음양견문록", UI_TEXT, -1, Font::Body, 3);
     text(206, 106, "陰陽見聞錄 · 조선 괴담 견문록", UI_HP, -1, Font::Small);
-    const char* items[] = {"새로 시작", "이어하기"};
-    for (int i = 0; i < 2; ++i) {
-        int y = 252 + i * 22, x = (UW - text_width(items[i])) / 2;
-        text(x, y, items[i], i == 1 ? UI_LINE : UI_TEXT);
-        if (i == g.title_sel) sprite(art::ui_cursor, x - 14 + (int)((g.frame / 12) % 2), y + 3);
-    }
+    int w = 0;
+    for (auto& s : g.title_menu.items) w = std::max(w, text_width(s));
+    g.title_menu.render((UW - w) / 2 - 16, 250, w + 16);
 }
 
 void prologue_world() {

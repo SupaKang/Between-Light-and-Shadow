@@ -7,6 +7,7 @@
 #include "../src/data.h"
 #include "../src/maps_api.h"
 #include "../src/script.h"
+#include "../src/ui.h"
 
 int main() {
     // Clock phases and rest rule: rest always wakes on the next day at 06:00.
@@ -27,7 +28,7 @@ int main() {
     for (auto& l : lines) assert(gfx::text_width(l) <= 120);
 
     // Every debug scene builds and renders without crashing.
-    for (const char* s : {"title", "prologue", "card", "wake", "village", "night", "talk", "rest", "menu", "shop",
+    for (const char* s : {"title", "prologue", "card", "wake", "village", "night", "talk", "rest", "menu", "bag", "shop", "shop_buy",
                           "battle", "battle_list", "battle_msg", "encounter", "choice"}) {
         game_init(1);
         assert(game_debug_scene(s));
@@ -96,6 +97,27 @@ int main() {
     }
     assert(!script_busy());
     assert(script_flag("t_ans") == 1);
+
+    // ListMenu: wraps, skips disabled rows, scrolls, B cancels.
+    {
+        yy::ListMenu m; m.items = {"a", "b", "c", "d", "e", "f", "g", "h"}; m.enabled = {1, 0, 1, 1, 1, 1, 1, 1}; m.rows = 3;
+        Input down; down.pressed[K_DOWN] = true;
+        Input up; up.pressed[K_UP] = true;
+        Input a; a.pressed[K_A] = true;
+        Input b; b.pressed[K_B] = true;
+        int c = 99;
+        m.update(down, c); assert(m.sel == 2);          // skips disabled "b"
+        m.update(up, c); m.update(up, c); assert(m.sel == 7 && m.top == 5);  // wraps to the end and scrolls
+        assert(m.update(a, c) && c == 7);
+        assert(m.update(b, c) && c == -1);
+    }
+    {
+        yy::NumberPicker p; p.max = 5;
+        Input up; up.pressed[K_UP] = true;
+        int c = 0;
+        for (int i = 0; i < 9; ++i) p.update(up, c);
+        assert(p.value == 5);                             // clamps at max
+    }
 
     std::puts("core_test ok");
 }

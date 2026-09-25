@@ -24,9 +24,13 @@ void game_update(const Input& in) {
     if (!g.dq.empty()) return update_dialog(in);
     switch (g.scene) {
         case Scene::Title:
-            if (in.pressed[K_UP] || in.pressed[K_DOWN]) g.title_sel ^= 1;
-            if ((in.pressed[K_A] || in.pressed[K_START]) && g.title_sel == 0) transition([] { g.scene = Scene::Prologue; script_start("prologue"); });
+        {
+            Input t = in;  // Enter confirms too
+            t.pressed[K_A] = in.pressed[K_A] || in.pressed[K_START];
+            int c;
+            if (g.title_menu.update(t, c) && c == 0) transition([] { g.scene = Scene::Prologue; script_start("prologue"); });
             break;
+        }
         case Scene::Prologue: break;
         case Scene::PlaceCard:
             if (++g.card_t == 150 || (g.card_t > 20 && (in.pressed[K_A] || in.pressed[K_B] || in.pressed[K_START]))) transition([] { wake_up(); script_start("wake"); });
@@ -89,8 +93,18 @@ bool game_debug_scene(const std::string& name) {
     if (name == "night") { village(22); g.px = 18; g.py = 10; g.dir = RIGHT; return true; }
     if (name == "talk") { village(10); g.px = 5; g.py = 12; g.dir = UP; g.npcs[0].face = DOWN; run_event("talk_jumo"); finish_text(); return true; }
     if (name == "rest") { wake_up(); g.dir = UP; g.px = 1; g.py = 2; run_event("search", 1, 1); finish_text(); return true; }
-    if (name == "menu") { village(12); g.menu = true; g.menu_sel = 3; g.panel = 3; return true; }
-    if (name == "shop") { village(12); g.px = 20; g.py = 7; g.dir = UP; g.shop = true; g.shop_items = {"cheongsimhwan", "contract_talisman"}; return true; }
+    if (name == "menu") { village(12); open_menu(); g.menu_list.sel = 3; g.panel = 3; return true; }
+    if (name == "bag") {
+        village(12); open_menu(); g.menu_list.sel = 2; g.panel = 2;
+        g.items = {{"cheongsimhwan", 3}, {"contract_talisman", 5}, {"hanji", 2}};
+        return true;
+    }
+    if (name == "shop_buy") {
+        village(12); g.px = 20; g.py = 7; g.dir = UP; g.money = 90;
+        open_shop({"cheongsimhwan", "contract_talisman"}); g.shop_list.sel = 1; g.qty = NumberPicker{2, 1, 2}; g.buying = true;
+        return true;
+    }
+    if (name == "shop") { village(12); g.px = 20; g.py = 7; g.dir = UP; open_shop({"cheongsimhwan", "contract_talisman"}); return true; }
     if (name == "battle" || name == "battle_list" || name == "battle_msg") {
         village(12);
         g.scene = Scene::Battle;

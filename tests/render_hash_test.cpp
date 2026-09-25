@@ -11,7 +11,7 @@ static const Expect kExpected[] = {
 };
 
 static const char* kScenes[] = {"title", "prologue", "choice", "card", "wake", "village", "yard", "gate", "dusk",
-                                "night", "talk", "rest", "menu", "shop", "encounter", "battle", "battle_list", "battle_msg"};
+                                "night", "talk", "rest", "menu", "bag", "shop", "shop_buy", "encounter", "battle", "battle_list", "battle_msg"};
 
 static unsigned long long render(const char* s) {
     game_init(1);

@@ -64,6 +64,23 @@ struct Battle {
     int dhp = 0, dng = 0, dehp = 36;  // displayed values; message fx move them
 };
 
+// Scrolling cursor list (menus, bag, shop, title). Rows are 20px; icons, if given, sit between cursor and text.
+struct ListMenu {
+    std::vector<std::string> items;
+    std::vector<bool> enabled;           // empty = all enabled
+    int sel = 0, top = 0, rows = 6;      // visible rows
+    std::vector<const Sprite*> icons;    // empty = no icon column
+    // Returns true when the player confirmed or cancelled; chosen = index or -1 on cancel.
+    bool update(const Input& in, int& chosen);
+    void render(int x, int y, int w, const std::vector<std::string>& right = {}) const;  // right-aligned column
+};
+// Quantity picker: up/down +-1, right/left +-10, clamped to [min, max].
+struct NumberPicker {
+    int value = 1, min = 1, max = 99;
+    bool update(const Input& in, int& chosen);
+    void render(int x, int y) const;
+};
+
 struct Game {
     Scene scene = Scene::Title;
     unsigned frame = 0;
@@ -86,14 +103,17 @@ struct Game {
 
     std::deque<Dialog> dq;
     bool menu = false;
-    int menu_sel = 0, panel = -1;
-    bool shop = false;
-    int shop_sel = 0;
-    std::vector<std::string> shop_items;  // item ids on sale (set by the shop() script call)
+    ListMenu menu_list;  // filled by open_menu
+    int panel = -1;
+    ListMenu bag_list{{}, {}, 0, 0, 7, {}};
+    bool shop = false, buying = false;
+    std::vector<std::string> shop_items;  // item ids on sale (open_shop)
+    ListMenu shop_list;
+    NumberPicker qty;
     std::string toast;
     int toast_t = 0;
 
-    int title_sel = 0;
+    ListMenu title_menu{{"새로 시작", "이어하기"}, {true, false}, 0, 0, 2, {}};  // continue: enabled by saves (Task 7)
     int card_t = 0;
 
     int trans_t = -1;
@@ -143,6 +163,8 @@ void update_field(const Input& in);
 void update_dialog(const Input& raw);
 void update_menu(const Input& in);
 void update_shop(const Input& in);
+void open_menu();
+void open_shop(const std::vector<std::string>& ids);
 void draw_grass(int sx, int sy, int tx, int ty);
 void draw_dirt(int sx, int sy, int tx, int ty);
 void draw_floor(int sx, int sy);
@@ -156,6 +178,7 @@ const Sprite* field_sprite(const std::string& name, Dir d);
 void placeholder(const std::string& label, int x, int y, int w, int h);
 void cursor(int x, int y);
 void more_mark(int x, int y);
+void more_up(int x, int y);
 void name_tag(int x, int y, const std::string& s);
 void render_dialog();
 void render_toast();

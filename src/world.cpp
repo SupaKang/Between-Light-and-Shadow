@@ -96,7 +96,7 @@ void update_field(const Input& in) {
         }
         return;
     }
-    if (in.pressed[K_START]) { g.menu = true; g.menu_sel = 0; g.panel = -1; return; }
+    if (in.pressed[K_START]) { open_menu(); return; }
     if (in.pressed[K_A]) {
         int tx = g.px + DX[g.dir], ty = g.py + DY[g.dir];
         for (auto& n : g.npcs)

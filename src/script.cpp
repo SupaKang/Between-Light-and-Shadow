@@ -146,14 +146,13 @@ static int l_rest(lua_State* s) {
 // shop({item_id, ...}): resumes when the player leaves
 static int l_shop(lua_State* s) {
     luaL_checktype(s, 1, LUA_TTABLE);
-    g.shop_items.clear();
+    std::vector<std::string> ids;
     for (lua_Integer i = 1; i <= luaL_len(s, 1); ++i) {
         lua_geti(s, 1, i);
-        g.shop_items.push_back(item_arg(s, -1));
+        ids.push_back(item_arg(s, -1));
         lua_pop(s, 1);
     }
-    g.shop = true;
-    g.shop_sel = 0;
+    open_shop(ids);
     return lua_yield(s, 0);
 }
 
