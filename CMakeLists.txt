@@ -14,11 +14,15 @@ else()
   add_compile_options(-Wall -Wextra)
 endif()
 
-# Lua 5.4.7 (vendored by tools/fetch_lua.py, MIT) for event scripts.
+# Lua 5.4.7 (vendored by tools/fetch_lua.py, MIT) for event scripts. Compiled as C++ so lua_error and
+# lua_yield unwind with exceptions and run the destructors of C++ bindings (C builds longjmp past them).
 file(GLOB LUA_SRC third_party/lua/*.c)
+set_source_files_properties(${LUA_SRC} PROPERTIES LANGUAGE CXX)
 add_library(lua STATIC ${LUA_SRC})
 target_include_directories(lua PUBLIC third_party/lua)
-if(NOT MSVC)
+if(MSVC)
+  target_compile_options(lua PRIVATE /W0)
+else()
   target_compile_options(lua PRIVATE -w)
 endif()
 

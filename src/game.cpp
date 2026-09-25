@@ -41,7 +41,9 @@ void game_update(const Input& in) {
             }
             break;
         }
-        case Scene::Prologue: break;
+        case Scene::Prologue:  // the prologue event ended without leaving (script error): move on
+            if (!script_busy()) transition([] { g.scene = Scene::PlaceCard; g.card_t = 0; });
+            break;
         case Scene::PlaceCard:
             if (++g.card_t == 150 || (g.card_t > 20 && (in.pressed[K_A] || in.pressed[K_B] || in.pressed[K_START]))) transition([] { wake_up(); script_start("wake"); });
             break;

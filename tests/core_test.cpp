@@ -10,8 +10,22 @@
 #include "../src/script.h"
 #include "../src/ui.h"
 #include "../src/save.h"
+#include "../src/lua_inc.h"
+
+// A Lua error raised from a C++ binding must still run that binding's destructors (no leaks, no UB).
+static int dtor_runs = 0;
+struct Guard { ~Guard() { ++dtor_runs; } };
+static int l_throw(lua_State* s) { Guard g; return luaL_error(s, "boom"); }
 
 int main() {
+    {
+        lua_State* s = luaL_newstate();
+        lua_pushcfunction(s, l_throw);
+        assert(lua_pcall(s, 0, 0, 0) != LUA_OK);
+        lua_close(s);
+        assert(dtor_runs == 1);
+    }
+
     // Clock phases and rest rule: rest always wakes on the next day at 06:00.
     assert(phase_of(6 * 60) == Phase::Dawn);
     assert(phase_of(12 * 60) == Phase::Day);
@@ -86,10 +100,16 @@ int main() {
 
     // Lua events: a broken script reports an error and returns control; events never overlap.
     game_init(3);
+    assert(script_last_error().empty());                // every baked script loads
+    assert(!script_load("bad.lua", "function ("));     // a broken script is reported, not swallowed
+    assert(script_last_error().find("bad.lua") != std::string::npos && yy::g.toast == "이벤트 오류: bad.lua");
+    yy::run_event("no_such_event");                    // map data naming a missing event
+    assert(script_last_error().find("no_such_event") != std::string::npos && yy::g.toast == "이벤트 오류: no_such_event");
     assert(!script_start("no_such_event"));
     assert(script_start("__test_error"));  // common.lua: calls an undefined function
     assert(!script_busy());
     assert(script_last_error().find("undefined_function_for_test") != std::string::npos);
+    assert(yy::g.toast == "이벤트 오류: __test_error");
     assert(script_start("__test_ask"));    // asks one question, stores the answer in flag "t_ans"
     assert(script_busy());
     assert(!script_start("__test_ask"));   // second start while busy is refused
@@ -99,6 +119,12 @@ int main() {
     }
     assert(!script_busy());
     assert(script_flag("t_ans") == 1);
+
+    // A prologue event that died (script error, missing function) must not strand the player there.
+    game_init(1);
+    yy::g.scene = yy::Scene::Prologue;
+    for (int i = 0; i < 60; ++i) game_update(Input{});
+    assert(yy::g.scene == yy::Scene::PlaceCard);
 
     // Walking off the village's north edge runs village_bump from Lua.
     game_init(1);

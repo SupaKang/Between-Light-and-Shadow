@@ -2,12 +2,8 @@
 #include <cstdlib>
 #include <cstring>
 #include "state.h"
+#include "lua_inc.h"
 #include "scripts_gen.h"
-extern "C" {
-#include "lauxlib.h"
-#include "lua.h"
-#include "lualib.h"
-}
 
 using namespace yy;
 
@@ -15,13 +11,16 @@ static lua_State* L = nullptr;
 static lua_State* co = nullptr;  // running event coroutine (one at a time); anchored on L's stack
 static std::string cur_event, last_error;
 
+// Every script failure is logged, kept for script_last_error(), and shown to the player; control returns.
+static void report(const std::string& what, const std::string& msg) {
+    last_error = msg;
+    std::fprintf(stderr, "script error in %s: %s\n", what.c_str(), msg.c_str());
+    show_toast("이벤트 오류: " + what);
+}
+
 static void finish(int status) {
     if (status == LUA_YIELD) return;  // waiting for a dialog, battle, shop or fade
-    if (status != LUA_OK) {
-        last_error = lua_tostring(co, -1) ? lua_tostring(co, -1) : "unknown";
-        std::fprintf(stderr, "script error in %s: %s\n", cur_event.c_str(), last_error.c_str());
-        show_toast("이벤트 오류: " + cur_event);
-    }
+    if (status != LUA_OK) report(cur_event, lua_tostring(co, -1) ? lua_tostring(co, -1) : "unknown");
     co = nullptr;
     lua_settop(L, 0);  // drop the thread so it can be collected
 }
@@ -211,17 +210,20 @@ void script_init() {
         {"phase", l_phase}, {"tile", l_tile}, {"searched", l_searched}, {"mark_searched", l_mark_searched},
         {"daily_roll", l_daily_roll}, {"face", l_face}, {"face_player", l_face_player}, {nullptr, nullptr}};
     for (const luaL_Reg* r = api; r->name; ++r) lua_register(L, r->name, r->func);
-    for (const auto& src : kScripts) {
-        std::string chunk = std::string("@") + src[0];
-        if (luaL_loadbuffer(L, src[1], std::strlen(src[1]), chunk.c_str()) != LUA_OK || lua_pcall(L, 0, 0, 0) != LUA_OK) {
-            std::fprintf(stderr, "script load error: %s\n", lua_tostring(L, -1));
-            lua_pop(L, 1);
-        }
-    }
+    for (const auto& src : kScripts) script_load(src[0], src[1]);
+}
+
+bool script_load(const std::string& name, const char* src) {
+    if (!L) return false;
+    std::string chunk = "@" + name;
+    if (luaL_loadbuffer(L, src, std::strlen(src), chunk.c_str()) == LUA_OK && lua_pcall(L, 0, 0, 0) == LUA_OK) return true;
+    report(name, lua_tostring(L, -1) ? lua_tostring(L, -1) : "unknown");
+    lua_settop(L, 0);
+    return false;
 }
 
 namespace yy {
 void run_event(const std::string& name, int x, int y) {
-    if (!script_start(name, x, y) && !script_busy()) std::fprintf(stderr, "unknown event %s\n", name.c_str());
+    if (!script_start(name, x, y) && !script_busy()) report(name, "unknown event " + name);
 }
 }  // namespace yy
