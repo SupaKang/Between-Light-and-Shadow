@@ -1,4 +1,5 @@
 #include "ui.h"
+#include "save.h"
 
 namespace yy {
 
@@ -31,8 +32,40 @@ static void fill_bag() {
     for (auto* it : bag_items()) { b.items.push_back(it->name_ko); b.icons.push_back(item_icon(it->id)); }
 }
 
+// Slot rows: "1. 주막 마을 · 2일째 · 0:37" / "비어 있음" / "손상됨". Loading enables good slots; saving enables all when allowed.
+void fill_slots(bool for_load) {
+    ListMenu& l = g.slot_list;
+    l.items.clear();
+    l.enabled.clear();
+    for (int i = 0; i < kSaveSlots; ++i) {
+        SaveInfo s = save_info(i);
+        char buf[160];
+        if (!s.exists) snprintf(buf, sizeof buf, "%d. 비어 있음", i + 1);
+        else if (s.corrupt) snprintf(buf, sizeof buf, "%d. 손상됨", i + 1);
+        else snprintf(buf, sizeof buf, "%d. %s · %d일째 · %d:%02d", i + 1, s.map_name.c_str(), s.day, s.playtime_min / 60, s.playtime_min % 60);
+        l.items.push_back(buf);
+        l.enabled.push_back(for_load ? s.exists && !s.corrupt : save_allowed());
+    }
+    l.sel = 0;
+    while (l.sel < kSaveSlots - 1 && !l.enabled[l.sel]) l.sel++;
+}
+
+static void write_slot(int slot) {
+    show_toast(save_game(slot) ? "기록했다" : "기록하지 못했다");
+    int sel = g.slot_list.sel;
+    fill_slots(false);
+    g.slot_list.sel = sel;
+}
+
 void update_menu(const Input& in) {
     int c;
+    if (g.panel == 4) {
+        if (!g.slot_list.update(in, c)) return;
+        if (c < 0) { g.panel = -1; return; }
+        if (!save_info(c).exists) return write_slot(c);
+        say({"이 기록을 덮어쓸까?"}, "", [c](int k) { if (k == 0) write_slot(c); }, {"예", "아니오"});
+        return;
+    }
     if (g.panel == 2) {
         fill_bag();
         if (g.bag_list.update(in, c) && c < 0) g.panel = -1;
@@ -47,6 +80,7 @@ void update_menu(const Input& in) {
     if (c < 0 || c == (int)g.menu_list.items.size() - 1) { g.menu = false; return; }
     g.panel = c;
     if (c == 2) g.bag_list.sel = g.bag_list.top = 0;
+    if (c == 4) fill_slots(false);
 }
 
 void open_shop(const std::vector<std::string>& ids) {
@@ -150,7 +184,11 @@ void render_menu() {
             text(x, y + 128, !flag("quest_gate") ? "임무 · 마을 어귀의 요괴 퇴치" : "임무 · 도선사 고개를 넘어라", TXT_RED);
             sprite(art::npc_hero_portrait, 346 - art::npc_hero_portrait.w, 186 - art::npc_hero_portrait.h);
             break;
-        case 4: header(x, y, 4, "기록"); text(x, y + 30, "저장 기능은 다음 단계에서 붙는다.", TXT_DIM); break;  // TODO(save)
+        case 4:
+            header(x, y, 4, "기록");
+            g.slot_list.render(x, y + 30, 300);
+            if (!save_allowed()) text(x, y + 104, "지금은 기록할 수 없다.", TXT_DIM, -1, Font::Small);
+            break;
         case 5:
             header(x, y, 5, "설정");
             text(x, y + 30, "글자 속도 · 보통", TXT);

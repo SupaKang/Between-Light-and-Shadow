@@ -2,12 +2,14 @@
 #undef NDEBUG  // asserts must run in Release builds too
 #include <cassert>
 #include <cstdio>
+#include <filesystem>
 #include "../src/game.h"
 #include "../src/gfx.h"
 #include "../src/data.h"
 #include "../src/maps_api.h"
 #include "../src/script.h"
 #include "../src/ui.h"
+#include "../src/save.h"
 
 int main() {
     // Clock phases and rest rule: rest always wakes on the next day at 06:00.
@@ -28,7 +30,7 @@ int main() {
     for (auto& l : lines) assert(gfx::text_width(l) <= 120);
 
     // Every debug scene builds and renders without crashing.
-    for (const char* s : {"title", "prologue", "card", "wake", "village", "night", "talk", "rest", "menu", "bag", "shop", "shop_buy",
+    for (const char* s : {"title", "prologue", "card", "wake", "village", "night", "talk", "rest", "menu", "save", "title_load", "bag", "shop", "shop_buy",
                           "battle", "battle_list", "battle_msg", "encounter", "choice"}) {
         game_init(1);
         assert(game_debug_scene(s));
@@ -98,6 +100,16 @@ int main() {
     assert(!script_busy());
     assert(script_flag("t_ans") == 1);
 
+    // Walking off the village's north edge runs village_bump from Lua.
+    game_init(1);
+    game_debug_scene("village");
+    yy::g.px = 13; yy::g.py = 0; yy::g.dir = yy::UP;
+    {
+        Input up; up.pressed[K_UP] = up.held[K_UP] = true;
+        game_update(up);
+    }
+    assert(!yy::g.dq.empty() && yy::g.dq.front().pages[0].find("장승의 요기") == 0);
+
     // ListMenu: wraps, skips disabled rows, scrolls, B cancels.
     {
         yy::ListMenu m; m.items = {"a", "b", "c", "d", "e", "f", "g", "h"}; m.enabled = {1, 0, 1, 1, 1, 1, 1, 1}; m.rows = 3;
@@ -117,6 +129,43 @@ int main() {
         int c = 0;
         for (int i = 0; i < 9; ++i) p.update(up, c);
         assert(p.value == 5);                             // clamps at max
+    }
+
+    // Save/load: round trip, refuse unsafe moments, survive corrupt or old files.
+    {
+        namespace fs = std::filesystem;
+        std::string dir = (fs::temp_directory_path() / "yyc_save_test").string();
+        fs::remove_all(dir);
+        fs::create_directories(dir);
+        yy::save_set_dir(dir);
+        game_init(5);
+        assert(!yy::g.title_menu.enabled[1]);                 // no saves yet: continue disabled
+        game_debug_scene("village");
+        assert(yy::save_allowed());
+        assert(yy::save_game(0));
+        DebugInfo before = game_debug_info();
+        game_init(6);
+        assert(yy::g.title_menu.enabled[1]);                  // a valid save enables continue
+        assert(yy::load_game(0));
+        DebugInfo after = game_debug_info();
+        assert(after.map == before.map && after.x == before.x && after.y == before.y && after.quest == before.quest);
+
+        game_debug_scene("battle");
+        assert(!yy::save_allowed());                          // Review Focus 5
+
+        std::FILE* f = std::fopen((dir + "/slot1.sav").c_str(), "w");
+        std::fputs("version=1\nmap=no_such_map\nx=1\ny=1\n", f); std::fclose(f);
+        DebugInfo held = game_debug_info();
+        assert(!yy::load_game(1) && yy::save_info(1).corrupt);  // Review Focus 1: unknown map
+        assert(game_debug_info().scene == held.scene && game_debug_info().map == held.map);  // state untouched
+
+        f = std::fopen((dir + "/slot2.sav").c_str(), "w");
+        std::fputs("version=1\nmap=village\nx=13\ny=9\n", f); std::fclose(f);  // old file: most keys missing
+        assert(yy::load_game(2));                              // defaults fill the rest
+        assert(!yy::save_info(0).corrupt && yy::save_info(0).exists);
+        assert(!yy::save_info(2).corrupt);
+        fs::remove_all(dir);
+        yy::save_set_dir("");
     }
 
     std::puts("core_test ok");

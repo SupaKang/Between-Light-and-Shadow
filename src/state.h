@@ -91,7 +91,8 @@ struct Game {
     std::string map_id = "tavern_room";
     const MapDef* mdef = nullptr;    // cached find_map(map_id); set by load_map
     std::vector<Npc> npcs;           // runtime NPCs of the current map
-    std::map<std::string, int> flags;
+    std::map<std::string, int> flags;  // story flags (saved)
+    int playtime_f = 0;               // field frames at 60 Hz (saved as minutes)
     int px = 1, py = 2;
     Dir dir = DOWN;
     int step = 0, turn_wait = 0;
@@ -113,7 +114,9 @@ struct Game {
     std::string toast;
     int toast_t = 0;
 
-    ListMenu title_menu{{"새로 시작", "이어하기"}, {true, false}, 0, 0, 2, {}};  // continue: enabled by saves (Task 7)
+    ListMenu title_menu{{"새로 시작", "이어하기"}, {true, false}, 0, 0, 2, {}};  // continue: enabled when a save loads
+    bool title_pick = false;  // title shows the slot list
+    ListMenu slot_list{{}, {}, 0, 0, 3, {}};  // save slots (title load / menu save)
     int card_t = 0;
 
     int trans_t = -1;
@@ -158,12 +161,13 @@ void start_battle();
 void update_battle(const Input& in);
 void on_arrive();
 bool npc_at(int x, int y);
-void bump_edge(int ny);
+void bump_edge(int nx, int ny);
 void update_field(const Input& in);
 void update_dialog(const Input& raw);
 void update_menu(const Input& in);
 void update_shop(const Input& in);
 void open_menu();
+void fill_slots(bool for_load);
 void open_shop(const std::vector<std::string>& ids);
 void draw_grass(int sx, int sy, int tx, int ty);
 void draw_dirt(int sx, int sy, int tx, int ty);

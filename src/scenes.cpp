@@ -40,6 +40,10 @@ void title_ui() {
     int w = 0;
     for (auto& s : g.title_menu.items) w = std::max(w, text_width(s));
     g.title_menu.render((UW - w) / 2 - 16, 250, w + 16);
+    if (g.title_pick) {
+        panel(150, 238, 340, 78);  // covers the title menu while picking
+        g.slot_list.render(166, 248, 308);
+    }
 }
 
 void prologue_world() {

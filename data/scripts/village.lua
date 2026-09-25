@@ -50,6 +50,19 @@ function shop_talisman()
   say("부적방", "또 들르시오. 길 조심하시고.")
 end
 
+-- Walked into a wall or off the map at (x, y).
+function village_bump(x, y)
+  if y < 0 then
+    if flag("quest_gate") == 0 then
+      say("", "장승의 요기가 길을 막고 있다. 먼저 장승을 살펴야 한다.")
+    else
+      say("", "(도선사 고개 — 이 너머는 다음 구간에서 이어진다.)")
+    end
+  elseif y >= 17 then
+    say("", "남쪽은 한양으로 돌아가는 길이다. 지금은 도선사로 가야 한다.")
+  end
+end
+
 -- A pressed facing tile (x, y).
 function search(x, y)
   local k = tile(x, y)

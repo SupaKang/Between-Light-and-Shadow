@@ -1,4 +1,5 @@
 #include "ui.h"
+#include "save.h"
 
 using namespace yy;
 
@@ -7,10 +8,12 @@ void game_init(unsigned seed) {
     g = Game{};
     g.rng.seed(seed);
     script_init();
+    g.title_menu.enabled[1] = any_save();
 }
 
 void game_update(const Input& in) {
     g.frame++;
+    if (g.scene == Scene::Field) g.playtime_f++;
     if (g.toast_t > 0) g.toast_t--;
     if (g.trans_t >= 0) {
         if (++g.trans_t == kTrans && g.trans_mid) { auto f = g.trans_mid; g.trans_mid = {}; f(); }
@@ -28,7 +31,14 @@ void game_update(const Input& in) {
             Input t = in;  // Enter confirms too
             t.pressed[K_A] = in.pressed[K_A] || in.pressed[K_START];
             int c;
-            if (g.title_menu.update(t, c) && c == 0) transition([] { g.scene = Scene::Prologue; script_start("prologue"); });
+            if (g.title_pick) {
+                if (!g.slot_list.update(t, c)) break;
+                g.title_pick = false;
+                if (c >= 0) transition([c] { if (!load_game(c)) show_toast("기록을 불러오지 못했다"); });
+            } else if (g.title_menu.update(t, c)) {
+                if (c == 0) transition([] { g.scene = Scene::Prologue; script_start("prologue"); });
+                if (c == 1) { g.title_pick = true; fill_slots(true); }
+            }
             break;
         }
         case Scene::Prologue: break;
@@ -94,6 +104,8 @@ bool game_debug_scene(const std::string& name) {
     if (name == "talk") { village(10); g.px = 5; g.py = 12; g.dir = UP; g.npcs[0].face = DOWN; run_event("talk_jumo"); finish_text(); return true; }
     if (name == "rest") { wake_up(); g.dir = UP; g.px = 1; g.py = 2; run_event("search", 1, 1); finish_text(); return true; }
     if (name == "menu") { village(12); open_menu(); g.menu_list.sel = 3; g.panel = 3; return true; }
+    if (name == "save") { village(12); open_menu(); g.menu_list.sel = 4; g.panel = 4; fill_slots(false); return true; }
+    if (name == "title_load") { g.title_menu.sel = 1; g.title_pick = true; fill_slots(true); return true; }
     if (name == "bag") {
         village(12); open_menu(); g.menu_list.sel = 2; g.panel = 2;
         g.items = {{"cheongsimhwan", 3}, {"contract_talisman", 5}, {"hanji", 2}};

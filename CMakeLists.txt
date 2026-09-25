@@ -24,7 +24,7 @@ endif()
 
 # Platform-free core: game logic + software framebuffer.
 add_library(core STATIC src/game.cpp src/gfx.cpp src/state.cpp src/world.cpp src/ui.cpp src/menu.cpp
-                        src/battle.cpp src/scenes.cpp src/script.cpp src/data.cpp src/maps.cpp)
+                        src/battle.cpp src/scenes.cpp src/script.cpp src/save.cpp src/data.cpp src/maps.cpp)
 target_include_directories(core PUBLIC src)
 target_link_libraries(core PUBLIC lua)
 

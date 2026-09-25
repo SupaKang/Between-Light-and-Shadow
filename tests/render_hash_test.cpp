@@ -10,8 +10,8 @@ static const Expect kExpected[] = {
 #include "render_hashes.inc"
 };
 
-static const char* kScenes[] = {"title", "prologue", "choice", "card", "wake", "village", "yard", "gate", "dusk",
-                                "night", "talk", "rest", "menu", "bag", "shop", "shop_buy", "encounter", "battle", "battle_list", "battle_msg"};
+static const char* kScenes[] = {"title", "title_load", "prologue", "choice", "card", "wake", "village", "yard", "gate", "dusk",
+                                "night", "talk", "rest", "menu", "save", "bag", "shop", "shop_buy", "encounter", "battle", "battle_list", "battle_msg"};
 
 static unsigned long long render(const char* s) {
     game_init(1);

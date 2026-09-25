@@ -1,4 +1,5 @@
 {"title", 0x7d97c3df4ad15cfdull},
+{"title_load", 0x9b52c46825f1754eull},
 {"prologue", 0xa10d4b19ed55aa88ull},
 {"choice", 0x7d48fdbc2952f91dull},
 {"card", 0xb3fd81e2f447cbcbull},
@@ -11,6 +12,7 @@
 {"talk", 0x2f966b9f72b24845ull},
 {"rest", 0xcb19dd302caedac6ull},
 {"menu", 0x4a0bd9bf5806e3e1ull},
+{"save", 0x74b44600de140670ull},
 {"bag", 0xc1b420bc50202054ull},
 {"shop", 0x1fe82ed73a17b2e0ull},
 {"shop_buy", 0x5dd112bef0666c28ull},

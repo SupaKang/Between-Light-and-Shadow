@@ -6,6 +6,7 @@
 #include <ctime>
 #include "game.h"
 #include "gfx.h"
+#include "save.h"
 
 static int shot(const char* scene, const char* path) {
     game_init(1);
@@ -30,6 +31,8 @@ int main(int argc, char** argv) {
         std::fprintf(stderr, "SDL_Init: %s\n", SDL_GetError());
         return 1;
     }
+    if (char* p = SDL_GetPrefPath("supakang", "YinYangChronicle")) { yy::save_set_dir(p); SDL_free(p); }
+    else yy::save_set_dir(".");
     SDL_Rect usable{0, 0, 1920, 1080};
     SDL_GetDisplayUsableBounds(0, &usable);
     int scale = SDL_max(1, SDL_min(usable.w / gfx::UW, (usable.h - 40) / gfx::UH));

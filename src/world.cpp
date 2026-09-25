@@ -65,15 +65,8 @@ bool npc_at(int x, int y) {
     return false;
 }
 
-void bump_edge(int ny) {
-    if (g.map_id != "village") return;
-    if (ny < 0) {
-        if (!flag("quest_gate")) say({"장승의 요기가 길을 막고 있다. 먼저 장승을 살펴야 한다."});
-        else say({"(도선사 고개 — 이 너머는 다음 구간에서 이어진다.)"});
-    } else if (ny >= 17 && g.py == 16) {
-        say({"남쪽은 한양으로 돌아가는 길이다. 지금은 도선사로 가야 한다."});
-    }
-}
+// Walking into a wall or off the map runs "<map>_bump"(x, y) if the map's script defines it.
+void bump_edge(int nx, int ny) { script_start(g.map_id + "_bump", nx, ny); }
 
 void update_field(const Input& in) {
     if (script_busy()) return;  // an event owns the player until it ends
@@ -113,7 +106,8 @@ void update_field(const Input& in) {
     if (g.turn_wait > 0) { g.turn_wait--; return; }
     int nx = g.px + DX[d], ny = g.py + DY[d];
     if (solid_tile(tile_at(nx, ny)) || npc_at(nx, ny)) {
-        if (in.pressed[d]) bump_edge(ny);
+        const Key key_of[] = {K_DOWN, K_UP, K_LEFT, K_RIGHT};  // Dir order differs from Key order
+        if (in.pressed[key_of[d]]) bump_edge(nx, ny);
         g.chain = false;
         return;
     }
