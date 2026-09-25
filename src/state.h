@@ -17,6 +17,7 @@
 #include "maps_api.h"
 #include "game.h"
 #include "gfx.h"
+#include "script.h"
 
 namespace yy {
 using namespace gfx;
@@ -81,7 +82,6 @@ struct Game {
 
     int hp = 40, hp_max = 40, ng = 20, ng_max = 20, level = 1, money = 120;
     std::map<std::string, int> items{{"cheongsimhwan", 1}};  // item id -> count (ids from data/items.json)
-    int quest = 0;  // 0: village-gate yokai not yet purified, 1: done
     std::set<std::string> searched;  // "map:x:y" objects searched today
 
     std::deque<Dialog> dq;
@@ -89,6 +89,7 @@ struct Game {
     int menu_sel = 0, panel = -1;
     bool shop = false;
     int shop_sel = 0;
+    std::vector<std::string> shop_items;  // item ids on sale (set by the shop() script call)
     std::string toast;
     int toast_t = 0;
 
@@ -99,6 +100,7 @@ struct Game {
     int enc_t = 0;  // encounter flash/wipe frames left
     std::function<void()> trans_mid;
 
+    std::string battle_enemy;  // set by the battle() script call
     Battle bt;
 };
 constexpr int kTrans = 18;
@@ -111,6 +113,7 @@ const Color* const ST = art::RAMP_STONE;
 
 extern Game g;
 inline int have(const std::string& id) { auto it = g.items.find(id); return it == g.items.end() ? 0 : it->second; }
+inline int flag(const std::string& k) { auto it = g.flags.find(k); return it == g.flags.end() ? 0 : it->second; }
 void load_map(const std::string& id);
 char tile_at(int x, int y);             // current map; '~' outside
 void run_event(const std::string& name, int x = -1, int y = -1);
@@ -124,11 +127,6 @@ int rnd(int lo, int hi);
 unsigned hash3(int a, int b, int c);
 std::string clock_str();
 void wake_up();
-void start_prologue();
-void after_place_card();
-void talk_npc(Npc& n);
-void give(const std::string& item, int n, const std::string& msg);
-void search(int x, int y);
 void bmsg(std::string t, std::function<void()> fx = {});
 void end_battle(bool won);
 void enemy_turn();

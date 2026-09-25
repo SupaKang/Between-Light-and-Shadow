@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(YinYangChronicle LANGUAGES CXX)
+project(YinYangChronicle LANGUAGES C CXX)
 enable_testing()
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -14,18 +14,28 @@ else()
   add_compile_options(-Wall -Wextra)
 endif()
 
+# Lua 5.4.7 (vendored by tools/fetch_lua.py, MIT) for event scripts.
+file(GLOB LUA_SRC third_party/lua/*.c)
+add_library(lua STATIC ${LUA_SRC})
+target_include_directories(lua PUBLIC third_party/lua)
+if(NOT MSVC)
+  target_compile_options(lua PRIVATE -w)
+endif()
+
 # Platform-free core: game logic + software framebuffer.
 add_library(core STATIC src/game.cpp src/gfx.cpp src/state.cpp src/world.cpp src/ui.cpp src/menu.cpp
-                        src/battle.cpp src/scenes.cpp src/story.cpp src/data.cpp src/maps.cpp)
+                        src/battle.cpp src/scenes.cpp src/script.cpp src/data.cpp src/maps.cpp)
 target_include_directories(core PUBLIC src)
+target_link_libraries(core PUBLIC lua)
 
 # Bake data/ (JSON) into C++ headers before compiling: no runtime parser, single executable.
 find_package(Python3 REQUIRED COMPONENTS Interpreter)
 add_custom_target(bake ALL
   COMMAND ${Python3_EXECUTABLE} tools/bake_data.py
   COMMAND ${Python3_EXECUTABLE} tools/bake_maps.py
+  COMMAND ${Python3_EXECUTABLE} tools/bake_scripts.py
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-  COMMENT "Baking data/*.json and data/maps/*.tmj")
+  COMMENT "Baking data/*.json, data/maps/*.tmj and data/scripts/*.lua")
 add_dependencies(core bake)
 
 # SDL2: vcpkg/installed CMake config on Windows, pkg-config on macOS/Linux.

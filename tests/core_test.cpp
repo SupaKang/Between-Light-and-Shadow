@@ -6,6 +6,7 @@
 #include "../src/gfx.h"
 #include "../src/data.h"
 #include "../src/maps_api.h"
+#include "../src/script.h"
 
 int main() {
     // Clock phases and rest rule: rest always wakes on the next day at 06:00.
@@ -79,6 +80,22 @@ int main() {
     assert(!warp_valid("tavern_room", 0, 0));  // wall
     assert(!warp_valid("no_such_map", 1, 1));
     assert(!warp_valid("village", 99, 99));    // out of bounds
+
+    // Lua events: a broken script reports an error and returns control; events never overlap.
+    game_init(3);
+    assert(!script_start("no_such_event"));
+    assert(script_start("__test_error"));  // common.lua: calls an undefined function
+    assert(!script_busy());
+    assert(script_last_error().find("undefined_function_for_test") != std::string::npos);
+    assert(script_start("__test_ask"));    // asks one question, stores the answer in flag "t_ans"
+    assert(script_busy());
+    assert(!script_start("__test_ask"));   // second start while busy is refused
+    {
+        Input a; a.pressed[K_A] = true;     // finish typing, then pick the first choice
+        for (int i = 0; i < 4 && script_busy(); ++i) { game_update(a); game_update(Input{}); }
+    }
+    assert(!script_busy());
+    assert(script_flag("t_ans") == 1);
 
     std::puts("core_test ok");
 }

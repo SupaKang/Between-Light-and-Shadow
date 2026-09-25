@@ -8,15 +8,7 @@ void bmsg(std::string t, std::function<void()> fx) { g.bt.msgs.push_back({std::m
 void end_battle(bool won) {
     transition([won] {
         g.scene = Scene::Field;
-        if (won) {
-            g.quest = 1;
-            say({"장승의 눈빛이 순하게 가라앉았다.", "임무 완료: 마을 어귀의 요괴 퇴치", "(북쪽 도선사 고개로 가는 길이 열렸다.)"});
-        } else {
-            rest(g.clock);
-            g.searched.clear();
-            wake_up();
-            say({"(……정신을 차려 보니 주막 방이다. 누군가 여기까지 데려다준 모양이다.)"});
-        }
+        script_resume(won ? 1 : 0);  // the event that called battle() continues
     });
 }
 
@@ -101,7 +93,7 @@ void begin_battle() {
 }
 
 void start_battle() {
-    say({"장승에 서린 요기가 꿈틀거린다……!"}, "", [](int) { g.enc_t = kEnc; });
+    g.enc_t = kEnc;
 }
 
 void update_battle(const Input& in) {

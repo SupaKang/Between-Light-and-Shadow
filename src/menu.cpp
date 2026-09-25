@@ -19,19 +19,17 @@ void update_menu(const Input& in) {
     }
 }
 
-const char* const SHOP_ITEMS[] = {"cheongsimhwan", "contract_talisman"};
-
 void update_shop(const Input& in) {
-    int n = 3;  // two goods + leave
+    int n = (int)g.shop_items.size() + 1;  // goods + leave
     if (in.pressed[K_UP]) g.shop_sel = (g.shop_sel + n - 1) % n;
     if (in.pressed[K_DOWN]) g.shop_sel = (g.shop_sel + 1) % n;
-    if (in.pressed[K_B] || (in.pressed[K_A] && g.shop_sel == 2)) {
+    if (in.pressed[K_B] || (in.pressed[K_A] && g.shop_sel == n - 1)) {
         g.shop = false;
-        say({"또 들르시오. 길 조심하시고."}, "부적방");
+        script_resume(0);  // the shop() call returns
         return;
     }
     if (in.pressed[K_A]) {
-        const data::ItemDef* it = data::find_item(SHOP_ITEMS[g.shop_sel]);
+        const data::ItemDef* it = data::find_item(g.shop_items[g.shop_sel]);
         if (g.money < it->price) { show_toast("엽전이 모자란다"); return; }
         g.money -= it->price;
         g.items[it->id]++;
@@ -109,7 +107,7 @@ void render_menu() {
             text(x + 202, y + 48, std::to_string(g.ng) + "/" + std::to_string(g.ng_max), TXT, -1, Font::Small);
             text(x, y + 76, clock_str(), TXT);
             text(x, y + 98, "엽전 " + std::to_string(g.money) + "냥", TXT);
-            text(x, y + 128, g.quest == 0 ? "임무 · 마을 어귀의 요괴 퇴치" : "임무 · 도선사 고개를 넘어라", TXT_RED);
+            text(x, y + 128, !flag("quest_gate") ? "임무 · 마을 어귀의 요괴 퇴치" : "임무 · 도선사 고개를 넘어라", TXT_RED);
             sprite(art::npc_hero_portrait, 346 - art::npc_hero_portrait.w, 186 - art::npc_hero_portrait.h);
             break;
         case 4: header(x, y, 4, "기록"); text(x, y + 30, "저장 기능은 다음 단계에서 붙는다.", TXT_DIM); break;  // TODO(save)
@@ -122,15 +120,17 @@ void render_menu() {
 }
 
 void render_shop() {
-    const Sprite* icons[] = {&art::icon_pouch, &art::icon_talisman, &art::icon_close};
-    panel(16, 16, 268, 3 * 20 + 18);
-    for (int i = 0; i < 3; ++i) {
+    int n = (int)g.shop_items.size() + 1;
+    panel(16, 16, 268, n * 20 + 18);
+    for (int i = 0; i < n; ++i) {
         int y = 25 + i * 20;
         if (i == g.shop_sel) { cursor(28, y + 3); }
-        sprite(*icons[i], 40, y + 1);
-        if (i < 2) {
-            text(56, y, data::find_item(SHOP_ITEMS[i])->name_ko, TXT);
-            std::string p = std::to_string(data::find_item(SHOP_ITEMS[i])->price) + "냥";
+        bool leave = i == n - 1;  // ponytail: talisman icon by id until items carry their own icon
+        sprite(leave ? art::icon_close : g.shop_items[i].find("talisman") != std::string::npos ? art::icon_talisman : art::icon_pouch, 40, y + 1);
+        if (!leave) {
+            const data::ItemDef* it = data::find_item(g.shop_items[i]);
+            text(56, y, it->name_ko, TXT);
+            std::string p = std::to_string(it->price) + "냥";
             text(266 - text_width(p), y, p, TXT);
         } else {
             text(56, y, "나간다", TXT);
@@ -141,8 +141,9 @@ void render_shop() {
     panel(UW - 16 - w, 16, w, 26);
     text(UW - 16 - w + 14, 23, m, TXT);
     panel(DX0, DY0, DW, DH);
-    text(DX0 + 18, DY0 + 14, g.shop_sel < 2 ? data::find_item(SHOP_ITEMS[g.shop_sel])->desc : "가게를 나선다.", TXT);
-    if (g.shop_sel < 2) text(DX0 + 18, DY0 + 32, "가진 수 " + std::to_string(have(SHOP_ITEMS[g.shop_sel])), TXT_DIM, -1, Font::Small);
+    bool goods = g.shop_sel < n - 1;
+    text(DX0 + 18, DY0 + 14, goods ? data::find_item(g.shop_items[g.shop_sel])->desc : "가게를 나선다.", TXT);
+    if (goods) text(DX0 + 18, DY0 + 32, "가진 수 " + std::to_string(have(g.shop_items[g.shop_sel])), TXT_DIM, -1, Font::Small);
 }
 
 }  // namespace yy

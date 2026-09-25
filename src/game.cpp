@@ -6,6 +6,7 @@ using namespace yy;
 void game_init(unsigned seed) {
     g = Game{};
     g.rng.seed(seed);
+    script_init();
 }
 
 void game_update(const Input& in) {
@@ -24,11 +25,11 @@ void game_update(const Input& in) {
     switch (g.scene) {
         case Scene::Title:
             if (in.pressed[K_UP] || in.pressed[K_DOWN]) g.title_sel ^= 1;
-            if ((in.pressed[K_A] || in.pressed[K_START]) && g.title_sel == 0) transition(start_prologue);
+            if ((in.pressed[K_A] || in.pressed[K_START]) && g.title_sel == 0) transition([] { g.scene = Scene::Prologue; script_start("prologue"); });
             break;
         case Scene::Prologue: break;
         case Scene::PlaceCard:
-            if (++g.card_t == 150 || (g.card_t > 20 && (in.pressed[K_A] || in.pressed[K_B] || in.pressed[K_START]))) after_place_card();
+            if (++g.card_t == 150 || (g.card_t > 20 && (in.pressed[K_A] || in.pressed[K_B] || in.pressed[K_START]))) transition([] { wake_up(); script_start("wake"); });
             break;
         case Scene::Field:
             if (g.shop) return update_shop(in);
@@ -76,10 +77,10 @@ bool game_debug_scene(const std::string& name) {
         g.last_phase = phase_of(g.clock.minute);
     };
     if (name == "title") return true;
-    if (name == "prologue") { start_prologue(); g.dq.front().page = 2; finish_text(); return true; }
+    if (name == "prologue") { g.scene = Scene::Prologue; script_start("prologue"); g.dq.front().page = 2; finish_text(); return true; }
     if (name == "card") { g.scene = Scene::PlaceCard; return true; }
     if (name == "encounter") { village(12); g.px = 13; g.py = 2; g.dir = UP; g.enc_t = 20; return true; }
-    if (name == "choice") { start_prologue(); g.dq.front().page = 3; finish_text(); return true; }
+    if (name == "choice") { g.scene = Scene::Prologue; script_start("prologue"); g.dq.front().page = 3; finish_text(); return true; }
     if (name == "wake") { wake_up(); say({"(벽사청의 명을 받아 도선사로 향하는 길이다. 오늘은 채비를 갖추고 길을 나서야 한다.)"}, "음양사"); finish_text(); return true; }
     if (name == "village") { village(12); return true; }
     if (name == "yard") { village(10); g.px = 7; g.py = 10; g.dir = LEFT; return true; }
@@ -87,9 +88,9 @@ bool game_debug_scene(const std::string& name) {
     if (name == "dusk") { village(18); return true; }
     if (name == "night") { village(22); g.px = 18; g.py = 10; g.dir = RIGHT; return true; }
     if (name == "talk") { village(10); g.px = 5; g.py = 12; g.dir = UP; g.npcs[0].face = DOWN; run_event("talk_jumo"); finish_text(); return true; }
-    if (name == "rest") { wake_up(); g.dir = UP; g.px = 1; g.py = 2; search(1, 1); finish_text(); return true; }
+    if (name == "rest") { wake_up(); g.dir = UP; g.px = 1; g.py = 2; run_event("search", 1, 1); finish_text(); return true; }
     if (name == "menu") { village(12); g.menu = true; g.menu_sel = 3; g.panel = 3; return true; }
-    if (name == "shop") { village(12); g.px = 20; g.py = 7; g.dir = UP; g.shop = true; return true; }
+    if (name == "shop") { village(12); g.px = 20; g.py = 7; g.dir = UP; g.shop = true; g.shop_items = {"cheongsimhwan", "contract_talisman"}; return true; }
     if (name == "battle" || name == "battle_list" || name == "battle_msg") {
         village(12);
         g.scene = Scene::Battle;
@@ -105,5 +106,6 @@ bool game_debug_scene(const std::string& name) {
 }
 
 DebugInfo game_debug_info() {
-    return {(int)g.scene, g.map_id, g.px, g.py, g.quest, !g.dq.empty() || g.trans_t >= 0 || g.menu || g.shop || g.moving};
+    return {(int)g.scene, g.map_id, g.px, g.py, flag("quest_gate"),
+            !g.dq.empty() || g.trans_t >= 0 || g.menu || g.shop || g.moving || script_busy()};
 }

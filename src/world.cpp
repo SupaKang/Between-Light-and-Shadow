@@ -68,7 +68,7 @@ bool npc_at(int x, int y) {
 void bump_edge(int ny) {
     if (g.map_id != "village") return;
     if (ny < 0) {
-        if (g.quest == 0) say({"장승의 요기가 길을 막고 있다. 먼저 장승을 살펴야 한다."});
+        if (!flag("quest_gate")) say({"장승의 요기가 길을 막고 있다. 먼저 장승을 살펴야 한다."});
         else say({"(도선사 고개 — 이 너머는 다음 구간에서 이어진다.)"});
     } else if (ny >= 17 && g.py == 16) {
         say({"남쪽은 한양으로 돌아가는 길이다. 지금은 도선사로 가야 한다."});
@@ -76,6 +76,7 @@ void bump_edge(int ny) {
 }
 
 void update_field(const Input& in) {
+    if (script_busy()) return;  // an event owns the player until it ends
     // Clock only runs while the player is free to act.
     g.clock.minute += 1.0f / 60.0f;
     if (g.clock.minute >= 1440) { g.clock.minute -= 1440; g.clock.day++; }
@@ -103,7 +104,7 @@ void update_field(const Input& in) {
                 n.face = (Dir)(g.dir == DOWN ? UP : g.dir == UP ? DOWN : g.dir == LEFT ? RIGHT : LEFT);
                 return run_event(n.talk_event);
             }
-        return search(tx, ty);
+        return run_event("search", tx, ty);
     }
     int d = in.held[K_UP] ? UP : in.held[K_DOWN] ? DOWN : in.held[K_LEFT] ? LEFT : in.held[K_RIGHT] ? RIGHT : -1;
     if (d < 0) { g.chain = false; g.turn_wait = 0; return; }
@@ -355,7 +356,7 @@ void render_actors() {
                 ds.push_back({ty * 16 + 15, [=] {
                     lit(tx * 16, ty * 16);
                     sprite(art::jangseung, sx, sy - 32, false, 2);
-                    if (g.quest == 0 && (g.frame / 20) % 2) { rect(sx + 10, sy - 20, 2, 2, UI_GLOW); rect(sx + 20, sy - 20, 2, 2, UI_GLOW); }
+                    if (!flag("quest_gate") && (g.frame / 20) % 2) { rect(sx + 10, sy - 20, 2, 2, UI_GLOW); rect(sx + 20, sy - 20, 2, 2, UI_GLOW); }
                 }});
             }
     for (auto& n : g.npcs) {
